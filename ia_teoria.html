@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IA i Programació</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', sans-serif; background: #f0f4ff; min-height: 100vh; }
+.container { max-width: 860px; margin: 0 auto; padding: 20px; }
+
+header { background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460); color: white; border-radius: 14px; padding: 26px 28px; margin-bottom: 20px; position: relative; overflow: hidden; }
+header::before { content:''; position:absolute; top:-40px; right:-40px; width:200px; height:200px; background: radial-gradient(circle, rgba(99,102,241,.3), transparent 70%); }
+header h1 { font-size: 1.5rem; margin-bottom: 4px; position: relative; }
+header p { opacity: .75; font-size: .88rem; position: relative; }
+.header-tag { display:inline-block; background:rgba(255,255,255,.12); border-radius:99px; padding:3px 12px; font-size:.75rem; margin-top:10px; }
+
+/* TIMELINE NAV */
+.timeline-nav { background: white; border-radius: 14px; padding: 18px 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,.06); overflow-x: auto; }
+.tl-track { display: flex; align-items: flex-start; gap: 0; min-width: 560px; }
+.tl-step { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; cursor: pointer; position: relative; }
+.tl-step::before { content:''; position:absolute; top: 18px; left: 50%; width: 100%; height: 2px; background: #e0e7ff; z-index: 0; }
+.tl-step:last-child::before { display: none; }
+.tl-dot { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; border: 2px solid #e0e7ff; background: white; z-index: 1; transition: all .2s; flex-shrink: 0; }
+.tl-step.active .tl-dot { border-color: transparent; transform: scale(1.15); box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+.tl-step:hover .tl-dot { transform: scale(1.1); }
+.tl-label { font-size: .72rem; font-weight: 600; color: #7a8aaa; text-align: center; line-height: 1.3; max-width: 80px; transition: color .2s; }
+.tl-step.active .tl-label { color: #1a1a3e; }
+.tl-year { font-size: .65rem; color: #aab0c0; font-weight: 500; }
+
+/* PANELS */
+.topic-panel { display: none; }
+.topic-panel.active { display: block; animation: fadeIn .3s; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)} }
+
+/* STAGE BADGE */
+.stage-badge { display: flex; align-items: center; gap: 14px; border-radius: 14px; padding: 18px 22px; margin-bottom: 16px; color: white; }
+.stage-badge .sb-icon { font-size: 2rem; flex-shrink: 0; }
+.stage-badge h2 { font-size: 1.1rem; margin-bottom: 3px; }
+.stage-badge p { font-size: .83rem; opacity: .85; line-height: 1.45; }
+
+/* CARDS */
+.theory-card { background: white; border-radius: 14px; padding: 24px; margin-bottom: 14px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+.theory-card h3 { color: #1a1a3e; font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.theory-card p { color: #3a4a6a; font-size: .92rem; line-height: 1.68; margin-bottom: 10px; }
+.theory-card p:last-child { margin-bottom: 0; }
+.theory-card ul { color: #3a4a6a; font-size: .92rem; line-height: 1.78; padding-left: 20px; margin-bottom: 10px; }
+.theory-card ul li { margin-bottom: 3px; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+@media(max-width:520px){ .two-col{grid-template-columns:1fr;} }
+.col-card { background: #f8faff; border-radius: 10px; padding: 14px; }
+.col-card h4 { font-size: .85rem; color: #6366f1; margin-bottom: 8px; font-weight: 600; }
+.col-card ul { font-size: .85rem; color: #3a4a6a; padding-left: 16px; line-height: 1.75; }
+.col-card p { font-size: .85rem; color: #3a4a6a; line-height: 1.6; }
+
+.info-box { border-radius: 0 10px 10px 0; padding: 12px 16px; margin: 12px 0; font-size: .88rem; line-height: 1.55; }
+.info-box.blue   { background:#eff6ff; border-left:4px solid #3b82f6; color:#1e3a5f; }
+.info-box.purple { background:#f5f3ff; border-left:4px solid #7c3aed; color:#3b1f6e; }
+.info-box.green  { background:#f0fdf4; border-left:4px solid #22c55e; color:#166534; }
+.info-box.orange { background:#fffbeb; border-left:4px solid #f59e0b; color:#78350f; }
+.info-box.red    { background:#fef2f2; border-left:4px solid #ef4444; color:#991b1b; }
+
+pre { background: #0f172a; color: #e2e8f0; border-radius: 10px; padding: 16px; font-size: .82rem; overflow-x: auto; margin: 12px 0; line-height: 1.7; }
+.kw{color:#93c5fd}.fn{color:#86efac}.st{color:#fca5a5}.cm{color:#64748b;font-style:italic}.nm{color:#fcd34d}
+
+table.tt { width:100%; border-collapse:collapse; margin:12px 0; font-size:.88rem; }
+.tt th { background:#f0f4ff; color:#6366f1; padding:9px 12px; text-align:left; font-size:.78rem; text-transform:uppercase; letter-spacing:.04em; }
+.tt td { padding:9px 12px; border-bottom:1px solid #f0f4ff; color:#3a4a6a; vertical-align:top; }
+.tt tr:last-child td { border:none; }
+.tt td strong { color:#1a1a3e; }
+
+code { background:#f1f5f9; padding:1px 6px; border-radius:4px; font-family:monospace; font-size:.9em; color:#4338ca; }
+
+.tag-list { display:flex; flex-wrap:wrap; gap:6px; margin:10px 0; }
+.tag { border-radius:99px; padding:3px 12px; font-size:.78rem; font-weight:600; }
+.tag-purple{background:#ede9fe;color:#5b21b6}.tag-blue{background:#dbeafe;color:#1e40af}
+.tag-green{background:#dcfce7;color:#166534}.tag-orange{background:#fef3c7;color:#92400e}
+.tag-red{background:#fee2e2;color:#991b1b}.tag-gray{background:#f1f5f9;color:#475569}
+
+.evo-steps { display:flex; flex-direction:column; }
+.evo-step { display:flex; gap:14px; padding:12px 0; }
+.evo-left { display:flex; flex-direction:column; align-items:center; width:36px; flex-shrink:0; }
+.evo-dot2 { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.82rem; font-weight:700; flex-shrink:0; }
+.evo-line { width:2px; flex:1; min-height:16px; background:#e0e7ff; margin-top:4px; }
+.evo-content { padding-top:4px; flex:1; }
+.evo-content h4 { font-size:.93rem; color:#1a1a3e; font-weight:600; margin-bottom:4px; }
+.evo-content p { font-size:.87rem; color:#5a6a8a; line-height:1.55; margin:0; }
+
+.tool-card { border:2px solid #e0e7ff; border-radius:12px; padding:16px; margin-bottom:10px; display:flex; gap:14px; align-items:flex-start; }
+.tool-card:hover { border-color:#6366f1; }
+.tool-icon { font-size:1.8rem; flex-shrink:0; margin-top:2px; }
+.tool-body h4 { font-size:.93rem; color:#1a1a3e; font-weight:600; margin-bottom:4px; }
+.tool-body p { font-size:.85rem; color:#5a6a8a; line-height:1.55; }
+.tool-tag { display:inline-block; margin-top:6px; background:#ede9fe; color:#5b21b6; border-radius:99px; padding:2px 10px; font-size:.73rem; font-weight:600; }
+.tool-tag.green { background:#dcfce7; color:#166534; }
+.tool-tag.orange { background:#fef3c7; color:#92400e; }
+.tool-tag.red { background:#fee2e2; color:#991b1b; }
+
+.comparison-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:12px 0; }
+.cg-card { border-radius:10px; padding:14px; }
+.cg-before { background:#fef2f2; border:1px solid #fecaca; }
+.cg-after  { background:#f0fdf4; border:1px solid #bbf7d0; }
+.cg-card h4 { font-size:.82rem; font-weight:700; margin-bottom:8px; text-transform:uppercase; letter-spacing:.05em; }
+.cg-before h4 { color:#991b1b; }
+.cg-after  h4 { color:#166534; }
+.cg-card ul { font-size:.84rem; padding-left:16px; line-height:1.75; }
+.cg-before ul { color:#7f1d1d; }
+.cg-after  ul { color:#14532d; }
+
+.nav-btns { display:flex; gap:10px; margin-top:18px; justify-content:space-between; }
+.nav-btn { padding:10px 22px; border:none; border-radius:99px; cursor:pointer; font-size:.9rem; font-weight:600; transition:all .2s; }
+.nav-btn.prev { background:#e0e7ff; color:#3b41c0; }
+.nav-btn.next { background:#6366f1; color:white; }
+.nav-btn:hover { filter:brightness(1.07); }
+.nav-btn:disabled { opacity:.35; cursor:not-allowed; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>🤖 La programació i la IA: una evolució</h1>
+  <p>Viatge des del codi escrit a mà fins als agents d'intel·ligència artificial</p>
+  <span class="header-tag">IES Ramon Llull · 1r Batxillerat · Curs 25-26</span>
+</header>
+
+<!-- TIMELINE NAV -->
+<div class="timeline-nav">
+  <div class="tl-track" id="tl-track">
+    <div class="tl-step active" onclick="goTo(0)">
+      <div class="tl-dot" style="background:#f1f5f9;border-color:#cbd5e1">✏️</div>
+      <div class="tl-label">Codi a mà</div>
+      <div class="tl-year">~2000</div>
+    </div>
+    <div class="tl-step" onclick="goTo(1)">
+      <div class="tl-dot" style="background:#ede9fe;border-color:#a78bfa">💡</div>
+      <div class="tl-label">Autocompleció</div>
+      <div class="tl-year">2005–15</div>
+    </div>
+    <div class="tl-step" onclick="goTo(2)">
+      <div class="tl-dot" style="background:#dbeafe;border-color:#60a5fa">🔍</div>
+      <div class="tl-label">IntelliSense i Linting</div>
+      <div class="tl-year">2015–20</div>
+    </div>
+    <div class="tl-step" onclick="goTo(3)">
+      <div class="tl-dot" style="background:#dcfce7;border-color:#4ade80">🤖</div>
+      <div class="tl-label">Copilot i IA Generativa</div>
+      <div class="tl-year">2021–23</div>
+    </div>
+    <div class="tl-step" onclick="goTo(4)">
+      <div class="tl-dot" style="background:#fce7f3;border-color:#f472b6">🚀</div>
+      <div class="tl-label">Agents i futur</div>
+      <div class="tl-year">2024+</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ETAPA 0: CODI A MÀ ===== -->
+<div class="topic-panel active" id="panel-0">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#374151,#1f2937)">
+    <div class="sb-icon">✏️</div>
+    <div>
+      <h2>Etapa 1 — Codi escrit completament a mà</h2>
+      <p>Anys 90 fins a principis dels 2000. El programador escrivia cada línia sense cap ajuda intel·ligent.</p>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>⌨️ Com es programava</h3>
+    <p>Els programadors escrivien tot el codi des de zero, usant editors de text simples com el Bloc de Notes, <strong>Notepad++</strong> o terminals de text. No hi havia suggeriments, no hi havia detecció d'errors en temps real — si t'equivocaves, ho descobries quan el programa fallava.</p>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>🛠️ Eines típiques de l'època</h4>
+        <ul>
+          <li>Notepad, vim, emacs</li>
+          <li>Compiladors de línia de comandes</li>
+          <li>Debuggers bàsics de terminal</li>
+          <li>Manuals en paper o PDF</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>🧠 Habilitats necessàries</h4>
+        <ul>
+          <li>Memoritzar sintaxi al detall</li>
+          <li>Conèixer bé l'API de cada llibreria</li>
+          <li>Depurar mentalment el codi</li>
+          <li>Llegir documentació extensa</li>
+        </ul>
+      </div>
+    </div>
+    <div class="info-box orange">⏱️ Una tasca senzilla com llegir un fitxer CSV i calcular la mitjana d'una columna podia costar 30-60 minuts, incloent la consulta de documentació i la depuració d'errors.</div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🖥️ Entendre el maquinari i el programari</h3>
+    <p>En aquella època, un bon programador havia d'entendre com funcionava la màquina per dins. La relació entre <strong>hardware i software</strong> era molt més directa.</p>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>🔩 Hardware</h4>
+        <ul>
+          <li>Components físics de l'ordinador</li>
+          <li>Processador, memòria RAM, disc dur</li>
+          <li>Perifèrics: teclat, ratolí, monitor</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>💾 Software</h4>
+        <ul>
+          <li><strong>Sistema:</strong> SO (Windows, Linux)</li>
+          <li><strong>Eines:</strong> Compiladors, editors</li>
+          <li><strong>Aplicació:</strong> Programes d'usuari</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🔄 Compilació vs Interpretació</h3>
+    <p>Ja en aquesta etapa existia la diferència clau entre <strong>compilar</strong> (traduir tot el codi a binari d'una vegada) i <strong>interpretar</strong> (executar-lo línia a línia en temps real, com fa Python).</p>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>⚙️ Compilats (C, C++)</h4>
+        <ul>
+          <li>Tradueixen tot el codi a màquina</li>
+          <li>Generen un executable (.exe)</li>
+          <li>Molt ràpids d'executar</li>
+          <li>Fitxers diferents per SO</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>🐍 Interpretats (Python)</h4>
+        <ul>
+          <li>Llegeixen i executen en temps real</li>
+          <li>Mateix codi per a tots els SO</li>
+          <li>Cal l'intèrpret instal·lat</li>
+          <li>Més fàcils de provar i aprendre</li>
+        </ul>
+      </div>
+    </div>
+    <div class="info-box blue">💡 Python, creat el 1991, va néixer com a resposta a la complexitat dels compilats: un llenguatge llegible, interpretat i fàcil d'aprendre. Aquesta filosofia el fa perfecte per aprendre a programar.</div>
+  </div>
+
+  <div class="theory-card">
+    <h3>📐 Algorismes i pseudocodi: pensar abans de codificar</h3>
+    <p>Sense eines d'ajuda, el disseny previ era fonamental. Un programador havia de tenir molt clar el que volia fer <em>abans</em> d'escriure la primera línia de codi.</p>
+    <p>Un <strong>algorisme</strong> és una seqüència de passos organitzats per resoldre un problema, independent del llenguatge. El <strong>pseudocodi</strong> és una forma d'escriure'l en un llenguatge semblant a l'humà.</p>
+    <pre><span class="cm">// Pseudocodi: trobar el nombre màxim d'una llista</span>
+INICI
+  llegir llista de nombres
+  maxim ← primer element de la llista
+  PER CADA nombre DE la llista:
+    SI nombre > maxim:
+      maxim ← nombre
+  mostrar maxim
+FI</pre>
+    <div class="info-box purple">🎯 Aquesta habilitat segueix sent fonamental avui, fins i tot amb IA. Si no saps plantejar un problema pas a pas, tampoc podràs dir-li a una IA el que vols que faci.</div>
+  </div>
+</div>
+
+<!-- ===== ETAPA 1: AUTOCOMPLECIÓ ===== -->
+<div class="topic-panel" id="panel-1">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#4c1d95,#5b21b6)">
+    <div class="sb-icon">💡</div>
+    <div>
+      <h2>Etapa 2 — Autocompleció bàsica</h2>
+      <p>2005–2015. Els IDEs comencen a suggerir noms de funcions i variables mentre el programador escriu.</p>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🔮 Què és un IDE i per què va canviar-ho tot</h3>
+    <p>Un <strong>IDE (Entorn de Desenvolupament Integrat)</strong> és una aplicació que reuneix en un sol lloc tot el que necessita un programador: editor de text, intèrpret/compilador i depurador.</p>
+    <p>A diferència d'un simple editor de text, l'IDE <em>entén</em> el codi: sap quines funcions has definit, quines variables existeixen i quines llibreries has importat.</p>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>📦 Exemples d'IDEs populars</h4>
+        <ul>
+          <li><strong>VS Code</strong> — el més usat avui</li>
+          <li>PyCharm — especialitzat en Python</li>
+          <li>Eclipse — Java i altres</li>
+          <li>Xcode — Apple (iOS/macOS)</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>🧩 Què té un IDE</h4>
+        <ul>
+          <li>Editor de text amb colors de sintaxi</li>
+          <li>Compilador o intèrpret integrat</li>
+          <li>Depurador visual (debugger)</li>
+          <li>Terminal integrat</li>
+          <li>Gestió de fitxers del projecte</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>💡 Autocompleció: la primera ajuda intel·ligent</h3>
+    <p>La primera gran millora va ser l'<strong>autocompleció</strong>: mentre escrius, l'IDE t'ofereix una llista de suggeriments basats en el codi que has escrit fins ara — noms de funcions, variables, mètodes de classes importades.</p>
+    <pre><span class="cm"># Quan escrius "fr" i prems Tab, l'IDE suggereix:</span>
+<span class="kw">from</span> math <span class="kw">import</span> sqrt   <span class="cm"># ← autocompleta "from"</span>
+
+<span class="nm">fruites</span> = [<span class="st">"poma"</span>, <span class="st">"pera"</span>]
+<span class="nm">fruites</span>.ap<span class="cm">  # ← l'IDE suggereix: .append(), .apply()...</span></pre>
+    <div class="info-box purple">📈 L'autocompleció reduïa els errors tipogràfics i accelerava l'escriptura, però encara era bàsica: no entenia el context semàntic ni sabia si el codi tenia sentit lògic.</div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🎨 Ressaltat de sintaxi i navegació</h3>
+    <p>Dues funcions senzilles però impactants: els IDEs van aprendre a <strong>colorar el codi</strong> per tipus d'element (paraules clau en blau, strings en vermell, comentaris en gris...) i a permetre <strong>navegar</strong> saltant directament a la definició d'una funció.</p>
+    <div class="info-box blue">🔍 Avui sembla trivial, però el ressaltat de sintaxi va reduir dràsticament els errors: és molt més difícil confondre una variable amb una paraula reservada si tenen colors completament diferents.</div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🚀 Extensions i ecosistema</h3>
+    <p>Els IDEs moderns com <strong>VS Code</strong> van portar aquest concepte molt més lluny: un sistema d'extensions que permet afegir funcionalitats infinites. Per a Python, la <strong>extensió oficial de Microsoft</strong> activa totes les funcions avançades.</p>
+    <div class="info-box green">✅ Per programar Python en VS Code necessites: Python 3 instal·lat + l'extensió oficial de Python (Microsoft) + executar <code>python --version</code> al terminal per verificar que tot funciona.</div>
+  </div>
+</div>
+
+<!-- ===== ETAPA 2: INTELLISENSE I LINTING ===== -->
+<div class="topic-panel" id="panel-2">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#1e3a8a,#1d4ed8)">
+    <div class="sb-icon">🔍</div>
+    <div>
+      <h2>Etapa 3 — IntelliSense i Linting</h2>
+      <p>2015–2020. Les eines aprenen a entendre el codi de forma profunda: suggeriments intel·ligents, detecció d'errors en temps real i anàlisi de qualitat.</p>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🧠 IntelliSense: molt més que autocompleció</h3>
+    <p><strong>IntelliSense</strong> és el nom que Microsoft va donar al seu motor d'assistència intel·ligent dins VS Code. Va molt més enllà de suggerir noms: <em>entén</em> el tipus de cada variable i el que cada funció espera rebre.</p>
+    <table class="tt">
+      <thead><tr><th>Funció</th><th>Què fa exactament</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Autocompleció intel·ligent</strong></td><td>Suggereix mètodes vàlids per al tipus de dada concret que estem usant</td></tr>
+        <tr><td><strong>Info de paràmetres</strong></td><td>Mostra quins arguments accepta una funció i de quin tipus han de ser</td></tr>
+        <tr><td><strong>Hover documentation</strong></td><td>Passa el cursor per sobre d'una funció i veus la documentació completa</td></tr>
+        <tr><td><strong>Go to definition</strong></td><td>Clic + F12 per saltar directament a on es defineix una funció o classe</td></tr>
+        <tr><td><strong>Find all references</strong></td><td>Troba tots els llocs del codi on s'usa una variable o funció</td></tr>
+      </tbody>
+    </table>
+    <pre><span class="cm"># IntelliSense sap que "fruites" és una llista i suggereix:</span>
+<span class="nm">fruites</span> = [<span class="st">"poma"</span>, <span class="st">"pera"</span>, <span class="st">"kiwi"</span>]
+<span class="nm">fruites</span>.  <span class="cm"># → mostra: append, remove, sort, reverse, index, count...</span>
+
+<span class="cm"># I si poses el cursor sobre sorted(), mostra la seva documentació:</span>
+<span class="nm">resultat</span> = <span class="fn">sorted</span>(<span class="nm">fruites</span>)  <span class="cm"># → sorted(iterable, key=None, reverse=False)</span></pre>
+  </div>
+
+  <div class="theory-card">
+    <h3>🔍 Linting: el revisor automàtic</h3>
+    <p>El <strong>linting</strong> és l'anàlisi automàtica del codi per trobar errors, males pràctiques i problemes d'estil <em>sense necessitat d'executar-lo</em>. Com un corrector ortogràfic però per a codi.</p>
+    <div class="info-box blue">📌 El nom ve de "lint" — la pelussa que s'acumula a la roba. Petites impureses al codi que cal eliminar per tenir un projecte net.</div>
+    <pre><span class="cm"># El linter marcaria tot això com a errors o advertències:</span>
+<span class="kw">def</span> <span class="fn">calcular</span>( x,y ):       <span class="cm"># ⚠️ Espais incorrectes als parèntesis</span>
+    z=x+y                   <span class="cm"># ⚠️ Falta espai al voltant de =</span>
+    <span class="kw">return</span> z
+    <span class="fn">print</span>(<span class="st">"mai s'executa"</span>) <span class="cm"># ⚠️ Codi mort (unreachable code)</span>
+
+<span class="nm">variable_no_usada</span> = <span class="nm">42</span>    <span class="cm"># ⚠️ Variable definida però mai usada</span></pre>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>🐍 Linters per a Python</h4>
+        <ul>
+          <li><strong>Pylint</strong> — el més complet</li>
+          <li><strong>Flake8</strong> — ràpid i lleuger</li>
+          <li><strong>Ruff</strong> — modern, molt ràpid</li>
+          <li><strong>mypy</strong> — comprovació de tipus</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>📏 PEP 8: l'estàndard d'estil</h4>
+        <p>Guia oficial d'estil de Python. Defineix espaiat, longitud de línies, nomenclatura, imports... Els linters comproven que el teu codi el compleixi automàticament.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>📊 Impacte real del linting als equips</h3>
+    <p>En empreses i equips de programadors, el linting va passar a ser <strong>obligatori</strong>: el codi no es podia pujar al repositori si el linter trobava errors. Això va millorar dràsticament la qualitat i la llegibilitat dels projectes.</p>
+    <div class="comparison-grid">
+      <div class="cg-card cg-before">
+        <h4>Sense linting</h4>
+        <ul>
+          <li>Cada programador té el seu estil</li>
+          <li>Els errors es descobreixen executant</li>
+          <li>Codi difícil de llegir en equip</li>
+          <li>Bugs subtils passen desapercebuts</li>
+        </ul>
+      </div>
+      <div class="cg-card cg-after">
+        <h4>Amb linting</h4>
+        <ul>
+          <li>Estil unificat a tot el projecte</li>
+          <li>Errors detectats mentre escrius</li>
+          <li>Codi consistent i llegible</li>
+          <li>Males pràctiques eliminades</li>
+        </ul>
+      </div>
+    </div>
+    <div class="info-box green">✅ La combinació perfecta d'aquesta etapa: <strong>IntelliSense</strong> t'ajuda a escriure codi correcte, <strong>Linting</strong> t'assegura que sigui de qualitat. Tots dos actuen en temps real mentre programes.</div>
+  </div>
+</div>
+
+<!-- ===== ETAPA 3: COPILOT I IA GENERATIVA ===== -->
+<div class="topic-panel" id="panel-3">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#065f46,#047857)">
+    <div class="sb-icon">🤖</div>
+    <div>
+      <h2>Etapa 4 — IA Generativa i Copilots de codi</h2>
+      <p>2021–2023. La IA deixa de revisar el codi i comença a generar-lo. Un salt qualitatiu enorme.</p>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>✨ Què és la IA Generativa?</h3>
+    <p>La <strong>IA Generativa</strong> és el tipus de IA capaç de <em>crear contingut nou</em> que no existia abans: text, codi, imatges, vídeos, música... No es limita a classificar o revisar — <strong>genera</strong>.</p>
+    <p>La base de la IA generativa de text i codi és el <strong>Large Language Model (LLM)</strong>: un model entrenat amb quantitats massives de text (i codi) per aprendre com funciona el llenguatge i poder continuar qualsevol seqüència de text de forma coherent.</p>
+    <div class="info-box purple">🧠 Un LLM no "busca" la resposta en una base de dades. <strong>Genera</strong> text token a token, predient cada vegada quina paraula és més probable que segueixi el context anterior.</div>
+  </div>
+
+  <div class="theory-card">
+    <h3>⚙️ Com funciona un LLM (simplificat)</h3>
+    <div class="evo-steps">
+      <div class="evo-step">
+        <div class="evo-left"><div class="evo-dot2" style="background:#ede9fe;border:2px solid #a78bfa;color:#5b21b6">1</div><div class="evo-line"></div></div>
+        <div class="evo-content"><h4>Tokenització</h4><p>El text es divideix en <em>tokens</em> (paraules o fragments). "Programació" pot ser 1 token; "anticonstitucional" pot ser-ne 4.</p></div>
+      </div>
+      <div class="evo-step">
+        <div class="evo-left"><div class="evo-dot2" style="background:#dbeafe;border:2px solid #60a5fa;color:#1e40af">2</div><div class="evo-line"></div></div>
+        <div class="evo-content"><h4>Embeddings</h4><p>Cada token es converteix en un vector numèric. Tokens amb significat similar queden propers en aquest espai matemàtic.</p></div>
+      </div>
+      <div class="evo-step">
+        <div class="evo-left"><div class="evo-dot2" style="background:#dcfce7;border:2px solid #4ade80;color:#166534">3</div><div class="evo-line"></div></div>
+        <div class="evo-content"><h4>Mecanisme d'Atenció (Attention)</h4><p>El model decideix quins tokens anteriors són més rellevants per predir el següent. Pot "atendre" paraules molt llunyanes al text.</p></div>
+      </div>
+      <div class="evo-step">
+        <div class="evo-left"><div class="evo-dot2" style="background:#fef3c7;border:2px solid #fbbf24;color:#92400e">4</div></div>
+        <div class="evo-content"><h4>Generació token a token</h4><p>El model genera un token cada vegada. Cada nou token s'afegeix al context i influencia el següent fins completar la resposta.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🐙 GitHub Copilot: el primer copilot massiu</h3>
+    <p>Llançat el <strong>2021</strong> per GitHub (Microsoft) en col·laboració amb OpenAI. Basat en el model Codex (derivat de GPT-3) entrenat amb milers de milions de línies de codi públic de GitHub.</p>
+    <p>Funciona com una extensió de VS Code. Mentre escrius, analitza el context — el fitxer obert, els comentaris, el nom de les funcions — i <strong>suggereix blocs de codi complets</strong> en temps real.</p>
+    <pre><span class="cm"># Amb un simple comentari, Copilot genera la funció sencera:</span>
+<span class="cm"># Funció que comprova si un nombre és primer</span>
+<span class="kw">def</span> <span class="fn">es_primer</span>(<span class="nm">n</span>):          <span class="cm"># ← Copilot autocompleta tot el de baix</span>
+    <span class="kw">if</span> <span class="nm">n</span> < <span class="nm">2</span>: <span class="kw">return</span> <span class="kw">False</span>
+    <span class="kw">for</span> <span class="nm">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">2</span>, <span class="fn">int</span>(<span class="nm">n</span>**<span class="nm">0.5</span>)+<span class="nm">1</span>):
+        <span class="kw">if</span> <span class="nm">n</span> % <span class="nm">i</span> == <span class="nm">0</span>: <span class="kw">return</span> <span class="kw">False</span>
+    <span class="kw">return</span> <span class="kw">True</span></pre>
+    <div class="tag-list">
+      <span class="tag tag-blue">Suggereix codi línia a línia</span>
+      <span class="tag tag-blue">Genera funcions completes</span>
+      <span class="tag tag-blue">Escriu tests automàticament</span>
+      <span class="tag tag-blue">Explica codi existent</span>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🌀 Cursor: l'IDE redissenyat per a la IA</h3>
+    <p><strong>Cursor</strong> és un IDE basat en VS Code però dissenyat des de zero per integrar IA en cada pas del treball. No és una extensió afegida — la IA és el nucli del producte.</p>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>Característiques clau</h4>
+        <ul>
+          <li>Xat directament al codi</li>
+          <li>Edita múltiples fitxers alhora</li>
+          <li>Entén tot el projecte sencer</li>
+          <li>Usa Claude, GPT-4 o Gemini</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>Per què és diferent</h4>
+        <p>Pots dir-li: "Refactoritza aquesta funció i actualitza tots els tests que la criden". I ho fa en tots els fitxers alhora, entenent tot el context del projecte.</p>
+      </div>
+    </div>
+    <div class="info-box blue">💬 La gran novetat de Cursor: pots <strong>xatejar</strong> amb la IA sobre el teu codi. "Per què falla aquesta funció?", "Com puc fer-la més eficient?", "Afegeix gestió d'errors". La IA respon en context.</div>
+  </div>
+
+  <div class="theory-card">
+    <h3>💬 Prompting: com parlar amb la IA</h3>
+    <p>Un <strong>prompt</strong> és la instrucció que li dones al model. La qualitat del prompt afecta directament la qualitat de la resposta.</p>
+    <div class="comparison-grid">
+      <div class="cg-card cg-before">
+        <h4>❌ Prompt feble</h4>
+        <p style="font-style:italic;color:#991b1b;font-size:.85rem">"Fes-me una funció Python"</p>
+        <p style="font-size:.84rem;color:#7f1d1d;margin-top:6px">Massa vague. La IA no sap per a què, amb quines dades ni quin format de sortida vols.</p>
+      </div>
+      <div class="cg-card cg-after">
+        <h4>✅ Prompt fort</h4>
+        <p style="font-style:italic;color:#166534;font-size:.84rem">"Crea una funció Python que rebi una llista d'enters i retorni la mitjana. Inclou docstring i gestió d'errors si la llista és buida."</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ETAPA 4: AGENTS I FUTUR ===== -->
+<div class="topic-panel" id="panel-4">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#7c1d6f,#a21caf)">
+    <div class="sb-icon">🚀</div>
+    <div>
+      <h2>Etapa 5 — Agents d'IA i el futur de la programació</h2>
+      <p>2024 en endavant. La IA deixa de ser una eina i comença a ser un company de feina que actua de forma autònoma.</p>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🕹️ Agents d'IA: la IA que actua</h3>
+    <p>Un <strong>agent d'IA</strong> no es limita a respondre — <em>actua</em>. Pot planificar passos, usar eines, executar codi, llegir fitxers, navegar per la web i prendre decisions per aconseguir un objectiu, tot de forma autònoma.</p>
+    <div class="info-box purple">🎯 Diferència clau: una IA de xat <em>parla</em>. Un agent <em>fa coses</em> per aconseguir un objectiu sense que l'hagis de guiar pas a pas.</div>
+    <div class="evo-steps">
+      <div class="evo-step">
+        <div class="evo-left"><div class="evo-dot2" style="background:#ede9fe;border:2px solid #a78bfa">💭</div><div class="evo-line"></div></div>
+        <div class="evo-content"><h4>Planificació</h4><p>L'agent analitza l'objectiu i el divideix en subtasques: "Per fer X haig de fer A, després B, i finalment C."</p></div>
+      </div>
+      <div class="evo-step">
+        <div class="evo-left"><div class="evo-dot2" style="background:#dbeafe;border:2px solid #60a5fa">🔧</div><div class="evo-line"></div></div>
+        <div class="evo-content"><h4>Ús d'eines</h4><p>Pot cridar funcions externes: cercar al web, executar Python, llegir/escriure fitxers, consultar una API, enviar emails...</p></div>
+      </div>
+      <div class="evo-step">
+        <div class="evo-left"><div class="evo-dot2" style="background:#dcfce7;border:2px solid #4ade80">🔄</div><div class="evo-line"></div></div>
+        <div class="evo-content"><h4>Feedback loop</h4><p>Executa una acció, observa el resultat i decideix el pas següent. Si hi ha un error, l'intenta solucionar automàticament.</p></div>
+      </div>
+      <div class="evo-step">
+        <div class="evo-left"><div class="evo-dot2" style="background:#fef3c7;border:2px solid #fbbf24">✅</div></div>
+        <div class="evo-content"><h4>Resultat final</h4><p>Quan ha completat tots els passos, entrega el resultat: el codi funciona, el document és llest, l'informe és redactat.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🤖 Claude: l'IA d'Anthropic</h3>
+    <p><strong>Claude</strong> és el model creat per <strong>Anthropic</strong> (fundada el 2021 per antics membres d'OpenAI). S'ha dissenyat posant èmfasi en la seguretat, el raonament i en ser útil, inofensiu i honest.</p>
+    <table class="tt">
+      <thead><tr><th>Versió</th><th>Punt fort</th><th>Ús típic</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Claude Haiku</strong></td><td>Ràpid i econòmic</td><td>Tasques simples, respostes ràpides</td></tr>
+        <tr><td><strong>Claude Sonnet</strong></td><td>Equilibri velocitat / qualitat</td><td>Ús general, codi, escriptura</td></tr>
+        <tr><td><strong>Claude Opus</strong></td><td>Màxima intel·ligència</td><td>Tasques complexes, raonament profund</td></tr>
+      </tbody>
+    </table>
+
+    <div class="tool-card" style="margin-top:14px">
+      <div class="tool-icon">⌨️</div>
+      <div class="tool-body">
+        <h4>Claude Code</h4>
+        <p>Agent de programació al terminal. Pots dir-li "implementa la funcionalitat X en el meu projecte" i llegeix el codi, proposa canvis, els aplica i comprova que funcionen, tot de forma autònoma.</p>
+        <span class="tool-tag">Agent de codi</span>
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">🌐</div>
+      <div class="tool-body">
+        <h4>Claude en Chrome</h4>
+        <p>Agent de navegació. Pot navegar per webs, extreure informació, omplir formularis i realitzar tasques al navegador de manera autònoma.</p>
+        <span class="tool-tag">Agent de navegació</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🚀 Com canvia el rol del programador</h3>
+    <div class="comparison-grid">
+      <div class="cg-card cg-before">
+        <h4>Programador clàssic</h4>
+        <ul>
+          <li>Escriu cada línia de codi</li>
+          <li>Memoritza sintaxi i APIs</li>
+          <li>Depura errors manualment</li>
+          <li>Prototipa lentament</li>
+        </ul>
+      </div>
+      <div class="cg-card cg-after">
+        <h4>Programador + IA (avui)</h4>
+        <ul>
+          <li>Dirigeix i revisa la IA</li>
+          <li>Sap quines preguntes fer</li>
+          <li>La IA proposa, el dev decideix</li>
+          <li>Prototipa 10x més ràpid</li>
+        </ul>
+      </div>
+    </div>
+    <div class="two-col" style="margin-top:14px">
+      <div class="col-card">
+        <h4>🔥 Habilitats cada cop més valuoses</h4>
+        <ul>
+          <li>Pensament crític i resolució de problemes</li>
+          <li>Saber fer bons prompts</li>
+          <li>Revisar i avaluar codi generat</li>
+          <li>Disseny d'arquitectura de sistemes</li>
+          <li>Coneixements de seguretat</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>⚠️ Riscos a tenir en compte</h4>
+        <ul>
+          <li>Codi incorrecte amb aparença correcta</li>
+          <li>Dependència excessiva sense aprendre</li>
+          <li>Privacitat del codi enviat al núvol</li>
+          <li>Possibles problemes de copyright</li>
+        </ul>
+      </div>
+    </div>
+    <div class="info-box purple">🎯 La conclusió: <strong>aprendre a programar segueix sent essencial</strong>. Sense entendre les bases, no pots dirigir ni avaluar la IA. El futur és <em>humà + IA</em>, no <em>IA sola</em>.</div>
+  </div>
+</div>
+
+<!-- NAV BUTTONS -->
+<div class="nav-btns">
+  <button class="nav-btn prev" id="btn-prev" onclick="navigate(-1)" disabled>← Etapa anterior</button>
+  <button class="nav-btn next" id="btn-next" onclick="navigate(1)">Etapa següent →</button>
+</div>
+
+</div><!-- /container -->
+
+<script>
+let current = 0;
+const total = 5;
+
+function goTo(i) {
+  document.querySelectorAll('.topic-panel').forEach((p,j) => p.classList.toggle('active', j === i));
+  document.querySelectorAll('.tl-step').forEach((s,j) => s.classList.toggle('active', j === i));
+  current = i;
+  document.getElementById('btn-prev').disabled = i === 0;
+  document.getElementById('btn-next').disabled = i === total - 1;
+  document.getElementById('btn-next').textContent = i === total - 1 ? '✓ Final' : 'Etapa següent →';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function navigate(dir) {
+  const next = current + dir;
+  if (next >= 0 && next < total) goTo(next);
+}
+</script>
+</body>
+</html>

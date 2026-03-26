@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Virtualització</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', sans-serif; background: #f0f4ff; min-height: 100vh; }
+.container { max-width: 860px; margin: 0 auto; padding: 20px; }
+
+header { background: linear-gradient(135deg, #0f172a, #1e293b, #0f3460); color: white; border-radius: 14px; padding: 26px 28px; margin-bottom: 20px; position: relative; overflow: hidden; }
+header::before { content:''; position:absolute; top:-40px; right:-40px; width:200px; height:200px; background: radial-gradient(circle, rgba(14,165,233,.3), transparent 70%); }
+header h1 { font-size: 1.5rem; margin-bottom: 4px; position: relative; }
+header p { opacity: .75; font-size: .88rem; position: relative; }
+.header-tag { display:inline-block; background:rgba(255,255,255,.12); border-radius:99px; padding:3px 12px; font-size:.75rem; margin-top:10px; }
+
+.topic-tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:18px; }
+.topic-tab { padding:7px 14px; border:2px solid #e0e7ff; border-radius:99px; cursor:pointer; font-size:.82rem; font-weight:600; color:#5a6a8a; background:white; transition:all .2s; white-space:nowrap; }
+.topic-tab:hover { border-color:#0ea5e9; color:#0ea5e9; }
+.topic-tab.active { background:#0ea5e9; color:white; border-color:#0ea5e9; }
+
+.topic-panel { display:none; }
+.topic-panel.active { display:block; animation: fadeIn .3s; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)} }
+
+.stage-badge { display:flex; align-items:center; gap:14px; border-radius:14px; padding:18px 22px; margin-bottom:16px; color:white; }
+.stage-badge .sb-icon { font-size:2rem; flex-shrink:0; }
+.stage-badge h2 { font-size:1.05rem; margin-bottom:3px; }
+.stage-badge p { font-size:.82rem; opacity:.85; line-height:1.45; }
+
+.theory-card { background:white; border-radius:14px; padding:24px; margin-bottom:14px; box-shadow:0 2px 10px rgba(0,0,0,.06); }
+.theory-card h3 { color:#0f172a; font-size:1rem; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.theory-card p { color:#334155; font-size:.92rem; line-height:1.68; margin-bottom:10px; }
+.theory-card p:last-child { margin-bottom:0; }
+.theory-card ul { color:#334155; font-size:.92rem; line-height:1.78; padding-left:20px; margin-bottom:10px; }
+.theory-card ul li { margin-bottom:3px; }
+.theory-card ol { color:#334155; font-size:.92rem; line-height:1.85; padding-left:22px; margin-bottom:10px; }
+.theory-card ol li { margin-bottom:6px; }
+
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:12px 0; }
+.three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin:12px 0; }
+@media(max-width:560px){ .two-col,.three-col{grid-template-columns:1fr;} }
+.col-card { background:#f8faff; border-radius:10px; padding:14px; }
+.col-card h4 { font-size:.85rem; color:#0ea5e9; margin-bottom:8px; font-weight:600; }
+.col-card ul { font-size:.85rem; color:#334155; padding-left:16px; line-height:1.75; }
+.col-card p { font-size:.85rem; color:#334155; line-height:1.6; }
+.col-card ol { font-size:.84rem; color:#334155; padding-left:16px; line-height:1.8; }
+
+.info-box { border-radius:0 10px 10px 0; padding:12px 16px; margin:12px 0; font-size:.88rem; line-height:1.55; }
+.info-box.blue   { background:#eff6ff; border-left:4px solid #3b82f6; color:#1e3a5f; }
+.info-box.green  { background:#f0fdf4; border-left:4px solid #22c55e; color:#166534; }
+.info-box.orange { background:#fffbeb; border-left:4px solid #f59e0b; color:#78350f; }
+.info-box.red    { background:#fef2f2; border-left:4px solid #ef4444; color:#991b1b; }
+.info-box.sky    { background:#f0f9ff; border-left:4px solid #0ea5e9; color:#0c4a6e; }
+
+pre { background:#0f172a; color:#e2e8f0; border-radius:10px; padding:14px 16px; font-size:.82rem; overflow-x:auto; margin:12px 0; line-height:1.7; }
+.cmd { color:#86efac; } .cm { color:#64748b; font-style:italic; } .val { color:#fcd34d; } .ip { color:#93c5fd; }
+
+code { background:#f1f5f9; padding:1px 6px; border-radius:4px; font-family:monospace; font-size:.9em; color:#0369a1; }
+
+table.tt { width:100%; border-collapse:collapse; margin:12px 0; font-size:.88rem; }
+.tt th { background:#f0f9ff; color:#0ea5e9; padding:9px 12px; text-align:left; font-size:.78rem; text-transform:uppercase; letter-spacing:.04em; }
+.tt td { padding:9px 12px; border-bottom:1px solid #f0f9ff; color:#334155; vertical-align:top; }
+.tt tr:last-child td { border:none; }
+.tt td strong { color:#0f172a; }
+.tt td code { font-size:.82em; }
+
+.step-list { display:flex; flex-direction:column; gap:0; margin:12px 0; }
+.step-item { display:flex; gap:14px; padding:10px 0; }
+.step-left { display:flex; flex-direction:column; align-items:center; width:32px; flex-shrink:0; }
+.step-num { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.82rem; font-weight:700; flex-shrink:0; background:#e0f2fe; color:#0369a1; border:2px solid #7dd3fc; }
+.step-line { width:2px; flex:1; min-height:12px; background:#e0f2fe; margin-top:4px; }
+.step-content { padding-top:4px; flex:1; }
+.step-content h4 { font-size:.92rem; color:#0f172a; font-weight:600; margin-bottom:3px; }
+.step-content p { font-size:.86rem; color:#64748b; line-height:1.55; margin:0; }
+.step-content code { font-size:.82em; }
+
+.net-diagram { background:#f8faff; border-radius:12px; padding:18px; margin:12px 0; display:flex; flex-direction:column; align-items:center; gap:10px; }
+.net-machine { border-radius:10px; padding:12px 20px; text-align:center; min-width:180px; }
+.net-server { background:#dbeafe; border:2px solid #60a5fa; }
+.net-client { background:#dcfce7; border:2px solid #4ade80; }
+.net-machine h4 { font-size:.88rem; font-weight:700; color:#0f172a; margin-bottom:4px; }
+.net-machine p  { font-size:.78rem; color:#475569; margin:2px 0; }
+.net-arrow { font-size:1.4rem; color:#94a3b8; }
+.net-label { font-size:.75rem; color:#64748b; font-weight:600; background:#e2e8f0; border-radius:99px; padding:3px 12px; }
+
+.checklist { list-style:none; padding:0; margin:10px 0; }
+.checklist li { font-size:.88rem; color:#166534; padding:5px 0; display:flex; gap:8px; align-items:flex-start; }
+.checklist li::before { content:'✅'; flex-shrink:0; }
+
+.tag-list { display:flex; flex-wrap:wrap; gap:6px; margin:10px 0; }
+.tag { border-radius:99px; padding:3px 12px; font-size:.78rem; font-weight:600; }
+.tag-blue   { background:#dbeafe; color:#1e40af; }
+.tag-green  { background:#dcfce7; color:#166534; }
+.tag-orange { background:#fef3c7; color:#92400e; }
+.tag-sky    { background:#e0f2fe; color:#0369a1; }
+.tag-gray   { background:#f1f5f9; color:#475569; }
+
+.nav-btns { display:flex; gap:10px; margin-top:18px; justify-content:space-between; }
+.nav-btn { padding:10px 22px; border:none; border-radius:99px; cursor:pointer; font-size:.9rem; font-weight:600; transition:all .2s; }
+.nav-btn.prev { background:#e0f2fe; color:#0369a1; }
+.nav-btn.next { background:#0ea5e9; color:white; }
+.nav-btn:hover { filter:brightness(1.07); }
+.nav-btn:disabled { opacity:.35; cursor:not-allowed; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>🖥️ Virtualització i Dominis Windows</h1>
+  <p>Configuració d'un domini Windows amb VirtualBox · Windows Server 2003 + Windows XP</p>
+  <span class="header-tag">IES Ramon Llull · 1r Batxillerat · Curs 25-26</span>
+</header>
+
+<div class="topic-tabs" id="topic-tabs">
+  <div class="topic-tab active"  onclick="switchTopic(0)">🖥️ Virtualització</div>
+  <div class="topic-tab"        onclick="switchTopic(1)">💿 Instal·lar VMs</div>
+  <div class="topic-tab"        onclick="switchTopic(2)">🌐 Xarxa i IPs</div>
+  <div class="topic-tab"        onclick="switchTopic(3)">🏛️ Domini i AD</div>
+  <div class="topic-tab"        onclick="switchTopic(4)">👥 Usuaris i Grups</div>
+  <div class="topic-tab"        onclick="switchTopic(5)">📂 Recursos i GPO</div>
+  <div class="topic-tab"        onclick="switchTopic(6)">🔧 Guest Additions</div>
+</div>
+
+<!-- ===== 0: VIRTUALITZACIÓ ===== -->
+<div class="topic-panel active" id="panel-0">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#0f172a,#1e3a5f)">
+    <div class="sb-icon">🖥️</div>
+    <div><h2>Què és la virtualització?</h2><p>Executar un ordinador complet dins d'un altre ordinador, de forma aïllada i independent.</p></div>
+  </div>
+
+  <div class="theory-card">
+    <h3>💡 Concepte de màquina virtual</h3>
+    <p>Una <strong>màquina virtual (MV)</strong> és un ordinador simulat per software. Funciona com un ordinador real —té el seu propi sistema operatiu, disc dur i xarxa— però existeix com un fitxer dins el teu ordinador físic.</p>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>🖥️ Màquina amfitriona (Host)</h4>
+        <p>L'ordinador físic real. Executa VirtualBox i conté les màquines virtuals com fitxers al disc dur.</p>
+      </div>
+      <div class="col-card">
+        <h4>📦 Màquina virtual (Guest)</h4>
+        <p>L'ordinador simulat que s'executa dins del host. Té el seu propi SO, RAM assignada i disc virtual.</p>
+      </div>
+    </div>
+    <div class="info-box sky">💡 En lloc d'usar ordinadors reals per crear una xarxa, emularem tots els equips dins d'un sol ordinador físic. Estalvia maquinari i permet fer proves sense riscos.</div>
+  </div>
+
+  <div class="theory-card">
+    <h3>⚙️ Per a què serveix VirtualBox?</h3>
+    <p><strong>VirtualBox</strong> és un software de virtualització gratuït creat per Oracle. Permet crear i gestionar màquines virtuals amb qualsevol sistema operatiu.</p>
+    <div class="tag-list">
+      <span class="tag tag-sky">Gratuït i codi obert</span>
+      <span class="tag tag-blue">Windows, Linux, macOS</span>
+      <span class="tag tag-green">Snapshots (punts de restauració)</span>
+      <span class="tag tag-orange">Xarxes virtuals internes</span>
+      <span class="tag tag-gray">Carpetes compartides</span>
+    </div>
+    <div class="info-box green">✅ VirtualBox ja està instal·lat a tots els ordinadors de l'aula.</div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🎯 Objectiu de la pràctica</h3>
+    <p>Crearem dues màquines virtuals connectades entre elles per simular una xarxa amb servidor i client:</p>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>🗄️ Màquina 1 — Servidor</h4>
+        <ul>
+          <li>Sistema: <strong>Windows Server 2003</strong></li>
+          <li>Rol: Controlador de Domini</li>
+          <li>IP: <code>192.168.1.1</code></li>
+          <li>RAM: 256 MB · Disc: 2 GB</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>💻 Màquina 2 — Client</h4>
+        <ul>
+          <li>Sistema: <strong>Windows XP</strong></li>
+          <li>Rol: Equip del domini</li>
+          <li>IP: <code>192.168.1.2</code></li>
+          <li>RAM: 512 MB – 1 GB · Disc: 10-20 GB</li>
+        </ul>
+      </div>
+    </div>
+    <div class="net-diagram">
+      <div class="net-machine net-server">
+        <h4>🗄️ SERVIDOR</h4>
+        <p>Windows Server 2003</p>
+        <p><strong>192.168.1.1</strong></p>
+      </div>
+      <div class="net-arrow">↕️</div>
+      <div class="net-label">Red Interna VirtualBox<br>"RedXP2003"</div>
+      <div class="net-arrow">↕️</div>
+      <div class="net-machine net-client">
+        <h4>💻 CLIENT</h4>
+        <p>Windows XP</p>
+        <p><strong>192.168.1.2</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>📀 Fitxers ISO: instal·lar un SO en una MV</h3>
+    <p>Per instal·lar un sistema operatiu en una MV s'usa un <strong>fitxer ISO</strong>: una imatge del disc d'instal·lació que VirtualBox munta com si fos un CD/DVD físic.</p>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Descarregar la ISO</h4><p>Fitxer <code>.iso</code> que conté tots els arxius d'instal·lació del SO.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Muntar-la a la unitat òptica virtual</h4><p>A VirtualBox: selecciona la MV → IDE secundari mestre → Unitat òptica → Seleccionar fitxer de disc.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">3</div></div>
+        <div class="step-content"><h4>Arrencar la MV des de la ISO</h4><p>La MV arrenca des de la unitat òptica virtual i inicia el procés d'instal·lació.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 1: INSTAL·LAR VMs ===== -->
+<div class="topic-panel" id="panel-1">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#1e3a5f,#1d4ed8)">
+    <div class="sb-icon">💿</div>
+    <div><h2>Crear i instal·lar les màquines virtuals</h2><p>Configuració de Windows XP (client) i Windows Server 2003 (servidor).</p></div>
+  </div>
+
+  <div class="theory-card">
+    <h3>💻 Màquina 1 — Windows XP (Client)</h3>
+    <p><strong>Crear la MV a VirtualBox:</strong></p>
+    <table class="tt">
+      <thead><tr><th>Paràmetre</th><th>Valor</th></tr></thead>
+      <tbody>
+        <tr><td>Nom</td><td><strong>Windows XP</strong></td></tr>
+        <tr><td>Tipus</td><td>Microsoft Windows</td></tr>
+        <tr><td>Versió</td><td>Windows XP (32-bit)</td></tr>
+        <tr><td>RAM</td><td>512 MB – 1 GB</td></tr>
+        <tr><td>Disc dur</td><td>VDI, tamaño fijo, 10-20 GB</td></tr>
+      </tbody>
+    </table>
+    <div class="info-box orange">⚠️ A l'hora de crear la MV, entra en <strong>Mode Expert</strong> per veure totes les opcions de configuració.</div>
+    <p><strong>Instal·lació de Windows XP:</strong></p>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Muntar la ISO de Windows XP</h4><p>IDE secundari mestre → Unitat òptica → Seleccionar la ISO.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Iniciar la MV i seguir l'instal·lador</h4><p>Formatar el disc en <strong>NTFS</strong>.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Configurar usuari i clau de producte</h4><p>Usuari: <code>Alumno</code> · Contrasenya: (en blanc)<br>Clau WXP SP3: <code>M8DPF-XT324-YBKK9-3VF8C-M2X78</code></p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🗄️ Màquina 2 — Windows Server 2003 (Servidor)</h3>
+    <table class="tt">
+      <thead><tr><th>Paràmetre</th><th>Valor</th></tr></thead>
+      <tbody>
+        <tr><td>Nom</td><td><strong>Windows Server 2003</strong></td></tr>
+        <tr><td>Tipus</td><td>Microsoft Windows</td></tr>
+        <tr><td>Versió</td><td>Windows 2003 (32-bit)</td></tr>
+        <tr><td>RAM</td><td>256 MB</td></tr>
+        <tr><td>Disc dur</td><td>VDI, tamaño fijo, 2 GB</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:14px"><strong>Instal·lació de Windows Server 2003:</strong></p>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Carregar la ISO i arrancar</h4><p>Seguir els passos de l'instal·lador. Triar <strong>NTFS</strong> com a sistema de fitxers.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Dades d'instal·lació</h4><p>Clau: <code>VWMD9-2Q897-F427R-TV2KY-CRF2B</code><br>Contrasenya administrador: <code>123456</code><br>Nom equip: <code>SERVIDOR</code> · Zona horària: GMT+1</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">3</div></div>
+        <div class="step-content"><h4>Primer inici de sessió</h4><p>Prem <strong>Ctrl+Alt+Supr</strong> dins la MV: clic dret a la icona de la fletxa → opció corresponent. Iniciar sessió com a <code>Administrador</code>.</p></div>
+      </div>
+    </div>
+    <div class="info-box sky">💡 Per enviar Ctrl+Alt+Supr dins de VirtualBox: clic dret sobre la icona de la fletxa a la barra inferior de la finestra.</div>
+  </div>
+</div>
+
+<!-- ===== 2: XARXA I IPs ===== -->
+<div class="topic-panel" id="panel-2">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#064e3b,#065f46)">
+    <div class="sb-icon">🌐</div>
+    <div><h2>Configuració de xarxa i adreces IP</h2><p>Connectar les dues màquines virtuals en una xarxa interna i assignar IPs fixes.</p></div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🔌 Pas 1 — Xarxa interna a VirtualBox</h3>
+    <p>Abans de configurar les IPs dins dels SOs, cal que ambdues MVs estiguin connectades a la <strong>mateixa xarxa interna</strong> a VirtualBox. Això simula un cable de xarxa entre elles.</p>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Obrir configuració de cada MV</h4><p>Selecciona la MV → Configuració → Xarxa.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Adaptador 1 → Xarxa Interna</h4><p>Canviar el mode a <strong>Red Interna</strong> (Internal Network).</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">3</div></div>
+        <div class="step-content"><h4>Posar el mateix nom a les dues MVs</h4><p>Nom de la xarxa: <code>RedXP2003</code> (ha de ser exactament igual a les dues màquines).</p></div>
+      </div>
+    </div>
+    <div class="info-box orange">⚠️ Repetir aquests passos en <strong>ambdues</strong> màquines virtuals. Si el nom de la xarxa és diferent, no es veuran.</div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🗄️ Pas 2 — IP fixa al Servidor (Windows Server 2003)</h3>
+    <p>El servidor necessita una IP fixa per ser localitzable sempre a la mateixa adreça.</p>
+    <p>Panel de Control → Conexiones de red → clic dret Conexión de área local → Propiedades → TCP/IP</p>
+    <table class="tt">
+      <thead><tr><th>Camp</th><th>Valor</th></tr></thead>
+      <tbody>
+        <tr><td>Adreça IP</td><td><code class="ip">192.168.1.1</code></td></tr>
+        <tr><td>Màscara de subxarxa</td><td><code>255.255.255.0</code></td></tr>
+        <tr><td>Porta d'enllaç</td><td>(buit)</td></tr>
+        <tr><td>Servidor DNS preferit</td><td><code class="ip">192.168.1.1</code> (ell mateix)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="theory-card">
+    <h3>💻 Pas 3 — IP manual al Client (Windows XP)</h3>
+    <p>Panel de Control → Conexiones de red → clic dret Conexión de área local → Propiedades → TCP/IP</p>
+    <table class="tt">
+      <thead><tr><th>Camp</th><th>Valor</th></tr></thead>
+      <tbody>
+        <tr><td>Adreça IP</td><td><code class="ip">192.168.1.2</code></td></tr>
+        <tr><td>Màscara de subxarxa</td><td><code>255.255.255.0</code></td></tr>
+        <tr><td>Porta d'enllaç</td><td><code class="ip">192.168.1.1</code></td></tr>
+        <tr><td>Servidor DNS preferit</td><td><code class="ip">192.168.1.1</code></td></tr>
+      </tbody>
+    </table>
+    <div class="info-box sky">💡 El client apunta al servidor com a DNS perquè quan s'uneixi al domini, el servidor serà qui resolgui els noms del domini.</div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🏓 Pas 4 — Provar la connexió amb ping</h3>
+    <p>Un cop configurades les IPs, verifiquem que les dues màquines es comuniquen usant la comanda <strong>ping</strong>.</p>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>Des de Windows XP</h4>
+        <pre><span class="cmd">ping 192.168.1.1</span>
+<span class="cm"># Ha de respondre el servidor</span></pre>
+      </div>
+      <div class="col-card">
+        <h4>Des de Windows Server</h4>
+        <pre><span class="cmd">ping 192.168.1.2</span>
+<span class="cm"># Ha de respondre el client</span></pre>
+      </div>
+    </div>
+    <div class="info-box green">✅ Si reps respostes a les dues bandes, les màquines estan correctament connectades. Si no respon, revisa la configuració de xarxa i el firewall.</div>
+  </div>
+</div>
+
+<!-- ===== 3: DOMINI I AD ===== -->
+<div class="topic-panel" id="panel-3">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#3b0764,#6b21a8)">
+    <div class="sb-icon">🏛️</div>
+    <div><h2>Domini Windows i Active Directory</h2><p>Configurar el servidor com a Controlador de Domini i afegir el client al domini.</p></div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🏛️ Què és un Domini de Windows?</h3>
+    <p>Un <strong>domini</strong> és una xarxa d'ordinadors gestionada de forma centralitzada per un servidor. El servidor decideix qui pot entrar, a quins recursos pot accedir cada usuari i quines polítiques s'apliquen als equips.</p>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>Sense domini (Grup de treball)</h4>
+        <ul>
+          <li>Cada PC és independent</li>
+          <li>Usuaris i contrasenyes locals</li>
+          <li>Difícil de gestionar en molts PCs</li>
+          <li>No hi ha control centralitzat</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>Amb domini (Active Directory)</h4>
+        <ul>
+          <li>Gestió centralitzada al servidor</li>
+          <li>Un sol usuari per accedir a tots els PCs</li>
+          <li>Polítiques aplicades automàticament</li>
+          <li>Recursos compartits de forma controlada</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🗄️ Instal·lar Active Directory al servidor</h3>
+    <p><strong>Active Directory (AD)</strong> és el servei de Windows Server que gestiona el domini: usuaris, grups, equips i polítiques.</p>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Executar dcpromo</h4><p>Executar → <code>dcpromo</code> → Enter. Inicia l'assistent de configuració del Controlador de Domini.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Seleccionar opcions</h4><p>Controlador de domini per a un <strong>nou domini</strong> → Domini en un <strong>nou bosc</strong>.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Introduir el nom del domini</h4><p>Nom: <code>aulainformatica.local</code></p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">4</div></div>
+        <div class="step-content"><h4>Finalitzar i reiniciar</h4><p>Configurar contrasenya segura per a l'administrador d'AD. Reiniciar el servidor.</p></div>
+      </div>
+    </div>
+    <div class="info-box sky">💡 Després d'instal·lar AD, el servidor ja és el <strong>Controlador de Domini (DC)</strong> de <code>aulainformatica.local</code>.</div>
+  </div>
+
+  <div class="theory-card">
+    <h3>💻 Unir el client Windows XP al domini</h3>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Verificar que el DNS apunta al servidor</h4><p>El client ha de tenir com a DNS preferit la IP del servidor: <code>192.168.1.1</code>.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Obrir propietats del sistema</h4><p>Clic dret a Mi PC → Propietats → Nom de l'equip → Canviar.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Seleccionar Domini i introduir el nom</h4><p>Seleccionar <strong>Dominio</strong> → escriure <code>aulainformatica.local</code> → Acceptar.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">4</div></div>
+        <div class="step-content"><h4>Introduir credencials i reiniciar</h4><p>Introduir usuari i contrasenya de l'administrador del domini quan es demani. Reiniciar.</p></div>
+      </div>
+    </div>
+    <div class="info-box green">✅ Després de reiniciar, a la pantalla d'inici de sessió podrem triar iniciar sessió al domini <code>aulainformatica.local</code>.</div>
+  </div>
+</div>
+
+<!-- ===== 4: USUARIS I GRUPS ===== -->
+<div class="topic-panel" id="panel-4">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#7c2d12,#b45309)">
+    <div class="sb-icon">👥</div>
+    <div><h2>Gestió d'Usuaris i Grups</h2><p>Crear usuaris i grups al domini amb Active Directory (dsa.msc).</p></div>
+  </div>
+
+  <div class="theory-card">
+    <h3>👤 Crear un usuari al domini</h3>
+    <p>Tots els usuaris del domini es gestionen al servidor amb l'eina <strong>Usuarios y Equipos de Active Directory</strong> (<code>dsa.msc</code>).</p>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Obrir dsa.msc</h4><p>Ejecutar → <code>dsa.msc</code> → Enter.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Nou usuari</h4><p>Dins del domini → clic dret a <strong>Usuarios</strong> → Nuevo → Usuario.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Emplenar les dades</h4><p>Nom: <code>Juan Pérez</code> · Nom d'usuari: <code>jperez</code><br>Contrasenya provisional: <code>!1234567a</code></p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">4</div></div>
+        <div class="step-content"><h4>Marcar "ha de canviar la contrasenya"</h4><p>Activar l'opció <em>"El usuario debe cambiar la contraseña en el próximo inicio de sesión"</em> → Finalitzar.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>👥 Crear un grup i afegir usuaris</h3>
+    <p>Els <strong>grups</strong> permeten assignar permisos a molts usuaris alhora. En lloc de donar permisos un a un, es donen al grup i tots els membres els hereten.</p>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Crear el grup</h4><p>Usuarios → Nuevo → Grupo → Nom: <code>Alumnos</code>.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Afegir membres</h4><p>Doble clic al grup <code>Alumnos</code> → pestanya <strong>Miembros</strong> → Agregar.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">3</div></div>
+        <div class="step-content"><h4>Cercar i confirmar l'usuari</h4><p>Escriure <code>jperez</code> → Comprobar nombres → Aceptar. Ara <code>jperez</code> pertany al grup <code>Alumnos</code>.</p></div>
+      </div>
+    </div>
+    <div class="info-box sky">💡 Els grups faciliten l'administració: si afegim 50 alumnes al grup <code>Alumnos</code>, tots tindran accés als mateixos recursos automàticament.</div>
+  </div>
+</div>
+
+<!-- ===== 5: RECURSOS I GPO ===== -->
+<div class="topic-panel" id="panel-5">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#14532d,#166534)">
+    <div class="sb-icon">📂</div>
+    <div><h2>Recursos compartits i Directives de Grup (GPO)</h2><p>Compartir carpetes en xarxa i assignar-les automàticament als usuaris del domini.</p></div>
+  </div>
+
+  <div class="theory-card">
+    <h3>📁 Crear una carpeta compartida al servidor</h3>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Crear la carpeta</h4><p>Al servidor, crear la carpeta <code>C:\Recursos_Alumnos</code>.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Compartir-la</h4><p>Clic dret → Propietats → Compartir → Activar "Compartir esta carpeta" → Nom: <code>Alumnos</code>.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">3</div></div>
+        <div class="step-content"><h4>Configurar permisos de seguretat</h4><p>Pestanya Seguridad → Donar permisos de lectura/escriptura al grup <code>Alumnos</code>. Eliminar els permisos del grup <code>Users</code> (massa ampli).</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🔗 Connectar la unitat de xarxa des del client (manual)</h3>
+    <p>Des de Windows XP, connectar manualment la carpeta compartida com una unitat de xarxa:</p>
+    <p>Mi PC → Herramientas → Conectar a unidad de red → Ruta: <code>\\Servidor\Alumnos</code> → Lletra: <code>Z:</code></p>
+    <ul class="checklist">
+      <li>L'usuari jperez pot iniciar sessió al domini des de Windows XP</li>
+      <li>L'usuari jperez té accés a la unitat de xarxa Alumnos</li>
+      <li>L'usuari pot crear i modificar fitxers a la carpeta compartida</li>
+    </ul>
+  </div>
+
+  <div class="theory-card">
+    <h3>⚙️ Directives de Grup (GPO): assignació automàtica</h3>
+    <p>Una <strong>GPO (Group Policy Object)</strong> és una directiva que s'aplica automàticament als usuaris o equips del domini. Amb una GPO podem assignar la unitat <code>Z:</code> automàticament a cada inici de sessió, sense que l'usuari hagi de fer res.</p>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Obrir l'editor de directives</h4><p>Ejecutar → <code>gpedit.msc</code>, o bé des de dsa.msc → clic dret al domini → Propietats → Directiva de Grupo.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Crear una nova GPO</h4><p>Clic dret al domini → Nova directiva de grup → Nom: <code>Assignació Unitat Alumnos</code>.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Editar la GPO</h4><p>Clic dret → Editar → Configuració d'usuari → Preferències → Configuració de Windows → Assignacions d'unitat → Nou → Unitat de xarxa.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">4</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Configurar la unitat</h4><p>Ubicació: <code>\\Servidor\Alumnos</code> · Lletra: <code>Z:</code> · Marcar <strong>"Reconectar"</strong>.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">5</div></div>
+        <div class="step-content"><h4>Filtrar la GPO al grup Alumnos</h4><p>Pestanya Àmbit → Seguretat → Agregar el grup <code>Alumnos</code> amb permisos de Llegir i Aplicar.</p></div>
+      </div>
+    </div>
+
+    <p style="margin-top:14px"><strong>Aplicar i verificar:</strong></p>
+    <pre><span class="cm"># Al client Windows XP, actualitzar les directives:</span>
+<span class="cmd">gpupdate /force</span>
+
+<span class="cm"># Verificar quines GPO s'apliquen:</span>
+<span class="cmd">gpresult /R</span></pre>
+    <div class="info-box green">✅ Després de reiniciar i iniciar sessió amb un usuari del grup Alumnos, la unitat Z: apareixerà automàticament a Mi PC, sense cap acció manual.</div>
+  </div>
+</div>
+
+<!-- ===== 6: GUEST ADDITIONS ===== -->
+<div class="topic-panel" id="panel-6">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#1e3a5f,#0369a1)">
+    <div class="sb-icon">🔧</div>
+    <div><h2>Guest Additions i transferència de fitxers</h2><p>Millorar la integració entre la MV i l'ordinador real, i mètodes per passar fitxers.</p></div>
+  </div>
+
+  <div class="theory-card">
+    <h3>✨ Què són les Guest Additions?</h3>
+    <p>Les <strong>Guest Additions</strong> (Adicions per a convidats) són un conjunt de controladors i eines que milloren la integració entre la màquina virtual i el sistema amfitrió.</p>
+    <div class="tag-list">
+      <span class="tag tag-green">Millor rendiment gràfic</span>
+      <span class="tag tag-green">Portapapers compartit</span>
+      <span class="tag tag-green">Arrossegar i soltar fitxers</span>
+      <span class="tag tag-sky">Carpetes compartides</span>
+      <span class="tag tag-sky">Millor compatibilitat ratolí/teclat</span>
+    </div>
+    <p><strong>Instal·lació a Windows XP:</strong></p>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Inserir la imatge de les Guest Additions</h4><p>Amb la MV encesa: Dispositius → Insertar imagen de CD de las Guest Additions.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-content"><h4>Executar l'instal·lador</h4><p>Obrir Mi PC → unitat de CD → executar <code>VBoxWindowsAdditions.exe</code>.</p></div>
+      </div>
+      <div class="step-item">
+        <div class="step-left"><div class="step-num">3</div></div>
+        <div class="step-content"><h4>Reiniciar la MV</h4><p>Reiniciar per aplicar els canvis.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>📦 Mètodes per passar fitxers entre el real i la MV</h3>
+    <table class="tt">
+      <thead><tr><th>Mètode</th><th>Com fer-ho</th><th>Quan usar-lo</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>📁 Carpetes compartides</strong></td>
+          <td>Configuració MV → Carpetes compartides → Afegir carpeta → Muntatge automàtic. Accedir des de XP a <code>\\VBOXSVR\</code></td>
+          <td>✅ Recomanat per transferències freqüents</td>
+        </tr>
+        <tr>
+          <td><strong>🖱️ Arrossegar i soltar</strong></td>
+          <td>Configuració → General → Avançat → Bidireccional (requereix Guest Additions)</td>
+          <td>Fitxers petits i ocasionals</td>
+        </tr>
+        <tr>
+          <td><strong>🔌 USB</strong></td>
+          <td>Configuració → USB → Habilitar USB 2.0/3.0 → Afegir filtre del dispositiu</td>
+          <td>Pendrives físics</td>
+        </tr>
+        <tr>
+          <td><strong>💿 Imatge ISO</strong></td>
+          <td>Crear una ISO amb ImgBurn/PowerISO → muntar-la a Almacenamiento</td>
+          <td>Múltiples fitxers empaquetats</td>
+        </tr>
+        <tr>
+          <td><strong>🌐 Xarxa / FTP</strong></td>
+          <td>Compartir carpeta en xarxa o muntar servidor FTP al host</td>
+          <td>Configuracions avançades</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="info-box sky">💡 Si les carpetes compartides no apareixen a Mi PC, prova a instal·lar les Guest Additions primer.</div>
+  </div>
+</div>
+
+<!-- BOTONS NAV -->
+<div class="nav-btns">
+  <button class="nav-btn prev" id="btn-prev" onclick="navigate(-1)" disabled>← Tema anterior</button>
+  <button class="nav-btn next" id="btn-next" onclick="navigate(1)">Tema següent →</button>
+</div>
+
+</div>
+<script>
+let cur = 0;
+const total = 7;
+function switchTopic(i) {
+  document.querySelectorAll('.topic-tab').forEach((t,j) => t.classList.toggle('active', j===i));
+  document.querySelectorAll('.topic-panel').forEach((p,j) => p.classList.toggle('active', j===i));
+  cur = i;
+  document.getElementById('btn-prev').disabled = i===0;
+  document.getElementById('btn-next').disabled = i===total-1;
+  document.getElementById('btn-next').textContent = i===total-1 ? '✓ Final' : 'Tema següent →';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function navigate(dir) {
+  const n = cur+dir;
+  if(n>=0 && n<total) switchTopic(n);
+}
+</script>
+</body>
+</html>
