@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔐 Criptografia</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d2e;
+    --surface2: #232640;
+    --accent: #6c63ff;
+    --accent2: #ff6584;
+    --accent3: #43e97b;
+    --accent4: #f7971e;
+    --text: #e8e8f0;
+    --text-muted: #9090aa;
+    --border: #2e3155;
+    --radius: 12px;
+    --nav-width: 240px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── NAV LATERAL ── */
+  nav {
+    width: var(--nav-width);
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    overflow-y: auto;
+    padding: 24px 0;
+    z-index: 100;
+  }
+
+  .nav-logo {
+    padding: 0 20px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+  .nav-logo .emoji { font-size: 2rem; }
+  .nav-logo h2 { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; letter-spacing: 0.05em; text-transform: uppercase; }
+
+  nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.88rem;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+  }
+  nav a:hover, nav a.active {
+    color: var(--text);
+    background: var(--surface2);
+    border-left-color: var(--accent);
+  }
+  nav a .nav-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+  /* ── MAIN ── */
+  main {
+    margin-left: var(--nav-width);
+    flex: 1;
+    padding: 40px 48px;
+    max-width: 960px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #1a1d2e 0%, #232640 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 40px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '🔐';
+    position: absolute;
+    right: 32px; top: 24px;
+    font-size: 5rem;
+    opacity: 0.15;
+  }
+  .hero h1 { font-size: 2rem; font-weight: 800; margin-bottom: 8px; }
+  .hero p { color: var(--text-muted); max-width: 520px; line-height: 1.6; }
+  .hero .meta { margin-top: 16px; font-size: 0.8rem; color: var(--text-muted); }
+
+  /* ── SECTIONS ── */
+  section { margin-bottom: 48px; scroll-margin-top: 80px; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+  .section-header h2 { font-size: 1.3rem; font-weight: 700; }
+  .section-header p { font-size: 0.85rem; color: var(--text-muted); margin-top: 2px; }
+
+  /* Colors per secció */
+  .c1 { background: #1e2060; }
+  .c2 { background: #1e3a2b; }
+  .c3 { background: #3a1e2b; }
+  .c4 { background: #1e3060; }
+  .c5 { background: #3a2e1e; }
+  .c6 { background: #2b1e3a; }
+  .c7 { background: #1e3a3a; }
+
+  /* ── ACORDIÓ ── */
+  .accordion { margin-bottom: 10px; }
+
+  .accordion summary {
+    cursor: pointer;
+    list-style: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.2s, border-color 0.2s;
+    user-select: none;
+  }
+  .accordion summary::-webkit-details-marker { display: none; }
+  .accordion summary::after { content: '▶'; font-size: 0.75rem; color: var(--text-muted); transition: transform 0.25s; }
+  .accordion[open] summary::after { transform: rotate(90deg); }
+  .accordion[open] summary { border-color: var(--accent); background: var(--surface2); border-radius: var(--radius) var(--radius) 0 0; }
+
+  .accordion-body {
+    background: var(--surface2);
+    border: 1px solid var(--accent);
+    border-top: none;
+    border-radius: 0 0 var(--radius) var(--radius);
+    padding: 20px;
+  }
+
+  /* ── CARDS GRID ── */
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin: 16px 0; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+  }
+  .card h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 8px; }
+  .card p, .card li { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+  .card ul { padding-left: 16px; }
+
+  /* Badge de color */
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .badge-purple { background: #2d2060; color: #a89fff; }
+  .badge-green  { background: #1a3326; color: #5fdf9a; }
+  .badge-red    { background: #3a1a1a; color: #ff8080; }
+  .badge-orange { background: #3a2a10; color: #ffc060; }
+  .badge-blue   { background: #102040; color: #60b0ff; }
+
+  /* ── TAULA ── */
+  table { width: 100%; border-collapse: collapse; font-size: 0.87rem; margin: 12px 0; }
+  th { background: var(--surface); padding: 10px 14px; text-align: left; font-weight: 600; border-bottom: 2px solid var(--border); }
+  td { padding: 9px 14px; border-bottom: 1px solid var(--border); color: var(--text-muted); }
+  td:first-child { color: var(--text); font-weight: 600; }
+  tr:last-child td { border-bottom: none; }
+
+  /* ── PASSOS NUMERATS ── */
+  .steps { display: flex; flex-direction: column; gap: 12px; margin: 12px 0; }
+  .step { display: flex; gap: 14px; align-items: flex-start; }
+  .step-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: 700;
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .step-content h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 3px; }
+  .step-content p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+
+  /* ── ALERTA / INFO BOX ── */
+  .info-box {
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    border-left: 4px solid;
+  }
+  .info-box.purple { background: #1c1840; border-color: var(--accent); }
+  .info-box.green  { background: #112218; border-color: var(--accent3); }
+  .info-box.orange { background: #231a0a; border-color: var(--accent4); }
+  .info-box.red    { background: #220f0f; border-color: var(--accent2); }
+
+  /* ── TIMELINE ── */
+  .timeline { display: flex; gap: 0; margin: 16px 0; overflow-x: auto; }
+  .tl-item { flex: 1; min-width: 130px; position: relative; }
+  .tl-item::before { content: ''; position: absolute; top: 18px; left: 50%; right: -50%; height: 2px; background: var(--border); }
+  .tl-item:last-child::before { display: none; }
+  .tl-dot { width: 36px; height: 36px; border-radius: 50%; background: var(--accent); margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 1rem; position: relative; z-index: 1; }
+  .tl-label { text-align: center; font-size: 0.8rem; color: var(--text-muted); padding: 0 6px; }
+  .tl-label strong { display: block; color: var(--text); font-size: 0.85rem; margin-bottom: 2px; }
+
+  /* ── PROPIETATS HASH ── */
+  .props { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
+  .prop { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+  .prop .prop-icon { font-size: 1.3rem; margin-bottom: 6px; }
+  .prop h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 4px; }
+  .prop p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+
+  /* ── COMPARACIÓ ── */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 12px 0; }
+  .compare-box { border-radius: var(--radius); padding: 16px; }
+  .compare-box.good { background: #112218; border: 1px solid #2a6640; }
+  .compare-box.bad  { background: #220f0f; border: 1px solid #662a2a; }
+  .compare-box h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 8px; }
+  .compare-box ul { padding-left: 16px; }
+  .compare-box li { font-size: 0.84rem; color: var(--text-muted); margin-bottom: 4px; line-height: 1.5; }
+
+  /* ── ESCALA / BARRA ── */
+  .scale { margin: 14px 0; }
+  .scale-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; font-size: 0.85rem; }
+  .scale-label { width: 180px; flex-shrink: 0; }
+  .scale-bar-wrap { flex: 1; background: var(--surface); border-radius: 4px; height: 10px; overflow: hidden; }
+  .scale-bar { height: 100%; border-radius: 4px; }
+  .scale-val { width: 80px; color: var(--text-muted); text-align: right; flex-shrink: 0; font-size: 0.8rem; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { display: none; }
+    main { margin-left: 0; padding: 20px; }
+    .compare, .props { grid-template-columns: 1fr; }
+  }
+
+  p { line-height: 1.7; color: var(--text-muted); margin-bottom: 10px; }
+  strong { color: var(--text); }
+
+  .hint { font-size: 0.8rem; color: var(--text-muted); margin-top: -16px; margin-bottom: 20px; font-style: italic; }
+
+  /* Key highlight */
+  .key-formula {
+    font-family: monospace;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 16px;
+    margin: 10px 0;
+    font-size: 0.9rem;
+    letter-spacing: 0.03em;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════ NAV ═══════════════════════════════════ -->
+<nav>
+  <div class="nav-logo">
+    <div class="emoji">🔐</div>
+    <h2>Criptografia</h2>
+  </div>
+  <a href="#historia" class="nav-link"><span class="nav-icon">📜</span> Història</a>
+  <a href="#xifrats-classics" class="nav-link"><span class="nav-icon">🔄</span> Xifrats clàssics</a>
+  <a href="#enigma" class="nav-link"><span class="nav-icon">⚙️</span> Màquina Enigma</a>
+  <a href="#algoritmes" class="nav-link"><span class="nav-icon">🧮</span> Algoritmes</a>
+  <a href="#simetrica" class="nav-link"><span class="nav-icon">🔑</span> Criptografia simètrica</a>
+  <a href="#asimetrica" class="nav-link"><span class="nav-icon">🗝️</span> Criptografia asimètrica</a>
+  <a href="#hash" class="nav-link"><span class="nav-icon">🧬</span> Funcions hash</a>
+  <a href="#aplicacions" class="nav-link"><span class="nav-icon">🌐</span> Aplicacions</a>
+</nav>
+
+<!-- ═══════════════════════════════════ MAIN ═══════════════════════════════════ -->
+<main>
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>🔐 Criptografia</h1>
+    <p>De l'escítala espartana als algoritmes moderns: l'art de protegir la informació a través del temps.</p>
+    <div class="meta">IES Ramon Llull · 1r Batxillerat · Curs 25-26</div>
+  </div>
+
+  <!-- NAVEGACIÓ RÀPIDA -->
+  <p class="hint">▸ Prem cada títol per revelar el contingut</p>
+
+  <!-- ═══════════ 1. HISTÒRIA ═══════════ -->
+  <section id="historia">
+    <div class="section-header">
+      <div class="section-icon c1">📜</div>
+      <div>
+        <h2>Història de la criptografia</h2>
+        <p>De la protecció física a l'enginyeria matemàtica.</p>
+      </div>
+    </div>
+
+    <details class="accordion">
+      <summary>📖 Criptografia i criptoanàlisi: les dues cares</summary>
+      <div class="accordion-body">
+        <div class="compare">
+          <div class="compare-box good">
+            <h4>🛡️ Criptografia</h4>
+            <ul>
+              <li>Dissenya tècniques i algoritmes per <strong>protegir</strong> informació.</li>
+              <li>Exemple: xifrat usat als missatges de WhatsApp.</li>
+            </ul>
+          </div>
+          <div class="compare-box bad">
+            <h4>🔓 Criptoanàlisi</h4>
+            <ul>
+              <li>Estudia mètodes per <strong>trencar</strong> sistemes de xifrat sense conèixer la clau.</li>
+              <li>Exemple: atacs per desxifrar contrasenyes febles.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="info-box purple">💡 Criptografia busca protegir; criptoanàlisi busca atacar. Són les <strong>dues cares de la mateixa moneda</strong>.</div>
+        <p>Un <strong>algoritme criptogràfic</strong> és un procés matemàtic per encriptar i desencriptar missatges, usant claus com a paràmetres.</p>
+        <div class="cards">
+          <div class="card"><span class="badge badge-green">Text en clar</span><p>Missatge original, abans de ser encriptat.</p></div>
+          <div class="card"><span class="badge badge-red">Text xifrat</span><p>Missatge transformat, després de l'encriptació.</p></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>⏳ Evolució al llarg del temps</summary>
+      <div class="accordion-body">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot">🏛️</div>
+            <div class="tl-label"><strong>Antiguitat</strong>Escítala, César, Atbash</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">⚙️</div>
+            <div class="tl-label"><strong>Seg. XX</strong>Màquines electromecàniques (Enigma)</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">💻</div>
+            <div class="tl-label"><strong>1970–90</strong>DES, RSA, algoritmes digitals</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot">🌐</div>
+            <div class="tl-label"><strong>Avui</strong>AES, TLS, xifrat de punta a punta</div>
+          </div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ═══════════ 2. XIFRATS CLÀSSICS ═══════════ -->
+  <section id="xifrats-classics">
+    <div class="section-header">
+      <div class="section-icon c2">🔄</div>
+      <div>
+        <h2>Xifrats clàssics</h2>
+        <p>Transposició i substitució: els fonaments del secret.</p>
+      </div>
+    </div>
+
+    <details class="accordion">
+      <summary>🔀 Tipus de xifrat: transposició vs. substitució</summary>
+      <div class="accordion-body">
+        <div class="cards">
+          <div class="card">
+            <span class="badge badge-blue">Transposició</span>
+            <h4>Canvi d'ordre</h4>
+            <p>Canvia l'ordre dels caràcters sense modificar-los. Exemple: l'escítala espartana.</p>
+          </div>
+          <div class="card">
+            <span class="badge badge-purple">Substitució</span>
+            <h4>Canvi de símbols</h4>
+            <p>Cada caràcter es reemplaça per un altre segons una regla. Exemples: César, Atbash.</p>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>🪖 Escítala espartana</summary>
+      <div class="accordion-body">
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Preparació</h4><p>S'enrotlla una tira de cuir en un bastó d'un gruix determinat.</p></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Escriptura</h4><p>El missatge s'escriu al llarg de la tira enrotllada.</p></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Xifrat</h4><p>En desenrotllar-la, el text sembla incoherent.</p></div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-content"><h4>Desxifrat</h4><p>Per llegir el missatge, cal enrotllar la tira en un bastó del <strong>mateix gruix</strong>.</p></div></div>
+        </div>
+        <div class="info-box green">🏛️ Emprat en missatges militars de l'Antiga Grècia per mantenir la informació segura.</div>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>🗡️ Xifrat del César</summary>
+      <div class="accordion-body">
+        <p>Cada lletra es reemplaça per una altra situada un <strong>nombre fix de posicions</strong> més endavant en l'alfabet.</p>
+        <div class="key-formula">Desplaçament de 3:&nbsp;&nbsp; A→D &nbsp; B→E &nbsp; C→F &nbsp; ...</div>
+        <div class="cards">
+          <div class="card">
+            <span class="badge badge-green">Text en clar</span>
+            <p style="font-size:1.2rem; font-family:monospace; color:var(--text); margin-top:4px;">HOLA</p>
+          </div>
+          <div class="card">
+            <span class="badge badge-red">Text xifrat</span>
+            <p style="font-size:1.2rem; font-family:monospace; color:var(--text); margin-top:4px;">KROD</p>
+          </div>
+        </div>
+        <div class="info-box orange">⚔️ Utilitzat per Juli César per enviar missatges segurs als seus generals.</div>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>🔀 Mètode Atbash</summary>
+      <div class="accordion-body">
+        <p>Cada lletra de l'alfabet es reemplaça per la seva equivalent simètrica: la primera per l'última, la segona per la penúltima...</p>
+        <div class="key-formula">A ↔ Z &nbsp;&nbsp; B ↔ Y &nbsp;&nbsp; C ↔ X &nbsp;&nbsp; ...</div>
+        <div class="cards">
+          <div class="card"><span class="badge badge-green">Text en clar</span><p style="font-family:monospace;font-size:1.1rem;color:var(--text)">ZORRO</p></div>
+          <div class="card"><span class="badge badge-red">Text xifrat</span><p style="font-family:monospace;font-size:1.1rem;color:var(--text)">ALIIW</p></div>
+        </div>
+        <div class="info-box purple">📖 Utilitzat entre els segles VI i V a.C. en textos hebreus. Mencionat al "Llibre de Jeremies". Popularitzat a <em>El Codi Da Vinci</em>.</div>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>⬛ Xifrat Francmaçó (Pigpen)</summary>
+      <div class="accordion-body">
+        <p>Xifrat per substitució simple que canvia les lletres per <strong>símbols geomètrics</strong> basats en una quadrícula. També conegut com a xifrat pocilga, maçònic, de Napoleó o de tres en ratlla.</p>
+        <div class="info-box purple">🔺 Cada lletra correspon a un fragment de la quadrícula o del símbol en X que l'envolta.</div>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>⬜ Quadrat de Polibio</summary>
+      <div class="accordion-body">
+        <p>Assigna coordenades numèriques a cada lletra de l'alfabet. Origen a l'Antiga Grècia. Emprat pels nihilistes russos en presons tsaristes.</p>
+        <div class="key-formula">A = 11 &nbsp; B = 12 &nbsp; C = 13 &nbsp; ...</div>
+        <div class="cards">
+          <div class="card"><span class="badge badge-green">Text en clar</span><p style="font-family:monospace;font-size:1.1rem;color:var(--text)">HOLA</p></div>
+          <div class="card"><span class="badge badge-red">Text xifrat</span><p style="font-family:monospace;font-size:1.1rem;color:var(--text)">23343111</p></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>📚 Exemples literaris de criptografia</summary>
+      <div class="accordion-body">
+        <div class="cards">
+          <div class="card">
+            <span class="badge badge-purple">Arthur Conan Doyle</span>
+            <h4>Els Ballarins</h4>
+            <p>Sherlock Holmes desxifra figures de ballarins que representen lletres per resoldre un misteri.</p>
+          </div>
+          <div class="card">
+            <span class="badge badge-orange">Edgar Allan Poe</span>
+            <h4>L'Escarabat d'Or</h4>
+            <p>Missatge misteriós basat en símbols i lletres substituïdes que condueix al descobriment d'un tresor.</p>
+          </div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ═══════════ 3. MÀQUINA ENIGMA ═══════════ -->
+  <section id="enigma">
+    <div class="section-header">
+      <div class="section-icon c3">⚙️</div>
+      <div>
+        <h2>Màquina Enigma</h2>
+        <p>El dispositiu electromecànic que va canviar la Segona Guerra Mundial.</p>
+      </div>
+    </div>
+
+    <details class="accordion">
+      <summary>🏭 Origen i adopció militar</summary>
+      <div class="accordion-body">
+        <div class="steps">
+          <div class="step"><div class="step-num">1918</div><div class="step-content"><h4>Patent</h4><p>Es patenta la màquina de rotors dissenyada per xifrar i desxifrar missatges.</p></div></div>
+          <div class="step"><div class="step-num">1926</div><div class="step-content"><h4>Adopció naval</h4><p>L'Armada alemanya l'adopta per a ús militar.</p></div></div>
+          <div class="step"><div class="step-num">WWII</div><div class="step-content"><h4>Extensió massiva</h4><p>S'estén a totes les forces armades alemanes. La facilitat de maneig i la robustesa criptogràfica en van ser les raons principals.</p></div></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>🔩 Components i funcionament</summary>
+      <div class="accordion-body">
+        <div class="cards">
+          <div class="card"><span class="badge badge-blue">Teclat</span><p>Similar al de les màquines d'escriure. Cada tecla era un interruptor elèctric.</p></div>
+          <div class="card"><span class="badge badge-purple">Rotors</span><p>Engranatge mecànic que substituïa elèctricament les lletres.</p></div>
+          <div class="card"><span class="badge badge-orange">Panel de llums</span><p>Mostrava el missatge xifrat: s'il·luminava la lletra resultant.</p></div>
+          <div class="card"><span class="badge badge-green">Plugboard</span><p>Tauler de connexió que intercanviava parells de lletres addicionals.</p></div>
+        </div>
+        <div class="steps" style="margin-top:16px">
+          <div class="step"><div class="step-num">1</div><div class="step-content"><h4>L'usuari escriu al teclat</h4><p>Cada pulsació genera un impuls elèctric.</p></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><h4>L'impuls viatja pels rotors i reflectors</h4><p>Cada rotor transforma la lletra de manera diferent.</p></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content"><h4>S'il·lumina la lletra xifrada</h4><p>El missatge xifrat apareix al panel de llums.</p></div></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>🔢 Configuracions possibles</summary>
+      <div class="accordion-body">
+        <p>Combinant <strong>3 rotors</strong> de 5 disponibles (cada un amb 26 posicions) i el <strong>plugboard</strong> (deu parells de lletres connectades):</p>
+        <div class="key-formula" style="font-size:1.1rem; text-align:center; padding: 16px;">
+          158.962.555.217.826.360.000 configuracions diferents
+        </div>
+        <div class="info-box orange">🔐 La configuració es canviava cada dia. Encara que es desxifràs el codi un dia, l'endemà calia tornar a començar de zero.</div>
+        <p>🌐 Emulador interactiu: <strong>101computing.net/enigma-machine-emulator</strong></p>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>📡 Ús en combat i desxifrat</summary>
+      <div class="accordion-body">
+        <p>Els missatges xifrats s'enviaven per <strong>ràdio en codi Morse</strong>. El desxifrat aliat dels missatges Enigma (Projecte Ultra a Bletchley Park) va ser decisiu per al desenllaç de la guerra.</p>
+        <div class="info-box green">🏆 Missatge autèntic enviat el 7 de juliol de 1941 per la Divisió SS-Totenkopf durant l'Operació Barbarroja. Desxifrat per Geoff Sullivan i Frode Weierud, membres del Crypto Simulation Group.</div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ═══════════ 4. ALGORITMES ═══════════ -->
+  <section id="algoritmes">
+    <div class="section-header">
+      <div class="section-icon c4">🧮</div>
+      <div>
+        <h2>Algoritmes criptogràfics</h2>
+        <p>La base matemàtica que fa possible el xifrat modern.</p>
+      </div>
+    </div>
+
+    <details class="accordion">
+      <summary>📐 Què és un algoritme criptogràfic?</summary>
+      <div class="accordion-body">
+        <p>Un <strong>algoritme</strong> és una sèrie de passos o instruccions per assolir un objectiu. En criptografia, aquests passos són <strong>operacions matemàtiques</strong> que es realitzen sobre les dades usant una clau per protegir-les.</p>
+        <div class="info-box purple">🔓 Els algoritmes <strong>són de domini públic</strong> i el codi font associat també. Continuen sent segurs perquè requereixen que l'usuari proporcioni la clau secreta.</div>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>📊 Tipus d'algoritmes</summary>
+      <div class="accordion-body">
+        <table>
+          <tr><th>Tipus</th><th>Clau</th><th>Algoritme principal</th><th>Ús típic</th></tr>
+          <tr><td>Simètric</td><td>Clau privada compartida</td><td>AES</td><td>WiFi WPA2, disc dur</td></tr>
+          <tr><td>Asimètric</td><td>Clau pública + privada</td><td>RSA</td><td>HTTPS, firma digital</td></tr>
+          <tr><td>Hash</td><td>Sense clau (unidireccional)</td><td>SHA-256</td><td>Contrasenyes, blockchain</td></tr>
+        </table>
+      </div>
+    </details>
+  </section>
+
+  <!-- ═══════════ 5. SIMÈTRICA ═══════════ -->
+  <section id="simetrica">
+    <div class="section-header">
+      <div class="section-icon c5">🔑</div>
+      <div>
+        <h2>Criptografia simètrica (AES)</h2>
+        <p>Una sola clau per xifrar i desxifrar: ràpida però delicada.</p>
+      </div>
+    </div>
+
+    <details class="accordion">
+      <summary>🔑 Com funciona la criptografia simètrica?</summary>
+      <div class="accordion-body">
+        <p>S'utilitza la <strong>mateixa clau</strong> tant per xifrar com per desxifrar. Aquesta clau no es mostrarà a ningú que no sigui l'emissor i el receptor. Per això també s'anomena <strong>criptografia de clau privada</strong>.</p>
+        <div class="info-box orange">⚡ L'algoritme de criptografia simètrica més usat és <strong>AES (Advanced Encryption Standard)</strong>.</div>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>⚙️ Com funciona AES?</summary>
+      <div class="accordion-body">
+        <p>L'algoritme funciona en <strong>rondes</strong>: passos repetitius on les dades es processen mitjançant operacions matemàtiques. La quantitat de rondes depèn de la longitud de la clau.</p>
+        <table>
+          <tr><th>Longitud de clau</th><th>Rondes</th><th>Seguretat</th><th>Velocitat</th></tr>
+          <tr><td>128 bits</td><td>10</td><td>Alta</td><td>Molt ràpida</td></tr>
+          <tr><td>192 bits</td><td>12</td><td>Molt alta</td><td>Ràpida</td></tr>
+          <tr><td>256 bits</td><td>14</td><td>Màxima</td><td>Moderada</td></tr>
+        </table>
+        <div class="info-box purple">📶 AES és l'estàndard de xifrat a les xarxes WiFi en el sistema de seguretat <strong>WPA2</strong>. La clau usada es calcula a partir del SSID i la contrasenya de la xarxa.</div>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>✅❌ Avantatges i inconvenients</summary>
+      <div class="accordion-body">
+        <div class="compare">
+          <div class="compare-box good">
+            <h4>✅ Avantatges</h4>
+            <ul>
+              <li>Més ràpida i eficient que l'asimètrica.</li>
+              <li>Ideal per xifrar grans volums de dades.</li>
+            </ul>
+          </div>
+          <div class="compare-box bad">
+            <h4>❌ Inconvenients</h4>
+            <ul>
+              <li>La clau s'ha de mantenir secreta.</li>
+              <li>Cal compartir-la de manera segura.</li>
+              <li>Problema: com enviar la clau sense que la interceptin?</li>
+              <li>Es necessiten més claus que amb l'asimètrica.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="info-box orange">🔗 Pràctica: <strong>anycript.com/crypto</strong></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ═══════════ 6. ASIMÈTRICA ═══════════ -->
+  <section id="asimetrica">
+    <div class="section-header">
+      <div class="section-icon c6">🗝️</div>
+      <div>
+        <h2>Criptografia asimètrica (RSA)</h2>
+        <p>Dues claus complementàries que solucionen el problema de la distribució.</p>
+      </div>
+    </div>
+
+    <details class="accordion">
+      <summary>🗝️ El concepte de clau pública i privada</summary>
+      <div class="accordion-body">
+        <p>En lloc d'una clau compartida, cada ordinador té <strong>dues claus</strong> que usa per comunicar-se amb qualsevol altre:</p>
+        <div class="cards">
+          <div class="card">
+            <span class="badge badge-green">Clau pública</span>
+            <p>Es comparteix amb tothom. Qualsevol pot xifrar un missatge amb ella.</p>
+          </div>
+          <div class="card">
+            <span class="badge badge-red">Clau privada</span>
+            <p>Secreta. Només el propietari pot desxifrar missatges xifrats amb la seva clau pública.</p>
+          </div>
+        </div>
+        <div class="info-box green">✉️ Si vols enviar-me un missatge secret: xifra'l amb la meva <strong>clau pública</strong>. Només jo podré obrir-lo amb la meva <strong>clau privada</strong>.</div>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>🔢 RSA: generació de claus</summary>
+      <div class="accordion-body">
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Tria de nombres primers</h4><p>S'escullen dos nombres primers <strong>p</strong> i <strong>q</strong> molt grans.</p></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Càlcul de n</h4><p>Es calcula el producte: <strong>n = p · q</strong>. Les dues claus es deriven d'aquest nombre.</p></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Seguretat</h4><p>La seguretat es basa en la dificultat de <strong>factoritzar n</strong>. Trobar p i q a partir de n és computacionalment inviable per nombres grans.</p></div></div>
+        </div>
+        <div class="info-box purple">🧮 El xifrat i desxifrat es realitzen mitjançant operacions d'<strong>aritmètica modular</strong>.</div>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>📊 Comparació simètrica vs. asimètrica</summary>
+      <div class="accordion-body">
+        <table>
+          <tr><th>Característica</th><th>Simètrica (AES)</th><th>Asimètrica (RSA)</th></tr>
+          <tr><td>Nombre de claus</td><td>1 (compartida)</td><td>2 (pública + privada)</td></tr>
+          <tr><td>Velocitat</td><td>Molt ràpida</td><td>Lenta</td></tr>
+          <tr><td>Distribució de claus</td><td>Problemàtica</td><td>Senzilla</td></tr>
+          <tr><td>Ús típic</td><td>Xifrat massiu de dades</td><td>Intercanvi de claus, firma</td></tr>
+        </table>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>🌐 HTTPS: combinació de tots dos</summary>
+      <div class="accordion-body">
+        <p>HTTPS usa els dos tipus de criptografia per aprofitar el millor de cada un:</p>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4>Intercanvi de claus (RSA)</h4>
+              <p>S'usa criptografia asimètrica. El client usa la clau pública del servidor per enviar una clau de sessió. Només el servidor pot desxifrar-la amb la seva clau privada.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4>Comunicació segura (AES)</h4>
+              <p>Un cop establerta la clau de sessió, s'usa xifrat simètric per a totes les transaccions. Més ràpid i segur per a grans volums de dades.</p>
+            </div>
+          </div>
+        </div>
+        <div class="info-box green">🔒 El cadenat que veus al navegador indica que la connexió usa HTTPS amb aquest mecanisme combinat.</div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ═══════════ 7. HASH ═══════════ -->
+  <section id="hash">
+    <div class="section-header">
+      <div class="section-icon c7">🧬</div>
+      <div>
+        <h2>Funcions de resum (hash)</h2>
+        <p>Empremtes digitals úniques i irreversibles per a cada dada.</p>
+      </div>
+    </div>
+
+    <details class="accordion">
+      <summary>🧬 Propietats de les funcions hash</summary>
+      <div class="accordion-body">
+        <div class="props">
+          <div class="prop"><div class="prop-icon">🔁</div><h4>Determinisme</h4><p>La mateixa entrada sempre genera el mateix hash.</p></div>
+          <div class="prop"><div class="prop-icon">⚡</div><h4>Velocitat</h4><p>Les funcions hash han de ser ràpides de calcular per a qualsevol entrada.</p></div>
+          <div class="prop"><div class="prop-icon">🎯</div><h4>Unicitat</h4><p>És extremadament improbable que dues entrades diferents produeixin el mateix hash (col·lisió).</p></div>
+          <div class="prop"><div class="prop-icon">🚫</div><h4>Irreversibilitat</h4><p>No es pot derivar l'entrada original a partir del hash.</p></div>
+          <div class="prop"><div class="prop-icon">🦋</div><h4>Sensibilitat a canvis</h4><p>Un petit canvi en l'entrada produeix un hash completament diferent.</p></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>🔐 Hash i contrasenyes</summary>
+      <div class="accordion-body">
+        <p>Les contrasenyes mai s'emmagatzemen en text pla a les bases de dades. En lloc d'això, s'hi emmagatzema el seu <strong>hash</strong>.</p>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Registre</h4><p>L'usuari crea la contrasenya. Es calcula el hash i s'emmagatzema a la base de dades juntament amb el nom d'usuari.</p></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Inici de sessió</h4><p>L'usuari introdueix la contrasenya. Es calcula el hash i es compara amb el hash emmagatzemat.</p></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Validació</h4><p>Si els valors coincideixen, la contrasenya és correcta. <strong>Mai es guarda la contrasenya real.</strong></p></div></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>📁 Detecció de duplicats i verificació d'arxius</summary>
+      <div class="accordion-body">
+        <p>Comparar arxius grans directament és lent. Calculant el hash de cada arxiu, la comparació és molt més ràpida i eficient, ja que els hashes són petits.</p>
+        <div class="info-box green">📂 En programes de compartició d'arxius, el hash s'utilitza per comprovar que varis arxius contenen la mateixa informació, independentment del nom que tinguin.</div>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>⛏️ Hash i blockchain</summary>
+      <div class="accordion-body">
+        <p>El contingut d'un bloc es passa per la funció <strong>SHA-256</strong>, produint un hash únic del bloc.</p>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Criteri de validesa</h4><p>El hash del bloc ha de complir certs criteris definits per la xarxa, com tenir un nombre específic de zeros al principi.</p></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Mineria (nonce)</h4><p>Els miners han de trobar un valor de <strong>nonce</strong> tal que el hash del bloc compleixi la dificultat establerta. Procés de prova i error computacionalment intensiu.</p></div></div>
+        </div>
+        <div class="info-box purple">🔗 Cada bloc conté el hash del bloc anterior, formant una cadena que fa impossible modificar dades passades sense invalidar tota la cadena posterior.</div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ═══════════ 8. APLICACIONS ═══════════ -->
+  <section id="aplicacions">
+    <div class="section-header">
+      <div class="section-icon c1">🌐</div>
+      <div>
+        <h2>Aplicacions i eines</h2>
+        <p>On s'aplica la criptografia en el teu dia a dia.</p>
+      </div>
+    </div>
+
+    <details class="accordion">
+      <summary>🌐 VPNs i TOR</summary>
+      <div class="accordion-body">
+        <div class="cards">
+          <div class="card">
+            <span class="badge badge-purple">VPN</span>
+            <h4>Xarxa Privada Virtual</h4>
+            <p>Xifra tot el tràfic entre el teu dispositiu i el servidor VPN. Amaga la teva IP real i protegeix les dades a xarxes WiFi públiques.</p>
+          </div>
+          <div class="card">
+            <span class="badge badge-orange">TOR</span>
+            <h4>The Onion Router</h4>
+            <p>Encamina el tràfic a través de múltiples nodes xifrats, fent molt difícil rastrejar l'origen. Cada capa és com una ceba que es va pelant.</p>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>📍 Resum: on trobes criptografia cada dia</summary>
+      <div class="accordion-body">
+        <div class="cards">
+          <div class="card"><span class="badge badge-green">WhatsApp</span><p>Xifrat de punta a punta amb Protocol Signal (asimètric).</p></div>
+          <div class="card"><span class="badge badge-blue">Navegador</span><p>HTTPS = RSA + AES per a totes les webs amb el cadenat 🔒.</p></div>
+          <div class="card"><span class="badge badge-purple">WiFi WPA2</span><p>AES xifra totes les dades entre el teu dispositiu i el router.</p></div>
+          <div class="card"><span class="badge badge-orange">Contrasenyes</span><p>Les bases de dades guarden hashes SHA o bcrypt, mai el text pla.</p></div>
+          <div class="card"><span class="badge badge-red">Bitcoin</span><p>SHA-256 per a la mineria i ECDSA per a les signatures de transaccions.</p></div>
+          <div class="card"><span class="badge badge-blue">Disc dur</span><p>BitLocker / FileVault usen AES-256 per xifrar tot el contingut.</p></div>
+        </div>
+      </div>
+    </details>
+
+  </section>
+
+  <div style="margin-top:40px; padding-top:24px; border-top:1px solid var(--border); display:flex; justify-content:space-between; font-size:0.85rem; color:var(--text-muted);">
+    <a href="#" style="color:var(--accent); text-decoration:none;">← Tema anterior</a>
+    <a href="#" style="color:var(--accent); text-decoration:none;">Tema següent →</a>
+  </div>
+
+</main>
+
+<script>
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  // Navegació suau amb scrollIntoView
+  navLinks.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const id = link.getAttribute('href').replace('#', '');
+      const target = document.getElementById(id);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // Marcar nav actiu en fer scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.2, rootMargin: '-60px 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

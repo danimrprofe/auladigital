@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Criptomonedes</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', sans-serif; background: #0a0a0f; min-height: 100vh; color: #e2e8f0; }
+.container { max-width: 880px; margin: 0 auto; padding: 20px; }
+
+header { background: linear-gradient(135deg, #0a0a0f, #1a1000, #0f0a1a); border: 1px solid #2a2000; border-radius: 14px; padding: 26px 28px; margin-bottom: 20px; position: relative; overflow: hidden; }
+header::before { content:''; position:absolute; top:-40px; right:-40px; width:220px; height:220px; background: radial-gradient(circle, rgba(234,179,8,.2), transparent 70%); }
+header h1 { font-size: 1.5rem; color: #f1f5f9; margin-bottom: 4px; position: relative; }
+header p { color: #94a3b8; font-size: .88rem; position: relative; }
+.header-tag { display:inline-block; background:rgba(234,179,8,.15); border:1px solid rgba(234,179,8,.3); color:#fcd34d; border-radius:99px; padding:3px 12px; font-size:.75rem; margin-top:10px; }
+
+.topic-tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:18px; }
+.topic-tab { padding:7px 13px; border:1px solid #1e293b; border-radius:99px; cursor:pointer; font-size:.79rem; font-weight:600; color:#64748b; background:#0a0a0f; transition:all .2s; white-space:nowrap; -webkit-tap-highlight-color:transparent; }
+.topic-tab:hover { border-color:#f59e0b; color:#f59e0b; }
+.topic-tab.active { background:#f59e0b; color:#0a0a0f; border-color:#f59e0b; }
+
+.topic-panel { display:none; }
+.topic-panel.active { display:block; animation: fadeIn .3s; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)} }
+
+/* REVEAL */
+.reveal-block { overflow:hidden; }
+.reveal-content { opacity:0; max-height:0; overflow:hidden; transition:opacity .5s ease, max-height .6s ease; pointer-events:none; }
+.reveal-content.shown { opacity:1; max-height:3000px; pointer-events:auto; }
+.reveal-trigger { cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:6px 0; user-select:none; -webkit-tap-highlight-color:transparent; transition:color .2s; }
+.reveal-trigger:hover { color:#fcd34d; }
+.reveal-trigger .arrow { font-size:.75rem; color:#374151; transition:transform .3s, color .3s; flex-shrink:0; }
+.reveal-trigger.open .arrow { transform:rotate(90deg); color:#f59e0b; }
+.reveal-trigger.open { color:#fcd34d; }
+.tap-hint { text-align:center; font-size:.75rem; color:#374151; margin-bottom:10px; letter-spacing:.04em; }
+
+.stage-badge { display:flex; align-items:center; gap:14px; border-radius:14px; padding:18px 22px; margin-bottom:16px; }
+.stage-badge .sb-icon { font-size:2rem; flex-shrink:0; }
+.stage-badge h2 { font-size:1.05rem; margin-bottom:3px; color:#f1f5f9; }
+.stage-badge p { font-size:.82rem; color:rgba(255,255,255,.65); line-height:1.45; }
+
+.theory-card { background:#111108; border:1px solid #2a2000; border-radius:14px; padding:24px; margin-bottom:14px; }
+.theory-card h3 { color:#f1f5f9; font-size:1rem; margin-bottom:12px; }
+.theory-card h3.reveal-trigger { margin-bottom:4px; }
+.theory-card p { color:#94a3b8; font-size:.92rem; line-height:1.7; margin-bottom:10px; }
+.theory-card p:last-child { margin-bottom:0; }
+.theory-card ul { color:#94a3b8; font-size:.92rem; line-height:1.8; padding-left:20px; margin-bottom:10px; }
+.theory-card ul li { margin-bottom:4px; }
+
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:12px 0; }
+.three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin:12px 0; }
+@media(max-width:560px){ .two-col,.three-col{grid-template-columns:1fr;} }
+.col-card { background:#0a0a05; border:1px solid #2a2000; border-radius:10px; padding:14px; }
+.col-card h4 { font-size:.85rem; margin-bottom:8px; font-weight:600; }
+.col-card ul { font-size:.84rem; color:#94a3b8; padding-left:16px; line-height:1.75; }
+.col-card p { font-size:.84rem; color:#94a3b8; line-height:1.6; }
+.col-card.yellow h4 { color:#fcd34d; }
+.col-card.green h4  { color:#86efac; }
+.col-card.blue h4   { color:#93c5fd; }
+.col-card.red h4    { color:#f87171; }
+.col-card.purple h4 { color:#d8b4fe; }
+.col-card.orange h4 { color:#fb923c; }
+.col-card.teal h4   { color:#5eead4; }
+
+.info-box { border-radius:0 10px 10px 0; padding:12px 16px; margin:12px 0; font-size:.88rem; line-height:1.55; }
+.info-box.yellow { background:rgba(234,179,8,.08);  border-left:4px solid #f59e0b; color:#fcd34d; }
+.info-box.green  { background:rgba(34,197,94,.08);  border-left:4px solid #22c55e; color:#86efac; }
+.info-box.blue   { background:rgba(59,130,246,.08); border-left:4px solid #3b82f6; color:#93c5fd; }
+.info-box.red    { background:rgba(239,68,68,.08);  border-left:4px solid #ef4444; color:#fca5a5; }
+.info-box.purple { background:rgba(168,85,247,.08); border-left:4px solid #a855f7; color:#d8b4fe; }
+.info-box.orange { background:rgba(249,115,22,.08); border-left:4px solid #f97316; color:#fb923c; }
+.info-box.teal   { background:rgba(20,184,166,.08); border-left:4px solid #14b8a6; color:#5eead4; }
+
+code { background:#0a0a05; border:1px solid #2a2000; padding:1px 7px; border-radius:4px; font-family:'Consolas',monospace; font-size:.88em; color:#fcd34d; }
+
+table.tt { width:100%; border-collapse:collapse; margin:12px 0; font-size:.87rem; }
+.tt th { background:#0a0a05; color:#f59e0b; padding:9px 12px; text-align:left; font-size:.77rem; text-transform:uppercase; letter-spacing:.04em; border-bottom:1px solid #2a2000; }
+.tt td { padding:9px 12px; border-bottom:1px solid #0a0a05; color:#94a3b8; vertical-align:top; }
+.tt tr:last-child td { border:none; }
+.tt td strong { color:#e2e8f0; }
+
+.step-list { display:flex; flex-direction:column; gap:0; margin:12px 0; }
+.step-item { display:flex; gap:14px; padding:10px 0; }
+.step-left { display:flex; flex-direction:column; align-items:center; width:32px; flex-shrink:0; }
+.step-num { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.82rem; font-weight:700; flex-shrink:0; background:rgba(234,179,8,.15); color:#fcd34d; border:1px solid rgba(234,179,8,.4); }
+.step-line { width:1px; flex:1; min-height:12px; background:#2a2000; margin-top:4px; }
+.step-content { padding-top:4px; flex:1; }
+.step-content h4 { font-size:.92rem; color:#e2e8f0; font-weight:600; margin-bottom:3px; }
+.step-content p { font-size:.86rem; color:#64748b; line-height:1.55; margin:0; }
+
+/* Blockchain visual */
+.blockchain-visual { display:flex; align-items:center; gap:0; margin:14px 0; overflow-x:auto; padding-bottom:6px; }
+.block { background:#0a0a05; border:1px solid #f59e0b; border-radius:10px; padding:12px 14px; min-width:140px; flex-shrink:0; }
+.block-title { font-size:.72rem; color:#f59e0b; font-weight:700; text-transform:uppercase; letter-spacing:.05em; margin-bottom:8px; }
+.block-row { font-size:.75rem; color:#64748b; margin-bottom:3px; }
+.block-row span { color:#94a3b8; }
+.block-hash { font-size:.65rem; color:#fcd34d; word-break:break-all; margin-top:6px; font-family:monospace; }
+.chain-arrow { font-size:1.4rem; color:#f59e0b; flex-shrink:0; margin:0 4px; }
+
+.tag-list { display:flex; flex-wrap:wrap; gap:6px; margin:10px 0; }
+.tag { border-radius:99px; padding:3px 12px; font-size:.78rem; font-weight:600; }
+.tag-yellow { background:rgba(234,179,8,.15);  color:#fcd34d; }
+.tag-green  { background:rgba(34,197,94,.15);  color:#86efac; }
+.tag-blue   { background:rgba(59,130,246,.15); color:#93c5fd; }
+.tag-red    { background:rgba(239,68,68,.15);  color:#fca5a5; }
+.tag-purple { background:rgba(168,85,247,.15); color:#d8b4fe; }
+.tag-orange { background:rgba(249,115,22,.15); color:#fb923c; }
+.tag-gray   { background:rgba(100,116,139,.2); color:#94a3b8; }
+
+.comparison { display:grid; grid-template-columns:1fr 1fr; gap:0; margin:12px 0; border:1px solid #2a2000; border-radius:12px; overflow:hidden; }
+.comp-col { padding:16px; }
+.comp-col:first-child { border-right:1px solid #2a2000; background:#0d0d0a; }
+.comp-col:last-child { background:#0a0d0a; }
+.comp-title { font-size:.8rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; margin-bottom:10px; }
+.comp-title.trad { color:#93c5fd; }
+.comp-title.crypto { color:#fcd34d; }
+.comp-col ul { font-size:.84rem; color:#94a3b8; padding-left:16px; line-height:1.8; }
+
+.nav-btns { display:flex; gap:10px; margin-top:18px; justify-content:space-between; }
+.nav-btn { padding:10px 22px; border:none; border-radius:99px; cursor:pointer; font-size:.9rem; font-weight:600; transition:all .2s; -webkit-tap-highlight-color:transparent; }
+.nav-btn.prev { background:#1e293b; color:#94a3b8; border:1px solid #2a2a1a; }
+.nav-btn.next { background:#f59e0b; color:#0a0a0f; }
+.nav-btn:hover { filter:brightness(1.1); }
+.nav-btn:disabled { opacity:.3; cursor:not-allowed; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>₿ Criptomonedes i Blockchain</h1>
+  <p>Del sistema financer tradicional al Bitcoin: com funciona el diner digital descentralitzat</p>
+  <span class="header-tag">IES Ramon Llull · 1r Batxillerat · Curs 25-26</span>
+</header>
+
+<div class="topic-tabs">
+  <div class="topic-tab active"  onclick="go(0)">🏦 Sistema tradicional</div>
+  <div class="topic-tab"        onclick="go(1)">₿ Què és una criptomoneda</div>
+  <div class="topic-tab"        onclick="go(2)">📜 Origen del Bitcoin</div>
+  <div class="topic-tab"        onclick="go(3)">⛓️ Blockchain</div>
+  <div class="topic-tab"        onclick="go(4)">⛏️ Mineria</div>
+  <div class="topic-tab"        onclick="go(5)">👛 Comptes i wallets</div>
+  <div class="topic-tab"        onclick="go(6)">🔄 Transaccions</div>
+  <div class="topic-tab"        onclick="go(7)">📈 Valor i desavantatges</div>
+</div>
+
+<!-- ===== 0: SISTEMA TRADICIONAL ===== -->
+<div class="topic-panel active" id="panel-0">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#0a0a1a,#0a1a2e);border:1px solid #1a1a3a">
+    <div class="sb-icon">🏦</div>
+    <div><h2>El sistema financer tradicional</h2><p>Com funciona el diner convencional i per què les criptomonedes el desafien.</p></div>
+  </div>
+  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🏛️ Qui controla el diner? <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>En els sistemes monetaris tradicionals, els <strong>bancs centrals i els governs</strong> són els responsables de controlar la quantitat de diner en circulació al mercat.</p>
+        <div class="two-col">
+          <div class="col-card blue"><h4>⚙️ Com ho fan</h4><ul><li>Emissió de nova moneda</li><li>Regulació de les taxes d'interès</li><li>Polítiques monetàries d'expansió o contracció</li><li>Auditories i regulació bancària</li></ul></div>
+          <div class="col-card yellow"><h4>🎯 Objectiu</h4><ul><li>Garantir l'estabilitat econòmica</li><li>Controlar la inflació</li><li>Protegir els estalvis dels ciutadans</li><li>Evitar crisis financeres</li></ul></div>
+        </div>
+        <div class="info-box blue">💡 La confiança en el sistema es basa en el <strong>recolzament dels governs</strong> a les monedes nacionals. L'euro val perquè la UE garanteix el seu valor, no perquè tingui or al darrere.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🔄 Transferències de diner tradicionals <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>En el sistema actual, per enviar diner d'una persona a una altra cal passar per <strong>intermediaris</strong>: bancs o entitats financeres que validen, registren i garanteixen l'operació.</p>
+        <div class="step-list">
+          <div class="step-item"><div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div><div class="step-content"><h4>Tu inicies la transferència</h4><p>Fas una transferència des de la teva app bancària.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div><div class="step-content"><h4>El teu banc la valida</h4><p>Comprova que tens saldo i autoritza l'operació.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div><div class="step-content"><h4>Passa per la xarxa interbancària</h4><p>SEPA, SWIFT o sistemes similars mouen el diner entre bancs.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">4</div></div><div class="step-content"><h4>Arriba al destinatari (hores o dies)</h4><p>El banc receptor acredita l'import al compte de destí.</p></div></div>
+        </div>
+        <div class="info-box orange">⏱️ Una transferència internacional pot tardar 1-5 dies hàbils i pagar comissions d'entre 15 i 50€. Amb Bitcoin, la mateixa transferència tarda ~10 minuts i costa cèntims.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">⚖️ Tradicional vs. Criptomonedes: diferències clau <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="comparison">
+          <div class="comp-col">
+            <div class="comp-title trad">🏦 Sistema tradicional</div>
+            <ul>
+              <li>Controlat per bancs i governs</li>
+              <li>Intermediaris obligatoris</li>
+              <li>Transferències lentes (dies)</li>
+              <li>Comissions altes (internacionals)</li>
+              <li>Identitat verificada (KYC)</li>
+              <li>Reversible (protecció al client)</li>
+              <li>Regulat i garantit per l'Estat</li>
+            </ul>
+          </div>
+          <div class="comp-col">
+            <div class="comp-title crypto">₿ Criptomonedes</div>
+            <ul>
+              <li>Descentralitzat, sense autoritat</li>
+              <li>Peer-to-peer directe</li>
+              <li>Transferències ràpides (~10 min)</li>
+              <li>Comissions molt baixes</li>
+              <li>Pseudoanonimat</li>
+              <li>Irreversible (sense banc mediador)</li>
+              <li>No garantit per cap govern</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 1: QUÈ ÉS UNA CRIPTOMONEDA ===== -->
+<div class="topic-panel" id="panel-1">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#1a0a00,#2a1500);border:1px solid #3a2000">
+    <div class="sb-icon">₿</div>
+    <div><h2>Què és una criptomoneda?</h2><p>Moneda digital descentralitzada basada en criptografia i blockchain.</p></div>
+  </div>
+  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">💡 Definició i característiques principals <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>Una <strong>criptomoneda</strong> és una moneda digital que funciona sobre la tecnologia <strong>blockchain</strong> (cadena de blocs). Permet la transferència directa de valor entre usuaris, eliminant la necessitat d'intermediaris com bancs o entitats financeres.</p>
+        <div class="three-col">
+          <div class="col-card yellow"><h4>🌐 Descentralitzada</h4><p>Opera en una xarxa d'ordinadors distribuïts per tot el món. No depèn de cap entitat governamental ni bancària.</p></div>
+          <div class="col-card green"><h4>🔗 P2P (Peer-to-Peer)</h4><p>El diner es mou directament entre persones sense intermediaris. Sense esperes ni validacions de tercers.</p></div>
+          <div class="col-card blue"><h4>🔒 Transparent i segura</h4><p>Cada ordinador (node) manté una còpia de totes les transaccions. Qualsevol pot verificar-les.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">📅 Evolució: de Digicash al Bitcoin <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="step-list">
+          <div class="step-item"><div class="step-left"><div class="step-num" style="font-size:.7rem">1980s</div><div class="step-line"></div></div><div class="step-content"><h4>Digicash i Ecash: els primers intents</h4><p>Les primeres criptomonedes existien als anys 80, però van fracassar perquè no van resoldre el <strong>problema del doble gasto</strong>: res impedia gastar el mateix diner digital dues vegades.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num" style="font-size:.7rem">2008</div><div class="step-line"></div></div><div class="step-content"><h4>Satoshi Nakamoto publica el Bitcoin</h4><p>Un document tècnic ("whitepaper") va descriure per primera vegada com evitar el doble gasto sense necessitat d'un banc.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num" style="font-size:.7rem">2009</div><div class="step-line"></div></div><div class="step-content"><h4>Neix la xarxa Bitcoin</h4><p>Es crea el primer bloc (bloc gènesi) i comença a funcionar la primera criptomoneda operativa de la història.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num" style="font-size:.7rem">Avui</div></div><div class="step-content"><h4>Milers de criptomonedes</h4><p>A partir de Bitcoin han sorgit milers de criptomonedes: Ethereum, Solana, stablecoins... cadascuna amb característiques pròpies.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🔢 Satoshi: la unitat mínima del Bitcoin <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>Com que 1 Bitcoin té un valor molt alt, s'utilitzen submúltiples, igual que els cèntims de l'euro. La unitat mínima del Bitcoin s'anomena <strong>satoshi</strong>.</p>
+        <table class="tt">
+          <thead><tr><th>Unitat</th><th>Valor en BTC</th><th>Equivalència</th></tr></thead>
+          <tbody>
+            <tr><td><strong>1 Bitcoin (BTC)</strong></td><td>1.00000000</td><td>La unitat principal</td></tr>
+            <tr><td><strong>1 mBTC (millibitcoin)</strong></td><td>0.00100000</td><td>Una mil·lèsima de BTC</td></tr>
+            <tr><td><strong>1 μBTC (microbitcoin)</strong></td><td>0.00000100</td><td>Una milionèsima de BTC</td></tr>
+            <tr><td><strong>1 Satoshi</strong></td><td>0.00000001</td><td>La unitat mínima indivisible</td></tr>
+          </tbody>
+        </table>
+        <div class="info-box yellow">💡 A gener del 2025, 1 Bitcoin s'intercanvia per aproximadament <strong>99.000 €</strong>. Per això la majoria de transaccions quotidianes es fan en satoshis o mBTC.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 2: ORIGEN DEL BITCOIN ===== -->
+<div class="topic-panel" id="panel-2">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#1a0500,#2a0a00);border:1px solid #3a1000">
+    <div class="sb-icon">📜</div>
+    <div><h2>L'origen del Bitcoin</h2><p>Satoshi Nakamoto i el naixement del primer sistema financer sense intermediaris.</p></div>
+  </div>
+  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🔍 Qui és Satoshi Nakamoto? <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p><strong>Satoshi Nakamoto</strong> és el pseudònim de la persona (o grup de persones) que va crear Bitcoin. La seva identitat real continua sent un dels grans misteris de la tecnologia. Mai s'ha identificat públicament i va desaparèixer de la comunitat el 2011.</p>
+        <div class="info-box purple">🕵️ Es calcula que Satoshi Nakamoto posseeix al voltant d'<strong>1 milió de bitcoins</strong> (mai moguts des de 2009) valorats en ~100.000 milions de dòlars. Ningú sap qui és.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">📄 El Whitepaper: octubre del 2008 <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>L'octubre del 2008, en plena crisi financera global, Satoshi Nakamoto va publicar en una llista de correu especialitzada en criptografia un document titulat:</p>
+        <div class="info-box yellow" style="font-style:italic;font-size:.95rem;text-align:center">"Bitcoin: A Peer-to-Peer Electronic Cash System"</div>
+        <ul>
+          <li>Va establir les bases matemàtiques i tècniques del sistema</li>
+          <li>Va descriure per primera vegada com evitar el frau sense necessitat d'un banc</li>
+          <li>Va solucionar el problema del <strong>doble gasto</strong> amb la cadena de blocs</li>
+          <li>Sols té 9 pàgines i és llegible per qualsevol</li>
+        </ul>
+        <div class="info-box teal">📖 El whitepaper original de Bitcoin és de domini públic i el pots llegir a: <code>bitcoin.org/bitcoin.pdf</code></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🧱 El bloc gènesi: 3 de gener del 2009 <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>El <strong>3 de gener del 2009</strong> es va crear el primer bloc de la xarxa Bitcoin, conegut com el <strong>bloc gènesi</strong> o bloc 0. Va marcar l'inici oficial de l'era de les criptomonedes operatives.</p>
+        <div class="blockchain-visual">
+          <div class="block">
+            <div class="block-title">🧱 Bloc Gènesi (#0)</div>
+            <div class="block-row">Data: <span>03/01/2009</span></div>
+            <div class="block-row">Tx: <span>1 (creació)</span></div>
+            <div class="block-row">Recompensa: <span>50 BTC</span></div>
+            <div class="block-hash">000000000019d6...5b</div>
+          </div>
+        </div>
+        <ul>
+          <li>Cada bloc té una mida aproximada d'1 MB i pot contenir ~2.000 transaccions</li>
+          <li>La primera transacció va ser la creació de 50 bitcoins assignats a Satoshi</li>
+          <li>Nakamoto va incloure al bloc un titular de diari: <em>"Chancellor on brink of second bailout for banks"</em> — un missatge sobre la crisi bancària del moment</li>
+        </ul>
+        <div class="info-box green">🔗 El codi font de Bitcoin és completament obert i disponible a GitHub: <code>github.com/bitcoin/bitcoin</code>. Qualsevol pot auditar-lo.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 3: BLOCKCHAIN ===== -->
+<div class="topic-panel" id="panel-3">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#0a0a1a,#1a0a2e);border:1px solid #2a1a3a">
+    <div class="sb-icon">⛓️</div>
+    <div><h2>La cadena de blocs (Blockchain)</h2><p>El registre distribuït, immutable i públic que ho fa tot possible.</p></div>
+  </div>
+  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">📚 Què és la blockchain? <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>La <strong>blockchain</strong> (cadena de blocs) és un llibre de comptes compartit, distribuït i immutable. Conté el registre de <em>totes</em> les transaccions realitzades des de l'inici de la xarxa (2009).</p>
+        <div class="three-col">
+          <div class="col-card yellow"><h4>📦 Blocs</h4><p>Cada bloc agrupa un conjunt de transaccions pendents. Un cop complet, es tanca i s'afegeix a la cadena.</p></div>
+          <div class="col-card blue"><h4>🔗 Cadena</h4><p>Cada bloc conté la referència matemàtica (hash) del bloc anterior, formant una cadena inalterable.</p></div>
+          <div class="col-card green"><h4>🌐 Distribuïda</h4><p>Milers de nodes arreu del món guarden una còpia completa. No hi ha un servidor central que pugui ser atacat.</p></div>
+        </div>
+        <div class="info-box yellow">📊 El conjunt de tots els blocs creats fins avui suma al voltant de <strong>600 GB</strong> d'informació. Cada ~10 minuts s'afegeix un bloc nou d'~1 MB.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🔢 El hash: l'empremta digital de cada bloc <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>Un <strong>hash</strong> és un codi alfanumèric únic generat a partir de les dades d'un bloc. Funciona com una empremta digital: si canvia un sol byte del bloc, el hash canvia completament.</p>
+        <div class="blockchain-visual">
+          <div class="block">
+            <div class="block-title">Bloc #100</div>
+            <div class="block-row">Hash ant: <span>000a1b2c...</span></div>
+            <div class="block-row">Txs: <span>1.847</span></div>
+            <div class="block-hash">Hash: 000000a3f7...</div>
+          </div>
+          <div class="chain-arrow">→</div>
+          <div class="block">
+            <div class="block-title">Bloc #101</div>
+            <div class="block-row">Hash ant: <span>000000a3f7...</span></div>
+            <div class="block-row">Txs: <span>2.031</span></div>
+            <div class="block-hash">Hash: 00000b9c2d...</div>
+          </div>
+          <div class="chain-arrow">→</div>
+          <div class="block">
+            <div class="block-title">Bloc #102</div>
+            <div class="block-row">Hash ant: <span>00000b9c2d...</span></div>
+            <div class="block-row">Txs: <span>1.954</span></div>
+            <div class="block-hash">Hash: 000001e4f8...</div>
+          </div>
+        </div>
+        <div class="info-box red">🔒 Per què és <strong>immutable</strong>: si algú modifiqués una transacció d'un bloc antic, el seu hash canviaria, trencant el vincle amb tots els blocs posteriors. La xarxa ho detectaria immediatament i rebutjaria la manipulació.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🖥️ Els nodes: la columna vertebral de la xarxa <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>Un <strong>node</strong> és qualsevol ordinador connectat a la xarxa Bitcoin que executa el programa <code>Bitcoin Core</code>. Els nodes complerts guarden una còpia íntegra de tota la blockchain.</p>
+        <div class="two-col">
+          <div class="col-card yellow"><h4>📋 Funció dels nodes</h4><ul><li>Guardar una còpia completa de la blockchain</li><li>Verificar que les transaccions siguin vàlides</li><li>Propagar transaccions i blocs a la xarxa</li><li>Rebutjar blocs invàlids o fraudulents</li></ul></div>
+          <div class="col-card green"><h4>💪 Per què és segur</h4><ul><li>Milers de còpies independents arreu del món</li><li>Cap node central que pugui ser atacat</li><li>Per falsejar dades caldria controlar >50% dels nodes</li><li>Auditable per qualsevol en qualsevol moment</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🔐 Seguretat criptogràfica: clau pública i privada <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>La xarxa Bitcoin usa avançats algoritmes criptogràfics (com <strong>RSA i SHA-256</strong>) per garantir la seguretat de les transaccions.</p>
+        <div class="two-col">
+          <div class="col-card green">
+            <h4>🔓 Clau pública</h4>
+            <p>Equivalent a un número de compte bancari. La pots compartir lliurement perquè tothom et pugui enviar bitcoin. Es deriva de la clau privada mitjançant operacions matemàtiques.</p>
+          </div>
+          <div class="col-card red">
+            <h4>🔑 Clau privada</h4>
+            <p>Equivalent al PIN de la targeta. <strong>Mai s'ha de compartir.</strong> Qui la posseeix controla els fons. Si la perds, perds els teus bitcoins per sempre. No hi ha "recuperar contrasenya".</p>
+          </div>
+        </div>
+        <div class="info-box purple">🎲 Una clau privada de Bitcoin és un nombre aleatori de 256 bits. Hi ha 2²⁵⁶ combinacions possibles — més que àtoms a l'univers observable. És pràcticament impossible endevinar-la.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 4: MINERIA ===== -->
+<div class="topic-panel" id="panel-4">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#1a0a00,#2a1a00);border:1px solid #3a2a00">
+    <div class="sb-icon">⛏️</div>
+    <div><h2>La mineria de Bitcoin</h2><p>El procés de crear nous blocs, validar transaccions i obtenir recompenses.</p></div>
+  </div>
+  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">⛏️ Què és la mineria? <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>La <strong>mineria</strong> és el procés pel qual els ordinadors de la xarxa competen per crear nous blocs i afegir-los a la blockchain. És el mecanisme que valida les transaccions, crea nous bitcoins i manté la seguretat de la xarxa.</p>
+        <div class="step-list">
+          <div class="step-item"><div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div><div class="step-content"><h4>S'agrupen transaccions pendents</h4><p>Quan es reuneix un conjunt de transaccions, s'agrupen per formar un bloc candidat.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div><div class="step-content"><h4>Els miners competeixen per validar-lo</h4><p>Tots els miners de la xarxa competeixen per trobar un hash vàlid per al nou bloc.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div><div class="step-content"><h4>El guanyador tanca el bloc</h4><p>El primer que troba el hash correcte "tanca" el bloc i l'afegeix a la cadena.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">4</div></div><div class="step-content"><h4>Rep la recompensa en bitcoin</h4><p>El miner guanyador rep nous bitcoins creats de la no-res (l'única manera d'emetre nous BTC) més les comissions de les transaccions del bloc.</p></div></div>
+        </div>
+        <div class="info-box yellow">⏱️ En promig, cada <strong>10 minuts</strong> es crea un nou bloc. La xarxa ajusta automàticament la dificultat per mantenir aquest ritme, independentment de quants miners hi participin.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🎯 L'ajust de dificultat: els zeros inicials <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>Trobar un hash vàlid no és trivial. El sistema imposa una condició: el hash ha de tenir un nombre determinat de zeros al principi. Com més zeros es requereixen, més difícil és trobar-lo.</p>
+        <div class="two-col">
+          <div class="col-card yellow"><h4>🔢 Com funciona</h4><ul><li>S'afegeix un paràmetre variable al bloc (el <strong>nonce</strong>)</li><li>Es calcula el hash amb un nonce diferent cada vegada</li><li>Es proven milions de nonces fins trobar-ne un que doni un hash amb els zeros requerits</li><li>L'únic mètode és la força bruta: provar i provar</li></ul></div>
+          <div class="col-card blue"><h4>⚙️ L'ajust automàtic</h4><ul><li>Cada 2.016 blocs (~2 setmanes), la xarxa revisa el temps de creació</li><li>Si els blocs s'han creat massa de pressa → augmenta la dificultat (més zeros)</li><li>Si massa lents → redueix la dificultat</li><li>L'objectiu sempre és: 1 bloc cada ~10 minuts</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🖥️ Miners i maquinari especialitzat <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>Els <strong>miners</strong> són usuaris que dediquen la potència dels seus ordinadors al procés de mineria, competint per ser els primers a resoldre el càlcul i obtenir la recompensa.</p>
+        <div class="step-list">
+          <div class="step-item"><div class="step-left"><div class="step-num" style="font-size:.7rem">CPU</div><div class="step-line"></div></div><div class="step-content"><h4>Ordinadors normals (2009-2010)</h4><p>Al principi, qualsevol ordinador podia minar. Satoshi Nakamoto va minar els primers blocs amb un PC convencional.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num" style="font-size:.7rem">GPU</div><div class="step-line"></div></div><div class="step-content"><h4>Targetes gràfiques (2010-2013)</h4><p>Les GPUs (targetes gràfiques) van resultar molt més eficients per calcular hashes, desplaçant els processadors normals.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num" style="font-size:.7rem">ASIC</div></div><div class="step-content"><h4>Maquinari especialitzat (2013-avui)</h4><p>Els ASICs (Application-Specific Integrated Circuits) són xips dissenyats exclusivament per minar Bitcoin. Són milers de vegades més ràpids que una GPU. Han generat una carrera tecnològica i energètica.</p></div></div>
+        </div>
+        <div class="info-box red">⚡ La xarxa Bitcoin consumeix tanta electricitat com alguns països sencers (similar a Argentina o Holanda). Això és el principal argument mediambiental contra el Bitcoin.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">📉 El Halving: reducció de la recompensa cada 4 anys <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>Cada 210.000 blocs (~4 anys), la recompensa que reben els miners per crear un bloc es redueix a la meitat. Això s'anomena <strong>halving</strong> i és el mecanisme que controla l'emissió de nous bitcoins.</p>
+        <table class="tt">
+          <thead><tr><th>Any</th><th>Recompensa per bloc</th><th>BTC creats/dia</th></tr></thead>
+          <tbody>
+            <tr><td>2009</td><td><strong>50 BTC</strong></td><td>~7.200</td></tr>
+            <tr><td>2012 (1r halving)</td><td><strong>25 BTC</strong></td><td>~3.600</td></tr>
+            <tr><td>2016 (2n halving)</td><td><strong>12,5 BTC</strong></td><td>~1.800</td></tr>
+            <tr><td>2020 (3r halving)</td><td><strong>6,25 BTC</strong></td><td>~900</td></tr>
+            <tr><td>2024 (4t halving)</td><td><strong>3,125 BTC</strong></td><td>~450</td></tr>
+          </tbody>
+        </table>
+        <div class="info-box yellow">🔢 El màxim de bitcoins que existiran mai és <strong>21 milions</strong>. A gener del 2025 ja n'hi ha ~19 milions en circulació. L'últim bitcoin s'estima que es minarà cap a l'any 2140.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 5: COMPTES I WALLETS ===== -->
+<div class="topic-panel" id="panel-5">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#0a1a0a,#1a2a0a);border:1px solid #2a3a0a">
+    <div class="sb-icon">👛</div>
+    <div><h2>Comptes i monederos (Wallets)</h2><p>Com funcionen les adreces Bitcoin i com guardar les teves claus de forma segura.</p></div>
+  </div>
+  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🏦 Compte bancari vs. Adreça Bitcoin <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="comparison">
+          <div class="comp-col">
+            <div class="comp-title trad">🏦 Compte bancari</div>
+            <ul>
+              <li>Número de compte (IBAN)</li>
+              <li>Vinculat al teu DNI i nom</li>
+              <li>El banc guarda el saldo i les operacions</li>
+              <li>El banc pot bloquejar-te el compte</li>
+              <li>Recuperable si perds l'accés</li>
+            </ul>
+          </div>
+          <div class="comp-col">
+            <div class="comp-title crypto">₿ Adreça Bitcoin</div>
+            <ul>
+              <li>Codi alfanumèric (ex: <code>1A2B3C...</code>)</li>
+              <li>No associada públicament a cap persona</li>
+              <li>La blockchain guarda les transaccions</li>
+              <li>Ningú pot bloquejar-te l'accés</li>
+              <li>Si perds la clau privada, perds tot</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">👛 Monedero (Wallet): on es guarden les claus <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>Un <strong>monedero digital (wallet)</strong> no guarda bitcoins — guarda les <strong>claus privades</strong> que donen accés als fons. Els bitcoins sempre estan a la blockchain; el wallet és com el llavaner.</p>
+        <div class="three-col">
+          <div class="col-card yellow"><h4>📱 Software wallet</h4><p>App al mòbil o PC. Còmode per a pagaments diaris. Risc si el dispositiu és piratejat o el perds.</p></div>
+          <div class="col-card green"><h4>🔌 Hardware wallet</h4><p>Dispositiu físic (ex: Ledger, Trezor). Molt segur perquè la clau mai surt del dispositiu. Recomanat per a grans quantitats.</p></div>
+          <div class="col-card blue"><h4>📄 Paper wallet</h4><p>La clau privada impresa en paper. Immune a hackejades. Risc de pèrdua física o deteriorament del paper.</p></div>
+        </div>
+        <div class="info-box orange">💡 "Not your keys, not your coins." Si guardes els teus bitcoins en un exchange (Binance, Coinbase...), ells controlen les claus, no tu. Si l'exchange fa fallida (com va passar amb FTX el 2022), pots perdre-ho tot.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🔗 Com es genera una adreça Bitcoin <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="step-list">
+          <div class="step-item"><div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div><div class="step-content"><h4>Generar la clau privada</h4><p>Un número aleatori de 256 bits. Completament aleatori i únic.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div><div class="step-content"><h4>Calcular la clau pública</h4><p>A partir de la clau privada, s'aplica criptografia de corba el·líptica (ECDSA) per obtenir la clau pública. El procés és irreversible: no es pot obtenir la clau privada a partir de la pública.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">3</div></div><div class="step-content"><h4>Obtenir l'adreça pública</h4><p>A la clau pública s'apliquen les funcions hash SHA-256 i RIPEMD-160, i es codifica en Base58. El resultat és l'adreça Bitcoin (ex: <code>1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2</code>).</p></div></div>
+        </div>
+        <div class="info-box green">✅ Pots tenir tantes adreces Bitcoin com vulguis, totes generades de forma gratuïta i instantània. Per privacitat, es recomana usar una adreça nova per a cada transacció.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 6: TRANSACCIONS ===== -->
+<div class="topic-panel" id="panel-6">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#0a0a1a,#0a1a2e);border:1px solid #1a2a3a">
+    <div class="sb-icon">🔄</div>
+    <div><h2>Com funcionen les transaccions</h2><p>Del QR a la confirmació: el viatge d'un pagament en Bitcoin.</p></div>
+  </div>
+  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">📤 Fer una transacció de Bitcoin <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="step-list">
+          <div class="step-item"><div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div><div class="step-content"><h4>Obtens l'adreça del destinatari</h4><p>L'adreça pot compartir-se com a text o com a <strong>codi QR</strong> (la forma més còmoda). El QR pot incloure l'adreça i la quantitat.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div><div class="step-content"><h4>Signes la transacció amb la teva clau privada</h4><p>El teu wallet genera una signatura digital que demostra que ets el propietari dels fons sense revelar la clau privada.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div><div class="step-content"><h4>La transacció s'envia a la xarxa</h4><p>Els nodes la reben, verifiquen que tens els bitcoins i la propaguen per tota la xarxa.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">4</div><div class="step-line"></div></div><div class="step-content"><h4>Un miner la inclou en un bloc</h4><p>La transacció s'inclou en el proper bloc que es mina. Cada bloc addicional confirma la transacció.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">5</div></div><div class="step-content"><h4>Confirmada (~10-60 minuts)</h4><p>Després de 6 confirmacions (~1 hora), la transacció es considera completament irreversible i segura.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">⚠️ Característiques importants de les transaccions <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="three-col">
+          <div class="col-card red"><h4>🔒 Irreversibles</h4><p>Un cop confirmada, una transacció no es pot cancel·lar ni revertir. Si t'equivoques d'adreça, perds els fons.</p></div>
+          <div class="col-card yellow"><h4>💰 Comissions</h4><p>Part del bitcoin enviat es paga com a comissió als miners. Com més alta la comissió, més ràpid s'inclou en un bloc.</p></div>
+          <div class="col-card blue"><h4>👁️ Públiques</h4><p>Totes les transaccions són visibles a la blockchain. Qualsevol pot veure quants bitcoins té una adreça i tots els seus moviments.</p></div>
+        </div>
+        <div class="info-box purple">🔍 Pots veure qualsevol transacció i saldo de qualsevol adreça en temps real a <code>blockchain.com/explorer</code>. La transparència és total, però les adreces no s'associen públicament a noms reals.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🔄 Com es pot obtenir Bitcoin? <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="three-col">
+          <div class="col-card green"><h4>💱 Comprar amb euros</h4><p>A plataformes d'intercanvi (exchanges) com Coinbase, Binance o Kraken. Pots comprar fraccions petites (fins a un satoshi).</p></div>
+          <div class="col-card yellow"><h4>⚒️ Minar</h4><p>Dedicant potència de computació a la xarxa. Avui dia és pràcticament impossible per a un usuari individual sense maquinari especialitzat.</p></div>
+          <div class="col-card blue"><h4>🤝 Rebre d'altri</h4><p>Qualsevol pot enviar-te bitcoin a la teva adreça pública, des de qualsevol lloc del món, en qualsevol moment.</p></div>
+        </div>
+        <div class="info-box yellow">📈 El tipus de canvi varía constantement. A gener del 2025: 1 BTC ≈ 99.000 €. El màxim històric va superar els 100.000 $ el novembre del 2024.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 7: VALOR I DESAVANTATGES ===== -->
+<div class="topic-panel" id="panel-7">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#1a0a00,#2a0500);border:1px solid #3a1000">
+    <div class="sb-icon">📈</div>
+    <div><h2>Valor, riscos i desavantatges</h2><p>Per què fluctua el preu i quines són les limitacions reals de les criptomonedes.</p></div>
+  </div>
+  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">📊 Com es determina el valor del Bitcoin? <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>El valor del Bitcoin, com el de qualsevol actiu, es determina per la <strong>llei de l'oferta i la demanda</strong>. Però té característiques úniques que influeixen en el preu:</p>
+        <div class="two-col">
+          <div class="col-card yellow"><h4>📉 Oferta limitada i decreixent</h4><ul><li>Màxim de 21 milions de BTC per sempre</li><li>El halving redueix la creació cada 4 anys</li><li>~4 milions de BTC es consideren perduts per sempre (claus privades perdudes)</li><li>L'escassetat creixent tendeix a augmentar el preu</li></ul></div>
+          <div class="col-card orange"><h4>📈 Demanda variable</h4><ul><li>Especulació i sentiment del mercat</li><li>Adopció institucional (Tesla, MicroStrategy, ETFs)</li><li>Decisions regulatòries de governs</li><li>Notícies i influencers (efecte Elon Musk)</li></ul></div>
+        </div>
+        <div class="info-box yellow">📈 El 2021 el preu de Bitcoin va multiplicar-se per 4 en un període relativament curt, assolint els ~65.000 $. El 2022 va caure fins als ~16.000 $. El 2024 va superar els 100.000 $. <strong>La volatilitat és enorme.</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">⚠️ Desavantatges i riscos de les criptomonedes <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="two-col">
+          <div class="col-card red"><h4>📉 Alta volatilitat</h4><p>El preu pot caure un 80% en mesos. Dificulta el seu ús com a moneda de pagament estable. No és apte per a persones amb poca tolerància al risc.</p></div>
+          <div class="col-card red"><h4>⚖️ Falta de regulació</h4><p>Poca legislació específica en molts països. Pot donar lloc a frau, estafa i incertesa jurídica per als inversors.</p></div>
+        </div>
+        <div class="two-col">
+          <div class="col-card orange"><h4>🔧 Sistema en desenvolupament</h4><p>Problemes d'escalabilitat (Bitcoin processa ~7 transaccions/segon vs. 24.000 de VISA). Interfície d'usuari encara complexa per a usuaris no tècnics.</p></div>
+          <div class="col-card orange"><h4>🛒 Acceptació limitada</h4><p>Encara poques botigues i serveis accepten Bitcoin com a pagament directe. La majoria d'usos reals impliquen convertir a moneda fiat.</p></div>
+        </div>
+        <div class="info-box red">🚨 <strong>Riscos addicionals:</strong> si perds la clau privada, perds els teus bitcoin per sempre. Les transaccions no es poden revertir. Les plataformes d'intercanvi (exchanges) poden fer fallida o ser hackejades.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🌍 El futur de les criptomonedes <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="three-col">
+          <div class="col-card green"><h4>✅ Arguments a favor</h4><ul><li>Inclusió financera (bancaritzar els no bancaritzats)</li><li>Transferències internacionals sense comissions altes</li><li>Alternativa en països amb alta inflació (Argentina, Veneçuela)</li><li>Tecnologia blockchain amb aplicacions més enllà del diner</li></ul></div>
+          <div class="col-card red"><h4>❌ Arguments en contra</h4><ul><li>Consum energètic insostenible</li><li>Facilitació d'activitats il·legals i evasió fiscal</li><li>Risc d'estafes i pèrdues per a inversors inexperts</li><li>Concentració de riquesa en pocs "whales"</li></ul></div>
+          <div class="col-card purple"><h4>🏦 CBDCs: la resposta dels governs</h4><p>Molts governs i bancs centrals estan creant les seves pròpies monedes digitals (<strong>Central Bank Digital Currencies</strong>): l'euro digital, el yuan digital... descentralitzats en tecnologia però centralitzats en control.</p></div>
+        </div>
+        <div class="info-box teal">🏆 Resum: Bitcoin és una innovació tecnològica i financera genuïna que ha demostrat la seva viabilitat en 15 anys. La seva volatilitat i complexitat fan que no sigui (encara) una alternativa pràctica per als pagaments quotidians — però és molt més que una moda passatgera.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="nav-btns">
+  <button class="nav-btn prev" id="btn-prev" onclick="navigate(-1)" disabled>← Tema anterior</button>
+  <button class="nav-btn next" id="btn-next" onclick="navigate(1)">Tema següent →</button>
+</div>
+
+</div>
+<script>
+let cur = 0;
+const total = 8;
+function toggle(t) {
+  const c = t.nextElementSibling;
+  const open = t.classList.contains('open');
+  t.classList.toggle('open', !open);
+  c.classList.toggle('shown', !open);
+}
+function go(i) {
+  document.querySelectorAll('.topic-panel').forEach((p,j) => p.classList.toggle('active', j===i));
+  document.querySelectorAll('.topic-tab').forEach((t,j) => t.classList.toggle('active', j===i));
+  cur = i;
+  document.getElementById('btn-prev').disabled = i===0;
+  document.getElementById('btn-next').disabled = i===total-1;
+  document.getElementById('btn-next').textContent = i===total-1 ? '✓ Final' : 'Tema següent →';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function navigate(dir) { const n=cur+dir; if(n>=0&&n<total) go(n); }
+</script>
+</body>
+</html>
