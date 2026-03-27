@@ -9,7 +9,75 @@ const subjects = [
     name: "Entorns Digitals",
     level: "1r-2n curs",
     description: "Ús responsable dels entorns virtuals de treball, identitat digital i organització personal.",
-    topics: ["Núvol", "Seguretat bàsica", "Comunicació digital", "Productivitat"]
+    topics: [
+      "Funcionalitats comunes",
+      "Processadors de text",
+      "Presentacions diapositives",
+      "Presentacions en línia",
+      "Fulls de càlcul"
+    ],
+    materials: [
+      {
+        title: "Funcionalitats i utilitats comunes a diverses aplicacions",
+        slug: "tema-funcionalitats-comunes",
+        items: [
+          { icon: "⌨️", label: "Teclat", title: "Teclat QWERTY i posició correcta dels dits" },
+          { icon: "🎹", label: "Tecles", title: "Grups de tecles i utilitats (escriptura, desplaçament, funcions...)" },
+          { icon: "⚡", label: "Dreceres", title: "Combinacions de tecles per evitar l’ús del ratolí" },
+          { icon: "🧰", label: "Eines", title: "Copiar, enganxar, clonar format, cercar i reemplaçar, barres d’eines" }
+        ]
+      },
+      {
+        title: "Processadors de text",
+        slug: "tema-processadors-text",
+        items: [
+          { icon: "📄", label: "Format", title: "Format de pàgina (mida, orientació, marges, columnes)" },
+          { icon: "✒️", label: "Caràcter", title: "Format de caràcter: mida, font i efectes" },
+          { icon: "¶", label: "Paràgraf", title: "Format de paràgraf: sagnat, espaiat, interlineat, alineació, vores" },
+          { icon: "🔢", label: "Llistes", title: "Pics i numeració" },
+          { icon: "🧾", label: "Estils", title: "Estils de paràgraf i índexs automàtics" },
+          { icon: "📊", label: "Taules", title: "Taules, unió de cel·les i llegendes" },
+          { icon: "🖼️", label: "Imatges", title: "Propietats d’imatges: alineació, ajustament, vores, llegendes" },
+          { icon: "🔤", label: "Revisió", title: "Revisió ortogràfica i gramatical, diccionaris" },
+          { icon: "📑", label: "TOC", title: "Taules de continguts i d’imatges" },
+          { icon: "🖨️", label: "Impressió", title: "Configuració d’impressió i impressores virtuals" }
+        ]
+      },
+      {
+        title: "Presentacions multimèdia basades en diapositives",
+        slug: "tema-presentacions-diapositives",
+        items: [
+          { icon: "🎤", label: "Ús", title: "Presentacions com a suport en exposicions" },
+          { icon: "🎨", label: "Disseny", title: "Plantilles, fons i teoria del color" },
+          { icon: "📐", label: "Diapositiva", title: "Mida, orientació i diapositiva mestra" },
+          { icon: "📋", label: "Contingut", title: "Duplicació, organització i racionalització del contingut" },
+          { icon: "🎞️", label: "Transició", title: "Transicions i interaccions d’elements" },
+          { icon: "⏱️", label: "Assaig", title: "Paràmetres de presentació i eina d’assaig" }
+        ]
+      },
+      {
+        title: "Presentacions multimèdia en línia",
+        slug: "tema-presentacions-en-linia",
+        items: [
+          { icon: "🌐", label: "Diapositives", title: "Eines en línia basades en diapositives (exploració)" },
+          { icon: "🌀", label: "Dinàmiques", title: "Eines en línia no basades en diapositives (Prezi, etc.)" },
+          { icon: "📤", label: "Compartició", title: "Plataformes de compartició de presentacions" }
+        ]
+      },
+      {
+        title: "Fulls de càlcul",
+        slug: "tema-fulls-de-calcul",
+        items: [
+          { icon: "📊", label: "Estructura", title: "Fileres, columnes, inserció i congelació" },
+          { icon: "🎨", label: "Format", title: "Format de cel·les: alineació, vores, fons i números" },
+          { icon: "➗", label: "Operacions", title: "Suma, resta, multiplicació, divisió i referències de cel·les" },
+          { icon: "🧠", label: "Funcions", title: "Funcions lògiques, matemàtiques, estadístiques i de text" },
+          { icon: "📌", label: "Fixació", title: "Còpia de fórmules i fixació de cel·les" },
+          { icon: "🔍", label: "Dades", title: "Ordenació, filtres i format condicional" },
+          { icon: "📈", label: "Gràfics", title: "Diagrames de columna, barra i sectors" }
+        ]
+      }
+    ]
   },
   {
     name: "Programació i Tractament de Dades I",
@@ -189,13 +257,20 @@ const subjects = [
     name: "Digitalització",
     level: "ESO/FP",
     description: "Competència digital, ciutadania digital i resolució de problemes amb tecnologia.",
-    topics: ["Benestar digital", "Seguretat", "Privacitat", "Competència digital"],
+    topics: ["Benestar digital", "Ciutadania digital", "Seguretat", "Privacitat", "Competència digital"],
     materials: [
       {
         title: "Benestar digital",
         slug: "tema-benestar-digital",
         items: [
           { icon: "🔐", label: "Teoria", title: "Seguretat teoria", href: "../seguretat_teoria.html" }
+        ]
+      },
+      {
+        title: "Ciutadania digital",
+        slug: "tema-ciutadania-digital",
+        items: [
+          { icon: "🧑‍🤝‍🧑", label: "Teoria", title: "Ciutadania digital", href: "./ciutadania_digital.html" }
         ]
       }
     ]
@@ -214,6 +289,7 @@ const materialsPageContainer = document.getElementById("materialsPageContainer")
 const subjectIndexContainer = document.getElementById("subjectIndexContainer");
 const themeIndexContainer = document.getElementById("themeIndexContainer");
 const subjectMaterialsPages = {
+  "Entorns Digitals": "entorns-digitals/index.html",
   "Programació i Tractament de Dades I": "programacio-i-tractament-de-dades-i/index.html",
   "Programació i Tractament de Dades II": "programacio-i-tractament-de-dades-ii/index.html",
   "Digitalització": "digitalizacio/index.html"
