@@ -15,7 +15,7 @@ const subjects = [
     name: "Programació i Tractament de Dades I",
     level: "1r curs",
     description: "Introducció a la programació i manipulació de dades amb activitats guiades.",
-    topics: ["Apps i prototipat", "Bases de dades", "mBot", "Python", "Virtualització", "Linux"],
+    topics: ["Thunkable", "LibreOffice Base", "mBot/mBuild", "Arduino", "Python", "Virtualització", "Linux"],
     materials: [
       {
         title: "TEMA 2: Joc d'endevinar (Thunkable)",
@@ -85,7 +85,7 @@ const subjects = [
         slug: "tema-7-linux",
         items: [
           { icon: "🐧", label: "Recurs", title: "Material Linux" },
-          { icon: "📄", label: "Teoria", title: "Linux teoria", href: "../../linux_teoria.html" }
+          { icon: "📄", label: "Teoria", title: "Linux teoria", href: "./linux_teoria.html" }
         ]
       }
     ]
@@ -94,7 +94,7 @@ const subjects = [
     name: "Programació i Tractament de Dades II",
     level: "2n curs",
     description: "Consolidació de programació aplicada a projectes i anàlisi de dades.",
-    topics: ["Funcions", "Mòduls", "Pandas inicial", "Visualització"],
+    topics: ["mBot/mBuild", "Criptografia", "Bases de dades", "Unity", "POO", "Web avançat", "Blender", "IA"],
     materials: [
       {
         title: "Programació i Robòtica amb Makeblock (mBot / mBuild)",
@@ -178,6 +178,7 @@ const subjects = [
       {
         title: "IA: teoria",
         slug: "tema-ia",
+        directHref: "/ia_teoria.html",
         items: [
           { icon: "🤖", label: "Teoria", title: "IA i Programació", href: "../../ia_teoria.html" }
         ]
@@ -188,7 +189,16 @@ const subjects = [
     name: "Digitalització",
     level: "ESO/FP",
     description: "Competència digital, ciutadania digital i resolució de problemes amb tecnologia.",
-    topics: ["Competència digital", "Privacitat", "Pensament computacional", "Projectes"]
+    topics: ["Benestar digital", "Seguretat", "Privacitat", "Competència digital"],
+    materials: [
+      {
+        title: "Benestar digital",
+        slug: "tema-benestar-digital",
+        items: [
+          { icon: "🔐", label: "Teoria", title: "Seguretat teoria", href: "../seguretat_teoria.html" }
+        ]
+      }
+    ]
   }
 ];
 
@@ -205,7 +215,8 @@ const subjectIndexContainer = document.getElementById("subjectIndexContainer");
 const themeIndexContainer = document.getElementById("themeIndexContainer");
 const subjectMaterialsPages = {
   "Programació i Tractament de Dades I": "programacio-i-tractament-de-dades-i/index.html",
-  "Programació i Tractament de Dades II": "programacio-i-tractament-de-dades-ii/index.html"
+  "Programació i Tractament de Dades II": "programacio-i-tractament-de-dades-ii/index.html",
+  "Digitalització": "digitalizacio/index.html"
 };
 
 function buildMaterialsHtml(subject, subtitleText) {
@@ -293,7 +304,7 @@ function renderSubjectIndex(subject) {
   const cards = subject.materials
     .map((section) => {
       const slug = section.slug || "";
-      const href = slug ? `./${slug}/index.html` : "#";
+      const href = section.directHref || (slug ? `./${slug}/index.html` : "#");
       return `
         <div class="col-md-6 col-xl-4">
           <article class="card h-100 border-0 shadow-sm subject-card">
@@ -344,13 +355,7 @@ function renderThemeIndex(subject, themeSlug) {
               hasLink
                 ? `
                   <div class="mt-2 d-flex flex-wrap gap-2">
-                    <a class="btn btn-outline-light btn-sm btn-modern" href="${safeHref}" target="_blank" rel="noopener">Obrir fitxer</a>
-                    <details class="w-100 mt-1">
-                      <summary class="small text-white-50">Vista prèvia (iframe)</summary>
-                      <div class="mt-2">
-                        <iframe src="${safeHref}" title="${it.title}" class="w-100 border-0" style="height:70vh;"></iframe>
-                      </div>
-                    </details>
+                    <a class="btn btn-outline-light btn-sm btn-modern" href="${safeHref}">Obrir fitxer</a>
                   </div>
                 `
                 : `<div class="mt-2 text-muted small">Pendent d'afegir fitxer/enllaç.</div>`

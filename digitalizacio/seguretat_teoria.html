@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seguretat Digital</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', sans-serif; background: #0a0f1a; min-height: 100vh; color: #e2e8f0; }
+.container { max-width: 880px; margin: 0 auto; padding: 20px; }
+
+header { background: linear-gradient(135deg, #0a0f1a, #1a0a2e, #0f1a2e); border: 1px solid #2a1a3a; border-radius: 14px; padding: 26px 28px; margin-bottom: 20px; position: relative; overflow: hidden; }
+header::before { content:''; position:absolute; top:-40px; right:-40px; width:220px; height:220px; background: radial-gradient(circle, rgba(239,68,68,.2), transparent 70%); }
+header h1 { font-size: 1.5rem; color: #f1f5f9; margin-bottom: 4px; position: relative; }
+header p { color: #94a3b8; font-size: .88rem; position: relative; }
+.header-tag { display:inline-block; background:rgba(239,68,68,.15); border:1px solid rgba(239,68,68,.3); color:#fca5a5; border-radius:99px; padding:3px 12px; font-size:.75rem; margin-top:10px; }
+
+.topic-tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:18px; }
+.topic-tab { padding:7px 13px; border:1px solid #1e293b; border-radius:99px; cursor:pointer; font-size:.8rem; font-weight:600; color:#64748b; background:#0a0f1a; transition:all .2s; white-space:nowrap; }
+.topic-tab:hover { border-color:#ef4444; color:#ef4444; }
+.topic-tab.active { background:#ef4444; color:white; border-color:#ef4444; }
+
+.topic-panel { display:none; }
+.topic-panel.active { display:block; animation: fadeIn .3s; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)} }
+
+/* REVEAL SYSTEM */
+.reveal-block { overflow: hidden; }
+.reveal-content {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity .5s ease, max-height .5s ease;
+  pointer-events: none;
+}
+.reveal-content.shown {
+  opacity: 1;
+  max-height: 2000px;
+  pointer-events: auto;
+}
+
+/* Trigger: títol clicable */
+.reveal-trigger {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 0;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: color .2s;
+}
+.reveal-trigger:hover { color: #fca5a5; }
+.reveal-trigger .arrow {
+  font-size: .75rem;
+  color: #374151;
+  transition: transform .3s, color .3s;
+  flex-shrink: 0;
+}
+.reveal-trigger.open .arrow { transform: rotate(90deg); color: #ef4444; }
+.reveal-trigger.open { color: #fca5a5; }
+
+/* Hint on first load */
+.tap-hint { text-align:center; font-size:.75rem; color:#374151; margin-bottom:10px; letter-spacing:.04em; }
+
+.stage-badge { display:flex; align-items:center; gap:14px; border-radius:14px; padding:18px 22px; margin-bottom:16px; }
+.stage-badge .sb-icon { font-size:2rem; flex-shrink:0; }
+.stage-badge h2 { font-size:1.05rem; margin-bottom:3px; color:#f1f5f9; }
+.stage-badge p { font-size:.82rem; color:rgba(255,255,255,.65); line-height:1.45; }
+
+.theory-card { background:#111827; border:1px solid #1e293b; border-radius:14px; padding:24px; margin-bottom:14px; }
+.theory-card h3.reveal-trigger { color:#f1f5f9; font-size:1rem; margin-bottom:4px; }
+.theory-card h3 { color:#f1f5f9; font-size:1rem; margin-bottom:12px; }
+.theory-card p { color:#94a3b8; font-size:.92rem; line-height:1.7; margin-bottom:10px; }
+.theory-card p:last-child { margin-bottom:0; }
+.theory-card ul { color:#94a3b8; font-size:.92rem; line-height:1.8; padding-left:20px; margin-bottom:10px; }
+.theory-card ul li { margin-bottom:4px; }
+.theory-card ol { color:#94a3b8; font-size:.92rem; line-height:1.85; padding-left:22px; margin-bottom:10px; }
+.theory-card ol li { margin-bottom:6px; }
+
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:12px 0; }
+.three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin:12px 0; }
+@media(max-width:560px){ .two-col,.three-col{grid-template-columns:1fr;} }
+.col-card { background:#0d1520; border:1px solid #1e293b; border-radius:10px; padding:14px; }
+.col-card h4 { font-size:.85rem; margin-bottom:8px; font-weight:600; }
+.col-card ul { font-size:.84rem; color:#94a3b8; padding-left:16px; line-height:1.75; }
+.col-card p { font-size:.84rem; color:#94a3b8; line-height:1.6; }
+.col-card.red h4   { color:#f87171; }
+.col-card.green h4 { color:#86efac; }
+.col-card.blue h4  { color:#93c5fd; }
+.col-card.yellow h4{ color:#fcd34d; }
+.col-card.purple h4{ color:#d8b4fe; }
+
+.info-box { border-radius:0 10px 10px 0; padding:12px 16px; margin:12px 0; font-size:.88rem; line-height:1.55; }
+.info-box.red    { background:rgba(239,68,68,.08);  border-left:4px solid #ef4444; color:#fca5a5; }
+.info-box.yellow { background:rgba(234,179,8,.08);  border-left:4px solid #f59e0b; color:#fcd34d; }
+.info-box.green  { background:rgba(34,197,94,.08);  border-left:4px solid #22c55e; color:#86efac; }
+.info-box.blue   { background:rgba(59,130,246,.08); border-left:4px solid #3b82f6; color:#93c5fd; }
+.info-box.purple { background:rgba(168,85,247,.08); border-left:4px solid #a855f7; color:#d8b4fe; }
+
+code { background:#0d1520; border:1px solid #1e293b; padding:1px 7px; border-radius:4px; font-family:'Consolas',monospace; font-size:.88em; color:#86efac; }
+
+table.tt { width:100%; border-collapse:collapse; margin:12px 0; font-size:.87rem; }
+.tt th { background:#0d1520; color:#ef4444; padding:9px 12px; text-align:left; font-size:.77rem; text-transform:uppercase; letter-spacing:.04em; border-bottom:1px solid #1e293b; }
+.tt td { padding:9px 12px; border-bottom:1px solid #0d1520; color:#94a3b8; vertical-align:top; }
+.tt tr:last-child td { border:none; }
+.tt td strong { color:#e2e8f0; }
+
+.step-list { display:flex; flex-direction:column; gap:0; margin:12px 0; }
+.step-item { display:flex; gap:14px; padding:10px 0; }
+.step-left { display:flex; flex-direction:column; align-items:center; width:32px; flex-shrink:0; }
+.step-num { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.82rem; font-weight:700; flex-shrink:0; background:rgba(239,68,68,.15); color:#f87171; border:1px solid rgba(239,68,68,.4); }
+.step-line { width:1px; flex:1; min-height:12px; background:#1e293b; margin-top:4px; }
+.step-content { padding-top:4px; flex:1; }
+.step-content h4 { font-size:.92rem; color:#e2e8f0; font-weight:600; margin-bottom:3px; }
+.step-content p { font-size:.86rem; color:#64748b; line-height:1.55; margin:0; }
+
+.tag-list { display:flex; flex-wrap:wrap; gap:6px; margin:10px 0; }
+.tag { border-radius:99px; padding:3px 12px; font-size:.78rem; font-weight:600; }
+.tag-red    { background:rgba(239,68,68,.15);  color:#fca5a5; }
+.tag-green  { background:rgba(34,197,94,.15);  color:#86efac; }
+.tag-blue   { background:rgba(59,130,246,.15); color:#93c5fd; }
+.tag-yellow { background:rgba(234,179,8,.15);  color:#fcd34d; }
+.tag-purple { background:rgba(168,85,247,.15); color:#d8b4fe; }
+.tag-gray   { background:rgba(100,116,139,.2); color:#94a3b8; }
+
+.activity-card { background:#0d1520; border:1px solid #2a3a1a; border-radius:14px; padding:20px; margin-bottom:14px; }
+.activity-card h3.reveal-trigger { color:#86efac; font-size:.95rem; margin-bottom:4px; }
+.activity-card h3 { color:#86efac; font-size:.95rem; margin-bottom:10px; }
+.activity-card p { color:#94a3b8; font-size:.9rem; line-height:1.65; margin-bottom:8px; }
+.activity-card ul { color:#94a3b8; font-size:.9rem; padding-left:18px; line-height:1.75; }
+
+.danger-scale { display:flex; gap:4px; margin:12px 0; align-items:stretch; }
+.ds-item { flex:1; border-radius:8px; padding:12px 8px; text-align:center; }
+.ds-item .ds-icon { font-size:1.4rem; margin-bottom:4px; }
+.ds-item h4 { font-size:.75rem; font-weight:700; margin-bottom:3px; }
+.ds-item p { font-size:.7rem; line-height:1.3; }
+.ds-low  { background:rgba(34,197,94,.1);  border:1px solid rgba(34,197,94,.3);  color:#86efac; }
+.ds-mid  { background:rgba(234,179,8,.1);  border:1px solid rgba(234,179,8,.3);  color:#fcd34d; }
+.ds-high { background:rgba(239,68,68,.1);  border:1px solid rgba(239,68,68,.3);  color:#fca5a5; }
+.ds-crit { background:rgba(239,68,68,.2);  border:1px solid #ef4444;             color:#ef4444; }
+
+.pass-demo { background:#0d1520; border:1px solid #1e293b; border-radius:10px; padding:16px; margin:12px 0; }
+.pass-row { display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid #1e293b; gap:12px; flex-wrap:wrap; }
+.pass-row:last-child { border:none; }
+.pass-text { font-family:monospace; font-size:.9rem; color:#e2e8f0; flex:1; }
+.pass-time { font-size:.78rem; font-weight:700; border-radius:99px; padding:3px 10px; white-space:nowrap; }
+.pt-instant { background:rgba(239,68,68,.2); color:#ef4444; }
+.pt-seconds { background:rgba(239,68,68,.15); color:#fca5a5; }
+.pt-hours   { background:rgba(234,179,8,.15); color:#fcd34d; }
+.pt-years   { background:rgba(34,197,94,.15); color:#86efac; }
+.pt-forever { background:rgba(34,197,94,.2);  color:#4ade80; }
+
+.nav-btns { display:flex; gap:10px; margin-top:18px; justify-content:space-between; }
+.nav-btn { padding:10px 22px; border:none; border-radius:99px; cursor:pointer; font-size:.9rem; font-weight:600; transition:all .2s; }
+.nav-btn.prev { background:#1e293b; color:#94a3b8; border:1px solid #2a3a4a; }
+.nav-btn.next { background:#ef4444; color:white; }
+.nav-btn:hover { filter:brightness(1.1); }
+.nav-btn:disabled { opacity:.3; cursor:not-allowed; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>🛡️ Seguretat i Benestar Digital</h1>
+  <p>Protegeix la teva identitat, les teves dades i la teva privacitat al món digital</p>
+  <span class="header-tag">IES Ramon Llull · 1r Batxillerat · Curs 25-26</span>
+</header>
+
+<div class="topic-tabs" id="topic-tabs">
+  <div class="topic-tab active"  onclick="go(0)">🔐 Introducció</div>
+  <div class="topic-tab"        onclick="go(1)">🎭 Hackers i atacs</div>
+  <div class="topic-tab"        onclick="go(2)">🔑 Contrasenyes</div>
+  <div class="topic-tab"        onclick="go(3)">💧 Filtracions</div>
+  <div class="topic-tab"        onclick="go(4)">📱 2FA i Wifi</div>
+  <div class="topic-tab"        onclick="go(5)">🧬 Empremta digital</div>
+  <div class="topic-tab"        onclick="go(6)">🕵️ Privacitat</div>
+  <div class="topic-tab"        onclick="go(7)">🎯 Enginyeria social</div>
+  <div class="topic-tab"        onclick="go(8)">🛠️ Activitats</div>
+</div>
+
+<!-- ===== 0: INTRODUCCIÓ ===== -->
+<div class="topic-panel active" id="panel-0">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#1a0505,#2a0a0a);border:1px solid #3a0a0a">
+    <div class="sb-icon">🛡️</div>
+    <div><h2>Seguretat digital: una evolució constant</h2><p>De les sales tancades amb clau als atacs de dia zero.</p></div>
+  </div>
+  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">📜 Com ha evolucionat la seguretat digital <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="step-list">
+          <div class="step-item"><div class="step-left"><div class="step-num" style="font-size:.7rem">70s</div><div class="step-line"></div></div><div class="step-content"><h4>Seguretat purament física</h4><p>Les sales d'ordinadors es tancaven amb clau. L'amenaça era física: que algú entràs a la sala i manipulàs les màquines directament.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num" style="font-size:.7rem">80–90s</div><div class="step-line"></div></div><div class="step-content"><h4>Primers virus i antivirus</h4><p>Amb l'arribada d'Internet sorgeixen els primers virus (com <strong>Creeper</strong>) i la necessitat de tallafocs i antivirus per protegir el perímetre de la xarxa.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num" style="font-size:.7rem">2000s</div><div class="step-line"></div></div><div class="step-content"><h4>Privacitat de dades i xifratge</h4><p>El focus canvia cap a protegir les dades dels usuaris. Neixen les lleis GDPR, el xifratge HTTPS i la consciència sobre la privacitat.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num" style="font-size:.7rem">Avui</div></div><div class="step-content"><h4>L'usuari és el principal objectiu</h4><p>Un SMS ben redactat o una contrasenya feble és tot el que necessita un cibercriminal. La tecnologia és secundària; l'engany és el principal vector.</p></div></div>
+        </div>
+        <div class="info-box yellow">🎯 L'objectiu d'aquest mòdul és convertir-te en <strong>propietari</strong> de la teva tecnologia, no simplement un usuari.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">📊 La superfície d'atac d'un adolescent <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>Cada compte, dispositiu i connexió és una possible porta d'entrada. Quantes tens tu?</p>
+        <div class="three-col">
+          <div class="col-card red"><h4>🔴 Risc alt</h4><ul><li>Correu electrònic principal</li><li>WhatsApp / Telegram</li><li>Instagram / TikTok</li><li>Compte bancari/Bizum</li></ul></div>
+          <div class="col-card yellow"><h4>🟡 Risc mitjà</h4><ul><li>Spotify / Netflix</li><li>Steam / PlayStation</li><li>Discord</li><li>Google Account</li></ul></div>
+          <div class="col-card green"><h4>🟢 Protecció</h4><ul><li>Contrasenya robusta</li><li>2FA activat</li><li>Gestor de contrasenyes</li><li>Actualitzacions al dia</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 1: HACKERS I ATACS ===== -->
+<div class="topic-panel" id="panel-1">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#1a0a00,#2a1500);border:1px solid #3a1a00">
+    <div class="sb-icon">🎭</div>
+    <div><h2>Hackers vs. Cibercriminals</h2><p>El mite de la caputxa: qui és realment qui al món de la ciberseguretat.</p></div>
+  </div>
+  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🎭 Hacker ≠ Cibercriminal <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="two-col">
+          <div class="col-card green"><h4>🤍 Hacker (White Hat)</h4><ul><li>Curiositat per entendre sistemes</li><li>Busca vulnerabilitats per <strong>millorar</strong> la seguretat</li><li>Treballa amb permís de les empreses</li><li>Ètica professional clara</li></ul></div>
+          <div class="col-card red"><h4>🖤 Cibercriminal (Black Hat)</h4><ul><li>Busca benefici econòmic o causar mal</li><li>Actua sense permís ni escrúpols</li><li>Ven dades robades a la Dark Web</li><li>Pot estar al teu propi país</li></ul></div>
+        </div>
+        <div class="info-box blue">💡 La majoria d'atacs exitosos no usen codi sofisticat — usen <strong>engany psicològic</strong>.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">⚔️ Escala de perillositat dels atacs <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="danger-scale">
+          <div class="ds-item ds-low"><div class="ds-icon">📧</div><h4>Spam</h4><p>Molest però poc perillós.</p></div>
+          <div class="ds-item ds-mid"><div class="ds-icon">🎣</div><h4>Phishing</h4><p>Engany per robar dades.</p></div>
+          <div class="ds-item ds-high"><div class="ds-icon">🦠</div><h4>Malware</h4><p>Pot prendre el control.</p></div>
+          <div class="ds-item ds-crit"><div class="ds-icon">🔐</div><h4>Ransomware</h4><p>Segrest de fitxers.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🎣 Phishing: l'art de l'engany <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>El phishing consisteix a fer-se passar per una entitat de confiança per robar les teves credencials o diners.</p>
+        <table class="tt">
+          <thead><tr><th>Tipus</th><th>Com funciona</th><th>Exemple real</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Email phishing</strong></td><td>Correu fals que imita una empresa real</td><td>"El teu compte de Netflix ha estat suspès"</td></tr>
+            <tr><td><strong>Smishing (SMS)</strong></td><td>SMS fals de Correos, banc o paquet</td><td>"Tens un paquet pendent. Paga 1,99€"</td></tr>
+            <tr><td><strong>Vishing</strong></td><td>Trucada telefònica falsa</td><td>Algú que "és del teu banc"</td></tr>
+            <tr><td><strong>Spear phishing</strong></td><td>Atac personalitzat amb dades teves</td><td>Correu que menciona el teu nom i empresa</td></tr>
+          </tbody>
+        </table>
+        <div class="info-box red">🚨 Cap banc et demanarà mai la contrasenya per correu. Revisa sempre l'adreça real del remitent.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🦠 Malware i segrest de comptes <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="two-col">
+          <div class="col-card red"><h4>Què pot fer el malware</h4><ul><li>Espiar càmera i micròfon</li><li>Robar contrasenyes guardades</li><li>Enviar fitxers a tercers</li><li>Usar el teu dispositiu per atacar altres</li></ul></div>
+          <div class="col-card yellow"><h4>Com s'instal·la</h4><ul><li>Apps de fonts no oficials (APKs pirata)</li><li>Fitxers adjunts de correus desconeguts</li><li>"Mods" de jocs de webs no oficials</li><li>USB infectats</li></ul></div>
+        </div>
+        <div class="step-list" style="margin-top:14px">
+          <div class="step-item"><div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div><div class="step-content"><h4>Reps un missatge atractiu</h4><p>"Has guanyat Nitro de Discord! Fes clic aquí per reclamar-lo"</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div><div class="step-content"><h4>Pàgina falsa idèntica a la real</h4><p>Introdueixes usuari i contrasenya — les dades van directament al cibercriminal.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">3</div></div><div class="step-content"><h4>Compte robat en segons</h4><p>El criminal canvia la contrasenya i el correu de recuperació. Has perdut el compte.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 2: CONTRASENYES ===== -->
+<div class="topic-panel" id="panel-2">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#0a1a0a,#0a2a1a);border:1px solid #1a3a1a">
+    <div class="sb-icon">🔑</div>
+    <div><h2>L'anatomia d'una contrasenya imbatible</h2><p>Per què les contrasenyes curtes ja no serveixen.</p></div>
+  </div>
+  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">⏱️ Quant triga un ordinador a trencar la teva contrasenya? <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="pass-demo">
+          <div class="pass-row"><span class="pass-text">123456</span><span class="pass-time pt-instant">Instantani</span></div>
+          <div class="pass-row"><span class="pass-text">password</span><span class="pass-time pt-instant">Instantani</span></div>
+          <div class="pass-row"><span class="pass-text">Marc1234</span><span class="pass-time pt-seconds">~3 hores</span></div>
+          <div class="pass-row"><span class="pass-text">C4st3ll!</span><span class="pass-time pt-hours">~2 dies</span></div>
+          <div class="pass-row"><span class="pass-text">M@rc#2024IES</span><span class="pass-time pt-years">~34 anys</span></div>
+          <div class="pass-row"><span class="pass-text">M'agradaMenjarPizzaAmbPinya2024!</span><span class="pass-time pt-forever">Segles ♾️</span></div>
+        </div>
+        <div class="info-box yellow">⚡ Un ordinador modern pot provar <strong>milions de combinacions per segon</strong>. La longitud és més important que la complexitat.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">💪 Força bruta i atacs de diccionari <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="two-col">
+          <div class="col-card red"><h4>🔨 Força bruta</h4><p>Prova totes les combinacions possibles. Contra una de 6 caràcters: minuts. Contra una de 20: segles.</p></div>
+          <div class="col-card yellow"><h4>📖 Atac de diccionari</h4><p>Usa llistes de paraules reals, noms i les contrasenyes filtrades més comunes. <code>qwerty</code>, <code>BarçaFCB</code> cauen en segons.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🗣️ Frases de pas (Passphrases) <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="two-col">
+          <div class="col-card red"><h4>❌ Contrasenya clàssica</h4><p style="font-family:monospace;color:#f87171;font-size:1.1rem;margin:8px 0">C4st3ll!</p><p>8 caràcters. Sembla segura però cau en 2 dies.</p></div>
+          <div class="col-card green"><h4>✅ Frase de pas</h4><p style="font-family:monospace;color:#86efac;font-size:.9rem;margin:8px 0">M'agradaMenjarPizzaAmbPinya2024!</p><p>32 caràcters. Fàcil de recordar. Trigarien segles.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🗃️ Gestors de contrasenyes <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>Impossible memoritzar 50 contrasenyes úniques. La solució: un gestor que genera i guarda contrasenyes complexes per tu.</p>
+        <table class="tt">
+          <thead><tr><th>Gestor</th><th>Plataformes</th><th>Cost</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Bitwarden</strong></td><td>Totes + navegador</td><td>Gratuït (codi obert)</td></tr>
+            <tr><td><strong>Google Password Manager</strong></td><td>Chrome + Android</td><td>Gratuït</td></tr>
+            <tr><td><strong>iCloud Keychain</strong></td><td>Apple (iOS/macOS)</td><td>Gratuït</td></tr>
+          </tbody>
+        </table>
+        <div class="info-box green">✅ Regla d'or: <strong>una contrasenya diferent per a cada servei</strong>. Si es filtra la del teu joc, el teu banc seguirà segur.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 3: FILTRACIONS ===== -->
+<div class="topic-panel" id="panel-3">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#1a0a00,#2a1000);border:1px solid #3a1500">
+    <div class="sb-icon">💧</div>
+    <div><h2>Filtracions de dades (Data Leaks)</h2><p>Quan les empreses fallen i les teves dades acaben a la Dark Web.</p></div>
+  </div>
+  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">💧 Què és un Leak? <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>Un <strong>leak</strong> és l'accés o publicació no autoritzada de dades privades. Quan una empresa pateix un hack, les dades de milions d'usuaris acaben a la Dark Web on es venen a cibercriminals.</p>
+        <div class="two-col">
+          <div class="col-card red"><h4>Dades que es filtren</h4><ul><li>Credencials: correus + contrasenyes</li><li>Dades personals: nom, DNI, telèfon</li><li>Informació bancària: targetes</li><li>Contingut privat: fotos, converses</li></ul></div>
+          <div class="col-card yellow"><h4>Filtracions famoses</h4><ul><li>Facebook: 533M usuaris (2021)</li><li>Wattpad: 270M (2020)</li><li>Canva: 137M (2019)</li><li>LinkedIn: 700M (2021)</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🔍 Com es produeix un leak? <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="step-list">
+          <div class="step-item"><div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div><div class="step-content"><h4>Atacs externs (Hacking)</h4><p>Injecció SQL, explotació de vulnerabilitats en programari no actualitzat.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div><div class="step-content"><h4>Errors de configuració</h4><p>Bases de dades al núvol sense contrasenya. Dades guardades en text pla sense xifrar.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div><div class="step-content"><h4>Enginyeria social interna</h4><p>Un empleat rep un correu fals i instal·la un programari espia que envia les dades als atacants.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">4</div></div><div class="step-content"><h4>Fugides internes (Insiders)</h4><p>Un treballador roba les dades per vendre-les o per venjança.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🔄 Cicle de vida d'un leak i Credential Stuffing <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="step-list">
+          <div class="step-item"><div class="step-left"><div class="step-num" style="font-size:.7rem">①</div><div class="step-line"></div></div><div class="step-content"><h4>L'extracció</h4><p>El cibercriminal copia la base de dades. De vegades l'empresa tarda mesos a descobrir-ho.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num" style="font-size:.7rem">②</div><div class="step-line"></div></div><div class="step-content"><h4>La venda a la Dark Web</h4><p>Preus típics: base de dades d'1M d'usuaris = 50-200 dòlars.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num" style="font-size:.7rem">③</div></div><div class="step-content"><h4>Credential Stuffing i estafes</h4><p>Provar les contrasenyes filtrades a Netflix, Amazon, bancs... Si repeteixes contrasenyes, et troben. Trucar sabent el teu nom i DNI per semblar "el teu banc".</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🔬 Com comprova el gestor si la contrasenya s'ha filtrat? <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="step-list">
+          <div class="step-item"><div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div><div class="step-content"><h4>Hashing</h4><p>La contrasenya es converteix en un codi irrecognoscible. Ex: <code>pizza123</code> → <code>a1b2c3d4e5f6...</code></p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div><div class="step-content"><h4>Sols s'envia un fragment del hash</h4><p>Per preservar la privacitat, sols s'envien els primers 5 caràcters. El servidor mai veu la contrasenya original.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">3</div></div><div class="step-content"><h4>Comparació local</h4><p>El gestor comprova localment si el teu hash és entre els filtrats. Si sí: t'avisa. <strong>Privacitat total garantida.</strong></p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 4: 2FA I WIFI ===== -->
+<div class="topic-panel" id="panel-4">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#0a0a1a,#0a1a2e);border:1px solid #1a1a3a">
+    <div class="sb-icon">📱</div>
+    <div><h2>Doble Factor i Seguretat de Xarxa</h2><p>La segona clau que protegeix els teus comptes i els perills del Wifi públic.</p></div>
+  </div>
+  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🔐 El Doble Factor d'Autenticació (2FA) <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>Fins i tot si un cibercriminal aconsegueix la teva contrasenya, <strong>no pot entrar sense el segon factor</strong>.</p>
+        <table class="tt">
+          <thead><tr><th>Mètode 2FA</th><th>Seguretat</th><th>Descripció</th></tr></thead>
+          <tbody>
+            <tr><td><strong>SMS</strong></td><td>⚠️ Baix-Mitjà</td><td>Vulnerable a SIM swapping.</td></tr>
+            <tr><td><strong>App d'autenticació</strong></td><td>✅ Alt</td><td>Google Authenticator, Authy. Codis cada 30s.</td></tr>
+            <tr><td><strong>Clau física (YubiKey)</strong></td><td>✅✅ Molt alt</td><td>Impossible d'interceptar remotament.</td></tr>
+            <tr><td><strong>Biomètrica (FaceID)</strong></td><td>✅ Alt</td><td>Còmode i segur.</td></tr>
+          </tbody>
+        </table>
+        <div class="info-box green">📊 El <strong>80% dels atacs</strong> es podrien evitar simplement amb contrasenya robusta + 2FA activat.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">📶 Wifi públic: l'home al mig (Man-in-the-Middle) <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="two-col">
+          <div class="col-card red"><h4>⚠️ Riscos</h4><ul><li>Xarxes falses: <code>Wifi_Gratis_Zara</code></li><li>Interceptació de dades</li><li>Robar sessions actives</li><li>Injecció de malware</li></ul></div>
+          <div class="col-card green"><h4>✅ Com protegir-te</h4><ul><li>Usar sempre HTTPS (cadenat 🔒)</li><li>Mai introduir dades bancàries</li><li>Usar dades mòbils si és possible</li><li>VPN si cal connectar-se</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🔄 Actualitzacions i antivirus <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>Les actualitzacions no són "emojis nous". Corregeixen <strong>vulnerabilitats de seguretat</strong> conegudes. Si no actualitzes, deixes una finestra oberta que els cibercriminals ja saben explotar.</p>
+        <div class="two-col">
+          <div class="col-card blue"><h4>🔬 VirusTotal</h4><p>Analitza fitxers i URLs amb <strong>+70 antivirus alhora</strong>. Usa <code>virustotal.com</code> abans de descarregar qualsevol cosa sospitosa.</p></div>
+          <div class="col-card purple"><h4>🚫 uBlock Origin</h4><p>Extensió gratuïta de navegador que bloqueja anuncis maliciosos que podrien descarregar malware automàticament.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 5: EMPREMTA DIGITAL ===== -->
+<div class="topic-panel" id="panel-5">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#1a0a1a,#2a0a2e);border:1px solid #3a1a3a">
+    <div class="sb-icon">🧬</div>
+    <div><h2>L'Empremta Digital</h2><p>El teu "currículum" invisible que construeixes cada dia sense adonar-te'n.</p></div>
+  </div>
+  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🧬 Empremta activa vs. passiva <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="info-box purple">🔍 <strong>Internet té memòria infinita.</strong> Una broma de quan tenies 12 anys pot tornar a sortir quan en tinguis 20, 25 o 30.</div>
+        <div class="two-col">
+          <div class="col-card red"><h4>Empremta activa (tu la crees)</h4><ul><li>Fotos i vídeos que puges</li><li>Comentaris i opinions</li><li>M'agrades i comparticions</li><li>Perfils de xarxes socials</li></ul></div>
+          <div class="col-card yellow"><h4>Empremta passiva (es crea sola)</h4><ul><li>Historial de cerques a Google</li><li>Localitzacions i etiquetes</li><li>Metadades de fotos</li><li>Cookies i seguiment publicitari</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">📍 Metadades de fotos: el perill ocult <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>Una foto enviada per correu pot portar incrustades les <strong>coordenades GPS exactes</strong> d'on es va fer, la data i hora i el model de mòbil.</p>
+        <div class="info-box red">⚠️ Si puges una foto feta a casa teva, algunes plataformes exposen les coordenades GPS a qualsevol que descarregui el fitxer. Instagram les elimina; d'altres no.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🌍 Activitat: Ego-surfing i dret a l'oblit <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>Cerca el teu nom complet entre cometes a Google: <code>"Joan Garcia Pérez"</code> i mira la pestanya d'imatges.</p>
+        <ul>
+          <li>Què surt sobre tu? T'agrada el que veus?</li>
+          <li>Podria afectar negativament una futura feina?</li>
+          <li>Hi ha informació que preferiries que no fos pública?</li>
+        </ul>
+        <div class="info-box blue">💡 <strong>El dret a l'oblit</strong>: pots demanar a Google que elimini dades teves que et perjudiquen. A Europa, el GDPR garanteix aquest dret.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 6: PRIVACITAT ===== -->
+<div class="topic-panel" id="panel-6">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#0a1a0a,#1a1a00);border:1px solid #2a2a0a">
+    <div class="sb-icon">🕵️</div>
+    <div><h2>Privacitat i propietat de les dades</h2><p>Si una app és gratuïta, el producte ets tu.</p></div>
+  </div>
+  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">💰 El negoci de les teves dades <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>Com guanyen diners Instagram, TikTok o Google si no els pagues res? Les teves <strong>dades es venen a anunciants</strong> que paguen per mostrar-te publicitat ultra-personalitzada.</p>
+        <div class="info-box yellow">💡 Si una app és completament gratuïta i no té model de negoci obvi... <strong>el producte ets tu</strong>. Les teves dades de comportament, localització i interessos valen milers de milions.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">⚙️ Auditoria de privacitat: check-list de xarxes socials <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <table class="tt">
+          <thead><tr><th>Plataforma</th><th>Preguntes clau</th><th>On configurar-ho</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Instagram</strong></td><td>Compte privat? Qui pot veure stories? Qui pot etiquetar-te?</td><td>Perfil → Privacitat</td></tr>
+            <tr><td><strong>TikTok</strong></td><td>Descàrrega dels teus vídeos activada per desconeguts?</td><td>Perfil → Privacitat</td></tr>
+            <tr><td><strong>Snapchat</strong></td><td>Qui veu la Story? Ghost Mode activat?</td><td>Perfil → Configuració</td></tr>
+            <tr><td><strong>WhatsApp</strong></td><td>Qui veu la teva foto de perfil i última connexió?</td><td>Configuració → Privacitat</td></tr>
+          </tbody>
+        </table>
+        <div class="info-box red">⚠️ Qualsevol amic pot fer una captura de pantalla. La privacitat absoluta no existeix un cop el contingut surt del teu mòbil.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🗺️ Geolocalització: el perill del temps real <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="two-col">
+          <div class="col-card red"><h4>🗺️ Snap Map</h4><p>Per defecte, el teu Snapchat comparteix la teva ubicació exacta en temps real. Qualsevol pot saber on vius i quins llocs freqüentes.<br><strong>Solució:</strong> activar el <strong>Ghost Mode</strong>.</p></div>
+          <div class="col-card yellow"><h4>📍 Etiquetes de lloc</h4><p>Millor pràctica: publicar la foto del restaurant <strong>quan ja n'has marxat</strong>, no mentre hi ets.</p></div>
+        </div>
+        <div class="info-box purple">📱 Revisa quines apps accedeixen a la teva ubicació. Un joc de llanternes no necessita saber on ets les 24 hores. Configuració → Privacitat → Ubicació.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">📸 Un cop puges una foto, ja no és teva <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>Les condicions d'ús que acceptes quan et registres a Instagram o TikTok inclouen una <strong>llicència d'ús de les teves imatges</strong>.</p>
+        <ul>
+          <li>Poden usar les teves fotos per a publicitat</li>
+          <li>Poden cedir-les a tercers</li>
+          <li>Fins i tot esborrant-les, poden continuar existint als seus servidors</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 7: ENGINYERIA SOCIAL ===== -->
+<div class="topic-panel" id="panel-7">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#1a0505,#2a0a15);border:1px solid #3a0a1a">
+    <div class="sb-icon">🎯</div>
+    <div><h2>Enginyeria Social</h2><p>La pirateria psicològica: t'ataquen amb emocions, no amb codi.</p></div>
+  </div>
+  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🧠 Per què funciona l'enginyeria social? <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>No cal ser un geni informàtic: en explotar les emocions humanes s'aconsegueix el que cap tecnologia podria.</p>
+        <div class="tag-list">
+          <span class="tag tag-red">😨 Por</span>
+          <span class="tag tag-yellow">⏰ Urgència</span>
+          <span class="tag tag-blue">🤔 Curiositat</span>
+          <span class="tag tag-purple">💜 Flirteig</span>
+          <span class="tag tag-green">🤝 Confiança</span>
+          <span class="tag tag-gray">🎁 Avarícia</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🏆 El "concurs" fals i l'"amic" en problemes <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="step-list">
+          <div class="step-item"><div class="step-left"><div class="step-num">🏆</div><div class="step-line"></div></div><div class="step-content"><h4>El "concurs" fals</h4><p>"Enhorabona! Has guanyat un iPhone 16. Introdueix les teves dades en les properes 24 hores." → Urgència + Avarícia. Mai has participat en cap concurs.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">📱</div></div><div class="step-content"><h4>L'"amic" en problemes</h4><p>"Hola, soc en Marc, he perdut el mòbil. Pots enviar-me el codi SMS que t'arribi?" → En realitat és un cibercriminal intentant prendre el control del teu WhatsApp.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">💜 Catfishing, sextorsió i trucada del "banc" <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="step-list">
+          <div class="step-item"><div class="step-left"><div class="step-num">💜</div><div class="step-line"></div></div><div class="step-content"><h4>Catfishing i sextorsió</h4><p>Una persona falsa crea una relació romàntica per obtenir fotos compromeses. Després amenaça amb publicar-les si no paga. Delicte: <strong>sextorsió</strong>.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">🏦</div></div><div class="step-content"><h4>La trucada del "banc"</h4><p>Algú truca, sap el teu nom i els últims 4 dígits de la targeta (extrets d'un leak) i demana que confirmis la contrasenya per "bloquejar una operació sospitosa".</p></div></div>
+        </div>
+        <div class="info-box red">🚨 Cap banc, empresa ni servei legítim et demanarà mai la teva contrasenya per telèfon, SMS o correu. <strong>Mai.</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 8: ACTIVITATS ===== -->
+<div class="topic-panel" id="panel-8">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#0a1a0a,#0a2a0a);border:1px solid #1a3a1a">
+    <div class="sb-icon">🛠️</div>
+    <div><h2>Activitats pràctiques</h2><p>Comprova la teva exposició real amb eines reals.</p></div>
+  </div>
+  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+  <div class="activity-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🕵️ Activitat 1: El Meu Passat Digital (Test de Vulnerabilitat) <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p><strong>Pas 1 — Have I Been Pwned?</strong> → <code>haveibeenpwned.com</code></p>
+        <ul>
+          <li>🟢 Resultat verd: estàs "net" (de moment).</li>
+          <li>🔴 Resultat vermell: les teves dades s'han filtrat. Veu quina empresa i quina informació.</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Pas 2 — Kaspersky Password Check</strong> → <code>password.kaspersky.com</code></p>
+        <ul><li>Introdueix una contrasenya <em>similar</em> (mai l'exacta). Veuràs quant trigaria un ordinador a trencar-la.</li></ul>
+        <p style="margin-top:10px"><strong>Pas 3 — VirusTotal</strong> → <code>virustotal.com</code></p>
+        <ul><li>Analitza una URL dubtosa o un fitxer petit. Si surten 3+ avisos en vermell: no hi facis clic.</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="activity-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🔍 Activitat 2: L'Investigador Privat (OSINT bàsic) <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <p>Escull un perfil d'Instagram o TikTok públic d'un influencer. En 5 minuts, intenta esbrinar:</p>
+        <ul>
+          <li>A quin institut va o anava?</li>
+          <li>Quines zones freqüenta els caps de setmana?</li>
+          <li>Quin és el seu aniversari?</li>
+          <li>Té animals de companyia? Com es diuen?</li>
+          <li>On viu aproximadament?</li>
+        </ul>
+        <div class="info-box red" style="margin-top:10px">🤔 <strong>Reflexió:</strong> Si nosaltres hem obtingut tota aquesta informació en 5 minuts... Què podria fer algú amb males intencions?</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="activity-card">
+    <div class="reveal-block">
+      <h3 class="reveal-trigger" onclick="toggle(this)">🛡️ Pla d'Acció: "M'han filtrat. Ara què?" <span class="arrow">▶</span></h3>
+      <div class="reveal-content">
+        <div class="step-list">
+          <div class="step-item"><div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div><div class="step-content"><h4>Canvia la contrasenya immediatament</h4><p>Del servei afectat i de tots els llocs on facis servir la mateixa contrasenya.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div><div class="step-content"><h4>Activa el 2FA</h4><p>Si el hacker té la contrasenya però no té el teu mòbil per rebre el codi, no podrà entrar.</p></div></div>
+          <div class="step-item"><div class="step-left"><div class="step-num">3</div></div><div class="step-content"><h4>Neteja de comptes obsolets</h4><p>Elimina comptes d'apps que ja no uses. Cada compte inactiu és una porta d'entrada potencial.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="nav-btns">
+  <button class="nav-btn prev" id="btn-prev" onclick="navigate(-1)" disabled>← Tema anterior</button>
+  <button class="nav-btn next" id="btn-next" onclick="navigate(1)">Tema següent →</button>
+</div>
+
+</div>
+<script>
+let cur = 0;
+const total = 9;
+
+function toggle(trigger) {
+  const content = trigger.nextElementSibling;
+  const isOpen = trigger.classList.contains('open');
+  trigger.classList.toggle('open', !isOpen);
+  content.classList.toggle('shown', !isOpen);
+}
+
+function go(i) {
+  document.querySelectorAll('.topic-panel').forEach((p,j) => p.classList.toggle('active', j===i));
+  document.querySelectorAll('.topic-tab').forEach((t,j) => t.classList.toggle('active', j===i));
+  cur = i;
+  document.getElementById('btn-prev').disabled = i===0;
+  document.getElementById('btn-next').disabled = i===total-1;
+  document.getElementById('btn-next').textContent = i===total-1 ? '✓ Final' : 'Tema següent →';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function navigate(dir) {
+  const n = cur + dir;
+  if (n >= 0 && n < total) go(n);
+}
+</script>
+</body>
+</html>
