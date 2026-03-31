@@ -8,6 +8,9 @@ const materialsModalEl = document.getElementById("materialsModal");
 const materialsModalLabel = document.getElementById("materialsModalLabel");
 const materialsModalSubtitle = document.getElementById("materialsModalSubtitle");
 const materialsModalBody = document.getElementById("materialsModalBody");
+const presentationToggleHome = document.getElementById("presentationToggleHome");
+const fullscreenToggleHome = document.getElementById("fullscreenToggleHome");
+const presentationStateHome = document.getElementById("presentationStateHome");
 
 // Inicialització segura del modal
 function initModal() {
@@ -578,6 +581,39 @@ function initBackToTop() {
   });
 }
 
+function initPresentationModeHome() {
+  if (presentationToggleHome) {
+    presentationToggleHome.addEventListener("click", () => {
+      const html = document.documentElement;
+      html.classList.toggle("presentation-mode");
+      const active = html.classList.contains("presentation-mode");
+      presentationToggleHome.textContent = active ? "Sortir mode aula" : "Mode pantalla aula";
+      if (presentationStateHome) {
+        presentationStateHome.hidden = !active;
+      }
+    });
+  }
+
+  if (fullscreenToggleHome) {
+    fullscreenToggleHome.addEventListener("click", async () => {
+      try {
+        if (!document.fullscreenElement) {
+          await document.documentElement.requestFullscreen();
+        } else {
+          await document.exitFullscreen();
+        }
+      } catch (err) {
+        console.warn("No s'ha pogut canviar la pantalla completa:", err);
+      }
+    });
+  }
+
+  document.addEventListener("fullscreenchange", () => {
+    if (!fullscreenToggleHome) return;
+    fullscreenToggleHome.textContent = document.fullscreenElement ? "Sortir pantalla completa" : "Pantalla completa";
+  });
+}
+
 function init() {
   if (themeIndexContainer) {
     const subjectName = themeIndexContainer.dataset.subject || "";
@@ -623,6 +659,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initFaviconAndMeta();
   initDarkMode();
   initBackToTop();
+  initPresentationModeHome();
 });
 
 document.addEventListener("keydown", (e) => {

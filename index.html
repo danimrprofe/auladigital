@@ -22,7 +22,7 @@
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body class="home-page">
     <nav class="navbar navbar-expand-lg sticky-top shadow-sm app-navbar">
       <div class="container">
         <a class="navbar-brand fw-semibold" href="#"
@@ -47,12 +47,6 @@
             <li class="nav-item">
               <a class="nav-link" href="#assignatures">Assignatures</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#calendari">Calendari</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#contacte">Contacte</a>
-            </li>
           </ul>
         </div>
       </div>
@@ -61,7 +55,7 @@
     <header id="inici" class="hero-section hero-compact py-3">
       <div class="container py-2">
         <div class="row align-items-center g-3">
-          <div class="col-lg-7">
+          <div class="col-12">
             <span
               class="badge rounded-pill text-bg-light border hero-badge mb-3"
               >IES Ramon Llull · Palma</span
@@ -76,9 +70,6 @@
             <div class="d-flex flex-wrap gap-2 mb-3">
               <a href="#assignatures" class="btn btn-primary btn-modern"
                 >Anar a assignatures</a
-              >
-              <a href="#searchInput" class="btn btn-outline-light btn-modern"
-                >Anar al cercador</a
               >
             </div>
             <div class="hero-shortcuts d-flex flex-wrap gap-2">
@@ -103,79 +94,44 @@
                 >Digitalització</a
               >
             </div>
-          </div>
-          <div class="col-lg-5">
-            <div class="card border-0 shadow-sm glass-card">
-              <div class="card-body p-3">
-                <h2 class="h6 mb-2">Cercador de continguts</h2>
-                <label for="searchInput" class="form-label mb-1"
-                  >Escriu una paraula clau</label
-                >
-                <div class="input-group">
-                  <span class="input-group-text">🔎</span>
-                  <input
-                    id="searchInput"
-                    type="text"
-                    class="form-control"
-                    placeholder="Ex: full de càlcul, Python..."
-                  />
-                </div>
-                <small class="text-muted d-block mt-2"
-                  >Prem <strong>/</strong> per enfocar el cercador
-                  ràpidament.</small
-                >
-              </div>
+            <div class="presentation-tools">
+              <button
+                id="presentationToggleHome"
+                type="button"
+                class="btn btn-outline-light btn-modern btn-sm"
+              >
+                Mode pantalla aula
+              </button>
+              <button
+                id="fullscreenToggleHome"
+                type="button"
+                class="btn btn-outline-light btn-modern btn-sm"
+              >
+                Pantalla completa
+              </button>
+              <span id="presentationStateHome" class="present-pill" hidden
+                >Presentació activa</span
+              >
             </div>
           </div>
         </div>
       </div>
     </header>
 
-    <main class="pb-5">
-      <section id="assignatures" class="container py-4">
+    <main class="pb-5 home-main">
+      <section
+        id="assignatures"
+        class="container py-4 home-panel home-assignatures"
+      >
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h2 class="mb-0">Assignatures</h2>
           <span id="resultCount" class="badge text-bg-light"></span>
         </div>
         <div id="subjectsContainer" class="row g-4"></div>
       </section>
-
-      <section id="calendari" class="container py-4">
-        <div class="card border-0 shadow-sm">
-          <div class="card-body p-4">
-            <h2 class="h4 mb-3">Calendari i avisos</h2>
-            <p class="mb-2">
-              Pots editar aquest bloc amb dates d'exàmens, entregues i
-              recordatoris.
-            </p>
-            <ul class="mb-0">
-              <li>
-                Exemple: 10/04 · Entrega pràctica de Programació i Tractament de
-                Dades I
-              </li>
-              <li>Exemple: 18/04 · Prova d'Entorns Digitals</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section id="contacte" class="container py-4">
-        <div class="card border-0 shadow-sm">
-          <div class="card-body p-4">
-            <h2 class="h4 mb-3">Contacte i tutories</h2>
-            <p class="mb-1">
-              <strong>Professor:</strong> (Afegeix aquí el teu nom)
-            </p>
-            <p class="mb-1"><strong>Centre:</strong> IES Ramon Llull · Palma</p>
-            <p class="mb-0">
-              <strong>Correu:</strong> (Afegeix aquí el teu correu del centre)
-            </p>
-          </div>
-        </div>
-      </section>
     </main>
 
-    <footer class="py-3">
+    <footer class="py-3 home-footer">
       <div
         class="container small d-flex flex-column flex-md-row justify-content-between gap-2"
       >

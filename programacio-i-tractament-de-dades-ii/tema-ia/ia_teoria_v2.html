@@ -42,6 +42,50 @@ header p { opacity: .75; font-size: .88rem; position: relative; }
 .tool-btn:hover { filter: brightness(0.98); }
 .tool-status { margin-left: auto; background: #ecfeff; color: #0e7490; border: 1px solid #bae6fd; border-radius: 99px; padding: 4px 10px; font-size: .75rem; font-weight: 700; }
 
+.presentation-mode body { background: #edf2ff; }
+.presentation-mode .container { max-width: 1280px; padding: 28px; }
+.presentation-mode header { padding: 34px 36px; border-radius: 18px; }
+.presentation-mode header h1 { font-size: clamp(3rem, 4.2vw, 4.2rem); line-height: 1.15; }
+.presentation-mode header p { font-size: clamp(1.45rem, 2.1vw, 2rem); opacity: 0.95; line-height: 1.5; }
+.presentation-mode .header-tag { font-size: 1.2rem; padding: 8px 16px; }
+.presentation-mode .timeline-nav { padding: 20px 22px; }
+.presentation-mode .tl-dot { width: 62px; height: 62px; font-size: 1.55rem; }
+.presentation-mode .tl-label { font-size: 1.22rem; max-width: 170px; line-height: 1.35; }
+.presentation-mode .tl-year { font-size: 1rem; }
+.presentation-mode .stage-badge h2 { font-size: clamp(2rem, 2.9vw, 2.9rem); }
+.presentation-mode .stage-badge p { font-size: clamp(1.35rem, 1.9vw, 1.8rem); line-height: 1.62; }
+.presentation-mode .theory-card { padding: 30px; border-radius: 16px; }
+.presentation-mode .theory-card h3 { font-size: clamp(1.9rem, 2.6vw, 2.6rem); margin-bottom: 16px; }
+.presentation-mode .theory-card p,
+.presentation-mode .theory-card li,
+.presentation-mode .theory-card td,
+.presentation-mode .theory-card th { font-size: clamp(1.28rem, 1.8vw, 1.65rem); line-height: 1.82; }
+.presentation-mode .col-card h4,
+.presentation-mode .evo-content h4,
+.presentation-mode .tool-body h4 { font-size: clamp(1.45rem, 2vw, 1.9rem); }
+.presentation-mode .tool-body p,
+.presentation-mode .col-card p,
+.presentation-mode .col-card li,
+.presentation-mode .evo-content p { font-size: clamp(1.28rem, 1.8vw, 1.62rem); }
+.presentation-mode .tool-btn { font-size: 1.2rem; padding: 12px 16px; }
+.presentation-mode .topic-search { font-size: 1.15rem; padding: 12px 14px; }
+.presentation-mode .tool-status { font-size: 1.15rem; padding: 8px 14px; }
+.presentation-mode .nav-btn { font-size: 1.35rem; padding: 14px 28px; }
+.presentation-mode .info-box { font-size: clamp(1.22rem, 1.8vw, 1.55rem); line-height: 1.75; }
+.presentation-mode table.tt { font-size: 1.22rem; }
+.presentation-mode .tt th { font-size: 1.08rem; }
+.presentation-mode pre { font-size: 1.05rem; line-height: 1.8; padding: 18px; }
+
+.present-pill {
+  background: #dbeafe;
+  color: #1e3a8a;
+  border: 1px solid #93c5fd;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: .75rem;
+  font-weight: 700;
+}
+
 .focus-mode .container { max-width: 940px; }
 .focus-mode .theory-card p,
 .focus-mode .theory-card li { font-size: .98rem; line-height: 1.82; }
@@ -180,8 +224,11 @@ code { background:#f1f5f9; padding:1px 6px; border-radius:4px; font-family:monos
   <div class="tools-row">
     <input id="topicSearch" class="topic-search" type="search" placeholder="Cerca dins l'etapa activa: ex. Python, prompt, Copilot..." aria-label="Cercar contingut dins l'etapa activa" />
     <button id="focusToggle" class="tool-btn" type="button">Mode focus</button>
+    <button id="presentationToggle" class="tool-btn" type="button">Mode pantalla aula</button>
+    <button id="fullscreenToggle" class="tool-btn" type="button">Pantalla completa</button>
     <button id="clearSearch" class="tool-btn" type="button">Netejar cerca</button>
     <span id="stageStatus" class="tool-status">Etapa 1 de 5</span>
+    <span id="presentationState" class="present-pill" hidden>Presentacio activa</span>
   </div>
 </div>
 
@@ -657,6 +704,9 @@ const stageStatus = document.getElementById('stageStatus');
 const topicSearch = document.getElementById('topicSearch');
 const clearSearch = document.getElementById('clearSearch');
 const focusToggle = document.getElementById('focusToggle');
+const presentationToggle = document.getElementById('presentationToggle');
+const fullscreenToggle = document.getElementById('fullscreenToggle');
+const presentationState = document.getElementById('presentationState');
 
 function applySearchFilter() {
   const query = (topicSearch?.value || '').trim().toLowerCase();
@@ -711,6 +761,37 @@ if (focusToggle) {
     focusToggle.textContent = active ? 'Sortir de focus' : 'Mode focus';
   });
 }
+
+if (presentationToggle) {
+  presentationToggle.addEventListener('click', () => {
+    const html = document.documentElement;
+    html.classList.toggle('presentation-mode');
+    const active = html.classList.contains('presentation-mode');
+    presentationToggle.textContent = active ? 'Sortir mode aula' : 'Mode pantalla aula';
+    if (presentationState) {
+      presentationState.hidden = !active;
+    }
+  });
+}
+
+if (fullscreenToggle) {
+  fullscreenToggle.addEventListener('click', async () => {
+    try {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+      } else {
+        await document.exitFullscreen();
+      }
+    } catch (err) {
+      console.warn('No s\'ha pogut canviar la pantalla completa:', err);
+    }
+  });
+}
+
+document.addEventListener('fullscreenchange', () => {
+  if (!fullscreenToggle) return;
+  fullscreenToggle.textContent = document.fullscreenElement ? 'Sortir pantalla completa' : 'Pantalla completa';
+});
 
 document.querySelectorAll('.tl-step').forEach((step, idx) => {
   step.addEventListener('keydown', (e) => {

@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="ca">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digitalització de l'entorn personal d'aprenentatge</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #fffaf2;
+        color: #2a2118;
+        min-height: 100vh;
+      }
+      .container {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+      header {
+        background: linear-gradient(135deg, #7c2d12, #c2410c, #ea580c);
+        color: white;
+        border-radius: 18px;
+        padding: 28px;
+        margin-bottom: 20px;
+      }
+      header h1 {
+        font-size: 1.7rem;
+        margin-bottom: 6px;
+      }
+      header p {
+        max-width: 760px;
+        line-height: 1.6;
+        opacity: 0.92;
+      }
+      .header-tag {
+        display: inline-block;
+        margin-top: 12px;
+        padding: 4px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.14);
+        font-size: 0.78rem;
+        font-weight: 700;
+      }
+      .header-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 18px;
+      }
+      .header-actions a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 16px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .topic-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 18px;
+      }
+      .topic-tab {
+        border: 1px solid #fdba74;
+        background: white;
+        color: #9a3412;
+        border-radius: 999px;
+        padding: 9px 14px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .topic-tab.active {
+        background: #ea580c;
+        color: white;
+        border-color: #ea580c;
+      }
+      .topic-panel {
+        display: none;
+      }
+      .topic-panel.active {
+        display: block;
+      }
+      .stage-badge {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        color: white;
+        background: linear-gradient(135deg, #fb923c, #ea580c);
+        border-radius: 16px;
+        padding: 18px 20px;
+        margin-bottom: 16px;
+      }
+      .sb-icon {
+        font-size: 2rem;
+      }
+      .theory-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 14px;
+        box-shadow: 0 12px 28px rgba(124, 45, 18, 0.08);
+      }
+      .theory-card h3 {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 1rem;
+        margin-bottom: 10px;
+        color: #7c2d12;
+        cursor: pointer;
+      }
+      .theory-card p,
+      .theory-card li {
+        line-height: 1.7;
+        color: #6b4f3b;
+      }
+      .theory-card ul,
+      .theory-card ol {
+        padding-left: 20px;
+        margin: 12px 0;
+      }
+      .reveal-content {
+        display: none;
+      }
+      .reveal-content.shown {
+        display: block;
+      }
+      .arrow {
+        color: #ea580c;
+        transition: transform 0.2s ease;
+      }
+      .reveal-trigger.open .arrow {
+        transform: rotate(90deg);
+      }
+      .two-col,
+      .three-col {
+        display: grid;
+        gap: 12px;
+        margin: 12px 0;
+      }
+      .two-col {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .three-col {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .col-card {
+        background: #fff7ed;
+        border: 1px solid #fed7aa;
+        border-radius: 12px;
+        padding: 14px;
+      }
+      .col-card h4 {
+        color: #c2410c;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+      }
+      .info-box {
+        border-left: 4px solid #ea580c;
+        background: #fff7ed;
+        color: #9a3412;
+        border-radius: 0 12px 12px 0;
+        padding: 12px 14px;
+        margin: 12px 0;
+        line-height: 1.6;
+      }
+      @media (max-width: 760px) {
+        .two-col,
+        .three-col {
+          grid-template-columns: 1fr;
+        }
+        .container {
+          padding: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Digitalització de l'entorn personal d'aprenentatge</h1>
+        <p>
+          Bloc orientat a cercar, seleccionar, organitzar i crear informació
+          digital, així com a comunicar-se i col·laborar de manera responsable
+          en entorns d'aprenentatge en línia.
+        </p>
+        <div class="header-tag">Digitalització · 4t d'ESO</div>
+        <div class="header-actions">
+          <a href="index.html">Tornar al tema</a>
+          <a href="../index.html">Tornar a Digitalització</a>
+        </div>
+      </header>
+
+      <div class="topic-tabs">
+        <button class="topic-tab active" data-tab="informacio">
+          Informació i gestió
+        </button>
+        <button class="topic-tab" data-tab="creacio">
+          Creació de continguts
+        </button>
+        <button class="topic-tab" data-tab="collaboracio">
+          Comunicació i difusió
+        </button>
+      </div>
+
+      <section id="informacio" class="topic-panel active">
+        <div class="stage-badge">
+          <div class="sb-icon">🔎</div>
+          <div>
+            <h2>Fonts, cerca i organització</h2>
+            <p>
+              L'entorn personal d'aprenentatge comença amb una bona selecció de
+              fonts i una gestió eficient de la informació.
+            </p>
+          </div>
+        </div>
+
+        <article class="theory-card reveal-block">
+          <h3 class="reveal-trigger open">
+            Fonts d'informació i criteris de selecció
+            <span class="arrow">▶</span>
+          </h3>
+          <div class="reveal-content shown">
+            <ul>
+              <li>
+                Distingir entre fonts primàries, secundàries i terciàries.
+              </li>
+              <li>
+                Comprovar autoria, data, intenció, verificació i actualització.
+              </li>
+              <li>Contrastar la mateixa dada en diverses fonts fiables.</li>
+            </ul>
+            <div class="info-box">
+              Cercar no és acumular resultats: és filtrar, contrastar i
+              quedar-se només amb allò que és útil i verificable.
+            </div>
+          </div>
+        </article>
+
+        <article class="theory-card reveal-block">
+          <h3 class="reveal-trigger">
+            Arxiu d'informació i gestió del coneixement
+            <span class="arrow">▶</span>
+          </h3>
+          <div class="reveal-content">
+            <div class="three-col">
+              <div class="col-card">
+                <h4>Arxius</h4>
+                <p>Carpetes, etiquetes, núvol i versions de documents.</p>
+              </div>
+              <div class="col-card">
+                <h4>Notes</h4>
+                <p>Mapes conceptuals, resum, esquemes i llibreta digital.</p>
+              </div>
+              <div class="col-card">
+                <h4>Recuperació</h4>
+                <p>Cerca interna, noms coherents i sistemes d'indexació.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section id="creacio" class="topic-panel">
+        <div class="stage-badge">
+          <div class="sb-icon">🛠️</div>
+          <div>
+            <h2>Edició i creació de continguts</h2>
+            <p>
+              La competència digital implica produir continguts útils, clars i
+              adaptats al format i al públic.
+            </p>
+          </div>
+        </div>
+
+        <article class="theory-card reveal-block">
+          <h3 class="reveal-trigger open">
+            Aplicacions de productivitat <span class="arrow">▶</span>
+          </h3>
+          <div class="reveal-content shown">
+            <ul>
+              <li>
+                Processadors de text per redactar i estructurar documents.
+              </li>
+              <li>Fulls de càlcul per analitzar dades i crear gràfics.</li>
+              <li>Presentacions per sintetitzar i comunicar idees.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="theory-card reveal-block">
+          <h3 class="reveal-trigger">
+            Desenvolupament d'aplicacions senzilles <span class="arrow">▶</span>
+          </h3>
+          <div class="reveal-content">
+            <p>
+              Es poden crear prototips per a mòbil o web amb eines visuals o de
+              codi senzill per resoldre problemes reals: formularis, jocs,
+              calculadores, qüestionaris o sistemes d'organització.
+            </p>
+            <div class="two-col">
+              <div class="col-card">
+                <h4>Per a mòbil</h4>
+                <ul>
+                  <li>Interfície tàctil i navegació simple.</li>
+                  <li>Ús de sensors o càmera quan cal.</li>
+                </ul>
+              </div>
+              <div class="col-card">
+                <h4>Per al web</h4>
+                <ul>
+                  <li>HTML, CSS i comportament interactiu bàsic.</li>
+                  <li>Disseny responsive i accessibilitat.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="theory-card reveal-block">
+          <h3 class="reveal-trigger">
+            Realitat virtual, augmentada i mixta <span class="arrow">▶</span>
+          </h3>
+          <div class="reveal-content">
+            <ul>
+              <li>Realitat virtual: entorn completament simulat.</li>
+              <li>Realitat augmentada: capes digitals sobre el món real.</li>
+              <li>
+                Realitat mixta: interacció integrada entre objectes reals i
+                virtuals.
+              </li>
+            </ul>
+          </div>
+        </article>
+      </section>
+
+      <section id="collaboracio" class="topic-panel">
+        <div class="stage-badge">
+          <div class="sb-icon">🤝</div>
+          <div>
+            <h2>Comunicació, col·laboració i publicació</h2>
+            <p>
+              Aprendre en xarxa exigeix dominar eines col·laboratives i publicar
+              contingut amb responsabilitat.
+            </p>
+          </div>
+        </div>
+
+        <article class="theory-card reveal-block">
+          <h3 class="reveal-trigger open">
+            Entorns d'aprenentatge en línia <span class="arrow">▶</span>
+          </h3>
+          <div class="reveal-content shown">
+            <ul>
+              <li>Aules virtuals, videoconferència, xat i fòrums.</li>
+              <li>Edició compartida de documents, tasques i comentaris.</li>
+              <li>Netiqueta, respecte dels torns i claredat comunicativa.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="theory-card reveal-block">
+          <h3 class="reveal-trigger">
+            Publicació i difusió responsable a xarxes
+            <span class="arrow">▶</span>
+          </h3>
+          <div class="reveal-content">
+            <ul>
+              <li>Revisar privacitat, autoria i permisos abans de publicar.</li>
+              <li>Adaptar el missatge al públic i al canal.</li>
+              <li>
+                Evitar exposar dades personals pròpies o d'altres persones.
+              </li>
+            </ul>
+            <div class="info-box">
+              Publicar també és deixar rastre. Cal pensar en la permanència i
+              l'impacte de cada contingut compartit.
+            </div>
+          </div>
+        </article>
+      </section>
+    </div>
+
+    <script>
+      const tabs = document.querySelectorAll(".topic-tab");
+      const panels = document.querySelectorAll(".topic-panel");
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const target = tab.dataset.tab;
+          tabs.forEach((btn) => btn.classList.toggle("active", btn === tab));
+          panels.forEach((panel) =>
+            panel.classList.toggle("active", panel.id === target),
+          );
+        });
+      });
+
+      document.querySelectorAll(".reveal-trigger").forEach((trigger) => {
+        trigger.addEventListener("click", () => {
+          trigger.classList.toggle("open");
+          const content = trigger.nextElementSibling;
+          if (content) {
+            content.classList.toggle("shown");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

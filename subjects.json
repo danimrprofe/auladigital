@@ -268,21 +268,36 @@
     "icon": "\uD83C\uDF10",
     "level": "4t d'ESO",
     "path": "digitalizacio/index.html",
-    "description": "Competència digital, ciutadania digital i resolució de problemes amb tecnologia.",
-    "topics": ["Benestar digital", "Ciutadania digital", "Seguretat", "Privacitat", "Competència digital"],
+    "description": "Dispositius, entorn personal d'aprenentatge, seguretat digital i ciutadania critica.",
+    "topics": ["Dispositius i xarxes", "Entorn personal d'aprenentatge", "Seguretat i benestar digital", "Ciutadania digital critica"],
     "materials": [
       {
-        "title": "Benestar digital",
-        "slug": "tema-benestar-digital",
+        "title": "Dispositius digitals, sistemes operatius i de comunicació",
+        "slug": "tema-dispositius-sistemes-i-xarxes",
         "items": [
-          { "icon": "🔐", "label": "Teoria", "title": "Seguretat teoria", "href": "../seguretat_teoria.html" }
+          { "icon": "\ud83d\udda5\ufe0f", "label": "Teoria", "title": "Dispositius, sistemes i xarxes", "href": "./dispositius_sistemes_i_xarxes_teoria.html" }
         ]
       },
       {
-        "title": "Ciutadania digital",
+        "title": "Digitalització de l'entorn personal d'aprenentatge",
+        "slug": "tema-entorn-personal-aprenentatge",
+        "items": [
+          { "icon": "\ud83d\udcc1", "label": "Teoria", "title": "Entorn personal d'aprenentatge", "href": "./entorn_personal_aprenentatge_teoria.html" }
+        ]
+      },
+      {
+        "title": "Seguretat i benestar digital",
+        "slug": "tema-benestar-digital",
+        "items": [
+          { "icon": "🔐", "label": "Teoria", "title": "Seguretat i benestar digital", "href": "../seguretat_teoria.html" }
+        ]
+      },
+      {
+        "title": "Ciutadania digital critica",
         "slug": "tema-ciutadania-digital",
         "items": [
-          { "icon": "🧑‍🤝‍🧑", "label": "Teoria", "title": "Ciutadania digital", "href": "./ciutadania_digital_teoria.html" }        ]
+          { "icon": "🧑‍🤝‍🧑", "label": "Teoria", "title": "Ciutadania digital critica", "href": "./ciutadania_digital_teoria.html" }
+        ]
       }
     ]
   }
