@@ -18,18 +18,34 @@ Aquest projecte és una plataforma web per gestionar i visualitzar materials did
 - **Botó de Copiar Codi:** Implementada la funcionalitat de "copiar al portapapers" per als blocs de codi (`<pre>`).
 - **Optimització de JSON:** Eliminades les rutes fixes al JavaScript; ara tot el contingut i navegació es genera dinàmicament des de `subjects.json`.
 - **Reorganització de Materials:** Teoria de la IA i Python integrada dins les carpetes d'assignatures corresponents per mantenir una estructura neta.
-- **Robustesa de Càrrega:** El JavaScript detecta automàticament la ruta del `subjects.json` i pot funcionar en pàgines independents (*standalone*).
 
-## Convencions i Estàndards
+## Estratègia de Continguts i UX (Nivell Pedagògic)
+
+### 1. Estàndard de Disseny de Teoria
+L'estil de referència per a totes les pàgines de teoria és **`virtualitzacio_teoria.html`**. Aquest disseny prioritza:
+- **Navegació lateral (Sidebar):** Menú fix a l'esquerra per saltar ràpidament entre apartats.
+- **Lectura Vertical:** Flux continu de contingut amb suport per a *scroll* suau.
+- **Codificació de Colors (Info Boxes):** Ús consistent de caixes per a definicions (blau), avisos (taronja) i conclusions (lila).
+- **Targetes de Teoria:** Agrupació de conceptes en blocs visuals independents per evitar la fatiga de lectura.
+
+### 2. Enriquiment de Materials
+- **Metadades d'Aprenentatge:** Incloure al JSON camps per a `"temps_estimat"` i `"dificultat"`.
+- **Saber-ne més:** Secció final de recursos externs curats (vídeos, articles, docs oficials).
+- **Autoavaluació:** Inclusió de "Quick Checks" (petits qüestionaris) al final de cada unitat didàctica.
+
+## Convencions i Estàndards d'Organització
 
 - **Idioma:** La interfície i el contingut han d'estar en català.
-- **Responsivitat:** Ús de classes de Bootstrap 5.
-- **Dades:** Totes les actualitzacions de contingut s'han de fer al fitxer `subjects.json`. Els nous fitxers HTML han d'incloure el contenidor `<ul id="breadcrumbContainer" class="app-breadcrumb"></ul>`.
-- **Estructura:** Els nous fitxers de teoria han d'anar dins la carpeta de la seva assignatura corresponent.
+- **Nomenclatura de Fitxers:** Ús estricte de minúscules i guions (ex: `teoria-ia.html` en lloc de `IA Teoria (1).html`).
+- **Estructura de Carpetes:**
+    - Cada assignatura té la seva pròpia carpeta.
+    - Els materials de teoria han de residir dins la carpeta de la seva assignatura.
+    - Proposta futura: Crear una carpeta `/assets` unificada per a imatges i recursos multimèdia.
+- **Rúbriques:** Les tasques al JSON han de tendir a incloure o enllaçar els criteris d'avaluació (rúbriques) per donar autonomia a l'alumne.
 
 ## Full de Ruta (Properes Millores)
 
-1.  **Checklist d'Estudiant:** Permetre marcar tasques com a completades (usant `localStorage`).
-2.  **Suport Offline (PWA):** Convertir la web en una Progressive Web App per a l'ús sense connexió.
-3.  **Mode Fosc/Clar Dinàmic:** Afegir un botó per canviar manualment entre temes visuals.
-4.  **Exportació a PDF:** Botó per generar versions impreses netes de la teoria.
+1.  **Template Mestre de Teoria:** Crear un fitxer base `teoria-template.html` extret de `virtualitzacio_teoria.html` per unificar IA, Python i Linux.
+2.  **Checklist d'Estudiant:** Sistema de marcat de tasques completades amb `localStorage`.
+3.  **Suport Offline (PWA):** Facilitar la consulta de materials a l'aula sense dependre de la connexió a internet.
+4.  **Glossari Unificat:** Centralitzar els termes tècnics transversals a totes les assignatures.
