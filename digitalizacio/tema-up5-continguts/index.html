@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UP5. Creació de continguts digitals - IES Ramon Llull</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', sans-serif; background: #f0f4ff; min-height: 100vh; }
+.container { max-width: 820px; margin: 0 auto; padding: 20px; }
+header { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border-radius: 14px; padding: 32px 36px; margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; }
+header h1 { font-size: 1.4rem; flex: 1; }
+header p { opacity: .8; font-size: .85rem; margin-top: 2px; width: 100%; }
+.header-back { background: rgba(255,255,255,.15); color: white; padding: 10px 18px; border-radius: 99px; text-decoration: none; font-size: .9rem; font-weight: 600; transition: all .2s; order: 3; width: 100%; text-align: center; margin-top: 12px; }
+.header-back:hover { background: rgba(255,255,255,.25); color: white; }
+.main-nav { display: flex; gap: 8px; margin-bottom: 22px; }
+.main-nav-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-size: .95rem; font-weight: 600; transition: all .2s; background: white; color: #5a6a8a; box-shadow: 0 2px 8px rgba(0,0,0,.07); }
+.main-nav-btn.active { background: #f59e0b; color: white; }
+.topic-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+.topic-tab { padding: 7px 14px; border: 2px solid #e0e7ff; border-radius: 99px; cursor: pointer; font-size: .82rem; font-weight: 600; color: #5a6a8a; background: white; transition: all .2s; white-space: nowrap; }
+.topic-tab:hover { border-color: #f59e0b; color: #f59e0b; }
+.topic-tab.active { background: #f59e0b; color: white; border-color: #f59e0b; }
+.topic-panel { display: none; }
+.topic-panel.active { display: block; animation: fadeIn .3s; }
+.theory-card { background: white; border-radius: 14px; padding: 24px; margin-bottom: 14px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+.theory-card h3 { color: #d97706; font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.theory-card p { color: #3a4a6a; font-size: .92rem; line-height: 1.65; margin-bottom: 10px; }
+.theory-card ul { color: #3a4a6a; font-size: .92rem; line-height: 1.7; padding-left: 20px; margin-bottom: 10px; }
+.info-box { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 0 10px 10px 0; padding: 12px 16px; margin: 12px 0; font-size: .88rem; color: #3a2a0a; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)} }
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg sticky-top shadow-sm" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+  <div class="container" style="max-width: 820px;">
+    <a class="navbar-brand fw-semibold text-white" href="../../index.html">Aula digital · IES Ramon Llull</a>
+  </div>
+</nav>
+
+<div class="container">
+  <header>
+    <div>
+      <div style="font-size: .9rem; opacity: .9;">Digitalització</div>
+      <h1>🛠️ UP5. Creació de continguts digitals</h1>
+      <p>Documents, aplicacions web i exploració de RV/RA</p>
+    </div>
+    <a href="../index.html" class="header-back">← Tornar a Temes</a>
+  </header>
+
+  <div class="main-nav">
+    <button class="main-nav-btn active" onclick="showSection('theory')">Teoria</button>
+    <button class="main-nav-btn" onclick="showSection('resources')">Recursos</button>
+  </div>
+
+  <div id="theory-area">
+    <div class="topic-tabs">
+      <button class="topic-tab active" onclick="switchTopic(this, 'topic1')">Documents</button>
+      <button class="topic-tab" onclick="switchTopic(this, 'topic2')">Web</button>
+      <button class="topic-tab" onclick="switchTopic(this, 'topic3')">RV/RA</button>
+    </div>
+
+    <div class="topic-panel active" id="topic1">
+      <div class="theory-card">
+        <h3>📄 Documents i presentacions professionals</h3>
+        <p>Crea documents visuals i ben estructurats:</p>
+        <ul>
+          <li><strong>Processadors:</strong> Google Docs, Microsoft Word, LibreOffice Writer</li>
+          <li><strong>Presentacions:</strong> Google Slides, PowerPoint, Impress</li>
+          <li><strong>Disseny:</strong> Canva per documents atractius sense experiència</li>
+          <li><strong>PDF:</strong> Format universal per preservar formatge</li>
+          <li><strong>Infografies:</strong> Piktochart, Infogram para visualitzacions</li>
+        </ul>
+        <div class="info-box">
+          💡 Consell: Usa paletes de colors coher ents i fonts llegibles (sans-serif per a web).
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-panel" id="topic2">
+      <div class="theory-card">
+        <h3>🌐 Creació d'aplicacions web senzilles</h3>
+        <p>Comença a crear pàgines web interactives:</p>
+        <ul>
+          <li><strong>HTML:</strong> Estructura del contingut (títols, paràgrafs, botons)</li>
+          <li><strong>CSS:</strong> Estil visual (colors, layouts, animacions)</li>
+          <li><strong>JavaScript:</strong> Interactivitat (clicks, validades, efectes)</li>
+          <li><strong>No-code:</strong> Wix, Webflow per a no programadors</li>
+          <li><strong>Frameworks:</strong> React, Vue, Angular (avançat)</li>
+        </ul>
+        <div class="info-box">
+          ✅ Bona pràctica: Comença amb templates, després personalitza amb CSS.
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-panel" id="topic3">
+      <div class="theory-card">
+        <h3>🥽 Introducció a Realitat Virtual i Augmentada</h3>
+        <p>Explora les tecnologies immersives:</p>
+        <ul>
+          <li><strong>Realitat Virtual (VR):</strong> Entorn 360° completament digital (Meta Quest, HTC Vive)</li>
+          <li><strong>Realitat Augmentada (AR):</strong> Digital superposat al món real (Instagram filters, Pokémon GO)</li>
+          <li><strong>Apps:</strong> Unity, Unreal Engine per desenvolupament VR/AR</li>
+          <li><strong>WebXR:</strong> VR i ar directament al navegador</li>
+          <li><strong>Casos d'ús:</strong> Marc mèdica, educació, entreteniment, arquitectura</li>
+        </ul>
+        <div class="info-box">
+          🔮 Opcional: Explora Spatial.io, Mozilla Hubs per col·laboració virtual.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="resources-area" style="display:none;">
+    <div class="theory-card">
+      <h3>📚 Recursos útils</h3>
+      <ul>
+        <li><strong>Codecademy:</strong> Cursos interactius de HTML, CSS, JavaScript</li>
+        <li><strong>Figma:</strong> Diseño de UI/UX col·laborativa</li>
+        <li><strong>Glitch o Replit:</strong> Editors online per programar web</li>
+        <li><strong>8th Wall:</strong> Crea experiències AR per a navegador</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+function showSection(section) {
+  document.querySelectorAll('.main-nav-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('theory-area').style.display = section === 'theory' ? 'block' : 'none';
+  document.getElementById('resources-area').style.display = section === 'resources' ? 'block' : 'none';
+}
+
+function switchTopic(btn, topicId) {
+  document.querySelectorAll('.topic-tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.topic-panel').forEach(panel => panel.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(topicId).classList.add('active');
+}
+</script>
+</body>
+</html>

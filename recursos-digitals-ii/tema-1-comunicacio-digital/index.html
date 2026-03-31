@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domina la comunicació digital - IES Ramon Llull</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', sans-serif; background: #f0f4ff; min-height: 100vh; }
+.container { max-width: 820px; margin: 0 auto; padding: 20px; }
+header { background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white; border-radius: 14px; padding: 32px 36px; margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; }
+header h1 { font-size: 1.4rem; flex: 1; }
+header p { opacity: .8; font-size: .85rem; margin-top: 2px; width: 100%; }
+.header-back { background: rgba(255,255,255,.15); color: white; padding: 10px 18px; border-radius: 99px; text-decoration: none; font-size: .9rem; font-weight: 600; transition: all .2s; order: 3; width: 100%; text-align: center; margin-top: 12px; }
+.header-back:hover { background: rgba(255,255,255,.25); color: white; }
+.main-nav { display: flex; gap: 8px; margin-bottom: 22px; }
+.main-nav-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-size: .95rem; font-weight: 600; transition: all .2s; background: white; color: #5a6a8a; box-shadow: 0 2px 8px rgba(0,0,0,.07); }
+.main-nav-btn.active { background: #8b5cf6; color: white; }
+#theory-area { display: block; }
+.topic-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+.topic-tab { padding: 7px 14px; border: 2px solid #e0e7ff; border-radius: 99px; cursor: pointer; font-size: .82rem; font-weight: 600; color: #5a6a8a; background: white; transition: all .2s; white-space: nowrap; }
+.topic-tab:hover { border-color: #8b5cf6; color: #8b5cf6; }
+.topic-tab.active { background: #8b5cf6; color: white; border-color: #8b5cf6; }
+.topic-panel { display: none; }
+.topic-panel.active { display: block; animation: fadeIn .3s; }
+.theory-card { background: white; border-radius: 14px; padding: 24px; margin-bottom: 14px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+.theory-card h3 { color: #6d28d9; font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.theory-card p { color: #3a4a6a; font-size: .92rem; line-height: 1.65; margin-bottom: 10px; }
+.theory-card ul { color: #3a4a6a; font-size: .92rem; line-height: 1.7; padding-left: 20px; margin-bottom: 10px; }
+.info-box { background: #f3e8ff; border-left: 4px solid #8b5cf6; border-radius: 0 10px 10px 0; padding: 12px 16px; margin: 12px 0; font-size: .88rem; color: #4a2a6a; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)} }
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg sticky-top shadow-sm" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">
+  <div class="container" style="max-width: 820px;">
+    <a class="navbar-brand fw-semibold text-white" href="../../index.html">Aula digital · IES Ramon Llull</a>
+  </div>
+</nav>
+
+<div class="container">
+  <header>
+    <div>
+      <div style="font-size: .9rem; opacity: .9;">Recursos Digitals II</div>
+      <h1>Domina la comunicació digital</h1>
+      <p>Gestió del correu, videotrucades, cloud storage i organització de carpetes</p>
+    </div>
+    <a href="../index.html" class="header-back">← Tornar a Temes</a>
+  </header>
+
+  <div class="main-nav">
+    <button class="main-nav-btn active" onclick="showSection('theory')">Teoria</button>
+    <button class="main-nav-btn" onclick="showSection('resources')">Recursos</button>
+  </div>
+
+  <div id="theory-area">
+    <div class="topic-tabs">
+      <button class="topic-tab active" onclick="switchTopic(this, 'topic1')">Correu electrònic</button>
+      <button class="topic-tab" onclick="switchTopic(this, 'topic2')">Videotrucades</button>
+      <button class="topic-tab" onclick="switchTopic(this, 'topic3')">Cloud storage</button>
+      <button class="topic-tab" onclick="switchTopic(this, 'topic4')">Organització</button>
+    </div>
+
+    <div class="topic-panel active" id="topic1">
+      <div class="theory-card">
+        <h3>📧 Gestió avançada del correu electrònic</h3>
+        <p>El correu electrònic és una de les millors eines de comunicació digital. Aprèn a:</p>
+        <ul>
+          <li>Organitzar carpetes i filtres automàtics</li>
+          <li>Crear plantilles i signatura professional</li>
+          <li>Usar etiquetes per classificar correus importants</li>
+          <li>Configurar respostes automàtiques</li>
+        </ul>
+        <div class="info-box">
+          💡 Consell: Revisa el correu regularment i mantén la bústia ordenada per trobar informació ràpidament.
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-panel" id="topic2">
+      <div class="theory-card">
+        <h3>📹 Crear i gestionar videotrucades</h3>
+        <p>Les videotrucades permeten comunicació en temps real. Aprèn els conceptes bàsics:</p>
+        <ul>
+          <li>Configurar micròfon, càmera i parlants</li>
+          <li>Etiqueta en línies: no interrompre, silenciar quan no parlis</li>
+          <li>Compartir pantalla per presentacions efectives</li>
+          <li>Enregistrar sessions per revisió posterior</li>
+        </ul>
+        <div class="info-box">
+          💡 Consell: Prova la connexió 10 minuts abans de la videotrucada important.
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-panel" id="topic3">
+      <div class="theory-card">
+        <h3>☁️ Intercanvi d'arxius i emmagatzematge al núvol</h3>
+        <p>Emmagatzema arxius de forma segura al núvol:</p>
+        <ul>
+          <li>Google Drive, OneDrive, Dropbox: com funcionen</li>
+          <li>Compartir arxius de forma controlada</li>
+          <li>Sincronització automàtica entre dispositius</li>
+          <li>Copia de seguretat: estratègies recomanades</li>
+        </ul>
+        <div class="info-box">
+          ⚠️ Recordi: Verifica que comparteixis amb les persones correctes i amb els permisos adequats.
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-panel" id="topic4">
+      <div class="theory-card">
+        <h3>📁 Organització en carpetes i unitats compartides</h3>
+        <p>Una bona organització facilita el treball en equip:</p>
+        <ul>
+          <li>Estructura de carpetes lograda i consistent</li>
+          <li>Nomenclatura clara de fitxers (data, tema, versió)</li>
+          <li>Unitats compartides: permisos i accés</li>
+          <li>Manteniment i neteja regular d'arxius obsolets</li>
+        </ul>
+        <div class="info-box">
+          ✅ Bona pràctica: Estableix una estructura de carpetes al principi del projecte perquè tots la seguisquen.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="resources-area" style="display:none;">
+    <div class="theory-card">
+      <h3>📚 Recursos útils</h3>
+      <p>Materials per aprofundir en aquest tema:</p>
+      <ul>
+        <li><strong>Gmail:</strong> Guia oficial de Google Mail</li>
+        <li><strong>Google Meet:</strong> Documentació i tutorials de Google</li>
+        <li><strong>Google Drive:</strong> Ajuda oficial amb sincronització</li>
+        <li><strong>Microsoft Teams:</strong> Alternativa per a organitzacions corporatives</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+function showSection(section) {
+  document.querySelectorAll('.main-nav-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('theory-area').style.display = section === 'theory' ? 'block' : 'none';
+  document.getElementById('resources-area').style.display = section === 'resources' ? 'block' : 'none';
+}
+
+function switchTopic(btn, topicId) {
+  document.querySelectorAll('.topic-tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.topic-panel').forEach(panel => panel.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(topicId).classList.add('active');
+}
+</script>
+</body>
+</html>

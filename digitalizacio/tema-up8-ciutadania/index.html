@@ -26,10 +26,15 @@
         background: linear-gradient(135deg, #0a1a0a, #0f2a1a, #0a1a2e);
         border: 1px solid #1a3a1a;
         border-radius: 14px;
-        padding: 26px 28px;
+        padding: 32px 36px;
         margin-bottom: 20px;
         position: relative;
         overflow: hidden;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
       }
       header::before {
         content: "";
@@ -64,6 +69,29 @@
         padding: 3px 12px;
         font-size: 0.75rem;
         margin-top: 10px;
+      }
+
+      .header-back {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 8px;
+        padding: 8px 14px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+        white-space: nowrap;
+        flex-shrink: 0;
+        order: 3;
+        width: 100%;
+        text-align: center;
+        margin-top: 12px;
+      }
+      .header-back:hover {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.4);
       }
 
       .topic-tabs {
@@ -724,6 +752,7 @@
   <body>
     <div class="container">
       <header>
+        <a href="../index.html" class="header-back">← Tornar a Temes</a>
         <h1>🌐 Ciutadania Digital Crítica</h1>
         <p>Drets, responsabilitats i pensament crític a l'era digital</p>
         <span class="header-tag"

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UP6. Comunicació i col·laboració - IES Ramon Llull</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', sans-serif; background: #f0f4ff; min-height: 100vh; }
+.container { max-width: 820px; margin: 0 auto; padding: 20px; }
+header { background: linear-gradient(135deg, #06b6d4, #0891b2); color: white; border-radius: 14px; padding: 32px 36px; margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; }
+header h1 { font-size: 1.4rem; flex: 1; }
+header p { opacity: .8; font-size: .85rem; margin-top: 2px; width: 100%; }
+.header-back { background: rgba(255,255,255,.15); color: white; padding: 10px 18px; border-radius: 99px; text-decoration: none; font-size: .9rem; font-weight: 600; transition: all .2s; order: 3; width: 100%; text-align: center; margin-top: 12px; }
+.header-back:hover { background: rgba(255,255,255,.25); color: white; }
+.main-nav { display: flex; gap: 8px; margin-bottom: 22px; }
+.main-nav-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-size: .95rem; font-weight: 600; transition: all .2s; background: white; color: #5a6a8a; box-shadow: 0 2px 8px rgba(0,0,0,.07); }
+.main-nav-btn.active { background: #06b6d4; color: white; }
+.topic-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+.topic-tab { padding: 7px 14px; border: 2px solid #e0e7ff; border-radius: 99px; cursor: pointer; font-size: .82rem; font-weight: 600; color: #5a6a8a; background: white; transition: all .2s; white-space: nowrap; }
+.topic-tab:hover { border-color: #06b6d4; color: #06b6d4; }
+.topic-tab.active { background: #06b6d4; color: white; border-color: #06b6d4; }
+.topic-panel { display: none; }
+.topic-panel.active { display: block; animation: fadeIn .3s; }
+.theory-card { background: white; border-radius: 14px; padding: 24px; margin-bottom: 14px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+.theory-card h3 { color: #0891b2; font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.theory-card p { color: #3a4a6a; font-size: .92rem; line-height: 1.65; margin-bottom: 10px; }
+.theory-card ul { color: #3a4a6a; font-size: .92rem; line-height: 1.7; padding-left: 20px; margin-bottom: 10px; }
+.info-box { background: #ecf7ff; border-left: 4px solid #06b6d4; border-radius: 0 10px 10px 0; padding: 12px 16px; margin: 12px 0; font-size: .88rem; color: #0a2a4a; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)} }
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg sticky-top shadow-sm" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">
+  <div class="container" style="max-width: 820px;">
+    <a class="navbar-brand fw-semibold text-white" href="../../index.html">Aula digital · IES Ramon Llull</a>
+  </div>
+</nav>
+
+<div class="container">
+  <header>
+    <div>
+      <div style="font-size: .9rem; opacity: .9;">Digitalització</div>
+      <h1>🤝 UP6. Comunicació i col·laboració</h1>
+      <p>Treballa en equip online i publica el teu contingut</p>
+    </div>
+    <a href="../index.html" class="header-back">← Tornar a Temes</a>
+  </header>
+
+  <div class="main-nav">
+    <button class="main-nav-btn active" onclick="showSection('theory')">Teoria</button>
+    <button class="main-nav-btn" onclick="showSection('resources')">Recursos</button>
+  </div>
+
+  <div id="theory-area">
+    <div class="topic-tabs">
+      <button class="topic-tab active" onclick="switchTopic(this, 'topic1')">Eines col·laboratives</button>
+      <button class="topic-tab" onclick="switchTopic(this, 'topic2')">Publicació</button>
+      <button class="topic-tab" onclick="switchTopic(this, 'topic3')">Etiqueta digital</button>
+    </div>
+
+    <div class="topic-panel active" id="topic1">
+      <div class="theory-card">
+        <h3>🤝 Eines col·laboratives en línia</h3>
+        <p>Treballa simultàniament amb altres persones:</p>
+        <ul>
+          <li><strong>Google Workspace:</strong> Docs, Sheets, Slides col·laboratiu en temps real</li>
+          <li><strong>Microsoft 365:</strong> Word, Excel, PowerPoint amb co-autoría</li>
+          <li><strong>Comunicació:</strong> Slack, Discord, WhatsApp, correo per coordinació</li>
+          <li><strong>Videoconferència:</strong> Google Meet, Teams, Zoom per reunions</li>
+          <li><strong>Gestió de projectes:</strong> Asana, Trello, Monday per tasques assignades</li>
+        </ul>
+        <div class="info-box">
+          💡 Consell: Estableix normes clares sobre eines, horaris i responsabilitats dins l'equip.
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-panel" id="topic2">
+      <div class="theory-card">
+        <h3>📢 Publicació i difusió de continguts</h3>
+        <p>Comparteix el teu treball amb l'audiència:</p>
+        <ul>
+          <li><strong>Blog:</strong> Medium, Blogger, WordPress per articles llargs</li>
+          <li><strong>Xarxes socials:</strong> Instagram, TikTok per vídeo-contingut, Twitter per notícies</li>
+          <li><strong>YouTube:</strong> Canal de vídeos (tutorials, vlogs, documentals)</li>
+          <li><strong>Podcasts:</strong> Spotify Podcasters, Apple Podcasts per audio</li>
+          <li><strong>Newsletters:</strong> Substack, Mailchimp per contactar seguidors regularment</li>
+        </ul>
+        <div class="info-box">
+          ✅ Bona pràctica: Sé autèntic, consistent, i respecta els drets d'autor i privacitat d'altres.
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-panel" id="topic3">
+      <div class="theory-card">
+        <h3>💬 Etiqueta digital i comunicació responsable</h3>
+        <p>Practica bones normes de comportament en línia:</p>
+        <ul>
+          <li><strong>Respecte:</strong> Trata els altres amb dignitat, evita insultar o discriminar</li>
+          <li><strong>Verificació:</strong> Comprova infos antes de compartir, no propa gues rumors</li>
+          <li><strong>Privacitat d'altres:</strong> No publiques fotos de gent sense permís</li>
+          <li><strong>Drets d'autor:</strong> Dona crèdit a creadors originals, no copies sense permís</li>
+          <li><strong>Ton apropiat:</strong> Recorda que el text sense emojis pot malinterpretar-se</li>
+          <li><strong>Permanència:</strong> Tot el que publiques és permanent (web archive, screenshots)</li>
+        </ul>
+        <div class="info-box">
+          ⚠️ Advertència: Els comentaris negatius o insultants poden ser delictes de cyberbullying.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="resources-area" style="display:none;">
+    <div class="theory-card">
+      <h3>📚 Recursos útils</h3>
+      <ul>
+        <li><strong>Canva:</strong> Templates per crear visuals per xarxes socials</li>
+        <li><strong>OBS Studio:</strong> Gravar i transmetre pantalla en viu</li>
+        <li><strong>Capcut:</strong> Editar vídeos simples amb mòbil</li>
+        <li><strong>Buffer o Later:</strong> Programar posts en múltiples xarxes</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+function showSection(section) {
+  document.querySelectorAll('.main-nav-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('theory-area').style.display = section === 'theory' ? 'block' : 'none';
+  document.getElementById('resources-area').style.display = section === 'resources' ? 'block' : 'none';
+}
+
+function switchTopic(btn, topicId) {
+  document.querySelectorAll('.topic-tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.topic-panel').forEach(panel => panel.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(topicId).classList.add('active');
+}
+</script>
+</body>
+</html>

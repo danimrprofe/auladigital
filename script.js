@@ -218,7 +218,10 @@ function renderSubjectIndex(subject) {
                   <h2 class="${titleClass} mb-0">${section.title}</h2>
                   <span class="badge text-bg-primary">${section.items ? section.items.length : 0} ítem/s</span>
                 </div>
-                <p class="text-muted mb-0 small">Toca per veure tasques i teoria del tema.</p>
+                <p class="text-muted mb-2 small">Tecnologies:</p>
+                <div class="d-flex flex-wrap gap-1">
+                  ${section.technologies ? section.technologies.map(tech => `<span class="badge rounded-pill text-bg-info">${tech}</span>`).join('') : '<span class="badge rounded-pill text-bg-secondary">Info disponible</span>'}
+                </div>
               </div>
               <div class="card-footer bg-transparent border-0 ${footerPaddingClass}">
                 <a class="${buttonClass}" href="${href}">Veure tema</a>

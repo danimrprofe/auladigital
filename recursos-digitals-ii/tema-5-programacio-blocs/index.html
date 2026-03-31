@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comença a programar amb blocs - IES Ramon Llull</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', sans-serif; background: #f0f4ff; min-height: 100vh; }
+.container { max-width: 820px; margin: 0 auto; padding: 20px; }
+header { background: linear-gradient(135deg, #ec4899, #db2777); color: white; border-radius: 14px; padding: 32px 36px; margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; }
+header h1 { font-size: 1.4rem; flex: 1; }
+header p { opacity: .8; font-size: .85rem; margin-top: 2px; width: 100%; }
+.header-back { background: rgba(255,255,255,.15); color: white; padding: 10px 18px; border-radius: 99px; text-decoration: none; font-size: .9rem; font-weight: 600; transition: all .2s; order: 3; width: 100%; text-align: center; margin-top: 12px; }
+.header-back:hover { background: rgba(255,255,255,.25); color: white; }
+.main-nav { display: flex; gap: 8px; margin-bottom: 22px; }
+.main-nav-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-size: .95rem; font-weight: 600; transition: all .2s; background: white; color: #5a6a8a; box-shadow: 0 2px 8px rgba(0,0,0,.07); }
+.main-nav-btn.active { background: #ec4899; color: white; }
+.topic-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+.topic-tab { padding: 7px 14px; border: 2px solid #e0e7ff; border-radius: 99px; cursor: pointer; font-size: .82rem; font-weight: 600; color: #5a6a8a; background: white; transition: all .2s; white-space: nowrap; }
+.topic-tab:hover { border-color: #ec4899; color: #ec4899; }
+.topic-tab.active { background: #ec4899; color: white; border-color: #ec4899; }
+.topic-panel { display: none; }
+.topic-panel.active { display: block; animation: fadeIn .3s; }
+.theory-card { background: white; border-radius: 14px; padding: 24px; margin-bottom: 14px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+.theory-card h3 { color: #db2777; font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.theory-card p { color: #3a4a6a; font-size: .92rem; line-height: 1.65; margin-bottom: 10px; }
+.theory-card ul { color: #3a4a6a; font-size: .92rem; line-height: 1.7; padding-left: 20px; margin-bottom: 10px; }
+.info-box { background: #fdf2f8; border-left: 4px solid #ec4899; border-radius: 0 10px 10px 0; padding: 12px 16px; margin: 12px 0; font-size: .88rem; color: #4a1a3a; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)} }
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg sticky-top shadow-sm" style="background: linear-gradient(135deg, #ec4899, #db2777);">
+  <div class="container" style="max-width: 820px;">
+    <a class="navbar-brand fw-semibold text-white" href="../../index.html">Aula digital · IES Ramon Llull</a>
+  </div>
+</nav>
+
+<div class="container">
+  <header>
+    <div>
+      <div style="font-size: .9rem; opacity: .9;">Recursos Digitals II</div>
+      <h1>Comença a programar amb blocs</h1>
+      <p>Fonaments de lògica i programació visual amb llenguatges de blocs</p>
+    </div>
+    <a href="../index.html" class="header-back">← Tornar a Temes</a>
+  </header>
+
+  <div class="main-nav">
+    <button class="main-nav-btn active" onclick="showSection('theory')">Teoria</button>
+    <button class="main-nav-btn" onclick="showSection('resources')">Recursos</button>
+  </div>
+
+  <div id="theory-area">
+    <div class="topic-tabs">
+      <button class="topic-tab active" onclick="switchTopic(this, 'topic1')">Fonaments</button>
+      <button class="topic-tab" onclick="switchTopic(this, 'topic2')">Scratch</button>
+      <button class="topic-tab" onclick="switchTopic(this, 'topic3')">Projectes</button>
+    </div>
+
+    <div class="topic-panel active" id="topic1">
+      <div class="theory-card">
+        <h3>🧩 Fonaments de la programació</h3>
+        <p>Aprèn els conceptes bàsics de lògica de programació:</p>
+        <ul>
+          <li>Variables: contenidors de dades</li>
+          <li>Condicionals: decisions (si... llavors...)</li>
+          <li>Bucles: repeticions d'accions</li>
+          <li>Funcions: blocs de codi reutilitzables</li>
+        </ul>
+        <div class="info-box">
+          💡 Consell: Els fonaments són iguals en qualsevol, sempre que aprengues com a pensar algorítmicament.
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-panel" id="topic2">
+      <div class="theory-card">
+        <h3>🟡 Introducció a Scratch i la programació visual</h3>
+        <p>Scratch és una plataforma que fa la programació accessible:</p>
+        <ul>
+          <li>Interfície visual sense necessitat de codi text</li>
+          <li>Blocs de colors per a funcions diferents</li>
+          <li>Simullació en temps real de canvis</li>
+          <li>Comunitat de compartició de projectes</li>
+        </ul>
+        <div class="info-box">
+          ✅ Bona pràctica: Comença amb projectes simples (moure un sprite, canviar colors).
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-panel" id="topic3">
+      <div class="theory-card">
+        <h3>🔨 Projectes bàsics amb blocs</h3>
+        <p>Crea el teus primers programes:</p>
+        <ul>
+          <li>Joc interactiu d'esquiva obstacles</li>
+          <li>Simulador de moviment de partícules</li>
+          <li>Quiz educatiu amb preguntes dinàmiques</li>
+          <li>Animació amb sincronització de música</li>
+        </ul>
+        <div class="info-box">
+          ⚠️ Recordi: No et desanimes si els primers projectes són simples; la complexitat ve gradualment.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="resources-area" style="display:none;">
+    <div class="theory-card">
+      <h3>📚 Recursos útils</h3>
+      <p>Plataformes i tutorials:</p>
+      <ul>
+        <li><strong>Scratch.mit.edu:</strong> Plataforma oficial gratuïta</li>
+        <li><strong>Scratch Studios:</strong> Col·leccions de projectes temàtics</li>
+        <li><strong>Scratch Tutorials:</strong> Vídeos de 2 minuts per temes</li>
+        <li><strong>Code.org:</strong> Curs estructurat de programació</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+function showSection(section) {
+  document.querySelectorAll('.main-nav-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('theory-area').style.display = section === 'theory' ? 'block' : 'none';
+  document.getElementById('resources-area').style.display = section === 'resources' ? 'block' : 'none';
+}
+
+function switchTopic(btn, topicId) {
+  document.querySelectorAll('.topic-tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.topic-panel').forEach(panel => panel.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(topicId).classList.add('active');
+}
+</script>
+</body>
+</html>

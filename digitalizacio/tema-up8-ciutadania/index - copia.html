@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UP8. Ciutadania digital i pensament crític - IES Ramon Llull</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', sans-serif; background: #f0f4ff; min-height: 100vh; }
+.container { max-width: 820px; margin: 0 auto; padding: 20px; }
+header { background: linear-gradient(135deg, #64748b, #475569); color: white; border-radius: 14px; padding: 32px 36px; margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; }
+header h1 { font-size: 1.4rem; flex: 1; }
+header p { opacity: .8; font-size: .85rem; margin-top: 2px; width: 100%; }
+.header-back { background: rgba(255,255,255,.15); color: white; padding: 10px 18px; border-radius: 99px; text-decoration: none; font-size: .9rem; font-weight: 600; transition: all .2s; order: 3; width: 100%; text-align: center; margin-top: 12px; }
+.header-back:hover { background: rgba(255,255,255,.25); color: white; }
+.main-nav { display: flex; gap: 8px; margin-bottom: 22px; }
+.main-nav-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-size: .95rem; font-weight: 600; transition: all .2s; background: white; color: #5a6a8a; box-shadow: 0 2px 8px rgba(0,0,0,.07); }
+.main-nav-btn.active { background: #64748b; color: white; }
+.topic-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+.topic-tab { padding: 7px 14px; border: 2px solid #e0e7ff; border-radius: 99px; cursor: pointer; font-size: .82rem; font-weight: 600; color: #5a6a8a; background: white; transition: all .2s; white-space: nowrap; }
+.topic-tab:hover { border-color: #64748b; color: #64748b; }
+.topic-tab.active { background: #64748b; color: white; border-color: #64748b; }
+.topic-panel { display: none; }
+.topic-panel.active { display: block; animation: fadeIn .3s; }
+.theory-card { background: white; border-radius: 14px; padding: 24px; margin-bottom: 14px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+.theory-card h3 { color: #475569; font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.theory-card p { color: #3a4a6a; font-size: .92rem; line-height: 1.65; margin-bottom: 10px; }
+.theory-card ul { color: #3a4a6a; font-size: .92rem; line-height: 1.7; padding-left: 20px; margin-bottom: 10px; }
+.info-box { background: #f1f5f9; border-left: 4px solid #64748b; border-radius: 0 10px 10px 0; padding: 12px 16px; margin: 12px 0; font-size: .88rem; color: #0f172a; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)} }
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg sticky-top shadow-sm" style="background: linear-gradient(135deg, #64748b, #475569);">
+  <div class="container" style="max-width: 820px;">
+    <a class="navbar-brand fw-semibold text-white" href="../../index.html">Aula digital · IES Ramon Llull</a>
+  </div>
+</nav>
+
+<div class="container">
+  <header>
+    <div>
+      <div style="font-size: .9rem; opacity: .9;">Digitalització</div>
+      <h1>🌍 UP8. Ciutadania digital i pensament crític</h1>
+      <p>Navega responsablement i avalua informació en xarxes</p>
+    </div>
+    <a href="../index.html" class="header-back">← Tornar a Temes</a>
+  </header>
+
+  <div class="main-nav">
+    <button class="main-nav-btn active" onclick="showSection('theory')">Teoria</button>
+    <button class="main-nav-btn" onclick="showSection('resources')">Recursos</button>
+  </div>
+
+  <div id="theory-area">
+    <div class="topic-tabs">
+      <button class="topic-tab active" onclick="switchTopic(this, 'topic1')">Informació fiable</button>
+      <button class="topic-tab" onclick="switchTopic(this, 'topic2')">Ètica digital</button>
+      <button class="topic-tab" onclick="switchTopic(this, 'topic3')">Economia digital</button>
+      <button class="topic-tab" onclick="switchTopic(this, 'topic4')">Administració</button>
+      <button class="topic-tab" onclick="switchTopic(this, 'topic5')">Software lliure</button>
+    </div>
+
+    <div class="topic-panel active" id="topic1">
+      <div class="theory-card">
+        <h3>🔍 Identificar fake news i desinformació</h3>
+        <p>Aprèn a detectar contingut fals:</p>
+        <ul>
+          <li><strong>Verificar fonts:</strong> Qui és l'autor? Té credentials? Quins interessos té?</li>
+          <li><strong>Data publicació:</strong> Notícia recent o antiga? Han canviat els fets?</li>
+          <li><strong>Verificadores:</strong> Usa Snopes, Fullfact, AFP Fact Check per contrastar</li>
+          <li><strong>Bots i spam:</strong> Detecta comptes falsos (foto genèrica, sense història, molts followers)</li>
+          <li><strong>Viralitat sospitosa:</strong> Si tots comparteixen igual text, probablement és propaganda</li>
+        </ul>
+        <div class="info-box">
+          💡 Consell: Quan veus notícia escandalosa, busca fonts independents verificant la mateixa noticia.
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-panel" id="topic2">
+      <div class="theory-card">
+        <h3>⚖️ Ètica digital i responsabilitat en IA</h3>
+        <p>Entén dilemmes morals de la tecnologia:</p>
+        <ul>
+          <li><strong>Algorithme bias:</strong> Algoritmes aprenen de dades històriques sexistas o racistes</li>
+          <li><strong>Drets d'autor:</strong> Respecta intellectual property, no publiques plans d'altres sense permís</li>
+          <li><strong>Accessibilitat:</strong> Dissenja per incloses persones amb discapacitats</li>
+          <li><strong>IA generativa:</strong> ChatGPT, Midjourney creen text/imatges: utilis però no és original</li>
+          <li><strong>Huella ambiental:</strong> Certes tècniques (mining, data centers) consumeixen molta energia</li>
+        </ul>
+        <div class="info-box">
+          ⚠️ Important: Usa IA com a eina per aprendre, no per copiar tasques escolars sense pensar.
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-panel" id="topic3">
+      <div class="theory-card">
+        <h3>💰 Economia digital i dret de consum</h3>
+        <p>Navega el comerç online amb prudència:</p>
+        <ul>
+          <li><strong>Compres online:</strong> Verifica dominis legítims (.es, certificat HTTPS), retorna clares</li>
+          <li><strong>Cryptomonedes:</strong> Bitcoin, Ethereum - volatilitat alta, risc de pèrdua total</li>
+          <li><strong>NFTs i metavers:</strong> Actius digitals speculatiu, coneix riscos antes d'invertir</li>
+          <li><strong>Dades com a negoci:</strong> Xarxes recopilen teus dades per vendre a publicitat</li>
+          <li><strong>Ciberestafes:</strong> No compartas dades bancàries, vigila "ofertes" massa bones per ser verdades</li>
+        </ul>
+        <div class="info-box">
+          🛒 Seguretat: Usa tarjeta de crèdit (protecció contra frau) no transferência bancária directa.
+        </div>
+      </div>
+    </div>
+    <div class="topic-panel" id="topic4">
+      <div class="theory-card">
+        <h3>🏛️ Administració digital i tràmits online</h3>
+        <p>Gestiona tràmits i serveis públics digitalment:</p>
+        <ul>
+          <li><strong>Plataformes oficials:</strong> Aula.gva.es, SEAT.gva.es per tràmits valencians</li>
+          <li><strong>Certificats digitals:</strong> Certificat digital (DNI.es) per signar documents</li>
+          <li><strong>Serveis públics:</strong> Solicitud de comportes, padrons, documentacions</li>
+          <li><strong>Factures digitals:</strong> Guardar i organitzar comprovants de compres</li>
+          <li><strong>Mètodes de pagament:</strong> Transferència, domiciliació, targeta segura (3D Secure)</li>
+          <li><strong>E-commerce segur:</strong> Plataformes amb protecció de comprador (Amazon, eBay)</li>
+        </ul>
+        <div class="info-box">
+          📝 Important: Guarda sempre els justificants de realitzacions online per reclamacions.
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-panel" id="topic5">
+      <div class="theory-card">
+        <h3>🔓 Software lliure, sobirania i sostenibilitat digital</h3>
+        <p>Entén alternatives a la tecnologia corporativa:</p>
+        <ul>
+          <li><strong>Software lliure:</strong> Linux, LibreOffice, GIMP - código xpert, sense patents</li>
+          <li><strong>Llicències:</strong> GPL, Creative Commons - ús lliure amb restriccions ètiques</li>
+          <li><strong>Sobirania tecnològica:</strong> No confiar en monopolis (Microsoft, Google, Apple)</li>
+          <li><strong>Obsolescència programada:</strong> Fabricants force updates, rendimiento degradació</li>
+          <li><strong>Sostenibilitat:</strong> Reparació devices, reciclatje responsable, footprint digital</li>
+          <li><strong>Comunitats:</strong> Open source communities (GitHub, GitLab) per col·laboració</li>
+        </ul>
+        <div class="info-box">
+          🌱 Activisme: Suporta projectes open source, usa software lliure per privacitat i independència.
+        </div>
+      </div>
+    </div>  </div>
+
+  <div id="resources-area" style="display:none;">
+    <div class="theory-card">
+      <h3>📚 Recursos útils</h3>
+      <ul>
+        <li><strong>NewsGuard:</strong> Extesió que califica fiabilitat de mitjans</li>
+        <li><strong>Reversible image search:</strong> Google Images inversa per detectar fotos modificades</li>
+        <li><strong>Politifact, Newtral:</strong> Verificació de declaracions polítics</li>
+        <li><strong>Stanford Internet Observatory:</strong> Reportes sobre desinformació i seguretat</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+function showSection(section) {
+  document.querySelectorAll('.main-nav-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('theory-area').style.display = section === 'theory' ? 'block' : 'none';
+  document.getElementById('resources-area').style.display = section === 'resources' ? 'block' : 'none';
+}
+
+function switchTopic(btn, topicId) {
+  document.querySelectorAll('.topic-tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.topic-panel').forEach(panel => panel.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(topicId).classList.add('active');
+}
+</script>
+</body>
+</html>

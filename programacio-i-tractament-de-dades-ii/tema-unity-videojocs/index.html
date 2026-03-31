@@ -1,43 +1,513 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ca">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tema · Unity · Programació i Tractament de Dades II</title>
-  <meta name="description" content="Tema: Desenvolupament de Videojocs amb Unity · Programació i Tractament de Dades II.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <link rel="stylesheet" href="../../styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Desenvolupament de Videojocs amb Unity</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', sans-serif; background: #f0f4ff; min-height: 100vh; }
+.container { max-width: 860px; margin: 0 auto; padding: 20px; }
+
+header { background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460); color: white; border-radius: 14px; padding: 26px 28px; margin-bottom: 20px; position: relative; overflow: hidden; }
+header::before { content:''; position:absolute; top:-40px; right:-40px; width:200px; height:200px; background: radial-gradient(circle, rgba(99,102,241,.3), transparent 70%); }
+header h1 { font-size: 1.5rem; margin-bottom: 4px; position: relative; }
+header p { opacity: .75; font-size: .88rem; position: relative; }
+.header-tag { display:inline-block; background:rgba(255,255,255,.12); border-radius:99px; padding:3px 12px; font-size:.75rem; margin-top:10px; }
+
+/* TIMELINE NAV */
+.timeline-nav { background: white; border-radius: 14px; padding: 18px 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,.06); overflow-x: auto; }
+.tl-track { display: flex; align-items: flex-start; gap: 0; min-width: 560px; }
+.tl-step { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; cursor: pointer; position: relative; }
+.tl-step:focus-visible { outline: 3px solid #6366f1; outline-offset: 4px; border-radius: 10px; }
+.tl-step::before { content:''; position:absolute; top: 18px; left: 50%; width: 100%; height: 2px; background: #e0e7ff; z-index: 0; }
+.tl-step:last-child::before { display: none; }
+.tl-dot { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; border: 2px solid #e0e7ff; background: white; z-index: 1; transition: all .2s; flex-shrink: 0; }
+.tl-step.active .tl-dot { border-color: transparent; transform: scale(1.15); box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+.tl-step:hover .tl-dot { transform: scale(1.1); }
+.tl-label { font-size: .72rem; font-weight: 600; color: #7a8aaa; text-align: center; line-height: 1.3; max-width: 80px; transition: color .2s; }
+.tl-step.active .tl-label { color: #1a1a3e; }
+.tl-year { font-size: .65rem; color: #aab0c0; font-weight: 500; }
+
+/* PANELS */
+.topic-panel { display: none; }
+.topic-panel.active { display: block; animation: fadeIn .3s; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)} }
+
+.page-tools { background: white; border-radius: 14px; padding: 14px 16px; margin-bottom: 18px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+.tools-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.topic-search { flex: 1; min-width: 220px; border: 1px solid #dbeafe; border-radius: 10px; padding: 9px 11px; font-size: .88rem; color: #1f2a44; }
+.topic-search::placeholder { color: #94a3b8; }
+.tool-btn { border: 1px solid #c7d2fe; background: #eef2ff; color: #4338ca; border-radius: 10px; padding: 8px 12px; font-size: .82rem; font-weight: 600; cursor: pointer; transition: all .2s; }
+.tool-btn:hover { filter: brightness(0.98); }
+.tool-status { margin-left: auto; background: #ecfeff; color: #0e7490; border: 1px solid #bae6fd; border-radius: 99px; padding: 4px 10px; font-size: .75rem; font-weight: 700; }
+
+.presentation-mode body { background: #edf2ff; }
+.presentation-mode .container { max-width: 1280px; padding: 28px; }
+.presentation-mode header { padding: 34px 36px; border-radius: 18px; }
+.presentation-mode header h1 { font-size: clamp(3rem, 4.2vw, 4.2rem); line-height: 1.15; }
+.presentation-mode header p { font-size: clamp(1.45rem, 2.1vw, 2rem); opacity: 0.95; line-height: 1.5; }
+.presentation-mode .header-tag { font-size: 1.2rem; padding: 8px 16px; }
+.presentation-mode .timeline-nav { padding: 20px 22px; }
+.presentation-mode .tl-dot { width: 62px; height: 62px; font-size: 1.55rem; }
+.presentation-mode .tl-label { font-size: 1.22rem; max-width: 170px; line-height: 1.35; }
+.presentation-mode .tl-year { font-size: 1rem; }
+.presentation-mode .stage-badge h2 { font-size: clamp(2rem, 2.9vw, 2.9rem); }
+.presentation-mode .stage-badge p { font-size: clamp(1.35rem, 1.9vw, 1.8rem); line-height: 1.62; }
+.presentation-mode .theory-card { padding: 30px; border-radius: 16px; }
+.presentation-mode .theory-card h3 { font-size: clamp(1.9rem, 2.6vw, 2.6rem); margin-bottom: 16px; }
+.presentation-mode .theory-card p, .presentation-mode .theory-card li, .presentation-mode .theory-card td, .presentation-mode .theory-card th { font-size: clamp(1.28rem, 1.8vw, 1.65rem); line-height: 1.82; }
+.presentation-mode .col-card h4, .presentation-mode .tool-body h4 { font-size: clamp(1.45rem, 2vw, 1.9rem); }
+.presentation-mode .tool-body p, .presentation-mode .col-card p, .presentation-mode .col-card li { font-size: clamp(1.28rem, 1.8vw, 1.62rem); }
+.presentation-mode .tool-btn { font-size: 1.2rem; padding: 12px 16px; }
+.presentation-mode .topic-search { font-size: 1.15rem; padding: 12px 14px; }
+.presentation-mode .tool-status { font-size: 1.15rem; padding: 8px 14px; }
+.presentation-mode .nav-btn { font-size: 1.35rem; padding: 14px 28px; }
+.presentation-mode .info-box { font-size: clamp(1.22rem, 1.8vw, 1.55rem); line-height: 1.75; }
+.presentation-mode pre { font-size: 1.05rem; line-height: 1.8; padding: 18px; }
+
+.present-pill { background: #dbeafe; color: #1e3a8a; border: 1px solid #93c5fd; border-radius: 999px; padding: 6px 10px; font-size: .75rem; font-weight: 700; }
+
+.focus-mode .container { max-width: 940px; }
+.focus-mode .theory-card p, .focus-mode .theory-card li { font-size: .98rem; line-height: 1.82; }
+.focus-mode .theory-card { box-shadow: 0 8px 22px rgba(0,0,0,.09); }
+
+.theory-card.is-hidden { display: none; }
+
+/* STAGE BADGE */
+.stage-badge { display: flex; align-items: center; gap: 14px; border-radius: 14px; padding: 18px 22px; margin-bottom: 16px; color: white; }
+.stage-badge .sb-icon { font-size: 2rem; flex-shrink: 0; }
+.stage-badge h2 { font-size: 1.1rem; margin-bottom: 3px; }
+.stage-badge p { font-size: .83rem; opacity: .85; line-height: 1.45; }
+
+/* CARDS */
+.theory-card { background: white; border-radius: 14px; padding: 24px; margin-bottom: 14px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+.theory-card h3 { color: #1a1a3e; font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.theory-card p { color: #3a4a6a; font-size: .92rem; line-height: 1.68; margin-bottom: 10px; }
+.theory-card p:last-child { margin-bottom: 0; }
+.theory-card ul { color: #3a4a6a; font-size: .92rem; line-height: 1.78; padding-left: 20px; margin-bottom: 10px; }
+.theory-card ul li { margin-bottom: 3px; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+@media(max-width:520px){ .two-col{grid-template-columns:1fr;} }
+.col-card { background: #f8faff; border-radius: 10px; padding: 14px; }
+.col-card h4 { font-size: .85rem; color: #6366f1; margin-bottom: 8px; font-weight: 600; }
+.col-card ul { font-size: .85rem; color: #3a4a6a; padding-left: 16px; line-height: 1.75; }
+.col-card p { font-size: .85rem; color: #3a4a6a; line-height: 1.6; }
+
+.info-box { border-radius: 0 10px 10px 0; padding: 12px 16px; margin: 12px 0; font-size: .88rem; line-height: 1.55; }
+.info-box.blue { background:#eff6ff; border-left:4px solid #3b82f6; color:#1e3a5f; }
+.info-box.purple { background:#f5f3ff; border-left:4px solid #7c3aed; color:#3b1f6e; }
+.info-box.green { background:#f0fdf4; border-left:4px solid #22c55e; color:#166534; }
+.info-box.orange { background:#fffbeb; border-left:4px solid #f59e0b; color:#78350f; }
+.info-box.red { background:#fef2f2; border-left:4px solid #ef4444; color:#991b1b; }
+
+pre { background: #0f172a; color: #e2e8f0; border-radius: 10px; padding: 16px; font-size: .82rem; overflow-x: auto; margin: 12px 0; line-height: 1.7; }
+.kw{color:#93c5fd}.fn{color:#86efac}.st{color:#fca5a5}.cm{color:#64748b;font-style:italic}.nm{color:#fcd34d}
+
+table.tt { width:100%; border-collapse:collapse; margin:12px 0; font-size:.88rem; }
+.tt th { background:#f0f4ff; color:#6366f1; padding:9px 12px; text-align:left; font-size:.78rem; text-transform:uppercase; letter-spacing:.04em; }
+.tt td { padding:9px 12px; border-bottom:1px solid #f0f4ff; color:#3a4a6a; vertical-align:top; }
+.tt tr:last-child td { border:none; }
+.tt td strong { color:#1a1a3e; }
+
+code { background:#f1f5f9; padding:1px 6px; border-radius:4px; font-family:monospace; font-size:.9em; color:#4338ca; }
+
+.nav-btns { display:flex; gap:10px; margin-top:18px; justify-content:space-between; }
+.nav-btn { padding:10px 22px; border:none; border-radius:99px; cursor:pointer; font-size:.9rem; font-weight:600; transition:all .2s; }
+.nav-btn.prev { background:#e0e7ff; color:#3b41c0; }
+.nav-btn.next { background:#6366f1; color:white; }
+.nav-btn:hover { filter:brightness(1.07); }
+.nav-btn:disabled { opacity:.35; cursor:not-allowed; }
+
+@media(max-width:640px){ .tool-status { margin-left: 0; } }
+</style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg sticky-top shadow-sm app-navbar">
-    <div class="container">
-      <a class="navbar-brand fw-semibold text-white" href="../../index.html">Aula digital · IES Ramon Llull</a>
-      <a class="btn btn-outline-light btn-modern ms-auto" href="../index.html">Temes</a>
-    </div>
-  </nav>
+<div class="container">
 
-  <main class="pb-5">
-    <section class="container py-4">
-      <div class="glass-card card border-0 shadow-sm">
-        <div class="card-body p-4">
-          <div id="themeIndexContainer" data-subject="Programació i Tractament de Dades II" data-theme-slug="tema-unity-videojocs"></div>
-        </div>
+<header>
+  <h1>🎮 Unity: Del Zero al Joc Complet</h1>
+  <p>Introducció al desenvolupament de videojocs amb l'motor més utilitzat a la indústria</p>
+  <span class="header-tag">IES Ramon Llull · 1r Batxillerat · Curs 25-26</span>
+</header>
+
+<!-- TIMELINE NAV -->
+<div class="timeline-nav">
+  <div class="tl-track" id="tl-track">
+    <div class="tl-step active" onclick="goTo(0)" role="button" tabindex="0" aria-label="Anar a l'etapa 1">
+      <div class="tl-dot" style="background:#f1f5f9;border-color:#cbd5e1">🎯</div>
+      <div class="tl-label">Conceptes bàsics</div>
+      <div class="tl-year">Etapa 1</div>
+    </div>
+    <div class="tl-step" onclick="goTo(1)" role="button" tabindex="0" aria-label="Anar a l'etapa 2">
+      <div class="tl-dot" style="background:#ede9fe;border-color:#a78bfa">🏗️</div>
+      <div class="tl-label">Escenes i GameObjects</div>
+      <div class="tl-year">Etapa 2</div>
+    </div>
+    <div class="tl-step" onclick="goTo(2)" role="button" tabindex="0" aria-label="Anar a l'etapa 3">
+      <div class="tl-dot" style="background:#dbeafe;border-color:#60a5fa">⚙️</div>
+      <div class="tl-label">Scripts i components</div>
+      <div class="tl-year">Etapa 3</div>
+    </div>
+    <div class="tl-step" onclick="goTo(3)" role="button" tabindex="0" aria-label="Anar a l'etapa 4">
+      <div class="tl-dot" style="background:#dcfce7;border-color:#4ade80">🎨</div>
+      <div class="tl-label">Gràfics i animacions</div>
+      <div class="tl-year">Etapa 4</div>
+    </div>
+    <div class="tl-step" onclick="goTo(4)" role="button" tabindex="0" aria-label="Anar a l'etapa 5">
+      <div class="tl-dot" style="background:#fce7f3;border-color:#f472b6">🚀</div>
+      <div class="tl-label">Publicació i distribució</div>
+      <div class="tl-year">Etapa 5</div>
+    </div>
+  </div>
+</div>
+
+<div class="page-tools" aria-label="Eines de lectura">
+  <div class="tools-row">
+    <input id="topicSearch" class="topic-search" type="search" placeholder="Cerca dins l'etapa activa..." aria-label="Cercar contingut dins l'etapa activa" />
+    <button id="focusToggle" class="tool-btn" type="button">Mode focus</button>
+    <button id="presentationToggle" class="tool-btn" type="button">Mode pantalla aula</button>
+    <button id="fullscreenToggle" class="tool-btn" type="button">Pantalla completa</button>
+    <button id="clearSearch" class="tool-btn" type="button">Netejar cerca</button>
+    <span id="stageStatus" class="tool-status">Etapa 1 de 5</span>
+    <span id="presentationState" class="present-pill" hidden>Presentació activa</span>
+  </div>
+</div>
+
+<!-- ===== ETAPA 1: CONCEPTES BÀSICS ===== -->
+<div class="topic-panel active" id="panel-0">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#374151,#1f2937)">
+    <div class="sb-icon">🎯</div>
+    <div>
+      <h2>Etapa 1 — Conceptes bàsics d'Unity</h2>
+      <p>Entenent el motor, la interfície i els primers passos de desenvolupament</p>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🎮 Què és Unity?</h3>
+    <p><strong>Unity</strong> és el motor de desenvolupament de videojocs més popular del món. Permet crear jocs 2D i 3D per a múltiples plataformes (PC, móvil, consola...) amb un sol projecte base.</p>
+    <p>Unity es basa en un sistema de <strong>componentes</strong>: cada element del joc (personatge, enemy, moneda...) és un <strong>GameObject</strong> que conté components com físiques, renderer de gràfics, scripts de comportament, etc.</p>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>📊 Números clau d'Unity</h4>
+        <ul>
+          <li>Fundat el 2004</li>
+          <li>Gratuït per a menys de 100.000 € ingressos anuals</li>
+          <li>Suporta 25+ plataformes</li>
+          <li>Usat per estudi com Pokémon, Genshin Impact</li>
+        </ul>
       </div>
-    </section>
-  </main>
-
-  <footer class="bg-dark text-light py-3">
-    <div class="container small d-flex flex-column flex-md-row justify-content-between gap-2">
-      <span>&copy; 2026 IES Ramon Llull · Aula digital</span>
-      <span>Programació i Tractament de Dades II</span>
+      <div class="col-card">
+        <h4>🎯 Avantatges d'Unity</h4>
+        <ul>
+          <li>Senzill d'aprendre per a principiants</li>
+          <li>Sistema visual potent (drag-and-drop)</li>
+          <li>Scriptures en C#, un llenguatge poderós</li>
+          <li>Multiplataforma amb pocs canvis</li>
+        </ul>
+      </div>
     </div>
-  </footer>
+    <div class="info-box purple">📌 La filosofia d'Unity: fer que és fàcil crear un joc simple, però també que és possible crear jocs complexos. Això la fa ideal tant per a principiants com per a studios professionals.</div>
+  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  <script src="../../script.js"></script>
+  <div class="theory-card">
+    <h3>📥 Instal·lació i configuració inicial</h3>
+    <p>Per començar, necessites descarregar <strong>Unity Hub</strong>, que és el gestor d'instal·lacions d'Unity. Després, triaràs la versió d'Unity que vols (LTS és la més estable) i crearás un projecte nou.</p>
+    <div class="info-box green">✅ Passos: 1) Descarrega Unity Hub, 2) Crea un compte Unity, 3) Instal·la la versió 2022 LTS o superior, 4) Crea un projecte "2D" o "3D", 5) Espera que Unity descargui totes les dependències.</div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🖼️ La interfície d'Unity</h3>
+    <p>L'editor d'Unity es divideix en vàries finestres (windows) que pots organitzar. Les principals són:</p>
+    <table class="tt">
+      <thead><tr><th>Finestra</th><th>Propòsit</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Viewport (Centre)</strong></td><td>Vista 3D/2D del joc mentre edites la escena</td></tr>
+        <tr><td><strong>Hierarchy (Esquerra)</strong></td><td>Llista de tots els GameObjects de la escena actual</td></tr>
+        <tr><td><strong>Inspector (Dreta)</strong></td><td>Propietats del GameObject seleccionat</td></tr>
+        <tr><td><strong>Project (Baix)</strong></td><td>Fitxers del projecte: scripts, imatges, sons, etc.</td></tr>
+        <tr><td><strong>Scene (Baix esquerra)</strong></td><td>Vista general de la escena, zoom i viewport control</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="theory-card">
+    <h3>🔄 El Sistema de Coordenades</h3>
+    <p>Tots els GameObjects a l'escena tenen una <strong>posició</strong> representada per coordenades X, Y, Z.</p>
+    <ul>
+      <li><strong>X:</strong> Esquerra (negatiu) o dreta (positiu)</li>
+      <li><strong>Y:</strong> Baix (negatiu) o amunt (positiu)</li>
+      <li><strong>Z:</strong> Enrera (negatiu) o endavant (positiu, cap a la càmera)</li>
+    </ul>
+    <div class="info-box blue">💡 En 2D, només usaràs X i Y. Z es reserva per a la profunditat (ordre de dibuix).</div>
+  </div>
+</div>
+
+<!-- ===== ETAPA 2: ESCENES I GAMEOBJECTS ===== -->
+<div class="topic-panel" id="panel-1">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#4c1d95,#5b21b6)">
+    <div class="sb-icon">🏗️</div>
+    <div>
+      <h2>Etapa 2 — Escenes i GameObjects</h2>
+      <p>Construint el teu primer nivell: com organitzar elements i com interactuen</p>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🎬 Què és una Escena?</h3>
+    <p>Una <strong>escena</strong> és un nivell o pantalla del joc. Cada escena conté tots els GameObjects, ambient, càmeres, etc. que necessites per a aquesta part del joc.</p>
+    <p>Un projecte típic pot tenir múltiples escenes: "MainMenu.unity", "Level_1.unity", "GameOver.unity", etc.</p>
+    <div class="info-box orange">📌 Consell: Mantén les escenes organitzades en carpetes dins de la carpeta "Assets". Exemple: Assets/Scenes/Level1, Assets/Scenes/MainMenu, etc.</div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🎲 Què és un GameObject?</h3>
+    <p>Tot allò que veus a la pantalla és un <strong>GameObject</strong>: el personatge principal, els enemics, les plataformes, les monedes, les lumieres... fins i tot la càmera.</p>
+    <p>Un GameObject per si sol no fa res. Els seus <strong>components</strong> són els que li donen funcionalitat: físiques, gràfics, comportament, so, etc.</p>
+    <p><strong>Contenido pending:</strong> Explica els components comuns i els tipus de GameObjects.</p>
+  </div>
+
+  <div class="theory-card">
+    <h3>📐 Transform: Posició, Rotació i Escala</h3>
+    <p>Cada GameObject té un component <strong>Transform</strong>. Aquest component controla els tres aspectes visuals més bàsics:</p>
+    <table class="tt">
+      <thead><tr><th>Propietat</th><th>Descripció</th><th>Unitats</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Position</strong></td><td>On està el GameObject a l'escena (X, Y, Z)</td><td>Unitats de l'escena</td></tr>
+        <tr><td><strong>Rotation</strong></td><td>Girar el GameObject als tres eixos</td><td>Graus (0–360)</td></tr>
+        <tr><td><strong>Scale</strong></td><td>Mida relativa (1 = mida normal, 2 = doble)</td><td>Factor (0.5–5)</td></tr>
+      </tbody>
+    </table>
+    <div class="info-box blue">🎯 Pots controlar el Transform manualment a l'Inspector, o canviar-lo des d'un script (per fer moure el personatge, girar objectes, etc.)</div>
+  </div>
+
+  <div class="theory-card">
+    <h3>👶 Parent-Child (Jerarquies)</h3>
+    <p>Els GameObjects poden ser "fills" (children) d'altres GameObjects dentro de la Hierarchy. Esto es útil para grupos lógicos, como todos los elementos de la UI dentro de un Canvas, o las partes de un personaje.</p>
+    <div class="info-box purple">⚙️ Quan moue el pare, els fills es mouen amb ell. Això simplifica molt la gestió de grups d'objectes que sempre han d'estar junts.</div>
+  </div>
+</div>
+
+<!-- ===== ETAPA 3: SCRIPTS I COMPONENTS ===== -->
+<div class="topic-panel" id="panel-2">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#1e3a8a,#1d4ed8)">
+    <div class="sb-icon">⚙️</div>
+    <div>
+      <h2>Etapa 3 — Scripts i Components</h2>
+      <p>Programando el comportamiento: física, entrada del usuario, lógica del juego</p>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>📝 Escribiendo tu Primer Script</h3>
+    <p>Los scripts en Unity se escriben en <strong>C#</strong>, un lenguaje compilado y fuerte que es muy similar a Java. Cada script es una clase que hereda de <strong>MonoBehaviour</strong>.</p>
+    <p>Cuando creas un script en Unity, obtienes automáticamente dos métodos principales:</p>
+    <pre><span class="kw">using</span> UnityEngine;
+
+<span class="kw">public class</span> <span class="fn">MiPrimer</span>Script : MonoBehaviour
+{
+    <span class="kw">void</span> <span class="fn">Start</span>()
+    {
+        <span class="cm">// Se ejecuta UNA VEZ al principio</span>
+        <span class="fn">Debug</span>.<span class="fn">Log</span>(<span class="st">"El juego ha comenzado!"</span>);
+    }
+
+    <span class="kw">void</span> <span class="fn">Update</span>()
+    {
+        <span class="cm">// Se ejecuta CADA FRAME (~60 veces por segundo)</span>
+        <span class="fn">Debug</span>.<span class="fn">Log</span>(<span class="st">"Actualizando..."</span>);
+    }
+}</pre>
+    <div class="info-box green">✅ <strong>Start():</strong> Inicialización. <strong>Update():</strong> Comportamiento contínuo cada fotograma.</div>
+  </div>
+
+  <div class="theory-card">
+    <h3>⌨️ Entrada del Usuario (Input)</h3>
+    <p>Para que el jugador controle el personaje, necesitas leer las pulsaciones del teclado o clicks del ratón. En Unity, esto se hace con <code>Input.GetKey()</code> o <code>Input.GetKeyDown()</code>.</p>
+    <p><strong>Contenido pending:</strong> Ejemplos de movimiento, saltos, acciones...</p>
+  </div>
+
+  <div class="theory-card">
+    <h3>🔫 Detección de Colisiones (Colliders)</h3>
+    <p>Para que el personaje não atravese muros ni para que detectes cuando toca una moneda o un enemy, necesitas <strong>colliders</strong>.</p>
+    <p>Dos tipos principales:</p>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>📦 Box Collider 2D</h4>
+        <ul>
+          <li>Forma de rectángulo</li>
+          <li>Ideal para plataformas y muros</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>⭕ Circle Collider 2D</h4>
+        <ul>
+          <li>Forma de círculo</li>
+          <li>Mejor para objetos redondeados</li>
+        </ul>
+      </div>
+    </div>
+    <div class="info-box orange">⚠️ Recuerdo: para que dos colliders detecten colisión, al menos uno debe tener un Rigidbody.</div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🤝 Métodos Callback de Colisión</h3>
+    <p>Cuando dos colliders chocan, Unity ejecuta automáticamente estos métodos:</p>
+    <table class="tt">
+      <thead><tr><th>Método</th><th>Se ejecuta cuando...</th></tr></thead>
+      <tbody>
+        <tr><td><code>OnTriggerEnter2D</code></td><td>Dos triggers entran en contacto</td></tr>
+        <tr><td><code>OnTriggerStay2D</code></td><td>Permanecen en contacto (cada frame)</td></tr>
+        <tr><td><code>OnTriggerExit2D</code></td><td>Se separan</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Contenido pending:</strong> ejemplos de scripts detectando colisiones...</p>
+  </div>
+</div>
+
+<!-- ===== ETAPA 4: GRÁFICS Y ANIMACIONES ===== -->
+<div class="topic-panel" id="panel-3">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#065f46,#047857)">
+    <div class="sb-icon">🎨</div>
+    <div>
+      <h2>Etapa 4 — Gráficos y Animaciones</h2>
+      <p>Haciendo que tu juego vea bien: sprites, animaciones, efectos</p>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🖼️ Sprites y Texturas</h3>
+    <p>Un <strong>sprite</strong> es una imagen 2D que representa un objeto del juego. En Unity, importas imágenes (PNG, JPG) y las configuraste como sprites.</p>
+    <p><strong>Contenido pending:</strong> cómo importar sprites, configurar el Sprite Renderer, atlas de texturas...</p>
+  </div>
+
+  <div class="theory-card">
+    <h3>🎬 Sistema de Animaciones</h3>
+    <p>Para animar un personaje, necesitas:</p>
+    <ul>
+      <li>Una secuencia de sprites (fotogramas)</li>
+      <li>Un Animator que controle las transiciones</li>
+      <li>Un Animator Controller que define los estados y condiciones</li>
+    </ul>
+    <div class="info-box blue">💡 <strong>Ejemplo:</strong> Si tienes 8 imágenes del personaje corriendo, Unity puede cambiar entre ellas automáticamente a cierta velocidad para crear la animación de carrera.</div>
+  </div>
+
+  <div class="theory-card">
+    <h3>💡 Iluminación (para juegos 3D)</h3>
+    <p><strong>Contenido pending:</strong> tipos de luz, sombras, global illumination...</p>
+  </div>
+</div>
+
+<!-- ===== ETAPA 5: PUBLICACIÓN ===== -->
+<div class="topic-panel" id="panel-4">
+  <div class="stage-badge" style="background:linear-gradient(135deg,#7c2d12,#92400e)">
+    <div class="sb-icon">🚀</div>
+    <div>
+      <h2>Etapa 5 — Publicació i Distribució</h2>
+      <p>Compartir tu juego: compilación, empaquetamiento, distribuición</p>
+    </div>
+  </div>
+
+  <div class="theory-card">
+    <h3>📦 Build Settings</h3>
+    <p>Antes de exportar tu juego, necesitas configurar <strong>File > Build Settings</strong>. Aquí decides:</p>
+    <ul>
+      <li>Plataforma de destino (PC Windows, Mac, Linux, Android, iOS, WebGL...)</li>
+      <li>Resolución de pantalla</li>
+      <li>Icono del juego</li>
+      <li>Splash screen (pantalla inicial con el logo de Unity)</li>
+    </ul>
+    <div class="info-box green">✅ Passos básicos: 1) Build Settings, 2) Elige plataforma, 3) Click en Build, 4) Elige donde guardar el .exe (o .apk para Android)</div>
+  </div>
+
+  <div class="theory-card">
+    <h3>🌐 WebGL: Tu juego en el navegador</h3>
+    <p><strong>Contenido pending:</strong> cómo exportar a WebGL para que la gente juegue directamente en una página web...</p>
+  </div>
+
+  <div class="theory-card">
+    <h3>📱 Móvil: Android e iOS</h3>
+    <p><strong>Contenido pending:</strong> requisitos de SDKs, certificados de Apple, diferencias en controles (touchscreen vs keyboard)...</p>
+  </div>
+
+  <div class="theory-card">
+    <h3>🎮 Consolas: Nintendo Switch, PlayStation, Xbox</h3>
+    <p><strong>Contenido pending:</strong> requisitos especiales, kits de desarrollo, licencias...</p>
+  </div>
+</div>
+
+<div class="nav-btns">
+  <button class="nav-btn prev" id="prevBtn" onclick="navigate(-1)">← Anterior</button>
+  <button class="nav-btn next" id="nextBtn" onclick="navigate(1)">Següent →</button>
+</div>
+
+</div>
+
+<script>
+let currentPanel = 0;
+const panelCount = 5;
+
+function goTo(index) {
+  currentPanel = index;
+  updatePanels();
+}
+
+function navigate(dir) {
+  currentPanel += dir;
+  if (currentPanel < 0) currentPanel = 0;
+  if (currentPanel >= panelCount) currentPanel = panelCount - 1;
+  updatePanels();
+}
+
+function updatePanels() {
+  document.querySelectorAll('.topic-panel').forEach((p, i) => {
+    p.classList.toggle('active', i === currentPanel);
+  });
+  document.querySelectorAll('.tl-step').forEach((s, i) => {
+    s.classList.toggle('active', i === currentPanel);
+  });
+  document.getElementById('stageStatus').textContent = `Etapa ${currentPanel + 1} de ${panelCount}`;
+  document.getElementById('prevBtn').disabled = currentPanel === 0;
+  document.getElementById('nextBtn').disabled = currentPanel === panelCount - 1;
+  applySearchFilter();
+}
+
+function applySearchFilter() {
+  const query = document.getElementById('topicSearch').value.toLowerCase();
+  const activePanel = document.getElementById(`panel-${currentPanel}`);
+  if (!activePanel) return;
+  const cards = activePanel.querySelectorAll('.theory-card');
+  cards.forEach(card => {
+    const text = card.textContent.toLowerCase();
+    card.classList.toggle('is-hidden', query && !text.includes(query));
+  });
+}
+
+document.getElementById('topicSearch').addEventListener('input', applySearchFilter);
+document.getElementById('clearSearch').addEventListener('click', () => {
+  document.getElementById('topicSearch').value = '';
+  applySearchFilter();
+});
+
+document.getElementById('focusToggle').addEventListener('click', () => {
+  document.documentElement.classList.toggle('focus-mode');
+});
+
+document.getElementById('presentationToggle').addEventListener('click', () => {
+  const isActive = document.documentElement.classList.toggle('presentation-mode');
+  document.getElementById('presentationState').hidden = !isActive;
+});
+
+document.getElementById('fullscreenToggle').addEventListener('click', () => {
+  if (document.documentElement.requestFullscreen) {
+    document.documentElement.requestFullscreen();
+  }
+});
+
+updatePanels();
+</script>
 </body>
 </html>
 

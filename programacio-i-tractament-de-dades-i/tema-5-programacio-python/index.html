@@ -1,43 +1,800 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ca">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TEMA 5 · Python · Programació i Tractament de Dades I</title>
-  <meta name="description" content="Tema: Programació Estructurada i Algorítmica amb Python · Programació i Tractament de Dades I.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <link rel="stylesheet" href="../../styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python - IES Ramon Llull</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', sans-serif; background: #f0f4ff; min-height: 100vh; }
+.container { max-width: 820px; margin: 0 auto; padding: 20px; }
+
+/* HEADER */
+header { background: linear-gradient(135deg, #3b6fd4, #1a3a8f); color: white; border-radius: 14px; padding: 22px 28px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: gap; }
+header h1 { font-size: 1.4rem; }
+header p { opacity: .8; font-size: .85rem; margin-top: 2px; }
+.main-nav { display: flex; gap: 8px; margin-bottom: 22px; }
+.main-nav-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-size: .95rem; font-weight: 600; transition: all .2s; background: white; color: #5a6a8a; box-shadow: 0 2px 8px rgba(0,0,0,.07); }
+.main-nav-btn.active { background: #3b6fd4; color: white; }
+
+/* THEORY */
+#theory-area { display: block; }
+.topic-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+.topic-tab { padding: 7px 14px; border: 2px solid #e0e7ff; border-radius: 99px; cursor: pointer; font-size: .82rem; font-weight: 600; color: #5a6a8a; background: white; transition: all .2s; white-space: nowrap; }
+.topic-tab:hover { border-color: #3b6fd4; color: #3b6fd4; }
+.topic-tab.active { background: #3b6fd4; color: white; border-color: #3b6fd4; }
+.topic-panel { display: none; }
+.topic-panel.active { display: block; animation: fadeIn .3s; }
+.theory-card { background: white; border-radius: 14px; padding: 24px; margin-bottom: 14px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+.theory-card h3 { color: #1a3a8f; font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.theory-card p { color: #3a4a6a; font-size: .92rem; line-height: 1.65; margin-bottom: 10px; }
+.theory-card p:last-child { margin-bottom: 0; }
+.theory-card ul { color: #3a4a6a; font-size: .92rem; line-height: 1.7; padding-left: 20px; margin-bottom: 10px; }
+.tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.tag { background: #eef2ff; color: #3b6fd4; border-radius: 99px; padding: 3px 12px; font-size: .78rem; font-weight: 600; }
+.tag.green { background: #dcfce7; color: #166534; }
+.tag.orange { background: #fef3c7; color: #92400e; }
+pre { background: #1e2a3a; color: #e2e8f0; border-radius: 10px; padding: 16px; font-size: .83rem; overflow-x: auto; margin: 12px 0; line-height: 1.6; }
+.kw { color: #93c5fd; } .fn { color: #86efac; } .st { color: #fca5a5; } .cm { color: #94a3b8; font-style: italic; } .nm { color: #fcd34d; }
+.info-box { background: #f0f4ff; border-left: 4px solid #3b6fd4; border-radius: 0 10px 10px 0; padding: 12px 16px; margin: 12px 0; font-size: .88rem; color: #2a3a6a; }
+.info-box.green { background: #f0fdf4; border-color: #22c55e; color: #166534; }
+.info-box.yellow { background: #fffbeb; border-color: #f59e0b; color: #78350f; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+@media(max-width:540px){ .two-col { grid-template-columns: 1fr; } }
+.col-card { background: #f8faff; border-radius: 10px; padding: 14px; }
+.col-card h4 { font-size: .85rem; color: #3b6fd4; margin-bottom: 8px; }
+.col-card ul { font-size: .85rem; color: #3a4a6a; padding-left: 16px; line-height: 1.7; }
+table.theory-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: .88rem; }
+.theory-table th { background: #eef2ff; color: #3b6fd4; padding: 9px 12px; text-align: left; font-size: .8rem; }
+.theory-table td { padding: 9px 12px; border-bottom: 1px solid #f0f4ff; color: #3a4a6a; }
+.theory-table tr:last-child td { border: none; }
+code { background: #f1f5f9; padding: 1px 6px; border-radius: 4px; font-family: monospace; font-size: .9em; color: #1a3a8f; }
+
+/* EXAM */
+#exam-area { display: none; }
+.progress-bar { background: #dde4f7; border-radius: 99px; height: 10px; margin-bottom: 8px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg,#3b6fd4,#5b8fff); border-radius: 99px; transition: width .4s; }
+.progress-label { font-size: .82rem; color: #5a6a8a; text-align: right; margin-bottom: 18px; }
+.question-card { background: white; border-radius: 14px; padding: 24px; margin-bottom: 16px; box-shadow: 0 2px 10px rgba(0,0,0,.06); display: none; }
+.question-card.active { display: block; animation: fadeIn .3s; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)} }
+.q-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.q-num { background: #3b6fd4; color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: .9rem; flex-shrink: 0; }
+.q-text { font-size: 1rem; font-weight: 600; color: #1a2a4a; line-height: 1.45; }
+.q-tag { font-size: .72rem; background: #eef2ff; color: #3b6fd4; border-radius: 99px; padding: 2px 10px; margin-bottom: 12px; display: inline-block; font-weight: 600; }
+.options { display: flex; flex-direction: column; gap: 9px; }
+.option { border: 2px solid #e0e7ff; border-radius: 10px; padding: 11px 15px; cursor: pointer; transition: all .2s; font-size: .93rem; color: #2a3a5a; }
+.option:hover:not(.disabled) { border-color: #3b6fd4; background: #f0f4ff; }
+.option.correct { border-color: #22c55e; background: #f0fdf4; color: #166534; }
+.option.incorrect { border-color: #ef4444; background: #fef2f2; color: #991b1b; }
+.option.disabled { cursor: default; }
+.feedback { margin-top: 12px; padding: 11px 14px; border-radius: 10px; font-size: .88rem; display: none; }
+.feedback.show { display: block; }
+.feedback.ok { background: #f0fdf4; color: #166534; border-left: 4px solid #22c55e; }
+.feedback.fail { background: #fef2f2; color: #991b1b; border-left: 4px solid #ef4444; }
+.nav { display: flex; justify-content: space-between; margin-top: 18px; }
+.btn { padding: 11px 24px; border: none; border-radius: 99px; cursor: pointer; font-size: .93rem; font-weight: 600; transition: all .2s; }
+.btn-primary { background: #3b6fd4; color: white; }
+.btn-primary:hover { background: #2d5ab8; }
+.btn-secondary { background: #e0e7ff; color: #3b6fd4; }
+.btn-secondary:hover { background: #c7d4f5; }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* RESULTS */
+#results { display: none; background: white; border-radius: 14px; padding: 32px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+.score-circle { width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; color: white; }
+.sc-great{background:linear-gradient(135deg,#22c55e,#16a34a)} .sc-good{background:linear-gradient(135deg,#3b6fd4,#1a3a8f)} .sc-ok{background:linear-gradient(135deg,#f59e0b,#d97706)} .sc-fail{background:linear-gradient(135deg,#ef4444,#b91c1c)}
+#results h2 { font-size: 1.3rem; color: #1a2a4a; margin-bottom: 6px; }
+#results .rsub { color: #5a6a8a; margin-bottom: 22px; }
+.summary-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 22px; }
+.summary-item { background: #f8faff; border-radius: 10px; padding: 12px; }
+.summary-item .val { font-size: 1.5rem; font-weight: bold; color: #3b6fd4; }
+.summary-item .lbl { font-size: .78rem; color: #7a8aaa; margin-top: 2px; }
+.review-list { text-align: left; }
+.review-item { padding: 9px 13px; border-radius: 8px; margin-bottom: 7px; font-size: .86rem; display: flex; gap: 8px; }
+.review-item.ok{background:#f0fdf4;color:#166534} .review-item.fail{background:#fef2f2;color:#991b1b}
+.rank-actions { display: flex; gap: 10px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+
+/* RANKING */
+#ranking-view { display: none; background: white; border-radius: 14px; padding: 28px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+#ranking-view h2 { text-align: center; color: #1a2a4a; margin-bottom: 4px; }
+#ranking-view .rsub { text-align: center; color: #7a8aaa; font-size: .85rem; margin-bottom: 18px; }
+.ranking-table { width: 100%; border-collapse: collapse; }
+.ranking-table th { background: #f0f4ff; color: #3b6fd4; font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; padding: 9px 13px; text-align: left; }
+.ranking-table td { padding: 10px 13px; border-bottom: 1px solid #f0f4ff; font-size: .9rem; color: #2a3a5a; }
+.ranking-table tr:last-child td { border: none; }
+.score-pill { display: inline-block; padding: 2px 10px; border-radius: 99px; font-weight: 700; font-size: .83rem; }
+.pill-great{background:#dcfce7;color:#166534} .pill-good{background:#dbeafe;color:#1e40af} .pill-ok{background:#fef9c3;color:#854d0e} .pill-fail{background:#fee2e2;color:#991b1b}
+.empty-msg { text-align: center; color: #9aabcc; padding: 28px; font-size: .9rem; }
+</style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg sticky-top shadow-sm app-navbar">
-    <div class="container">
-      <a class="navbar-brand fw-semibold text-white" href="../../index.html">Aula digital · IES Ramon Llull</a>
-      <a class="btn btn-outline-light btn-modern ms-auto" href="../index.html">Temes</a>
+<div class="container">
+  <header>
+    <div>
+      <h1>🐍 Programació amb Python</h1>
+      <p>IES Ramon Llull · 1r Batxillerat · Curs 25-26</p>
     </div>
-  </nav>
+    <a href="../index.html" style="color: white; text-decoration: none; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); border-radius: 8px; padding: 8px 14px; font-weight: 600; font-size: 0.85rem; transition: all 0.2s; white-space: nowrap;" onmouseover="this.style.background='rgba(255,255,255,0.25)'; this.style.borderColor='rgba(255,255,255,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'; this.style.borderColor='rgba(255,255,255,0.25)'">← Tornar a Temes</a>
+  </header>
 
-  <main class="pb-5">
-    <section class="container py-4">
-      <div class="glass-card card border-0 shadow-sm">
-        <div class="card-body p-4">
-          <div id="themeIndexContainer" data-subject="Programació i Tractament de Dades I" data-theme-slug="tema-5-programacio-python"></div>
+  <div style="display: flex; flex-wrap: wrap; gap: 8px; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+    <span style="background: rgba(255,255,255,0.12); color: white; border-radius: 99px; padding: 4px 12px; font-size: 0.8rem; font-weight: 600; white-space: nowrap;">Python</span>
+    <span style="background: rgba(255,255,255,0.12); color: white; border-radius: 99px; padding: 4px 12px; font-size: 0.8rem; font-weight: 600; white-space: nowrap;">Variables</span>
+    <span style="background: rgba(255,255,255,0.12); color: white; border-radius: 99px; padding: 4px 12px; font-size: 0.8rem; font-weight: 600; white-space: nowrap;">Condicions</span>
+    <span style="background: rgba(255,255,255,0.12); color: white; border-radius: 99px; padding: 4px 12px; font-size: 0.8rem; font-weight: 600; white-space: nowrap;">Bucles</span>
+  </div>
+    <button class="main-nav-btn active" onclick="showSection('theory')">📖 Teoria</button>
+    <button class="main-nav-btn" onclick="showSection('exam')">📝 Examen</button>
+    <button class="main-nav-btn" onclick="showSection('ranking')">🏆 Ranking</button>
+  </div>
+
+  <!-- ===== THEORY ===== -->
+  <div id="theory-area">
+    <div class="topic-tabs" id="topic-tabs"></div>
+    <div id="topic-panels"></div>
+  </div>
+
+  <!-- ===== EXAM ===== -->
+  <div id="exam-area">
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="progress-label" id="progress-label"></div>
+    <div id="questions-container"></div>
+    <div class="nav">
+      <button class="btn btn-secondary" id="btn-prev" onclick="navigate(-1)" disabled>← Anterior</button>
+      <button class="btn btn-primary" id="btn-next" onclick="navigate(1)">Següent →</button>
+    </div>
+  </div>
+
+  <!-- ===== RESULTS ===== -->
+  <div id="results">
+    <div class="score-circle" id="score-circle"></div>
+    <h2 id="result-title"></h2>
+    <p class="rsub" id="result-msg"></p>
+    <div class="summary-grid">
+      <div class="summary-item"><div class="val" id="r-correct"></div><div class="lbl">Correctes ✅</div></div>
+      <div class="summary-item"><div class="val" id="r-wrong"></div><div class="lbl">Incorrectes ❌</div></div>
+      <div class="summary-item"><div class="val" id="r-score"></div><div class="lbl">Puntuació</div></div>
+    </div>
+    <div class="review-list" id="review-list"></div>
+    <div class="rank-actions">
+      <button class="btn btn-primary" onclick="showSection('ranking')">🏆 Veure Ranking</button>
+      <button class="btn btn-secondary" onclick="restartExam()">🔄 Repetir</button>
+    </div>
+  </div>
+
+  <!-- ===== RANKING ===== -->
+  <div id="ranking-view">
+    <h2>🏆 Ranking</h2>
+    <p class="rsub">Millors puntuacions registrades</p>
+    <div id="ranking-content"></div>
+    <div class="rank-actions" style="margin-top:16px">
+      <button class="btn btn-secondary" onclick="clearRanking()">🗑️ Esborrar ranking</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===================== THEORY DATA =====================
+const topics = [
+  {
+    id:"fonaments", label:"🖥️ Fonaments",
+    cards:[
+      { title:"Hardware vs Software", body:`
+        <p><strong>Hardware</strong> són els components físics d'un ordinador: processador, disc dur, memòria RAM i perifèrics (teclat, ratolí, monitor).</p>
+        <p><strong>Software</strong> és el conjunt de programes que controlen el funcionament de l'ordinador. Segueix una sèrie de passos (instruccions).</p>
+        <div class="two-col">
+          <div class="col-card"><h4>🔩 Tipus de Hardware</h4><ul><li>Processador (CPU)</li><li>Memòria RAM</li><li>Disc dur / SSD</li><li>Perifèrics E/S</li></ul></div>
+          <div class="col-card"><h4>💾 Tipus de Software</h4><ul><li><strong>Sistema:</strong> SO (Windows, Linux)</li><li><strong>Desenvolupament:</strong> IDEs, compiladors</li><li><strong>Aplicació:</strong> Word, jocs...</li></ul></div>
+        </div>`
+      },
+      { title:"Algorismes i Pseudocodi", body:`
+        <p>Abans de codificar cal dissenyar un <strong>algorisme</strong>: una seqüència de passos organitzats per resoldre un problema, independent del llenguatge de programació.</p>
+        <div class="info-box">💡 Un bon algorisme garanteix el bon funcionament del programa.</div>
+        <p>Es pot expressar com a <strong>pseudocodi</strong> (similar al llenguatge humà) o com a <strong>diagrama de flux</strong> (representació gràfica).</p>
+        <pre><span class="cm">// Pseudocodi: calcular la mitjana de dos nombres</span>
+INICI
+  llegir num1, num2
+  mitjana ← (num1 + num2) / 2
+  mostrar mitjana
+FI</pre>`
+      },
+      { title:"Compilació vs Interpretació", body:`
+        <div class="two-col">
+          <div class="col-card"><h4>⚙️ Compilats (ex: C)</h4><ul><li>Tradueixen tot el codi a llenguatge màquina</li><li>Generen un executable (.exe)</li><li>Fitxers diferents per a cada SO</li><li>No cal instal·lar res més</li></ul></div>
+          <div class="col-card"><h4>🐍 Interpretats (Python)</h4><ul><li>Llegeixen i executen el codi en temps real</li><li>Cal l'intèrpret instal·lat al PC</li><li>Mateix codi per a tots els SO</li><li>Més fàcils de provar i depurar</li></ul></div>
         </div>
-      </div>
-    </section>
-  </main>
+        <div class="info-box yellow">⚠️ Per executar Python cal tenir l'intèrpret instal·lat: <code>python --version</code></div>`
+      }
+    ]
+  },
+  {
+    id:"python", label:"🐍 Python",
+    cards:[
+      { title:"Per què Python?", body:`
+        <p>Python és un dels llenguatges de programació més populars i demandats del món. Destaca per:</p>
+        <div class="tag-list"><span class="tag">Alt nivell</span><span class="tag">S'assembla a l'anglès</span><span class="tag">Multipropòsit</span><span class="tag green">Sintaxi neta</span><span class="tag green">Gran comunitat</span><span class="tag orange">Sortida laboral</span></div>
+        <div class="info-box green">✅ Python no usa <code>{}</code> ni <code>;</code> — la indentació estructura el codi.</div>
+        <p style="margin-top:10px">S'usa per a: IA, ciència de dades, webs, automatització, ciberseguretat, videojocs i molt més.</p>`
+      },
+      { title:"Aplicacions de Python", body:`
+        <table class="theory-table">
+          <thead><tr><th>Àmbit</th><th>Exemples</th><th>Llibreries</th></tr></thead>
+          <tbody>
+            <tr><td>🤖 Intel·ligència Artificial</td><td>ChatGPT, reconeixement facial, recomanacions</td><td>TensorFlow, PyTorch</td></tr>
+            <tr><td>📊 Ciència de Dades</td><td>Predicció del temps, mercats financers</td><td>Pandas, Matplotlib</td></tr>
+            <tr><td>🌐 Desenvolupament Web</td><td>Instagram, Spotify, Pinterest</td><td>Django, Flask</td></tr>
+            <tr><td>🤖 Automatització</td><td>Canviar noms de fitxers, web scraping</td><td>Requests, Selenium</td></tr>
+            <tr><td>🔒 Ciberseguretat</td><td>Escaneig de ports, proves de seguretat</td><td>Scapy, Paramiko</td></tr>
+          </tbody>
+        </table>`
+      },
+      { title:"Configuració i eines", body:`
+        <p>Per programar en Python necessites:</p>
+        <ul>
+          <li><strong>Python 3</strong> — l'intèrpret que llegeix i executa el codi</li>
+          <li><strong>VS Code</strong> — IDE recomanat per programar</li>
+          <li><strong>Extensió Python (Microsoft)</strong> — dins VS Code</li>
+        </ul>
+        <div class="info-box">Un <strong>IDE</strong> conté: editor de text, compilador/intèrpret i depurador.</div>
+        <pre><span class="cm"># Comprovar instal·lació al terminal</span>
+python --version
 
-  <footer class="bg-dark text-light py-3">
-    <div class="container small d-flex flex-column flex-md-row justify-content-between gap-2">
-      <span>&copy; 2026 IES Ramon Llull · Aula digital</span>
-      <span>Programació i Tractament de Dades I</span>
-    </div>
-  </footer>
+<span class="cm"># Executar un script</span>
+python el_meu_programa.py</pre>`
+      }
+    ]
+  },
+  {
+    id:"variables", label:"📦 Variables",
+    cards:[
+      { title:"Variables i Tipus de Dades", body:`
+        <p>Una <strong>variable</strong> és un espai a la memòria que guarda informació. Pot canviar de valor al llarg del programa.</p>
+        <table class="theory-table">
+          <thead><tr><th>Tipus</th><th>Descripció</th><th>Exemple</th></tr></thead>
+          <tbody>
+            <tr><td><code>str</code></td><td>Text (entre cometes)</td><td><code>"Hola món"</code></td></tr>
+            <tr><td><code>int</code></td><td>Nombre enter</td><td><code>10</code></td></tr>
+            <tr><td><code>float</code></td><td>Nombre decimal</td><td><code>9.5</code></td></tr>
+            <tr><td><code>bool</code></td><td>Valor lògic</td><td><code>True</code> / <code>False</code></td></tr>
+          </tbody>
+        </table>
+        <pre><span class="nm">nom</span> = <span class="st">"Anna"</span>       <span class="cm"># str</span>
+<span class="nm">edat</span> = <span class="nm">17</span>          <span class="cm"># int</span>
+<span class="nm">nota</span> = <span class="nm">8.5</span>         <span class="cm"># float</span>
+<span class="nm">aprovat</span> = <span class="kw">True</span>     <span class="cm"># bool</span></pre>`
+      },
+      { title:"Entrada i Sortida", body:`
+        <p><code>print()</code> mostra dades per pantalla. <code>input()</code> demana dades a l'usuari.</p>
+        <div class="info-box yellow">⚠️ <strong>Casting:</strong> <code>input()</code> sempre retorna <code>str</code>. Si vols un nombre, has de convertir-lo.</div>
+        <pre><span class="cm"># Mostrar per pantalla</span>
+<span class="fn">print</span>(<span class="st">"Hola, món!"</span>)
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  <script src="../../script.js"></script>
+<span class="cm"># Demanar dades</span>
+<span class="nm">nom</span> = <span class="fn">input</span>(<span class="st">"Com et dius? "</span>)
+
+<span class="cm"># Casting: convertir a enter</span>
+<span class="nm">edat</span> = <span class="fn">int</span>(<span class="fn">input</span>(<span class="st">"Quina edat tens? "</span>))
+<span class="nm">altura</span> = <span class="fn">float</span>(<span class="fn">input</span>(<span class="st">"Quina altura tens? "</span>))</pre>`
+      },
+      { title:"Comentaris", body:`
+        <p>Els comentaris s'usen per explicar el codi. El llenguatge els ignora durant l'execució.</p>
+        <pre><span class="cm"># Comentari d'una sola línia</span>
+
+<span class="st">'''
+Comentari
+de diverses
+línies
+'''</span>
+
+<span class="nm">x</span> = <span class="nm">5</span>  <span class="cm"># també es pot comentar al final d'una línia</span></pre>
+        <div class="info-box green">💡 Bona pràctica: comenta el codi per ajudar als teus companys (i al tu del futur!).</div>`
+      }
+    ]
+  },
+  {
+    id:"operadors", label:"➕ Operadors",
+    cards:[
+      { title:"Operadors Aritmètics", body:`
+        <table class="theory-table">
+          <thead><tr><th>Operador</th><th>Descripció</th><th>Exemple</th><th>Resultat</th></tr></thead>
+          <tbody>
+            <tr><td><code>+</code></td><td>Suma</td><td><code>5 + 3</code></td><td>8</td></tr>
+            <tr><td><code>-</code></td><td>Resta</td><td><code>5 - 3</code></td><td>2</td></tr>
+            <tr><td><code>*</code></td><td>Multiplicació</td><td><code>5 * 3</code></td><td>15</td></tr>
+            <tr><td><code>/</code></td><td>Divisió (amb decimals)</td><td><code>7 / 2</code></td><td>3.5</td></tr>
+            <tr><td><code>//</code></td><td>Divisió entera</td><td><code>7 // 2</code></td><td>3</td></tr>
+            <tr><td><code>%</code></td><td>Residu (mòdul)</td><td><code>7 % 2</code></td><td>1</td></tr>
+            <tr><td><code>**</code></td><td>Potència</td><td><code>2 ** 3</code></td><td>8</td></tr>
+          </tbody>
+        </table>`
+      },
+      { title:"Operadors de Comparació i Lògics", body:`
+        <p><strong>Comparació</strong> — retornen <code>True</code> o <code>False</code>:</p>
+        <div class="tag-list"><span class="tag">== igual</span><span class="tag">!= diferent</span><span class="tag">&gt; major</span><span class="tag">&lt; menor</span><span class="tag">&gt;= major o igual</span><span class="tag">&lt;= menor o igual</span></div>
+        <p style="margin-top:12px"><strong>Operadors Lògics:</strong></p>
+        <table class="theory-table">
+          <thead><tr><th>Operador</th><th>Descripció</th><th>Exemple</th></tr></thead>
+          <tbody>
+            <tr><td><code>and</code></td><td>True si <em>tots dos</em> són True</td><td><code>5>3 and 2>1</code> → True</td></tr>
+            <tr><td><code>or</code></td><td>True si <em>algun</em> és True</td><td><code>5>3 or 2>9</code> → True</td></tr>
+            <tr><td><code>not</code></td><td>Inverteix el valor</td><td><code>not True</code> → False</td></tr>
+          </tbody>
+        </table>`
+      }
+    ]
+  },
+  {
+    id:"control", label:"🔀 Control",
+    cards:[
+      { title:"Condicionals (if / elif / else)", body:`
+        <p>Els condicionals permeten prendre decisions: executar un codi o un altre segons si es compleix una condició.</p>
+        <pre><span class="nm">nota</span> = <span class="fn">int</span>(<span class="fn">input</span>(<span class="st">"Introdueix la nota: "</span>))
+
+<span class="kw">if</span> <span class="nm">nota</span> >= <span class="nm">9</span>:
+    <span class="fn">print</span>(<span class="st">"Excel·lent!"</span>)
+<span class="kw">elif</span> <span class="nm">nota</span> >= <span class="nm">5</span>:
+    <span class="fn">print</span>(<span class="st">"Aprovat"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="st">"Suspès"</span>)</pre>
+        <div class="info-box yellow">⚠️ La indentació (TAB) és obligatòria. El 90% dels errors de principiants venen d'una indentació incorrecta.</div>`
+      },
+      { title:"Bucle while", body:`
+        <p>El bucle <code>while</code> repeteix un bloc de codi <strong>mentre es compleixi una condició</strong>.</p>
+        <pre><span class="nm">comptador</span> = <span class="nm">0</span>
+
+<span class="kw">while</span> <span class="nm">comptador</span> < <span class="nm">5</span>:
+    <span class="fn">print</span>(<span class="st">"Volta número:"</span>, <span class="nm">comptador</span>)
+    <span class="nm">comptador</span> += <span class="nm">1</span>
+
+<span class="fn">print</span>(<span class="st">"Acabat!"</span>)</pre>
+        <div class="info-box yellow">⚠️ Si la condició mai es fa False → bucle infinit. Assegura't que el comptador avança!</div>`
+      },
+      { title:"Bucle for", body:`
+        <p>El bucle <code>for</code> repeteix el codi un nombre <strong>exacte de vegades</strong> o recorre una llista d'elements.</p>
+        <pre><span class="cm"># Repetir 5 vegades amb range()</span>
+<span class="kw">for</span> <span class="nm">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">5</span>):
+    <span class="fn">print</span>(<span class="st">"Número:"</span>, <span class="nm">i</span>)
+
+<span class="cm"># Recórrer una llista</span>
+<span class="nm">fruites</span> = [<span class="st">"poma"</span>, <span class="st">"plàtan"</span>, <span class="st">"pera"</span>]
+<span class="kw">for</span> <span class="nm">fruita</span> <span class="kw">in</span> <span class="nm">fruites</span>:
+    <span class="fn">print</span>(<span class="nm">fruita</span>)</pre>
+        <div class="info-box"><code>range(5)</code> genera: 0, 1, 2, 3, 4. <code>range(2, 8)</code> genera: 2, 3, 4, 5, 6, 7.</div>`
+      },
+      { title:"break i continue: controlar el flux del bucle", body:`
+        <p>Dins d'un bucle (<code>for</code> o <code>while</code>) podem alterar el seu flux normal amb dues paraules clau especials:</p>
+        <div class="two-col">
+          <div class="col-card">
+            <h4>🛑 break</h4>
+            <p><strong>Atura el bucle completament</strong> i en surt immediatament, encara que no s'hagi acabat de recórrer tot.</p>
+          </div>
+          <div class="col-card">
+            <h4>⏭️ continue</h4>
+            <p><strong>Salta la resta de la iteració actual</strong> i passa directament a la següent volta del bucle.</p>
+          </div>
+        </div>
+        <pre><span class="cm"># break: atura el bucle quan troba el 3</span>
+<span class="kw">for</span> <span class="nm">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">6</span>):
+    <span class="kw">if</span> <span class="nm">i</span> == <span class="nm">3</span>:
+        <span class="kw">break</span>
+    <span class="fn">print</span>(<span class="nm">i</span>)
+<span class="cm"># Imprimeix: 0 1 2</span>
+
+<span class="cm"># continue: salta el 3 però continua</span>
+<span class="kw">for</span> <span class="nm">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">6</span>):
+    <span class="kw">if</span> <span class="nm">i</span> == <span class="nm">3</span>:
+        <span class="kw">continue</span>
+    <span class="fn">print</span>(<span class="nm">i</span>)
+<span class="cm"># Imprimeix: 0 1 2 4 5</span></pre>
+        <div class="info-box yellow">⚠️ <code>break</code> s'usa habitualment dins un <code>if</code> que comprova una condició de sortida. És molt útil per buscar un element en una llista i aturar-se quan el trobes, evitant recórrer la resta innecessàriament.</div>
+        <pre><span class="cm"># Cas d'ús típic: buscar un element</span>
+<span class="nm">alumnes</span> = [<span class="st">"Anna"</span>, <span class="st">"Marc"</span>, <span class="st">"Laia"</span>, <span class="st">"Pau"</span>]
+<span class="nm">buscat</span> = <span class="st">"Laia"</span>
+
+<span class="kw">for</span> <span class="nm">alumne</span> <span class="kw">in</span> <span class="nm">alumnes</span>:
+    <span class="kw">if</span> <span class="nm">alumne</span> == <span class="nm">buscat</span>:
+        <span class="fn">print</span>(<span class="st">"Trobat!"</span>)
+        <span class="kw">break</span>  <span class="cm"># no cal seguir mirant</span></pre>`
+      }
+    ]
+  },
+  {
+    id:"funcions", label:"🔧 Funcions",
+    cards:[
+      { title:"Definir i cridar funcions", body:`
+        <p>Una <strong>funció</strong> és un bloc de codi amb un nom que realitza una tasca específica. Evita repetir codi i fa els programes més llegibles.</p>
+        <pre><span class="cm"># Definir la funció (no s'executa aquí)</span>
+<span class="kw">def</span> <span class="fn">saludar</span>():
+    <span class="fn">print</span>(<span class="st">"Hola! Benvingut/da."</span>)
+
+<span class="cm"># Cridar la funció (s'executa aquí)</span>
+<span class="fn">saludar</span>()
+<span class="fn">saludar</span>()  <span class="cm"># es pot cridar tantes vegades com calgui</span></pre>
+        <div class="info-box green">✅ Definició = recepta. Crida = cuinar la recepta.</div>`
+      },
+      { title:"Paràmetres i Retorn", body:`
+        <p><strong>Paràmetres</strong>: informació que passem a la funció. <strong>return</strong>: valor que la funció retorna en acabar.</p>
+        <pre><span class="cm"># Funció amb paràmetres i retorn</span>
+<span class="kw">def</span> <span class="fn">sumar</span>(<span class="nm">a</span>, <span class="nm">b</span>):
+    <span class="nm">resultat</span> = <span class="nm">a</span> + <span class="nm">b</span>
+    <span class="kw">return</span> <span class="nm">resultat</span>
+
+<span class="nm">total</span> = <span class="fn">sumar</span>(<span class="nm">3</span>, <span class="nm">5</span>)
+<span class="fn">print</span>(<span class="nm">total</span>)  <span class="cm"># 8</span>
+
+<span class="cm"># Funció sense return (retorna None)</span>
+<span class="kw">def</span> <span class="fn">mostrar_nota</span>(<span class="nm">nota</span>):
+    <span class="fn">print</span>(<span class="st">"La teva nota és:"</span>, <span class="nm">nota</span>)</pre>
+        <div class="info-box yellow">⚠️ Quan s'arriba al <code>return</code>, la funció s'atura immediatament.</div>`
+      }
+    ]
+  },
+  {
+    id:"moduls", label:"📦 Mòduls",
+    cards:[
+      { title:"Mòduls i Llibreries", body:`
+        <p>Un <strong>mòdul</strong> és un fitxer <code>.py</code> amb funcions i variables reutilitzables. Una <strong>llibreria</strong> és un conjunt de mòduls.</p>
+        <pre><span class="cm"># Importar un mòdul</span>
+<span class="kw">import</span> random
+
+<span class="nm">numero</span> = random.<span class="fn">randint</span>(<span class="nm">1</span>, <span class="nm">10</span>)
+<span class="fn">print</span>(<span class="nm">numero</span>)  <span class="cm"># nombre aleatori entre 1 i 10</span>
+
+<span class="cm"># Importar una funció concreta</span>
+<span class="kw">from</span> math <span class="kw">import</span> sqrt
+<span class="fn">print</span>(<span class="fn">sqrt</span>(<span class="nm">16</span>))  <span class="cm"># 4.0</span></pre>`
+      },
+      { title:"Instal·lar llibreries amb pip", body:`
+        <p><strong>pip</strong> (Pip Installs Packages) és el gestor de paquets de Python. Connecta amb PyPI, el repositori amb milers de paquets.</p>
+        <pre><span class="cm"># Instal·lar una llibreria</span>
+pip install numpy
+
+<span class="cm"># Actualitzar una llibreria</span>
+pip install --upgrade numpy
+
+<span class="cm"># Veure totes les instal·lades</span>
+pip list</pre>
+        <table class="theory-table" style="margin-top:12px">
+          <thead><tr><th>Llibreria</th><th>Per a què serveix</th></tr></thead>
+          <tbody>
+            <tr><td>NumPy</td><td>Càlcul numèric, vectors i matrius</td></tr>
+            <tr><td>Pandas</td><td>Treball amb dades tabulars</td></tr>
+            <tr><td>Matplotlib</td><td>Creació de gràfics</td></tr>
+            <tr><td>Requests</td><td>Peticions web</td></tr>
+            <tr><td>Flask</td><td>Crear webs i APIs</td></tr>
+          </tbody>
+        </table>`
+      }
+    ]
+  },
+  {
+    id:"fitxers", label:"📁 Fitxers",
+    cards:[
+      { title:"Tipus de fitxers", body:`
+        <p>Un <strong>fitxer</strong> és una seqüència de bytes guardada en un dispositiu d'emmagatzematge, identificada per un nom, una extensió i uns permisos d'accés.</p>
+        <div class="two-col">
+          <div class="col-card"><h4>📄 Fitxers de text</h4><ul><li>Contingut llegible per humans</li><li>Extensions: <code>.txt</code>, <code>.csv</code>, <code>.json</code></li><li>Es poden obrir amb qualsevol editor</li></ul></div>
+          <div class="col-card"><h4>🔒 Fitxers binaris</h4><ul><li>Format no llegible directament</li><li>Extensions: <code>.jpg</code>, <code>.exe</code>, <code>.mp3</code></li><li>Necessiten programa específic</li></ul></div>
+        </div>`
+      },
+      { title:"Obrir i tancar fitxers", body:`
+        <p>Per treballar amb un fitxer cal <strong>obrir-lo</strong> en un mode específic i, en acabar, <strong>tancar-lo</strong> per evitar pèrdues de dades o errors.</p>
+        <table class="theory-table"><thead><tr><th>Mode</th><th>Descripció</th><th>Si no existeix</th></tr></thead>
+        <tbody>
+          <tr><td><code>'r'</code></td><td>Lectura</td><td>Error</td></tr>
+          <tr><td><code>'w'</code></td><td>Escriptura (sobreescriu)</td><td>El crea</td></tr>
+          <tr><td><code>'a'</code></td><td>Afegir al final</td><td>El crea</td></tr>
+          <tr><td><code>'r+'</code></td><td>Lectura i escriptura</td><td>Error</td></tr>
+        </tbody></table>
+        <div class="info-box green">✅ La forma recomanada és usar <code>with</code>: tanca el fitxer automàticament encara que hi hagi errors.</div>
+        <pre><span class="cm"># Forma recomanada amb 'with'</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="st">"fitxer.txt"</span>, <span class="st">"r"</span>) <span class="kw">as</span> <span class="nm">f</span>:
+    <span class="nm">contingut</span> = <span class="nm">f</span>.<span class="fn">read</span>()
+<span class="cm"># El fitxer es tanca sol en sortir del bloc</span></pre>`
+      },
+      { title:"Llegir i escriure fitxers de text", body:`
+        <pre><span class="cm"># Escriure (crea o sobreescriu)</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="st">"notes.txt"</span>, <span class="st">"w"</span>) <span class="kw">as</span> <span class="nm">f</span>:
+    <span class="nm">f</span>.<span class="fn">write</span>(<span class="st">"Hola món!\n"</span>)
+
+<span class="cm"># Afegir contingut al final</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="st">"notes.txt"</span>, <span class="st">"a"</span>) <span class="kw">as</span> <span class="nm">f</span>:
+    <span class="nm">f</span>.<span class="fn">write</span>(<span class="st">"Nova línia\n"</span>)
+
+<span class="cm"># Llegir tot el contingut</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="st">"notes.txt"</span>, <span class="st">"r"</span>) <span class="kw">as</span> <span class="nm">f</span>:
+    <span class="nm">text</span> = <span class="nm">f</span>.<span class="fn">read</span>()
+
+<span class="cm"># Llegir línia per línia</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="st">"notes.txt"</span>, <span class="st">"r"</span>) <span class="kw">as</span> <span class="nm">f</span>:
+    <span class="kw">for</span> <span class="nm">linia</span> <span class="kw">in</span> <span class="nm">f</span>:
+        <span class="fn">print</span>(<span class="nm">linia</span>.<span class="fn">strip</span>())</pre>`
+      },
+      { title:"Fitxers CSV", body:`
+        <p><strong>CSV (Comma-Separated Values)</strong> és un format de text on les dades s'organitzen en files i columnes separades per comes. És ideal per emmagatzemar taules de dades i intercanviar informació entre aplicacions (com Excel).</p>
+        <pre><span class="cm"># Escriure un CSV</span>
+<span class="kw">import</span> csv
+
+<span class="kw">with</span> <span class="fn">open</span>(<span class="st">"alumnes.csv"</span>, <span class="st">"w"</span>, newline=<span class="st">""</span>) <span class="kw">as</span> <span class="nm">f</span>:
+    <span class="nm">escriptor</span> = csv.<span class="fn">writer</span>(<span class="nm">f</span>)
+    <span class="nm">escriptor</span>.<span class="fn">writerow</span>([<span class="st">"Nom"</span>, <span class="st">"Nota"</span>])  <span class="cm"># capçalera</span>
+    <span class="nm">escriptor</span>.<span class="fn">writerow</span>([<span class="st">"Anna"</span>, <span class="nm">9.5</span>])
+    <span class="nm">escriptor</span>.<span class="fn">writerow</span>([<span class="st">"Marc"</span>, <span class="nm">7.0</span>])
+
+<span class="cm"># Llegir un CSV</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="st">"alumnes.csv"</span>, <span class="st">"r"</span>) <span class="kw">as</span> <span class="nm">f</span>:
+    <span class="nm">lector</span> = csv.<span class="fn">reader</span>(<span class="nm">f</span>)
+    <span class="kw">for</span> <span class="nm">fila</span> <span class="kw">in</span> <span class="nm">lector</span>:
+        <span class="fn">print</span>(<span class="nm">fila</span>)</pre>
+        <div class="info-box">El mòdul <code>csv</code> ja ve inclòs amb Python. No cal instal·lar res.</div>`
+      },
+      { title:"Fitxers JSON", body:`
+        <p><strong>JSON (JavaScript Object Notation)</strong> és un format lleuger i llegible per emmagatzemar dades estructurades. Usa la mateixa sintaxi que els diccionaris de Python i és el format estàndard per a APIs web i bases de dades modernes.</p>
+        <div class="two-col">
+          <div class="col-card"><h4>Característiques</h4><ul><li>Independent del llenguatge</li><li>Llegible per humans i màquines</li><li>Suporta objectes, llistes, nombres, strings i booleans</li></ul></div>
+          <div class="col-card"><h4>Aplicacions</h4><ul><li>APIs web (intercanvi de dades)</li><li>Bases de dades NoSQL (MongoDB)</li><li>Fitxers de configuració</li></ul></div>
+        </div>
+        <pre><span class="kw">import</span> json
+
+<span class="nm">dades</span> = {<span class="st">"nom"</span>: <span class="st">"Anna"</span>, <span class="st">"edat"</span>: <span class="nm">17</span>, <span class="st">"aprovat"</span>: <span class="kw">True</span>}
+
+<span class="cm"># Guardar a fitxer JSON</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="st">"dades.json"</span>, <span class="st">"w"</span>) <span class="kw">as</span> <span class="nm">f</span>:
+    json.<span class="fn">dump</span>(<span class="nm">dades</span>, <span class="nm">f</span>, indent=<span class="nm">4</span>)
+
+<span class="cm"># Llegir des de fitxer JSON</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="st">"dades.json"</span>, <span class="st">"r"</span>) <span class="kw">as</span> <span class="nm">f</span>:
+    <span class="nm">carregat</span> = json.<span class="fn">load</span>(<span class="nm">f</span>)
+    <span class="fn">print</span>(<span class="nm">carregat</span>[<span class="st">"nom"</span>])  <span class="cm"># Anna</span></pre>`
+      },
+      { title:"APIs web amb Requests i JSON", body:`
+        <p>Una <strong>API (Application Programming Interface)</strong> permet que dos programes es comuniquin. Les APIs web envien i reben dades en format JSON a través d'internet.</p>
+        <pre><span class="kw">import</span> requests
+
+<span class="cm"># Demanar dades a una API (exemple: NASA)</span>
+<span class="nm">url</span> = <span class="st">"https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY"</span>
+<span class="nm">resposta</span> = requests.<span class="fn">get</span>(<span class="nm">url</span>)
+
+<span class="cm"># Convertir la resposta JSON a diccionari Python</span>
+<span class="nm">dades</span> = <span class="nm">resposta</span>.<span class="fn">json</span>()
+<span class="fn">print</span>(<span class="nm">dades</span>[<span class="st">"title"</span>])   <span class="cm"># Títol de la foto del dia</span>
+<span class="fn">print</span>(<span class="nm">dades</span>[<span class="st">"url"</span>])     <span class="cm"># URL de la imatge</span></pre>
+        <table class="theory-table"><thead><tr><th>API</th><th>Dades</th><th>URL base</th></tr></thead>
+        <tbody>
+          <tr><td>🚀 NASA APOD</td><td>Foto astronòmica del dia</td><td><code>api.nasa.gov/planetary/apod</code></td></tr>
+          <tr><td>🌍 Open-Meteo</td><td>Clima en temps real</td><td><code>api.open-meteo.com/v1/forecast</code></td></tr>
+          <tr><td>🎮 PokéAPI</td><td>Dades de Pokémon</td><td><code>pokeapi.co/api/v2</code></td></tr>
+          <tr><td>🧬 NCBI</td><td>Genomes i proteïnes</td><td><code>api.ncbi.nlm.nih.gov</code></td></tr>
+        </tbody></table>
+        <div class="info-box yellow">⚠️ Cal instal·lar el mòdul requests: <code>pip install requests</code></div>`
+      },
+    ]
+  },
+  {
+    id:"dades", label:"🗂️ Estructures",
+    cards:[
+      { title:"Llistes", body:`
+        <p>Dades <strong>ordenades i mutables</strong> (es poden modificar). Admeten duplicats. Sintaxi: <code>[ ]</code>.</p>
+        <pre><span class="nm">fruites</span> = [<span class="st">"poma"</span>, <span class="st">"plàtan"</span>, <span class="st">"pera"</span>]
+
+<span class="cm"># Accés per índex (comença en 0)</span>
+<span class="fn">print</span>(<span class="nm">fruites</span>[<span class="nm">0</span>])   <span class="cm"># poma</span>
+<span class="fn">print</span>(<span class="nm">fruites</span>[-<span class="nm">1</span>])  <span class="cm"># pera (últim)</span>
+
+<span class="cm"># Modificar</span>
+<span class="nm">fruites</span>[<span class="nm">1</span>] = <span class="st">"kiwi"</span>
+
+<span class="cm"># Afegir / eliminar</span>
+<span class="nm">fruites</span>.<span class="fn">append</span>(<span class="st">"mango"</span>)
+<span class="nm">fruites</span>.<span class="fn">remove</span>(<span class="st">"poma"</span>)
+
+<span class="fn">print</span>(<span class="fn">len</span>(<span class="nm">fruites</span>))  <span class="cm"># longitud de la llista</span></pre>`
+      },
+      { title:"Diccionaris", body:`
+        <p>Col·leccions de parells <strong>clau-valor</strong>. Claus úniques i immutables. Sintaxi: <code>{ }</code>.</p>
+        <pre><span class="nm">alumne</span> = {
+    <span class="st">"nom"</span>: <span class="st">"Anna"</span>,
+    <span class="st">"edat"</span>: <span class="nm">17</span>,
+    <span class="st">"nota"</span>: <span class="nm">8.5</span>
+}
+
+<span class="cm"># Accés per clau</span>
+<span class="fn">print</span>(<span class="nm">alumne</span>[<span class="st">"nom"</span>])   <span class="cm"># Anna</span>
+
+<span class="cm"># Afegir / modificar</span>
+<span class="nm">alumne</span>[<span class="st">"curs"</span>] = <span class="st">"1r Batx"</span>
+
+<span class="cm"># Iterar</span>
+<span class="kw">for</span> <span class="nm">clau</span>, <span class="nm">valor</span> <span class="kw">in</span> <span class="nm">alumne</span>.<span class="fn">items</span>():
+    <span class="fn">print</span>(<span class="nm">clau</span>, <span class="st">":"</span>, <span class="nm">valor</span>)</pre>`
+      },
+      { title:"Tuples", body:`
+        <p>Col·leccions <strong>ordenades i immutables</strong> (no es poden modificar). Admeten duplicats. Sintaxi: <code>( )</code>.</p>
+        <pre><span class="nm">coordenades</span> = (<span class="nm">39.5696</span>, <span class="nm">2.6502</span>)  <span class="cm"># Palma</span>
+<span class="fn">print</span>(<span class="nm">coordenades</span>[<span class="nm">0</span>])  <span class="cm"># 39.5696</span>
+
+<span class="cm"># No es pot modificar:</span>
+<span class="cm"># coordenades[0] = 40  → ERROR!</span></pre>
+        <div class="two-col" style="margin-top:12px">
+          <div class="col-card"><h4>Quan usar llistes</h4><ul><li>Dades que canvien</li><li>Afegir/eliminar elements</li><li>Col·leccions flexibles</li></ul></div>
+          <div class="col-card"><h4>Quan usar tuples</h4><ul><li>Dades constants</li><li>Coordenades, colors RGB</li><li>Més ràpides en memòria</li></ul></div>
+        </div>`
+      }
+    ]
+  }
+];
+
+// ===================== QUESTIONS =====================
+const questions = [
+  {tag:"Fonaments",text:"Quina és la diferència principal entre hardware i software?",options:["El hardware és el conjunt de programes i el software els components físics","El hardware són els components físics i el software el conjunt de programes","El hardware és el sistema operatiu i el software el processador","No hi ha diferència, són el mateix"],correct:1,explanation:"El hardware inclou components físics (processador, disc dur, memòria), mentre que el software és el conjunt de programes que controlen l'ordinador."},
+  {tag:"Fonaments",text:"Quin d'aquests és un exemple de software de sistema?",options:["Microsoft Word","Visual Studio Code","Windows 10","Google Chrome"],correct:2,explanation:"Els sistemes operatius com Windows o Linux són software de sistema. Word i Chrome són d'aplicació, VS Code és de desenvolupament."},
+  {tag:"Python",text:"Python és un llenguatge compilat o interpretat?",options:["Compilat, genera un fitxer .exe","Interpretat, llegeix i executa el codi en temps real","Compilat i interpretat alhora","Cap de les anteriors"],correct:1,explanation:"Python és interpretat: l'intèrpret llegeix el codi tal com està escrit i el tradueix i executa en temps real."},
+  {tag:"Variables",text:"Quin tipus de dada és <code>9.5</code> en Python?",options:["int","str","bool","float"],correct:3,explanation:"Els nombres amb decimals en Python són de tipus float. int és enter, str és text i bool és True/False."},
+  {tag:"Variables",text:"Quina instrucció s'utilitza per demanar dades a l'usuari en Python?",options:["print()","scan()","input()","read()"],correct:2,explanation:"input() demana dades a l'usuari. Sempre retorna str, per tant cal fer casting per a nombres."},
+  {tag:"Variables",text:"Si executem <code>edat = input('Quina edat tens?')</code> i l'usuari escriu 17, quin tipus té <code>edat</code>?",options:["int","float","str","bool"],correct:2,explanation:"input() sempre retorna text (str). Caldria fer int(input(...)) per obtenir un enter."},
+  {tag:"Operadors",text:"Quin operador s'utilitza per fer la divisió entera (sense decimals)?",options:["/","%","//","**"],correct:2,explanation:"// és la divisió entera. / retorna float, % retorna el residu i ** és la potència."},
+  {tag:"Operadors",text:"Quin resultat dona l'expressió <code>True and False</code>?",options:["True","False","Error","1"],correct:1,explanation:"AND retorna True només si les dues condicions són True. Com que un és False, el resultat és False."},
+  {tag:"Control",text:"Quina paraula clau s'utilitza per a 'si no s'ha complert cap condició anterior'?",options:["elif","if","unless","else"],correct:3,explanation:"else s'executa quan cap condició anterior (if/elif) s'ha complert."},
+  {tag:"Control",text:"Quin bucle repeteix codi un nombre exacte de vegades amb <code>range()</code>?",options:["while","do-while","for","repeat"],correct:2,explanation:"El bucle for amb range() és el que s'usa per repetir un nombre exacte de vegades."},
+  {tag:"Control",text:"En Python, com s'indica que un bloc pertany a un condicional o bucle?",options:["Amb claus {}","Amb parèntesis ()","Amb indentació (TAB)","Amb punt i coma ;"],correct:2,explanation:"Python usa la indentació obligatòria per delimitar blocs de codi."},
+  {tag:"Funcions",text:"Quina paraula clau s'utilitza per definir una funció en Python?",options:["function","func","define","def"],correct:3,explanation:"def és la paraula clau per definir funcions a Python."},
+  {tag:"Funcions",text:"Quina paraula clau fa que una funció retorni un valor?",options:["send","output","return","yield"],correct:2,explanation:"return finalitza la funció i retorna el valor al punt on va ser cridada."},
+  {tag:"Estructures",text:"Quina estructura usa claudàtors [] i permet modificar els seus elements?",options:["Tupla","Diccionari","Llista","Conjunt"],correct:2,explanation:"Les llistes usen [] i són mutables. Les tuples usen () i són immutables."},
+  {tag:"Mòduls",text:"Quina comanda instal·la una llibreria externa com NumPy?",options:["install numpy","python get numpy","pip install numpy","import numpy"],correct:2,explanation:"pip (Pip Installs Packages) és el gestor de paquets de Python per instal·lar des de PyPI."}
+];
+
+// ===================== STATE =====================
+let current = 0, answers = [], answered = [];
+
+// ===================== STORAGE =====================
+const SKEY = 'python-exam-ranking-anon';
+async function loadRanking(){ try{ const r=await window.storage.get(SKEY,true); return r?JSON.parse(r.value):[]; }catch{return[];} }
+async function saveScore(score){ let r=await loadRanking(); r.push({score,date:new Date().toLocaleDateString('ca-ES'),time:Date.now()}); r.sort((a,b)=>b.score-a.score); if(r.length>20)r=r.slice(0,20); await window.storage.set(SKEY,JSON.stringify(r),true); return r; }
+
+// ===================== NAV =====================
+function showSection(s){
+  document.querySelectorAll('.main-nav-btn').forEach((b,i)=>{b.classList.toggle('active',['theory','exam','ranking'][i]===s);});
+  document.getElementById('theory-area').style.display = s==='theory'?'block':'none';
+  document.getElementById('exam-area').style.display = (s==='exam'&&document.getElementById('results').style.display==='none')?'block':'none';
+  document.getElementById('results').style.display = (s==='exam'&&document.getElementById('results').style.display==='block')?'block':'none';
+  document.getElementById('ranking-view').style.display = 'none';
+  if(s==='exam'){ initExam(); }
+  if(s==='ranking'){ showRanking(); }
+}
+
+// ===================== THEORY =====================
+function initTheory(){
+  const tabs=document.getElementById('topic-tabs');
+  const panels=document.getElementById('topic-panels');
+  tabs.innerHTML=''; panels.innerHTML='';
+  topics.forEach((t,i)=>{
+    const tab=document.createElement('div');
+    tab.className='topic-tab'+(i===0?' active':'');
+    tab.textContent=t.label;
+    tab.onclick=()=>switchTopic(i);
+    tabs.appendChild(tab);
+    const panel=document.createElement('div');
+    panel.className='topic-panel'+(i===0?' active':'');
+    panel.id='panel-'+i;
+    panel.innerHTML=t.cards.map(c=>`<div class="theory-card"><h3>📌 ${c.title}</h3>${c.body}</div>`).join('');
+    panels.appendChild(panel);
+  });
+}
+function switchTopic(i){
+  document.querySelectorAll('.topic-tab').forEach((t,j)=>t.classList.toggle('active',j===i));
+  document.querySelectorAll('.topic-panel').forEach((p,j)=>p.classList.toggle('active',j===i));
+}
+// ===================== EXAM =====================
+let examInited=false;
+function initExam(){
+  if(examInited) return;
+  examInited=true;
+  current=0; answers=new Array(questions.length).fill(null); answered=new Array(questions.length).fill(false);
+  const c=document.getElementById('questions-container'); c.innerHTML='';
+  questions.forEach((q,i)=>{
+    const card=document.createElement('div');
+    card.className='question-card'+(i===0?' active':'');
+    card.id='q-'+i;
+    card.innerHTML=`<div class="q-tag">${q.tag}</div>
+      <div class="q-header"><div class="q-num">${i+1}</div><div class="q-text">${q.text}</div></div>
+      <div class="options" id="opts-${i}">${q.options.map((o,j)=>`<div class="option" id="opt-${i}-${j}" onclick="selectOpt(${i},${j})">${String.fromCharCode(65+j)}) ${o}</div>`).join('')}</div>
+      <div class="feedback" id="fb-${i}"></div>`;
+    c.appendChild(card);
+  });
+  updateExamUI();
+}
+function selectOpt(qi,oi){
+  if(answered[qi])return;
+  answers[qi]=oi; answered[qi]=true;
+  const q=questions[qi];
+  document.querySelectorAll(`#opts-${qi} .option`).forEach((o,j)=>{
+    o.classList.add('disabled');
+    if(j===q.correct)o.classList.add('correct');
+    else if(j===oi)o.classList.add('incorrect');
+  });
+  const fb=document.getElementById('fb-'+qi);
+  fb.className=`feedback show ${oi===q.correct?'ok':'fail'}`;
+  fb.innerHTML=`${oi===q.correct?'✅ Correcte!':'❌ Incorrecte.'} ${q.explanation}`;
+  updateExamUI();
+}
+function navigate(dir){
+  if(dir===1&&current===questions.length-1){showResults();return;}
+  document.getElementById('q-'+current).classList.remove('active');
+  current+=dir;
+  document.getElementById('q-'+current).classList.add('active');
+  updateExamUI();
+}
+function updateExamUI(){
+  const tot=questions.length;
+  document.getElementById('progress-fill').style.width=((current+1)/tot*100)+'%';
+  document.getElementById('progress-label').textContent=`Pregunta ${current+1} de ${tot}`;
+  document.getElementById('btn-prev').disabled=current===0;
+  const bn=document.getElementById('btn-next');
+  const isLast=current===questions.length-1;
+  bn.textContent=isLast?'📊 Veure resultats':'Següent →';
+  bn.disabled=isLast?!answered.every(a=>a):!answered[current];
+}
+
+// ===================== RESULTS =====================
+async function showResults(){
+  document.getElementById('exam-area').style.display='none';
+  document.getElementById('results').style.display='block';
+  const correct=answers.filter((a,i)=>a===questions[i].correct).length;
+  const pct=Math.round(correct/questions.length*100)/10;
+  document.getElementById('r-correct').textContent=correct;
+  document.getElementById('r-wrong').textContent=questions.length-correct;
+  document.getElementById('r-score').textContent=pct+'/10';
+  const circle=document.getElementById('score-circle');
+  circle.innerHTML=pct+'<br><span style="font-size:.8rem;font-weight:400">/ 10</span>';
+  let cls,title,msg;
+  if(pct>=9){cls='sc-great';title='Excel·lent! 🎉';msg='Domini perfecte dels fonaments de Python!';}
+  else if(pct>=7){cls='sc-good';title='Molt bé! 👍';msg='Bon coneixement, repassa els errors.';}
+  else if(pct>=5){cls='sc-ok';title='Aprovat ✔️';msg='Has superat el mínim, però hi ha coses a reforçar.';}
+  else{cls='sc-fail';title='Suspès 😕';msg='Repassa la teoria i torna-ho a intentar. Tu pots!';}
+  circle.className='score-circle '+cls;
+  document.getElementById('result-title').textContent=title;
+  document.getElementById('result-msg').textContent=msg;
+  const rev=document.getElementById('review-list');
+  rev.innerHTML='<h3 style="margin-bottom:12px;color:#1a2a4a">Revisió de les respostes</h3>';
+  questions.forEach((q,i)=>{
+    const ok=answers[i]===q.correct;
+    const d=document.createElement('div');
+    d.className='review-item '+(ok?'ok':'fail');
+    d.innerHTML=`<span>${ok?'✅':'❌'}</span><span><strong>P${i+1}:</strong> ${q.text.replace(/<[^>]+>/g,'')}${ok?'':` <br><em>Correcta: ${q.options[q.correct]}</em>`}</span>`;
+    rev.appendChild(d);
+  });
+  await saveScore(pct);
+}
+function restartExam(){
+  examInited=false;
+  document.getElementById('results').style.display='none';
+  document.getElementById('exam-area').style.display='block';
+  showSection('exam');
+}
+
+// ===================== RANKING =====================
+async function showRanking(){
+  document.getElementById('ranking-view').style.display='block';
+  const content=document.getElementById('ranking-content');
+  content.innerHTML='<div class="empty-msg">Carregant...</div>';
+  const r=await loadRanking();
+  if(!r.length){content.innerHTML='<div class="empty-msg">Encara no hi ha puntuacions. Fes l\'examen! 🚀</div>';return;}
+  const medals=['🥇','🥈','🥉'];
+  const pc=s=>s>=9?'pill-great':s>=7?'pill-good':s>=5?'pill-ok':'pill-fail';
+  content.innerHTML=`<table class="ranking-table">
+    <thead><tr><th>#</th><th>Puntuació</th><th>Data</th></tr></thead>
+    <tbody>${r.map((e,i)=>`<tr><td>${medals[i]||'#'+(i+1)}</td><td><span class="score-pill ${pc(e.score)}">${e.score}/10</span></td><td style="color:#9aabcc;font-size:.82rem">${e.date}</td></tr>`).join('')}</tbody>
+  </table>`;
+}
+async function clearRanking(){
+  if(!confirm('Esborrar totes les puntuacions?'))return;
+  try{await window.storage.delete(SKEY,true);}catch{}
+  showRanking();
+}
+
+// ===================== INIT =====================
+initTheory();
+</script>
 </body>
 </html>
-

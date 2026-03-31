@@ -5,7 +5,85 @@
     "level": "2n d'ESO",
     "path": "recursos-digitals-ii/index.html",
     "description": "Creació de continguts digitals, gestió d'eines col·laboratives i publicació de projectes.",
-    "topics": ["Canva i disseny", "Eines col·laboratives", "Presentacions", "Publicació web"]
+    "topics": ["Comunicació digital", "Treball col·laboratiu", "Aules virtuals", "Programació"],
+    "materials": [
+      {
+        "title": "Domina la comunicació digital",
+        "slug": "tema-1-comunicacio-digital",
+        "technologies": ["Correu electrònic", "Videotrucades", "Cloud storage", "Xarxes socials"],
+        "items": [
+          { "icon": "📧", "label": "Lliçó", "title": "Gestió avançada del correu electrònic" },
+          { "icon": "📹", "label": "Lliçó", "title": "Crear i gestionar videotrucades" },
+          { "icon": "☁️", "label": "Lliçó", "title": "Intercanvi d'arxius i emmagatzematge al núvol" },
+          { "icon": "📁", "label": "Pràctica", "title": "Organització en carpetes i unitats compartides" }
+        ]
+      },
+      {
+        "title": "Treballa en equip efectivament",
+        "slug": "tema-2-treball-colaboratiu",
+        "technologies": ["Permisos d'accés", "Compartició", "Sincronització"],
+        "items": [
+          { "icon": "👥", "label": "Lliçó", "title": "Conceptes de treball col·laboratiu" },
+          { "icon": "🔐", "label": "Lliçó", "title": "Configuració dels permisos d'accés" },
+          { "icon": "🔗", "label": "Pràctica", "title": "Projecte de col·laboració" }
+        ]
+      },
+      {
+        "title": "Aprèn en aules virtuals",
+        "slug": "tema-3-aules-virtuals",
+        "technologies": ["Aules virtuals", "Processador de text", "Full de càlcul", "Formularis"],
+        "items": [
+          { "icon": "🏫", "label": "Lliçó", "title": "Introducció a les aules virtuals" },
+          { "icon": "📝", "label": "Lliçó", "title": "Ús del processador de text col·laboratiu" },
+          { "icon": "📊", "label": "Lliçó", "title": "Fulls de càlcul compartits" },
+          { "icon": "📋", "label": "Pràctica", "title": "Creació de formularis i enquestes" }
+        ]
+      },
+      {
+        "title": "Estratègies de col·laboració en línia",
+        "slug": "tema-4-estrategies-colaboracio",
+        "technologies": ["Organització", "Productivitat", "Eines col·laboratives"],
+        "items": [
+          { "icon": "📚", "label": "Lliçó", "title": "Estratègies per al treball col·laboratiu eficient" },
+          { "icon": "📌", "label": "Lliçó", "title": "Aplicacions per prendre notes i fer llistes" },
+          { "icon": "✅", "label": "Pràctica", "title": "Apps per organitzar tasques i projectes" },
+          { "icon": "🔄", "label": "Pràctica", "title": "Gestió de fluxos de treball" }
+        ]
+      },
+      {
+        "title": "Comença a programar amb blocs",
+        "slug": "tema-5-programacio-blocs",
+        "technologies": ["Programació visual", "Scratch", "Lògica de programació"],
+        "items": [
+          { "icon": "🧩", "label": "Teoria", "title": "Fonaments de la programació" },
+          { "icon": "🟡", "label": "Tutoria", "title": "Introducció a Scratch" },
+          { "icon": "🔨", "label": "Pràctica", "title": "Projectes bàsics amb blocs" },
+          { "icon": "💡", "label": "Entrega", "title": "Crear un programa personalitzat" }
+        ]
+      },
+      {
+        "title": "Descobreix la intel·ligència artificial",
+        "slug": "tema-6-intel-ligencia-artificial",
+        "technologies": ["IA", "Machine Learning", "Chatbots"],
+        "items": [
+          { "icon": "🤖", "label": "Teoria", "title": "Fonaments de la intel·ligència artificial" },
+          { "icon": "🧠", "label": "Lliçó", "title": "Com funcionen els algoritmes" },
+          { "icon": "💬", "label": "Pràctica", "title": "Exploração d'assistents IA" },
+          { "icon": "📊", "label": "Pràctica", "title": "Casos d'ús de l'IA en la vida quotidiana" }
+        ]
+      },
+      {
+        "title": "Dissenya amb simuladors",
+        "slug": "tema-7-simuladors",
+        "technologies": ["Simuladors", "Prototipatge", "Disseny experimental"],
+        "items": [
+          { "icon": "🔬", "label": "Lliçó", "title": "Introducció als simuladors" },
+          { "icon": "⚙️", "label": "Pràctica", "title": "Simuladors educatius: Ciència i Tecnologia" },
+          { "icon": "🏗️", "label": "Pràctica", "title": "Prototipatge: Crear dissenys nous" },
+          { "icon": "📈", "label": "Projecte", "title": "Projecte de prototipatge" }
+        ]
+      }
+    ]
   },
   {
     "name": "Entorns Digitals",
@@ -24,6 +102,7 @@
       {
         "title": "Funcionalitats i utilitats comunes a diverses aplicacions",
         "slug": "tema-funcionalitats-comunes",
+        "technologies": ["Office", "Productivitat", "Aplicacions"],
         "items": [
           { "icon": "⌨️", "label": "Teclat", "title": "Teclat QWERTY i posició correcta dels dits" },
           { "icon": "🎹", "label": "Tecles", "title": "Grups de tecles i utilitats (escriptura, desplaçament, funcions...)" },
@@ -34,6 +113,7 @@
       {
         "title": "Processadors de text",
         "slug": "tema-processadors-text",
+        "technologies": ["LibreOffice Writer", "Processament text"],
         "items": [
           { "icon": "📄", "label": "Format", "title": "Format de pàgina (mida, orientació, marges, columnes)" },
           { "icon": "✒️", "label": "Caràcter", "title": "Format de caràcter: mida, font i efectes" },
@@ -50,6 +130,7 @@
       {
         "title": "Presentacions multimèdia basades en diapositives",
         "slug": "tema-presentacions-diapositives",
+        "technologies": ["LibreOffice Impress", "Presentacions", "Disseny"],
         "items": [
           { "icon": "🎤", "label": "Ús", "title": "Presentacions com a suport en exposicions" },
           { "icon": "🎨", "label": "Disseny", "title": "Plantilles, fons i teoria del color" },
@@ -62,6 +143,7 @@
       {
         "title": "Presentacions multimèdia en línia",
         "slug": "tema-presentacions-en-linia",
+        "technologies": ["Web", "Prezi", "Presentacions interactives"],
         "items": [
           { "icon": "🌐", "label": "Diapositives", "title": "Eines en línia basades en diapositives (exploració)" },
           { "icon": "🌀", "label": "Dinàmiques", "title": "Eines en línia no basades en diapositives (Prezi, etc.)" },
@@ -71,6 +153,7 @@
       {
         "title": "Fulls de càlcul",
         "slug": "tema-fulls-de-calcul",
+        "technologies": ["LibreOffice Calc", "Fulls de càlcul", "Dades"],
         "items": [
           { "icon": "📊", "label": "Estructura", "title": "Fileres, columnes, inserció i congelació" },
           { "icon": "🎨", "label": "Format", "title": "Format de cel·les: alineació, vores, fons i números" },
@@ -92,8 +175,9 @@
     "topics": ["Thunkable", "LibreOffice Base", "mBot/mBuild", "Arduino", "Python", "Virtualització", "Linux"],
     "materials": [
       {
-        "title": "TEMA 2: Joc d'endevinar (Thunkable)",
+        "title": "Crea un joc d'endevinar",
         "slug": "tema-2-joc-dendevinar-thunkable",
+        "technologies": ["Thunkable", "Aplicacions mòbil", "UX/UI"],
         "items": [
           { "icon": "📄", "label": "Lliçó", "title": "Introducció a Thunkable" },
           { "icon": "📄", "label": "Lliçó", "title": "Ús de Temporitzadors (Timers)" },
@@ -103,8 +187,9 @@
         ]
       },
       {
-        "title": "TEMA 2: Joc Matabitxos (Thunkable)",
+        "title": "Crea el joc Matabitxos",
         "slug": "tema-2-joc-matabitxos-thunkable",
+        "technologies": ["Thunkable", "Aplicacions mòbil"],
         "items": [
           { "icon": "🔨", "label": "Pràctica", "title": "Joc Matabitxos" },
           { "icon": "📋", "label": "Rúbrica", "title": "Puntuació Joc Matabitxos" },
@@ -112,16 +197,18 @@
         ]
       },
       {
-        "title": "TEMA 3: Bases de Dades amb LibreOffice Base: Disseny i Gestió Pràctica",
+        "title": "Crea la teva base de dades",
         "slug": "tema-3-libreoffice-base",
+        "technologies": ["LibreOffice Base", "Bases de dades"],
         "items": [
           { "icon": "📊", "label": "Pràctica", "title": "Pel·lícules" },
           { "icon": "💾", "label": "Presentació", "title": "BD individual" }
         ]
       },
       {
-        "title": "TEMA 4: Makeblock mBot & mBuild",
+        "title": "Programa robots (mBot)",
         "slug": "tema-4-makeblock-mbot-mbuild",
+        "technologies": ["mBot", "mBuild", "Robòtica", "mBlock"],
         "items": [
           { "icon": "📒", "label": "Recurs", "title": "Vídeo 'Primeres Passes amb mBot2'" },
           { "icon": "🤖", "label": "Pràctica", "title": "Primeres pràctiques amb mBot (mBlock)" },
@@ -129,23 +216,26 @@
         ]
       },
       {
-        "title": "TEMA 4: Arduino",
+        "title": "Comença amb Arduino",
         "slug": "tema-4-arduino",
+        "technologies": ["Arduino", "C++", "Electrònica"],
         "items": [
           { "icon": "🤖", "label": "Pràctica", "title": "Arduino" }
         ]
       },
       {
-        "title": "TEMA 5: Programació Estructurada i Algorítmica amb Python",
+        "title": "Aprèn Python",
         "slug": "tema-5-programacio-python",
+        "technologies": ["Python", "Programació", "Scripting"],
         "items": [
           { "icon": "🐍", "label": "Recurs", "title": "Web repàs Python" },
           { "icon": "🐍", "label": "Teoria", "title": "Teoria Python", "href": "./python_teoria.html" }
         ]
       },
       {
-        "title": "TEMA 6: Virtualització i Instal·lació de Sistemes Operatius",
+        "title": "Instal·la el teu sistema",
         "slug": "tema-6-virtualitzacio",
+        "technologies": ["VirtualBox", "Windows Server", "Virtualització"],
         "items": [
           { "icon": "💻", "label": "Recurs", "title": "ISOs Windows" },
           { "icon": "💻", "label": "Recurs", "title": "Drivers targeta de xarxa" },
@@ -154,8 +244,9 @@
         ]
       },
       {
-        "title": "TEMA 7: Introducció i Administració de Sistemes Linux",
+        "title": "Descobreix Linux",
         "slug": "tema-7-linux",
+        "technologies": ["Linux", "Terminal", "Bash", "Sistemes Operatius"],
         "items": [
           { "icon": "🐧", "label": "Recurs", "title": "Material Linux" },
           { "icon": "📄", "label": "Teoria", "title": "Linux teoria", "href": "./linux_teoria.html" }
@@ -172,8 +263,9 @@
     "topics": ["mBot/mBuild", "Criptografia", "Bases de dades", "Unity", "POO", "Web avançat", "Blender", "IA"],
     "materials": [
       {
-        "title": "Programació i Robòtica amb Makeblock (mBot / mBuild)",
+        "title": "Crea robots amb mBot i mBuild",
         "slug": "tema-programacio-robotica-makeblock",
+        "technologies": ["mBot", "mBuild", "Robòtica", "Python"],
         "items": [
           { "icon": "🤖", "label": "Robòtica", "title": "Programació i Robòtica amb Makeblock (mBot / mBuild)" },
           { "icon": "🤖", "label": "mòdul", "title": "mBuild" },
@@ -184,8 +276,9 @@
         ]
       },
       {
-        "title": "Criptografia, privacitat i seguretat",
+        "title": "Protegeix dades i crea sistemes segurs",
         "slug": "tema-criptografia",
+        "technologies": ["Criptografia", "Seguretat", "Blockchain"],
         "items": [
           { "icon": "🔐", "label": "Teoria", "title": "Criptografia i xifrat", "href": "criptografia_teoria.html" },
           { "icon": "🆔", "label": "Teoria", "title": "Identitat digital" },
@@ -194,8 +287,9 @@
         ]
       },
       {
-        "title": "Bases de Dades Relacionals",
+        "title": "Construeix la teva base de dades",
         "slug": "tema-bases-de-dades-relacionals",
+        "technologies": ["SQL", "SQLite", "Bases de dades"],
         "items": [
           { "icon": "🎮", "label": "Pràctica", "title": "Joc endevinador amb JSON" },
           { "icon": "🗄️", "label": "Eina", "title": "Descàrrega SQLite DB Browser" },
@@ -203,8 +297,9 @@
         ]
       },
       {
-        "title": "Desenvolupament de Videojocs amb Unity",
+        "title": "Dissenya els teus propis videojocs",
         "slug": "tema-unity-videojocs",
+        "technologies": ["Unity", "Videojocs", "C#"],
         "items": [
           { "icon": "📘", "label": "Introducció", "title": "Introducció al tema" },
           { "icon": "🎯", "label": "Recopilació", "title": "Recopilació de jocs de plataforma" },
@@ -213,8 +308,9 @@
         ]
       },
       {
-        "title": "Programació orientada a objectes",
+        "title": "Aprèn programació orientada a objectes",
         "slug": "tema-poo",
+        "technologies": ["Python", "POO", "Programació"],
         "items": [
           { "icon": "🐍", "label": "Repàs", "title": "Qüestionari repàs Python" },
           { "icon": "🧩", "label": "Unitat", "title": "Programació orientada a objectes" },
@@ -225,8 +321,9 @@
         ]
       },
       {
-        "title": "Desenvolupament web avançat",
+        "title": "Crea pàgines web professionals",
         "slug": "tema-web-avancat",
+        "technologies": ["HTML", "CSS", "JavaScript", "Bootstrap"],
         "items": [
           { "icon": "📄", "label": "Apunts", "title": "Apunts HTML" },
           { "icon": "🧾", "label": "Cheatsheet", "title": "Cheatsheet HTML" },
@@ -243,8 +340,9 @@
         ]
       },
       {
-        "title": "Disseny i Animació 3D amb Blender",
+        "title": "Dóna vida als teus models 3D",
         "slug": "tema-blender-3d",
+        "technologies": ["Blender", "3D", "Animació"],
         "items": [
           { "icon": "🧊", "label": "Projecte", "title": "Disseny i Animació 3D amb Blender" },
           { "icon": "📒", "label": "Material", "title": "Pràctiques Blender" },
@@ -254,8 +352,9 @@
         ]
       },
       {
-        "title": "IA: teoria",
+        "title": "Explora la intel·ligència artificial",
         "slug": "tema-ia",
+        "technologies": ["IA", "Machine Learning", "Python"],
         "directHref": "./tema-ia/ia_teoria.html",
         "items": [
           { "icon": "🤖", "label": "Teoria", "title": "IA i Programació", "href": "./ia_teoria.html" }
@@ -268,35 +367,89 @@
     "icon": "\uD83C\uDF10",
     "level": "4t d'ESO",
     "path": "digitalizacio/index.html",
-    "description": "Dispositius, entorn personal d'aprenentatge, seguretat digital i ciutadania critica.",
-    "topics": ["Dispositius i xarxes", "Entorn personal d'aprenentatge", "Seguretat i benestar digital", "Ciutadania digital critica"],
+    "description": "Arquitectura de sistemes, xarxes, IoT, continguts digitals, col·laboració, seguretat i ciutadania",
+    "topics": ["Hardware", "Xarxes", "IoT", "Continguts", "Col·laboració", "Seguretat", "Ciutadania"],
     "materials": [
       {
-        "title": "Dispositius digitals, sistemes operatius i de comunicació",
-        "slug": "tema-dispositius-sistemes-i-xarxes",
+        "title": "UP1. Arquitectura i sistemes operatius",
+        "slug": "tema-up1-arquitectura-so",
+        "technologies": ["Hardware", "Muntatge", "Linux", "Windows"],
         "items": [
-          { "icon": "\ud83d\udda5\ufe0f", "label": "Teoria", "title": "Dispositius, sistemes i xarxes", "href": "./dispositius_sistemes_i_xarxes_teoria.html" }
+          { "icon": "🖥️", "label": "Lliçó", "title": "Components de l'ordinador" },
+          { "icon": "🔧", "label": "Pràctica", "title": "Muntatge bàsic i resolució de problemes" },
+          { "icon": "⚙️", "label": "Lliçó", "title": "Instal·lació de SO i gestió d'usuaris" }
         ]
       },
       {
-        "title": "Digitalització de l'entorn personal d'aprenentatge",
-        "slug": "tema-entorn-personal-aprenentatge",
+        "title": "UP2. Xarxes i Internet",
+        "slug": "tema-up2-xarxes-internet",
+        "technologies": ["Internet", "TCP/IP", "Router", "WiFi"],
         "items": [
-          { "icon": "\ud83d\udcc1", "label": "Teoria", "title": "Entorn personal d'aprenentatge", "href": "./entorn_personal_aprenentatge_teoria.html" }
+          { "icon": "🌐", "label": "Lliçó", "title": "Funcionament d'Internet i protòcols" },
+          { "icon": "📡", "label": "Lliçó", "title": "Dispositius de xarxa" },
+          { "icon": "🏠", "label": "Pràctica", "title": "Muntatge i configuració de WiFi domèstica" }
         ]
       },
       {
-        "title": "Seguretat i benestar digital",
-        "slug": "tema-benestar-digital",
+        "title": "UP3. Dispositius connectats (IoT)",
+        "slug": "tema-up3-iot",
+        "technologies": ["IoT", "Wearables", "Arduino", "Sensores"],
         "items": [
-          { "icon": "🔐", "label": "Teoria", "title": "Seguretat i benestar digital", "href": "../seguretat_teoria.html" }
+          { "icon": "📡", "label": "Lliçó", "title": "Internet de les Coses i dispositius wearables" },
+          { "icon": "⚙️", "label": "Pràctica", "title": "Configuració de dispositius IoT" },
+          { "icon": "🤖", "label": "Projecte", "title": "Arduino: connexió de sensors" }
         ]
       },
       {
-        "title": "Ciutadania digital critica",
-        "slug": "tema-ciutadania-digital",
+        "title": "UP4. Cerca i gestió de la informació",
+        "slug": "tema-up4-cerca-informacio",
+        "technologies": ["Fonts fiables", "Cerca avançada", "Organització"],
         "items": [
-          { "icon": "🧑‍🤝‍🧑", "label": "Teoria", "title": "Ciutadania digital critica", "href": "./ciutadania_digital_teoria.html" }
+          { "icon": "🔎", "label": "Lliçó", "title": "Fonts d'informació fiable" },
+          { "icon": "🔍", "label": "Lliçó", "title": "Técniques de cerca eficient" },
+          { "icon": "📚", "label": "Pràctica", "title": "Organització de continguts i gestió de coneixement" }
+        ]
+      },
+      {
+        "title": "UP5. Creació de continguts digitals",
+        "slug": "tema-up5-continguts",
+        "technologies": ["Documents", "Disseny", "Web", "RV/RA"],
+        "items": [
+          { "icon": "📄", "label": "Lliçó", "title": "Documents i presentacions professionals" },
+          { "icon": "🌐", "label": "Lliçó", "title": "Création d'aplicacions web senzilles" },
+          { "icon": "🥽", "label": "Opcionl", "title": "Introducció a Realitat Virtual i Augmentada" }
+        ]
+      },
+      {
+        "title": "UP6. Comunicació i col·laboració",
+        "slug": "tema-up6-comunicacio",
+        "technologies": ["Eines col·laboratives", "Publicació", "Cloud"],
+        "items": [
+          { "icon": "🤝", "label": "Lliçó", "title": "Eines col·laboratives en línia" },
+          { "icon": "📢", "label": "Lliçó", "title": "Publicació i difusió de continguts" },
+          { "icon": "👥", "label": "Projecte", "title": "Projecte col·laboratiu en grup" }
+        ]
+      },
+      {
+        "title": "UP7. Seguretat, privacitat i benestar digital",
+        "slug": "tema-up7-seguretat",
+        "technologies": ["Ciberseguretat", "Privacitat", "Benestar", "Identitat digital"],
+        "items": [
+          { "icon": "🔐", "label": "Lliçó", "title": "Fonaments de ciberseguretat i contraseñes" },
+          { "icon": "🆔", "label": "Lliçó", "title": "Identitat digital i gestió de dades personals" },
+          { "icon": "❤️", "label": "Lliçó", "title": "Salut digital i ús responsable" },
+          { "icon": "⚠️", "label": "Lliçó", "title": "Ciberassetjament i denuncia" }
+        ]
+      },
+      {
+        "title": "UP8. Ciutadania digital i pensament crític",
+        "slug": "tema-up8-ciutadania",
+        "technologies": ["Fake news", "Ètica digital", "IA", "Economia digital"],
+        "items": [
+          { "icon": "🔍", "label": "Lliçó", "title": "Detecció de desinformació i verificació de fonts" },
+          { "icon": "⚖️", "label": "Lliçó", "title": "Ètica digital i IA responsable" },
+          { "icon": "💼", "label": "Lliçó", "title": "Tràmits online i economia digital bàsica" },
+          { "icon": "🌍", "label": "Lliçó", "title": "Activisme digital i societat" }
         ]
       }
     ]

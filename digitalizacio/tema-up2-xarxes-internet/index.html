@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UP2. Xarxes i Internet - IES Ramon Llull</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', sans-serif; background: #f0f4ff; min-height: 100vh; }
+.container { max-width: 820px; margin: 0 auto; padding: 20px; }
+header { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; border-radius: 14px; padding: 32px 36px; margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; }
+header h1 { font-size: 1.4rem; flex: 1; }
+header p { opacity: .8; font-size: .85rem; margin-top: 2px; width: 100%; }
+.header-back { background: rgba(255,255,255,.15); color: white; padding: 10px 18px; border-radius: 99px; text-decoration: none; font-size: .9rem; font-weight: 600; transition: all .2s; order: 3; width: 100%; text-align: center; margin-top: 12px; }
+.header-back:hover { background: rgba(255,255,255,.25); color: white; }
+.main-nav { display: flex; gap: 8px; margin-bottom: 22px; }
+.main-nav-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-size: .95rem; font-weight: 600; transition: all .2s; background: white; color: #5a6a8a; box-shadow: 0 2px 8px rgba(0,0,0,.07); }
+.main-nav-btn.active { background: #8b5cf6; color: white; }
+.topic-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+.topic-tab { padding: 7px 14px; border: 2px solid #e0e7ff; border-radius: 99px; cursor: pointer; font-size: .82rem; font-weight: 600; color: #5a6a8a; background: white; transition: all .2s; white-space: nowrap; }
+.topic-tab:hover { border-color: #8b5cf6; color: #8b5cf6; }
+.topic-tab.active { background: #8b5cf6; color: white; border-color: #8b5cf6; }
+.topic-panel { display: none; }
+.topic-panel.active { display: block; animation: fadeIn .3s; }
+.theory-card { background: white; border-radius: 14px; padding: 24px; margin-bottom: 14px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+.theory-card h3 { color: #7c3aed; font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.theory-card p { color: #3a4a6a; font-size: .92rem; line-height: 1.65; margin-bottom: 10px; }
+.theory-card ul { color: #3a4a6a; font-size: .92rem; line-height: 1.7; padding-left: 20px; margin-bottom: 10px; }
+.info-box { background: #f3e8ff; border-left: 4px solid #8b5cf6; border-radius: 0 10px 10px 0; padding: 12px 16px; margin: 12px 0; font-size: .88rem; color: #2a1a4a; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)} }
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg sticky-top shadow-sm" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+  <div class="container" style="max-width: 820px;">
+    <a class="navbar-brand fw-semibold text-white" href="../../index.html">Aula digital · IES Ramon Llull</a>
+  </div>
+</nav>
+
+<div class="container">
+  <header>
+    <div>
+      <div style="font-size: .9rem; opacity: .9;">Digitalització</div>
+      <h1>🌐 UP2. Xarxes i Internet</h1>
+      <p>Comprèn Internet, configura xarxes domèstiques i munta la teva WiFi</p>
+    </div>
+    <a href="../index.html" class="header-back">← Tornar a Temes</a>
+  </header>
+
+  <div class="main-nav">
+    <button class="main-nav-btn active" onclick="showSection('theory')">Teoria</button>
+    <button class="main-nav-btn" onclick="showSection('resources')">Recursos</button>
+  </div>
+
+  <div id="theory-area">
+    <div class="topic-tabs">
+      <button class="topic-tab active" onclick="switchTopic(this, 'topic1')">Internet</button>
+      <button class="topic-tab" onclick="switchTopic(this, 'topic2')">Xarxes</button>
+      <button class="topic-tab" onclick="switchTopic(this, 'topic3')">WiFi domèstica</button>
+      <button class="topic-tab" onclick="switchTopic(this, 'topic4')">Connexió dispositius</button>
+    </div>
+
+    <div class="topic-panel active" id="topic1">
+      <div class="theory-card">
+        <h3>🌐 Funcionament d'Internet i protòcols</h3>
+        <p>Internet és una xarxa global interconnectada. Aprèn com funciona:</p>
+        <ul>
+          <li><strong>TCP/IP:</strong> Protocol fonamental que tota connexió usa</li>
+          <li><strong>DNS:</strong> Tradueix noms de dominis (google.com) a adreces IP</li>
+          <li><strong>Adreça IP:</strong> Identificador únic de cada dispositiu (ej: 192.168.1.1)</li>
+          <li><strong>Ruta de dades:</strong> Els paquets viajan a través de routers</li>
+          <li><strong>Velocitat:</strong> Mbps (per baixada) i Mbps (per pujada)</li>
+        </ul>
+        <div class="info-box">
+          💡 Consell: Comprova la teva adreça IP local amb "ipconfig" (Windows) o "ifconfig" (Linux/Mac).
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-panel" id="topic2">
+      <div class="theory-card">
+        <h3>📡 Dispositius de xarxa</h3>
+        <p>Dispositius que permeten la comunicació entre ordinadors:</p>
+        <ul>
+          <li><strong>Router:</strong> El nucli de la xarxa domèstica, distribueix connexió</li>
+          <li><strong>Switch:</strong> Connecta múltiples dispositius per Ethernet</li>
+          <li><strong>Mòdem:</strong> Converteix la connexió de l'ISP a dades digitals</li>
+          <li><strong>Punt d'accés WiFi:</strong> Crea la xarxa sense fils</li>
+          <li><strong>Encaminador mesh:</strong> Múltiples punts per a cobertura millor</li>
+        </ul>
+        <div class="info-box">
+          ⚠️ Important: Canvia la contrasenya per defecte del router per seguretat.
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-panel" id="topic3">
+      <div class="theory-card">
+        <h3>🏠 Muntatge i configuració de WiFi domèstica</h3>
+        <p>Passos per configurar una xarxa WiFi segura a casa:</p>
+        <ul>
+          <li>Connecta el mòdem al router amb Ethernet</li>
+          <li>Encén ambdós dispositius i espera a que inicialitzin</li>
+          <li>Accedeix a l'interfície del router (192.168.1.1)</li>
+          <li>Canvia el SSID (nom de la xarxa) a quelcom personalitzat</li>
+          <li>Estableix una contrasenya WPA3 forta (mínim 12 caràcters)</li>
+          <li>Desactiva WPS per seguretat</li>
+        </ul>
+        <div class="info-box">
+          ✅ Bona pràctica: Ubicar el router en un lloc central i alt per a millor cobertura.
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-panel" id="topic4">
+      <div class="theory-card">
+        <h3>📱 Connexió de dispositius a la xarxa</h3>
+        <p>Connecta i configura els teus dispositius:</p>
+        <ul>
+          <li><strong>Ordinadors:</strong> WiFi o Ethernet per a velocitat màxima</li>
+          <li><strong>Mòbils i tauletes:</strong> WiFi per economitzar dades 4G</li>
+          <li><strong>Impressores:</strong> Configura per WiFi fent servir la contrasenya de la xarxa</li>
+          <li><strong>Smart TVs:</strong> Selecciona la xarxa WiFi al setup inicial</li>
+          <li><strong>Dispositius IoT:</strong> Cameras, termòstats, timbres intel·ligents (veure UP3)</li>
+          <li><strong>Cadena de coneixement:</strong> Alguns dispositius necessitem app mòbil per configurar</li>
+        </ul>
+        <div class="info-box">
+          💡 Consell: Crea una contrasenya de guest si vols compartir WiFi sense donar accés a tot.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="resources-area" style="display:none;">
+    <div class="theory-card">
+      <h3>📚 Recursos útils</h3>
+      <ul>
+        <li><strong>Speedtest:</strong> Testa la velocitat de la teva connexió</li>
+        <li><strong>WhatIsMyIP:</strong> Veu la teva adreça IP pública</li>
+        <li><strong>Wireshark:</strong> Analitza el tràfic de la xarxa (avançat)</li>
+        <li><strong>Documentació del teu router:</strong> Busca el manual en línia</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+function showSection(section) {
+  document.querySelectorAll('.main-nav-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('theory-area').style.display = section === 'theory' ? 'block' : 'none';
+  document.getElementById('resources-area').style.display = section === 'resources' ? 'block' : 'none';
+}
+
+function switchTopic(btn, topicId) {
+  document.querySelectorAll('.topic-tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.topic-panel').forEach(panel => panel.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(topicId).classList.add('active');
+}
+</script>
+</body>
+</html>

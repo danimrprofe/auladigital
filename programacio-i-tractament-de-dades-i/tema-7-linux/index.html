@@ -1,46 +1,3030 @@
 <!doctype html>
 <html lang="ca">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TEMA 7 · Linux · Programació i Tractament de Dades I</title>
-  <meta name="description" content="Tema: Linux · Programació i Tractament de Dades I.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <link rel="stylesheet" href="../../styles.css">
-</head>
-<body>
-  <nav class="navbar navbar-expand-lg sticky-top shadow-sm app-navbar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Linux</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #0f1117;
+        min-height: 100vh;
+        color: #e2e8f0;
+      }
+      .container {
+        max-width: 880px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      header {
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        border: 1px solid #1e3a5f;
+        border-radius: 14px;
+        padding: 32px 36px;
+        margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+      }
+      header::before {
+        content: "";
+        position: absolute;
+        top: -40px;
+        right: -40px;
+        width: 220px;
+        height: 220px;
+        background: radial-gradient(
+          circle,
+          rgba(234, 179, 8, 0.15),
+          transparent 70%
+        );
+      }
+      header h1 {
+        font-size: 1.5rem;
+        color: #f1f5f9;
+        margin-bottom: 4px;
+        position: relative;
+      }
+      header p {
+        color: #94a3b8;
+        font-size: 0.88rem;
+        position: relative;
+      }
+      .header-tag {
+        display: inline-block;
+        background: rgba(234, 179, 8, 0.15);
+        border: 1px solid rgba(234, 179, 8, 0.3);
+        color: #fbbf24;
+        border-radius: 99px;
+        padding: 3px 12px;
+        font-size: 0.75rem;
+        margin-top: 10px;
+      }
+
+      .header-back {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 8px;
+        padding: 8px 14px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+        white-space: nowrap;
+        flex-shrink: 0;
+        order: 3;
+        width: 100%;
+        text-align: center;
+        margin-top: 12px;
+      }
+      .header-back:hover {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.4);
+      }
+
+      .topic-tabs {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+      }
+      .topic-tab {
+        padding: 7px 13px;
+        border: 1px solid #1e3a5f;
+        border-radius: 99px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #64748b;
+        background: #0f1117;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .topic-tab:hover {
+        border-color: #f59e0b;
+        color: #f59e0b;
+      }
+      .topic-tab.active {
+        background: #f59e0b;
+        color: #0f172a;
+        border-color: #f59e0b;
+      }
+      .topic-tab.noentra {
+        border-style: dashed;
+      }
+      .topic-tab.noentra.active {
+        background: #7c3aed;
+        border-color: #7c3aed;
+        color: white;
+      }
+
+      .topic-panel {
+        display: none;
+      }
+      .topic-panel.active {
+        display: block;
+        animation: fadeIn 0.3s;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .stage-badge {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        border-radius: 14px;
+        padding: 18px 22px;
+        margin-bottom: 16px;
+      }
+      .stage-badge .sb-icon {
+        font-size: 2rem;
+        flex-shrink: 0;
+      }
+      .stage-badge h2 {
+        font-size: 1.05rem;
+        margin-bottom: 3px;
+        color: #f1f5f9;
+      }
+      .stage-badge p {
+        font-size: 0.82rem;
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.45;
+      }
+
+      .theory-card {
+        background: #1e293b;
+        border: 1px solid #1e3a5f;
+        border-radius: 14px;
+        padding: 24px;
+        margin-bottom: 14px;
+      }
+      .theory-card h3 {
+        color: #f1f5f9;
+        font-size: 1rem;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .theory-card p {
+        color: #94a3b8;
+        font-size: 0.92rem;
+        line-height: 1.7;
+        margin-bottom: 10px;
+      }
+      .theory-card p:last-child {
+        margin-bottom: 0;
+      }
+      .theory-card ul {
+        color: #94a3b8;
+        font-size: 0.92rem;
+        line-height: 1.8;
+        padding-left: 20px;
+        margin-bottom: 10px;
+      }
+      .theory-card ul li {
+        margin-bottom: 3px;
+      }
+      .theory-card ol {
+        color: #94a3b8;
+        font-size: 0.92rem;
+        line-height: 1.85;
+        padding-left: 22px;
+        margin-bottom: 10px;
+      }
+      .theory-card ol li {
+        margin-bottom: 5px;
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin: 12px 0;
+      }
+      .three-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 10px;
+        margin: 12px 0;
+      }
+      @media (max-width: 560px) {
+        .two-col,
+        .three-col {
+          grid-template-columns: 1fr;
+        }
+      }
+      .col-card {
+        background: #0f172a;
+        border: 1px solid #1e3a5f;
+        border-radius: 10px;
+        padding: 14px;
+      }
+      .col-card h4 {
+        font-size: 0.85rem;
+        color: #f59e0b;
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
+      .col-card ul {
+        font-size: 0.84rem;
+        color: #94a3b8;
+        padding-left: 16px;
+        line-height: 1.75;
+      }
+      .col-card p {
+        font-size: 0.84rem;
+        color: #94a3b8;
+        line-height: 1.6;
+      }
+      .col-card ol {
+        font-size: 0.83rem;
+        color: #94a3b8;
+        padding-left: 16px;
+        line-height: 1.8;
+      }
+
+      .info-box {
+        border-radius: 0 10px 10px 0;
+        padding: 12px 16px;
+        margin: 12px 0;
+        font-size: 0.88rem;
+        line-height: 1.55;
+      }
+      .info-box.yellow {
+        background: rgba(234, 179, 8, 0.08);
+        border-left: 4px solid #f59e0b;
+        color: #fcd34d;
+      }
+      .info-box.green {
+        background: rgba(34, 197, 94, 0.08);
+        border-left: 4px solid #22c55e;
+        color: #86efac;
+      }
+      .info-box.blue {
+        background: rgba(59, 130, 246, 0.08);
+        border-left: 4px solid #3b82f6;
+        color: #93c5fd;
+      }
+      .info-box.red {
+        background: rgba(239, 68, 68, 0.08);
+        border-left: 4px solid #ef4444;
+        color: #fca5a5;
+      }
+      .info-box.purple {
+        background: rgba(168, 85, 247, 0.08);
+        border-left: 4px solid #a855f7;
+        color: #d8b4fe;
+      }
+
+      pre {
+        background: #020817;
+        border: 1px solid #1e3a5f;
+        border-radius: 10px;
+        padding: 14px 16px;
+        font-size: 0.83rem;
+        overflow-x: auto;
+        margin: 12px 0;
+        line-height: 1.75;
+      }
+      .cmd {
+        color: #86efac;
+        font-weight: 600;
+      }
+      .cm {
+        color: #475569;
+        font-style: italic;
+      }
+      .val {
+        color: #fcd34d;
+      }
+      .op {
+        color: #f472b6;
+      }
+      .kw {
+        color: #93c5fd;
+      }
+      .out {
+        color: #64748b;
+      }
+      .path {
+        color: #fb923c;
+      }
+      .root {
+        color: #ef4444;
+        font-weight: 600;
+      }
+
+      code {
+        background: #020817;
+        border: 1px solid #1e3a5f;
+        padding: 1px 7px;
+        border-radius: 4px;
+        font-family: "Consolas", monospace;
+        font-size: 0.88em;
+        color: #86efac;
+      }
+
+      table.tt {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0;
+        font-size: 0.87rem;
+      }
+      .tt th {
+        background: #0f172a;
+        color: #f59e0b;
+        padding: 9px 12px;
+        text-align: left;
+        font-size: 0.77rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        border-bottom: 1px solid #1e3a5f;
+      }
+      .tt td {
+        padding: 9px 12px;
+        border-bottom: 1px solid #0f172a;
+        color: #94a3b8;
+        vertical-align: top;
+      }
+      .tt tr:last-child td {
+        border: none;
+      }
+      .tt td strong {
+        color: #e2e8f0;
+      }
+      .tt td code {
+        font-size: 0.82em;
+      }
+
+      .distro-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin: 12px 0;
+      }
+      @media (max-width: 560px) {
+        .distro-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      .distro-card {
+        background: #0f172a;
+        border: 1px solid #1e3a5f;
+        border-radius: 10px;
+        padding: 14px;
+        text-align: center;
+      }
+      .distro-card .logo {
+        font-size: 2rem;
+        margin-bottom: 6px;
+      }
+      .distro-card h4 {
+        font-size: 0.85rem;
+        color: #e2e8f0;
+        margin-bottom: 4px;
+      }
+      .distro-card p {
+        font-size: 0.76rem;
+        color: #64748b;
+        line-height: 1.4;
+      }
+      .distro-card .badge {
+        display: inline-block;
+        margin-top: 6px;
+        border-radius: 99px;
+        padding: 2px 9px;
+        font-size: 0.7rem;
+        font-weight: 600;
+      }
+      .bd-beginner {
+        background: rgba(34, 197, 94, 0.15);
+        color: #86efac;
+      }
+      .bd-advanced {
+        background: rgba(239, 68, 68, 0.15);
+        color: #fca5a5;
+      }
+      .bd-server {
+        background: rgba(59, 130, 246, 0.15);
+        color: #93c5fd;
+      }
+      .bd-privacy {
+        background: rgba(168, 85, 247, 0.15);
+        color: #d8b4fe;
+      }
+
+      .folder-tree {
+        background: #020817;
+        border: 1px solid #1e3a5f;
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin: 12px 0;
+        font-family: "Consolas", monospace;
+        font-size: 0.85rem;
+        line-height: 1.9;
+      }
+      .ft-dir {
+        color: #93c5fd;
+      }
+      .ft-desc {
+        color: #475569;
+        font-style: italic;
+        margin-left: 8px;
+        font-family: "Segoe UI", sans-serif;
+        font-size: 0.78rem;
+      }
+
+      .perm-box {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2px;
+        margin: 12px 0;
+      }
+      .perm-cell {
+        background: #0f172a;
+        border: 1px solid #1e3a5f;
+        border-radius: 4px;
+        padding: 10px;
+        text-align: center;
+      }
+      .perm-cell .letter {
+        font-size: 1.4rem;
+        font-weight: 700;
+        font-family: monospace;
+      }
+      .perm-cell p {
+        font-size: 0.72rem;
+        color: #64748b;
+        margin-top: 3px;
+      }
+      .perm-r {
+        color: #86efac;
+      }
+      .perm-w {
+        color: #f59e0b;
+      }
+      .perm-x {
+        color: #f472b6;
+      }
+
+      .step-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        margin: 12px 0;
+      }
+      .step-item {
+        display: flex;
+        gap: 14px;
+        padding: 10px 0;
+      }
+      .step-left {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 32px;
+        flex-shrink: 0;
+      }
+      .step-num {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.82rem;
+        font-weight: 700;
+        flex-shrink: 0;
+        background: rgba(245, 158, 11, 0.15);
+        color: #f59e0b;
+        border: 1px solid rgba(245, 158, 11, 0.4);
+      }
+      .step-line {
+        width: 1px;
+        flex: 1;
+        min-height: 12px;
+        background: #1e3a5f;
+        margin-top: 4px;
+      }
+      .step-content {
+        padding-top: 4px;
+        flex: 1;
+      }
+      .step-content h4 {
+        font-size: 0.92rem;
+        color: #e2e8f0;
+        font-weight: 600;
+        margin-bottom: 3px;
+      }
+      .step-content p {
+        font-size: 0.86rem;
+        color: #64748b;
+        line-height: 1.55;
+        margin: 0;
+      }
+
+      .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: 10px 0;
+      }
+      .tag {
+        border-radius: 99px;
+        padding: 3px 12px;
+        font-size: 0.78rem;
+        font-weight: 600;
+      }
+      .tag-yellow {
+        background: rgba(234, 179, 8, 0.15);
+        color: #fcd34d;
+      }
+      .tag-green {
+        background: rgba(34, 197, 94, 0.15);
+        color: #86efac;
+      }
+      .tag-blue {
+        background: rgba(59, 130, 246, 0.15);
+        color: #93c5fd;
+      }
+      .tag-red {
+        background: rgba(239, 68, 68, 0.15);
+        color: #fca5a5;
+      }
+      .tag-purple {
+        background: rgba(168, 85, 247, 0.15);
+        color: #d8b4fe;
+      }
+      .tag-gray {
+        background: rgba(100, 116, 139, 0.2);
+        color: #94a3b8;
+      }
+
+      .noentra-banner {
+        background: rgba(168, 85, 247, 0.08);
+        border: 1px dashed #7c3aed;
+        border-radius: 10px;
+        padding: 10px 16px;
+        margin-bottom: 14px;
+        font-size: 0.83rem;
+        color: #d8b4fe;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .nav-btns {
+        display: flex;
+        gap: 10px;
+        margin-top: 18px;
+        justify-content: space-between;
+      }
+      .nav-btn {
+        padding: 10px 22px;
+        border: none;
+        border-radius: 99px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: all 0.2s;
+      }
+      .nav-btn.prev {
+        background: #1e293b;
+        color: #94a3b8;
+        border: 1px solid #1e3a5f;
+      }
+      .nav-btn.next {
+        background: #f59e0b;
+        color: #0f172a;
+      }
+      .nav-btn:hover {
+        filter: brightness(1.1);
+      }
+      .nav-btn:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
+
+      /* Light theme override aligned with IA theory style */
+      body {
+        background: #f0f4ff;
+        color: #3a4a6a;
+      }
+      header {
+        background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+        border: none;
+      }
+      header h1 {
+        color: #f1f5f9;
+      }
+      header p {
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .header-tag {
+        background: rgba(255, 255, 255, 0.12);
+        border: none;
+        color: #e2e8f0;
+      }
+
+      .topic-tab {
+        background: white;
+        border: 2px solid #e0e7ff;
+        color: #5a6a8a;
+      }
+      .topic-tab:hover {
+        border-color: #6366f1;
+        color: #6366f1;
+      }
+      .topic-tab.active {
+        background: #6366f1;
+        color: white;
+        border-color: #6366f1;
+      }
+      .topic-tab.noentra.active {
+        background: #7c3aed;
+        border-color: #7c3aed;
+      }
+
+      .theory-card {
+        background: white;
+        border: none;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+      }
+      .theory-card h3,
+      .theory-card p,
+      .theory-card ul,
+      .theory-card ol {
+        color: #3a4a6a;
+      }
+
+      .col-card {
+        background: #f8faff;
+        border: none;
+      }
+      .col-card h4 {
+        color: #6366f1;
+      }
+      .col-card p,
+      .col-card ul,
+      .col-card ol {
+        color: #3a4a6a;
+      }
+
+      .info-box.yellow {
+        background: #fffbeb;
+        border-left-color: #f59e0b;
+        color: #78350f;
+      }
+      .info-box.green {
+        background: #f0fdf4;
+        border-left-color: #22c55e;
+        color: #166534;
+      }
+      .info-box.blue {
+        background: #eff6ff;
+        border-left-color: #3b82f6;
+        color: #1e3a5f;
+      }
+      .info-box.red {
+        background: #fef2f2;
+        border-left-color: #ef4444;
+        color: #991b1b;
+      }
+      .info-box.purple {
+        background: #f5f3ff;
+        border-left-color: #7c3aed;
+        color: #3b1f6e;
+      }
+
+      pre {
+        background: #0f172a;
+        border: none;
+        color: #e2e8f0;
+      }
+      code {
+        background: #f1f5f9;
+        border: none;
+        color: #4338ca;
+      }
+
+      .tt th {
+        background: #f0f4ff;
+        color: #6366f1;
+        border-bottom: none;
+      }
+      .tt td {
+        color: #3a4a6a;
+        border-bottom: 1px solid #f0f4ff;
+      }
+      .tt td strong {
+        color: #1a1a3e;
+      }
+
+      .distro-card,
+      .folder-tree,
+      .perm-cell {
+        background: #f8faff;
+        border: 1px solid #e0e7ff;
+      }
+      .distro-card h4 {
+        color: #1a1a3e;
+      }
+      .distro-card p,
+      .perm-cell p,
+      .ft-desc {
+        color: #5a6a8a;
+      }
+      .ft-dir {
+        color: #4338ca;
+      }
+
+      .step-num {
+        background: #e0e7ff;
+        color: #3b41c0;
+        border: none;
+      }
+      .step-line {
+        background: #e0e7ff;
+      }
+      .step-content h4 {
+        color: #1a1a3e;
+      }
+      .step-content p {
+        color: #5a6a8a;
+      }
+
+      .tag-yellow {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .tag-green {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .tag-blue {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+      .tag-red {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .tag-purple {
+        background: #ede9fe;
+        color: #5b21b6;
+      }
+      .tag-gray {
+        background: #f1f5f9;
+        color: #475569;
+      }
+
+      .noentra-banner {
+        background: #f5f3ff;
+        border: 1px dashed #c4b5fd;
+        color: #5b21b6;
+      }
+
+      .nav-btn.prev {
+        background: #e0e7ff;
+        color: #3b41c0;
+        border: none;
+      }
+      .nav-btn.next {
+        background: #6366f1;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
     <div class="container">
-      <a class="navbar-brand fw-semibold" href="../../index.html">Aula digital · IES Ramon Llull</a>
-      <a class="btn btn-outline-primary btn-sm btn-modern ms-auto" href="../index.html">Tornar als temes</a>
-    </div>
-  </nav>
+      <header>
+        <a href="../index.html" class="header-back">← Tornar a Temes</a>
+        <h1>🐧 Linux — Teoria completa</h1>
+        <p>
+          Des dels orígens fins al servidor web, passant per la terminal i
+          l'accés remot
+        </p>
+        <span class="header-tag"
+          >IES Ramon Llull · 1r Batxillerat · Curs 25-26</span
+        >
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;">
+          <span style="background: rgba(255, 255, 255, 0.12); color: white; border-radius: 99px; padding: 4px 12px; font-size: 0.8rem; font-weight: 600; white-space: nowrap;">Linux</span>
+          <span style="background: rgba(255, 255, 255, 0.12); color: white; border-radius: 99px; padding: 4px 12px; font-size: 0.8rem; font-weight: 600; white-space: nowrap;">Terminal</span>
+          <span style="background: rgba(255, 255, 255, 0.12); color: white; border-radius: 99px; padding: 4px 12px; font-size: 0.8rem; font-weight: 600; white-space: nowrap;">Gestió de fitxers</span>
+        </div>
+      </header>
 
-  <main class="pb-5">
-    <section class="container py-4">
-      <nav aria-label="breadcrumb">
-        <ul id="breadcrumbContainer" class="app-breadcrumb"></ul>
-      </nav>
+      <div class="topic-tabs" id="topic-tabs">
+        <div class="topic-tab active" onclick="go(0)">🐧 Què és Linux</div>
+        <div class="topic-tab" onclick="go(1)">⭐ Per què és important</div>
+        <div class="topic-tab" onclick="go(2)">📜 Història</div>
+        <div class="topic-tab" onclick="go(3)">📦 Distribucions</div>
+        <div class="topic-tab" onclick="go(4)">💿 Instal·lar Lubuntu</div>
+        <div class="topic-tab" onclick="go(5)">📁 Estructura carpetes</div>
+        <div class="topic-tab" onclick="go(6)">⌨️ Terminal i comandes</div>
+        <div class="topic-tab" onclick="go(7)">🧭 Navegació</div>
+        <div class="topic-tab" onclick="go(8)">✏️ Editor de text</div>
+        <div class="topic-tab" onclick="go(9)">📄 Fitxers i directoris</div>
+        <div class="topic-tab" onclick="go(10)">⚙️ Automatització</div>
+        <div class="topic-tab noentra" onclick="go(11)">📜 Scripts</div>
+        <div class="topic-tab" onclick="go(12)">👑 Usuari root</div>
+        <div class="topic-tab" onclick="go(13)">📦 Gestió paquets</div>
+        <div class="topic-tab" onclick="go(14)">👥 Usuaris</div>
+        <div class="topic-tab noentra" onclick="go(15)">🔐 Permisos</div>
+        <div class="topic-tab" onclick="go(16)">🌐 Accés remot</div>
+        <div class="topic-tab" onclick="go(17)">🖥️ Servidor web</div>
+      </div>
 
-      <div class="glass-card card border-0 shadow-sm">
-        <div class="card-body p-4">
-          <div id="themeIndexContainer" data-subject="Programació i Tractament de Dades I" data-theme-slug="tema-7-linux"></div>
+      <!-- ===== 0: QUÈ ÉS LINUX ===== -->
+      <div class="topic-panel active" id="panel-0">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #1a1a2e, #1e3a1e);
+            border: 1px solid #1a3a1a;
+          "
+        >
+          <div class="sb-icon">🐧</div>
+          <div>
+            <h2>Què és Linux?</h2>
+            <p>
+              Un sistema operatiu lliure, de codi obert i gratuït que mou el
+              món.
+            </p>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🖥️ Definició</h3>
+          <p>
+            <strong style="color: #e2e8f0">Linux</strong> és un sistema operatiu
+            (SO) de codi obert creat el 1991 per Linus Torvalds. Com Windows o
+            macOS, gestiona el maquinari de l'ordinador i permet executar
+            programes, però té tres característiques que el fan únic:
+          </p>
+          <div class="three-col">
+            <div class="col-card">
+              <h4>🆓 Lliure i gratuït</h4>
+              <p>
+                El codi font és accessible a tothom. Qualsevol pot llegir-lo,
+                modificar-lo i distribuir-lo.
+              </p>
+            </div>
+            <div class="col-card">
+              <h4>🔒 Segur i estable</h4>
+              <p>
+                Dissenyat per funcionar 24/7 sense reinicis. És el SO més usat
+                en servidors del món.
+              </p>
+            </div>
+            <div class="col-card">
+              <h4>🌍 Universal</h4>
+              <p>
+                Funciona en mòbils (Android), servidors, superordinadors,
+                routers, cotxes i molt més.
+              </p>
+            </div>
+          </div>
+          <div class="info-box yellow">
+            🐧 La mascota de Linux és <strong>Tux</strong>, un pingüí. El nom
+            "Linux" ve de combinar "Linus" (el creador) amb "Unix" (el sistema
+            que el va inspirar).
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🧩 El Nucli (Kernel)</h3>
+          <p>
+            Linux en sentit estricte és el <strong>kernel</strong> (nucli): el
+            programa central que fa de pont entre el maquinari i els programes.
+            Gestiona la memòria, els processos, els dispositius i el sistema de
+            fitxers.
+          </p>
+          <div class="two-col">
+            <div class="col-card">
+              <h4>Kernel Linux</h4>
+              <ul>
+                <li>Gestiona la CPU i la memòria RAM</li>
+                <li>Controla dispositius (disc, xarxa, USB)</li>
+                <li>Permet que múltiples programes funcionin alhora</li>
+                <li>Base comuna de totes les distribucions</li>
+              </ul>
+            </div>
+            <div class="col-card">
+              <h4>Sistema complet (distro)</h4>
+              <ul>
+                <li>Kernel Linux +</li>
+                <li>Eines GNU (ls, cp, bash...)</li>
+                <li>Gestor de paquets</li>
+                <li>Entorn gràfic (opcional)</li>
+                <li>Aplicacions d'usuari</li>
+              </ul>
+            </div>
+          </div>
+          <div class="info-box blue">
+            💡 Tècnicament, el que installem és <strong>GNU/Linux</strong>: el
+            kernel Linux + les eines GNU del projecte de Richard Stallman. Però
+            popularment es diu simplement "Linux".
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🌍 On trobem Linux avui?</h3>
+          <table class="tt">
+            <thead>
+              <tr>
+                <th>Àmbit</th>
+                <th>Presència de Linux</th>
+                <th>Exemple</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Servidors web</strong></td>
+                <td>~96% dels servidors del món</td>
+                <td>Google, Facebook, Amazon</td>
+              </tr>
+              <tr>
+                <td><strong>Smartphones</strong></td>
+                <td>Android = Linux modificat</td>
+                <td>Tots els mòbils Android</td>
+              </tr>
+              <tr>
+                <td><strong>Superordinadors</strong></td>
+                <td>100% del Top500 mundial</td>
+                <td>Els 500 supercomputadors més potents</td>
+              </tr>
+              <tr>
+                <td><strong>Núvol</strong></td>
+                <td>Base de tots els proveïdors</td>
+                <td>AWS, Google Cloud, Azure</td>
+              </tr>
+              <tr>
+                <td><strong>Dispositius IoT</strong></td>
+                <td>Routers, TVs, cotxes, robots</td>
+                <td>Tesla, Raspberry Pi</td>
+              </tr>
+              <tr>
+                <td><strong>Espai</strong></td>
+                <td>Naus espacials i satèl·lits</td>
+                <td>SpaceX, ISS</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-    </section>
-  </main>
 
-  <footer class="py-3">
-    <div class="container small d-flex flex-column flex-md-row justify-content-between gap-2">
-      <span>&copy; 2026 IES Ramon Llull · Aula digital</span>
-      <span>Programació i Tractament de Dades I</span>
+      <!-- ===== 1: PER QUÈ ÉS IMPORTANT ===== -->
+      <div class="topic-panel" id="panel-1">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #1a1a2e, #1a2e1a);
+            border: 1px solid #1a3a1a;
+          "
+        >
+          <div class="sb-icon">⭐</div>
+          <div>
+            <h2>Per què és important Linux?</h2>
+            <p>
+              Per a un programador o tècnic informàtic, Linux no és opcional —
+              és essencial.
+            </p>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>💼 Importància professional</h3>
+          <div class="two-col">
+            <div class="col-card">
+              <h4>🌐 Servidors i núvol</h4>
+              <p>
+                Quasi tot el backend d'internet corre sobre Linux. Si treballes
+                en desenvolupament web, DevOps o sistemes, treballaràs amb Linux
+                cada dia.
+              </p>
+            </div>
+            <div class="col-card">
+              <h4>🔒 Ciberseguretat</h4>
+              <p>
+                Les eines de seguretat més potents (Kali Linux, Metasploit,
+                Wireshark) funcionen nativamente a Linux. És l'entorn estàndard
+                per a ethical hacking i pentesting.
+              </p>
+            </div>
+          </div>
+          <div class="two-col">
+            <div class="col-card">
+              <h4>🤖 IA i Ciència de dades</h4>
+              <p>
+                Els clústers de GPUs per entrenar models d'IA corren tots sobre
+                Linux. TensorFlow, PyTorch i Jupyter s'originen en entorns
+                Linux.
+              </p>
+            </div>
+            <div class="col-card">
+              <h4>💰 Sortida laboral</h4>
+              <p>
+                Conèixer Linux augmenta significativament el valor professional.
+                La majoria d'ofertes de feina en IT mencionen Linux com a
+                requisit.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🆓 Llibertat i filosofia del codi obert</h3>
+          <p>
+            Linux és el major projecte de col·laboració humana de la història.
+            Milers de programadors de tot el món contribueixen al seu codi de
+            forma voluntària o pagada per empreses com Google, Red Hat o IBM.
+          </p>
+          <div class="info-box green">
+            🌍 La llicència
+            <strong>GPL (GNU General Public License)</strong> garanteix que
+            Linux sempre serà lliure: si algú el modifica i el distribueix, ha
+            de publicar el codi dels seus canvis. Ningú pot "tancar" Linux.
+          </div>
+          <div class="tag-list">
+            <span class="tag tag-green">Gratuït per sempre</span>
+            <span class="tag tag-blue">Codi obert i auditable</span>
+            <span class="tag tag-yellow">Sense telemetria ni espionatge</span>
+            <span class="tag tag-purple">Control total del sistema</span>
+            <span class="tag tag-gray">Sense llicències corporatives</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 2: HISTÒRIA ===== -->
+      <div class="topic-panel" id="panel-2">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #1a1a2e, #2e1a1a);
+            border: 1px solid #3a1a1a;
+          "
+        >
+          <div class="sb-icon">📜</div>
+          <div>
+            <h2>Història de Linux</h2>
+            <p>De Unix als anys 70 fins al nucli que mou el món avui.</p>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🕰️ Línia del temps</h3>
+          <div class="step-list">
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num" style="font-size: 0.7rem">1969</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <h4>Unix — Bell Labs (AT&T)</h4>
+                <p>
+                  Ken Thompson i Dennis Ritchie creen <strong>Unix</strong> als
+                  laboratoris Bell d'AT&T. El primer SO multitasca i
+                  multiusuari. Escrit en C, un llenguatge que ells mateixos van
+                  crear. Va influir en tots els SOs posteriors.
+                </p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num" style="font-size: 0.7rem">1983</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <h4>Projecte GNU — Richard Stallman</h4>
+                <p>
+                  Stallman llança el projecte <strong>GNU</strong> amb
+                  l'objectiu de crear un SO completament lliure compatible amb
+                  Unix. Crea eines fonamentals (gcc, bash, ls, cp...) però li
+                  falta el nucli.
+                </p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num" style="font-size: 0.7rem">1991</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <h4>Linux 0.01 — Linus Torvalds</h4>
+                <p>
+                  Linus Torvalds, estudiant de 21 anys de Hèlsinki (Finlàndia),
+                  publica el primer kernel Linux com a projecte personal. El
+                  famós missatge al fòrum:
+                  <em>"Estic fent un SO lliure, sols com a hobby..."</em>
+                </p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num" style="font-size: 0.7rem">1992</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <h4>GNU + Linux = GNU/Linux</h4>
+                <p>
+                  El kernel Linux es combina amb les eines GNU sota la llicència
+                  GPL. Neix el primer sistema GNU/Linux complet i funcional.
+                </p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num" style="font-size: 0.7rem">1993</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <h4>Debian i Slackware — primeres distros</h4>
+                <p>
+                  Apareixen les primeres distribucions que empaqueten Linux per
+                  a usuaris: Debian (base d'Ubuntu) i Slackware (la més antiga
+                  que encara existeix).
+                </p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num" style="font-size: 0.7rem">2004</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <h4>Ubuntu — Linux per a tothom</h4>
+                <p>
+                  Mark Shuttleworth funda Canonical i llança
+                  <strong>Ubuntu</strong>, basat en Debian, amb l'objectiu de
+                  fer Linux accessible per a usuaris sense coneixements tècnics.
+                  Revoluciona l'adopció de Linux al desktop.
+                </p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num" style="font-size: 0.7rem">2008</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <h4>Android — Linux als mòbils</h4>
+                <p>
+                  Google llança Android, basat en el kernel Linux. Avui és el SO
+                  mòbil més usat del món, amb més de 3.000 milions de
+                  dispositius actius.
+                </p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num" style="font-size: 0.7rem">Avui</div>
+              </div>
+              <div class="step-content">
+                <h4>Linux domina el món</h4>
+                <p>
+                  El kernel Linux té més de 30 milions de línies de codi i més
+                  de 15.000 contribuïdors. Empreses com Google, Microsoft, Intel
+                  i Red Hat paguen enginyers per millorar-lo.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 3: DISTRIBUCIONS ===== -->
+      <div class="topic-panel" id="panel-3">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #1a1a2e, #1a1a3e);
+            border: 1px solid #1a1a4a;
+          "
+        >
+          <div class="sb-icon">📦</div>
+          <div>
+            <h2>Distribucions de Linux</h2>
+            <p>
+              El kernel Linux és comú, però existeixen centenars de "sabors"
+              adaptats a cada necessitat.
+            </p>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🤔 Què és una distribució?</h3>
+          <p>
+            Una <strong>distribució (distro)</strong> és un paquet complet que
+            inclou el kernel Linux + eines de sistema + gestor de paquets +
+            entorn gràfic + aplicacions preinstal·lades. Cada distribució té els
+            seus objectius, filosofia i públic objectiu.
+          </p>
+          <div class="info-box yellow">
+            💡 Hi ha més de 600 distribucions actives. Totes comparteixen el
+            mateix kernel però difereixen en l'entorn gràfic, el gestor de
+            paquets, la configuració per defecte i el públic al qual van
+            dirigides.
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🌿 Famílies principals</h3>
+          <div class="distro-grid">
+            <div class="distro-card">
+              <div class="logo">🔴</div>
+              <h4>Red Hat / RHEL</h4>
+              <p>Empresarial, estable, suport de pagament</p>
+              <span class="badge bd-server">Servidor</span>
+            </div>
+            <div class="distro-card">
+              <div class="logo">🎩</div>
+              <h4>Fedora</h4>
+              <p>Tecnologia punta, comunitat Red Hat</p>
+              <span class="badge bd-advanced">Intermedi</span>
+            </div>
+            <div class="distro-card">
+              <div class="logo">🐊</div>
+              <h4>CentOS / AlmaLinux</h4>
+              <p>Clon gratuït d'RHEL per a servidors</p>
+              <span class="badge bd-server">Servidor</span>
+            </div>
+            <div class="distro-card">
+              <div class="logo">🌀</div>
+              <h4>Debian</h4>
+              <p>La més antiga, molt estable, base d'Ubuntu</p>
+              <span class="badge bd-advanced">Avançat</span>
+            </div>
+            <div class="distro-card">
+              <div class="logo">🟠</div>
+              <h4>Ubuntu</h4>
+              <p>La més popular per a usuaris nous</p>
+              <span class="badge bd-beginner">Principiants</span>
+            </div>
+            <div class="distro-card">
+              <div class="logo">🪶</div>
+              <h4>Lubuntu</h4>
+              <p>Ubuntu lleuger, ideal per a PCs antics i VMs</p>
+              <span class="badge bd-beginner">Principiants</span>
+            </div>
+            <div class="distro-card">
+              <div class="logo">🌿</div>
+              <h4>Linux Mint</h4>
+              <p>Familiar per a usuaris de Windows</p>
+              <span class="badge bd-beginner">Principiants</span>
+            </div>
+            <div class="distro-card">
+              <div class="logo">💀</div>
+              <h4>Kali Linux</h4>
+              <p>Ciberseguretat i pentesting</p>
+              <span class="badge bd-advanced">Expert</span>
+            </div>
+            <div class="distro-card">
+              <div class="logo">🏹</div>
+              <h4>Arch Linux</h4>
+              <p>Minimalista, configura-ho tot tu</p>
+              <span class="badge bd-advanced">Expert</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🪶 Per què Lubuntu a classe?</h3>
+          <p>
+            <strong>Lubuntu</strong> és una variant oficial d'Ubuntu que usa
+            l'entorn gràfic <strong>LXQt</strong>, molt lleuger. És perfecte per
+            a màquines virtuals perquè consumeix molt poca RAM i CPU, deixant
+            més recursos per al sistema amfitrió.
+          </p>
+          <div class="two-col">
+            <div class="col-card">
+              <h4>✅ Avantatges per a la pràctica</h4>
+              <ul>
+                <li>Funciona bé amb 1-2 GB de RAM</li>
+                <li>Arrenca ràpid a la MV</li>
+                <li>Compatible amb totes les eines que usarem</li>
+                <li>Té terminal i entorn gràfic</li>
+              </ul>
+            </div>
+            <div class="col-card">
+              <h4>📦 Gestor de paquets</h4>
+              <p>
+                Usa <code>apt</code> (Advanced Package Tool), el mateix que
+                Ubuntu i Debian. Permet instal·lar, actualitzar i eliminar
+                programes amb una sola comanda.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 4: INSTAL·LAR LUBUNTU ===== -->
+      <div class="topic-panel" id="panel-4">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #1a1a2e, #1e2a1a);
+            border: 1px solid #1e3a1e;
+          "
+        >
+          <div class="sb-icon">💿</div>
+          <div>
+            <h2>Instal·lar Lubuntu a VirtualBox</h2>
+            <p>Creació de la màquina virtual i instal·lació pas a pas.</p>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>⚙️ Configuració de la màquina virtual</h3>
+          <table class="tt">
+            <thead>
+              <tr>
+                <th>Paràmetre</th>
+                <th>Valor recomanat</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Nom</td>
+                <td><strong>Lubuntu</strong></td>
+              </tr>
+              <tr>
+                <td>Tipus</td>
+                <td>Linux</td>
+              </tr>
+              <tr>
+                <td>Versió</td>
+                <td>Ubuntu (64-bit)</td>
+              </tr>
+              <tr>
+                <td>RAM</td>
+                <td>2048 MB (2 GB)</td>
+              </tr>
+              <tr>
+                <td>Disc dur</td>
+                <td>VDI, dinàmic, 20 GB</td>
+              </tr>
+              <tr>
+                <td>Vídeo</td>
+                <td>128 MB VRAM</td>
+              </tr>
+              <tr>
+                <td>Xarxa</td>
+                <td>NAT (per tenir accés a internet)</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="info-box yellow">
+            💡 A diferència de Windows Server (2 GB disc!), Lubuntu necessita
+            mínim 8-10 GB. Amb 20 GB tindrem espai suficient per instal·lar
+            paquets.
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>💿 Instal·lació pas a pas</h3>
+          <div class="step-list">
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num">1</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <h4>Descarregar la ISO de Lubuntu</h4>
+                <p>
+                  Des de <code>lubuntu.me/downloads</code> — triar la versió LTS
+                  (Long Term Support) més recent.
+                </p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num">2</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <h4>Muntar la ISO a la MV</h4>
+                <p>
+                  Configuració → Emmagatzematge → Controlador IDE → Unitat
+                  òptica → Seleccionar la ISO descàrregada.
+                </p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num">3</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <h4>Arrencar i triar "Install Lubuntu"</h4>
+                <p>
+                  La MV arrenca des de la ISO. Seleccionar idioma i fer clic a
+                  <strong>Install Lubuntu</strong>.
+                </p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num">4</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <h4>Configurar el teclat i la zona horària</h4>
+                <p>Teclat: Spanish (Spain) · Zona horaria: Europe/Madrid.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num">5</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <h4>Particions del disc</h4>
+                <p>
+                  Triar <strong>"Erase disk and install Lubuntu"</strong> (el
+                  disc virtual és nou, no hi ha res a perdre).
+                </p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num">6</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <h4>Crear l'usuari</h4>
+                <p>
+                  Nom: el que vulguis · Nom d'equip: ex.
+                  <code>lubuntu-vm</code> · Contrasenya: recorda-la bé.
+                </p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left"><div class="step-num">7</div></div>
+              <div class="step-content">
+                <h4>Reiniciar i extreure la ISO</h4>
+                <p>
+                  Al finalitzar, reiniciar. VirtualBox et demanarà que expulsis
+                  el disc virtual — prem Enter.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🔧 Primers passos després d'instal·lar</h3>
+          <p>Actualitzar el sistema és el primer que cal fer sempre:</p>
+          <pre><span class="cm"># Actualitzar la llista de paquets disponibles</span>
+<span class="cmd">sudo apt update</span>
+
+<span class="cm"># Instal·lar les actualitzacions disponibles</span>
+<span class="cmd">sudo apt upgrade -y</span></pre>
+          <div class="info-box green">
+            ✅ Instal·la les Guest Additions de VirtualBox per tenir millor
+            resolució de pantalla i poder compartir el portapapers amb el
+            sistema real (Dispositivos → Insertar imagen de CD de las Guest
+            Additions).
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 5: ESTRUCTURA CARPETES ===== -->
+      <div class="topic-panel" id="panel-5">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #1a1a2e, #2e1a0e);
+            border: 1px solid #3a2a0e;
+          "
+        >
+          <div class="sb-icon">📁</div>
+          <div>
+            <h2>Estructura de carpetes de Linux</h2>
+            <p>
+              El sistema de fitxers de Linux segueix l'estàndard FHS (Filesystem
+              Hierarchy Standard).
+            </p>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🌳 Tot part de l'arrel /</h3>
+          <p>
+            A Linux <strong>no hi ha unitats</strong> com C:\ o D:\ de Windows.
+            Existeix un únic arbre de directoris que comença a l'arrel,
+            representada per <code>/</code>. Tots els discos, USBs i particions
+            es munten com a subdirectoris dins d'aquest arbre.
+          </p>
+          <div class="folder-tree">
+            <span class="ft-dir">/</span
+            ><span class="ft-desc"
+              >— Arrel (root): inici de tot el sistema de fitxers</span
+            ><br />
+            <span class="ft-dir">├── bin/</span
+            ><span class="ft-desc"
+              >— Comandes essencials (ls, cp, mv, cat...)</span
+            ><br />
+            <span class="ft-dir">├── boot/</span
+            ><span class="ft-desc">— Fitxers d'arrencada (kernel, GRUB)</span
+            ><br />
+            <span class="ft-dir">├── dev/</span
+            ><span class="ft-desc"
+              >— Dispositius hardware (discos, USB, terminals)</span
+            ><br />
+            <span class="ft-dir">├── etc/</span
+            ><span class="ft-desc"
+              >— Fitxers de configuració del sistema i aplicacions</span
+            ><br />
+            <span class="ft-dir">├── home/</span
+            ><span class="ft-desc">— Carpetes personals dels usuaris</span
+            ><br />
+            <span class="ft-dir">│ └── alumne/</span
+            ><span class="ft-desc">— Carpeta personal de l'usuari "alumne"</span
+            ><br />
+            <span class="ft-dir">├── lib/</span
+            ><span class="ft-desc"
+              >— Biblioteques del sistema (com DLLs de Windows)</span
+            ><br />
+            <span class="ft-dir">├── media/</span
+            ><span class="ft-desc">— Punt de muntatge per a USB, CD-ROM...</span
+            ><br />
+            <span class="ft-dir">├── mnt/</span
+            ><span class="ft-desc"
+              >— Muntatge temporal de sistemes de fitxers</span
+            ><br />
+            <span class="ft-dir">├── opt/</span
+            ><span class="ft-desc">— Programes opcionals de tercers</span><br />
+            <span class="ft-dir">├── proc/</span
+            ><span class="ft-desc"
+              >— Sistema de fitxers virtual: info de processos en curs</span
+            ><br />
+            <span class="ft-dir">├── root/</span
+            ><span class="ft-desc"
+              >— Carpeta personal de l'usuari root (administrador)</span
+            ><br />
+            <span class="ft-dir">├── sbin/</span
+            ><span class="ft-desc">— Comandes d'administració del sistema</span
+            ><br />
+            <span class="ft-dir">├── srv/</span
+            ><span class="ft-desc">— Dades de serveis (web, FTP...)</span><br />
+            <span class="ft-dir">├── tmp/</span
+            ><span class="ft-desc"
+              >— Fitxers temporals (s'esborren en reiniciar)</span
+            ><br />
+            <span class="ft-dir">├── usr/</span
+            ><span class="ft-desc">— Programes i biblioteques d'usuari</span
+            ><br />
+            <span class="ft-dir">│ ├── bin/</span
+            ><span class="ft-desc">— La majoria de programes instal·lats</span
+            ><br />
+            <span class="ft-dir">│ └── share/</span
+            ><span class="ft-desc"
+              >— Dades compartides (documentació, icones)</span
+            ><br />
+            <span class="ft-dir">└── var/</span
+            ><span class="ft-desc"
+              >— Dades variables (logs, bases de dades, correu)</span
+            >
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🏠 La carpeta home</h3>
+          <p>
+            Cada usuari té la seva pròpia carpeta dins de <code>/home</code>.
+            Per exemple, si l'usuari es diu <code>alumne</code>, la seva carpeta
+            personal és <code>/home/alumne</code>.
+          </p>
+          <p>
+            El símbol <code>~</code> (titlla) és una drecera que apunta sempre a
+            la teva carpeta personal:
+          </p>
+          <pre><span class="cm"># ~ és equivalent a /home/alumne (si l'usuari és "alumne")</span>
+<span class="cmd">cd ~</span>          <span class="cm"># va a /home/alumne</span>
+<span class="cmd">cd ~/Documents</span> <span class="cm"># va a /home/alumne/Documents</span></pre>
+          <div class="info-box blue">
+            💡 A diferència de Windows, a Linux els fitxers i carpetes que
+            comencen per <strong>punt</strong> (<code>.</code>) estan ocults.
+            Per exemple: <code>.bashrc</code>, <code>.ssh</code>. Es veuen amb
+            <code>ls -a</code>.
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🔤 Linux distingeix majúscules i minúscules</h3>
+          <p>
+            A Linux (a diferència de Windows), els noms de fitxers i carpetes
+            diferencien majúscules de minúscules. Aquests tres fitxers són
+            <strong>completament diferents</strong>:
+          </p>
+          <pre><span class="val">fitxer.txt</span>    <span class="cm">← fitxer diferent de...</span>
+<span class="val">Fitxer.txt</span>    <span class="cm">← ...diferent de...</span>
+<span class="val">FITXER.TXT</span>    <span class="cm">← ...diferent d'aquest</span></pre>
+        </div>
+      </div>
+
+      <!-- ===== 6: TERMINAL I COMANDES ===== -->
+      <div class="topic-panel" id="panel-6">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #020817, #0f2a1a);
+            border: 1px solid #1a3a1a;
+          "
+        >
+          <div class="sb-icon">⌨️</div>
+          <div>
+            <h2>Terminal i comandes bàsiques</h2>
+            <p>
+              La terminal és la eina més potent de Linux. Aprendre-la és
+              fonamental.
+            </p>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>💻 Què és la terminal?</h3>
+          <p>
+            La <strong>terminal</strong> (o consola) és una interfície de text
+            on escrivim comandes que el sistema executa. A Lubuntu s'obre amb
+            l'aplicació <strong>LXTerminal</strong> o amb la drecera
+            <code>Ctrl+Alt+T</code>.
+          </p>
+          <pre><span class="val">alumne@lubuntu-vm</span>:<span class="path">~</span><span class="op">$</span> <span class="cm">← prompte de comandes</span>
+  <span class="cm">│         │        │ └── $ = usuari normal (# = root)</span>
+  <span class="cm">│         └──────────── nom de l'equip</span>
+  <span class="cm">└──────────────────────── nom de l'usuari</span></pre>
+          <div class="info-box yellow">
+            💡 La <strong>shell</strong> és el programa que interpreta les
+            comandes. La shell per defecte a Linux és
+            <strong>Bash</strong> (Bourne Again Shell).
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>📋 Comandes essencials</h3>
+          <table class="tt">
+            <thead>
+              <tr>
+                <th>Comanda</th>
+                <th>Descripció</th>
+                <th>Exemple</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>pwd</code></td>
+                <td>Mostra el directori actual (Print Working Directory)</td>
+                <td><code>pwd</code> → <code>/home/alumne</code></td>
+              </tr>
+              <tr>
+                <td><code>ls</code></td>
+                <td>Llista el contingut d'un directori</td>
+                <td><code>ls -la</code></td>
+              </tr>
+              <tr>
+                <td><code>cd</code></td>
+                <td>Canvia de directori</td>
+                <td><code>cd /etc</code></td>
+              </tr>
+              <tr>
+                <td><code>mkdir</code></td>
+                <td>Crea un directori nou</td>
+                <td><code>mkdir proves</code></td>
+              </tr>
+              <tr>
+                <td><code>touch</code></td>
+                <td>Crea un fitxer buit</td>
+                <td><code>touch hola.txt</code></td>
+              </tr>
+              <tr>
+                <td><code>cat</code></td>
+                <td>Mostra el contingut d'un fitxer</td>
+                <td><code>cat hola.txt</code></td>
+              </tr>
+              <tr>
+                <td><code>echo</code></td>
+                <td>Imprimeix text per pantalla</td>
+                <td><code>echo "Hola món"</code></td>
+              </tr>
+              <tr>
+                <td><code>clear</code></td>
+                <td>Neteja la terminal</td>
+                <td><code>clear</code></td>
+              </tr>
+              <tr>
+                <td><code>man</code></td>
+                <td>Manual d'una comanda</td>
+                <td><code>man ls</code></td>
+              </tr>
+              <tr>
+                <td><code>history</code></td>
+                <td>Historial de comandes executades</td>
+                <td><code>history</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="theory-card">
+          <h3>🔧 Opcions i arguments</h3>
+          <p>
+            Les comandes poden rebre <strong>opcions</strong> (modificadors que
+            canvien el comportament) i <strong>arguments</strong> (objectes
+            sobre els quals actuen).
+          </p>
+          <pre><span class="cmd">ls</span> <span class="op">-l</span> <span class="op">-a</span> <span class="path">/home</span>
+<span class="cm"> │   │   │   └── argument: directori sobre el qual actua</span>
+<span class="cm"> │   │   └────── opció -a: mostra fitxers ocults</span>
+<span class="cm"> │   └────────── opció -l: format llarg (detallat)</span>
+<span class="cm"> └────────────── comanda</span>
+
+<span class="cm"># Les opcions es poden combinar:</span>
+<span class="cmd">ls -la</span> <span class="path">/home</span>   <span class="cm"># equivalent a ls -l -a /home</span></pre>
+          <div class="info-box blue">
+            💡 Dreceres útils: <strong>Tab</strong> autocompleta noms de fitxers
+            i comandes. <strong>↑/↓</strong> navega l'historial.
+            <strong>Ctrl+C</strong> atura la comanda en curs.
+            <strong>Ctrl+L</strong> neteja la pantalla.
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🔍 Comandes d'informació del sistema</h3>
+          <pre><span class="cmd">uname -a</span>       <span class="cm"># informació del kernel i sistema</span>
+<span class="cmd">whoami</span>         <span class="cm"># nom de l'usuari actual</span>
+<span class="cmd">hostname</span>       <span class="cm"># nom de l'equip</span>
+<span class="cmd">date</span>           <span class="cm"># data i hora actual</span>
+<span class="cmd">df -h</span>          <span class="cm"># espai en disc (human-readable)</span>
+<span class="cmd">free -h</span>        <span class="cm"># memòria RAM disponible</span>
+<span class="cmd">top</span>            <span class="cm"># processos en execució (com el Gestor de Tasques)</span>
+<span class="cmd">ps aux</span>         <span class="cm"># llista de tots els processos</span>
+<span class="cmd">ip a</span>           <span class="cm"># adreces IP de les interfícies de xarxa</span></pre>
+        </div>
+      </div>
+
+      <!-- ===== 7: NAVEGACIÓ ===== -->
+      <div class="topic-panel" id="panel-7">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #020817, #0f1a2e);
+            border: 1px solid #1a2a3a;
+          "
+        >
+          <div class="sb-icon">🧭</div>
+          <div>
+            <h2>Navegació pel sistema de fitxers</h2>
+            <p>Moure's pel sistema de directoris de Linux amb eficiència.</p>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>📍 Rutes absolutes i relatives</h3>
+          <div class="two-col">
+            <div class="col-card">
+              <h4>📌 Ruta absoluta</h4>
+              <p>
+                Comença sempre per <code>/</code>. Especifica el camí complet
+                des de l'arrel, independentment d'on ets.
+              </p>
+              <pre><span class="cmd">cd /home/alumne/Documents</span>
+<span class="cmd">cat /etc/hostname</span></pre>
+            </div>
+            <div class="col-card">
+              <h4>📍 Ruta relativa</h4>
+              <p>
+                Comença des del directori actual. Usa <code>.</code> (directori
+                actual) i <code>..</code> (directori pare).
+              </p>
+              <pre><span class="cmd">cd Documents</span>       <span class="cm"># entrar a Documents</span>
+<span class="cmd">cd ..</span>              <span class="cm"># pujar un nivell</span>
+<span class="cmd">cd ../../etc</span>       <span class="cm"># pujar 2 i entrar a etc</span></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🧭 Comandes de navegació</h3>
+          <pre><span class="cmd">pwd</span>                   <span class="cm"># on soc ara?</span>
+<span class="out">/home/alumne</span>
+
+<span class="cmd">cd /var/log</span>           <span class="cm"># anar a /var/log (ruta absoluta)</span>
+<span class="cmd">cd ~</span>                  <span class="cm"># anar a la carpeta personal</span>
+<span class="cmd">cd -</span>                  <span class="cm"># tornar al directori anterior</span>
+<span class="cmd">cd ..</span>                 <span class="cm"># pujar un nivell</span>
+
+<span class="cmd">ls</span>                    <span class="cm"># llistar contingut</span>
+<span class="cmd">ls -l</span>                 <span class="cm"># format llarg (permisos, mida, data)</span>
+<span class="cmd">ls -a</span>                 <span class="cm"># mostrar fitxers ocults (comencen per .)</span>
+<span class="cmd">ls -lh</span>                <span class="cm"># mides en KB/MB (human-readable)</span>
+<span class="cmd">ls -lt</span>                <span class="cm"># ordenar per data de modificació</span>
+
+<span class="cmd">tree</span>                  <span class="cm"># arbre visual de directoris (cal instal·lar)</span></pre>
+        </div>
+
+        <div class="theory-card">
+          <h3>🔎 Cercar fitxers</h3>
+          <pre><span class="cm"># find: cerca fitxers al sistema</span>
+<span class="cmd">find</span> <span class="path">/home</span> <span class="op">-name</span> <span class="val">"*.txt"</span>         <span class="cm"># tots els .txt a /home</span>
+<span class="cmd">find</span> <span class="path">.</span> <span class="op">-name</span> <span class="val">"fitxer.py"</span>          <span class="cm"># cercar al directori actual</span>
+<span class="cmd">find</span> <span class="path">/</span> <span class="op">-type d -name</span> <span class="val">"config"</span>    <span class="cm"># cercar directoris anomenats config</span>
+
+<span class="cm"># grep: cercar text dins fitxers</span>
+<span class="cmd">grep</span> <span class="val">"hola"</span> <span class="path">fitxer.txt</span>            <span class="cm"># cercar "hola" al fitxer</span>
+<span class="cmd">grep -r</span> <span class="val">"error"</span> <span class="path">/var/log</span>          <span class="cm"># cercar "error" a tots els logs</span>
+<span class="cmd">grep -i</span> <span class="val">"hola"</span> <span class="path">fitxer.txt</span>         <span class="cm"># sense distingir majúscules</span>
+<span class="cmd">grep -n</span> <span class="val">"hola"</span> <span class="path">fitxer.txt</span>         <span class="cm"># mostra el número de línia</span></pre>
+        </div>
+      </div>
+
+      <!-- ===== 8: EDITOR DE TEXT ===== -->
+      <div class="topic-panel" id="panel-8">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #020817, #1a0f2e);
+            border: 1px solid #2a1a3a;
+          "
+        >
+          <div class="sb-icon">✏️</div>
+          <div>
+            <h2>Editor de text a la terminal</h2>
+            <p>
+              Editar fitxers directament des de la línia de comandes sense
+              entorn gràfic.
+            </p>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>📝 Per què editar a la terminal?</h3>
+          <p>
+            Quan treballem en un servidor remot o sense entorn gràfic,
+            necessitem editar fitxers de configuració, scripts i codi
+            directament des de la terminal. Els editors més comuns són
+            <strong>nano</strong> (fàcil) i <strong>vim</strong> (potent però
+            complex).
+          </p>
+        </div>
+
+        <div class="theory-card">
+          <h3>🟢 nano — l'editor senzill</h3>
+          <p>
+            <strong>nano</strong> és l'editor recomanat per a principiants. Les
+            dreceres es mostren a la part inferior de la pantalla.
+          </p>
+          <pre><span class="cm"># Obrir (o crear) un fitxer amb nano</span>
+<span class="cmd">nano fitxer.txt</span>
+<span class="cmd">nano /etc/hosts</span>       <span class="cm"># editar un fitxer del sistema (amb sudo)</span></pre>
+          <table class="tt">
+            <thead>
+              <tr>
+                <th>Drecera</th>
+                <th>Acció</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Ctrl+O</code></td>
+                <td>Guardar el fitxer (Write Out)</td>
+              </tr>
+              <tr>
+                <td><code>Ctrl+X</code></td>
+                <td>Sortir de nano</td>
+              </tr>
+              <tr>
+                <td><code>Ctrl+K</code></td>
+                <td>Tallar la línia actual</td>
+              </tr>
+              <tr>
+                <td><code>Ctrl+U</code></td>
+                <td>Enganxar la línia tallada</td>
+              </tr>
+              <tr>
+                <td><code>Ctrl+W</code></td>
+                <td>Cercar text</td>
+              </tr>
+              <tr>
+                <td><code>Ctrl+G</code></td>
+                <td>Ajuda</td>
+              </tr>
+              <tr>
+                <td><code>Ctrl+C</code></td>
+                <td>Mostrar la posició del cursor</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="theory-card">
+          <h3>🔵 vim — l'editor professional</h3>
+          <p>
+            <strong>vim</strong> (Vi IMproved) és extremadament potent però té
+            una corba d'aprenentatge elevada. Funciona amb
+            <strong>modes</strong>: no escrius directament com al nano.
+          </p>
+          <div class="two-col">
+            <div class="col-card">
+              <h4>Modes de vim</h4>
+              <ul>
+                <li>
+                  <strong>Normal</strong> (per defecte): navegar i executar
+                  comandes
+                </li>
+                <li><strong>Insert</strong> (<code>i</code>): escriure text</li>
+                <li>
+                  <strong>Visual</strong> (<code>v</code>): seleccionar text
+                </li>
+                <li>
+                  <strong>Command</strong> (<code>:</code>): comandes especials
+                </li>
+              </ul>
+            </div>
+            <div class="col-card">
+              <h4>Comandes essencials</h4>
+              <ul>
+                <li><code>i</code> → entrar al mode Insert</li>
+                <li><code>Esc</code> → tornar al mode Normal</li>
+                <li><code>:w</code> → guardar</li>
+                <li><code>:q</code> → sortir</li>
+                <li><code>:wq</code> → guardar i sortir</li>
+                <li><code>:q!</code> → sortir sense guardar</li>
+              </ul>
+            </div>
+          </div>
+          <div class="info-box purple">
+            💜 El meme famós: "Com surto de vim?" → prem <code>Esc</code> i
+            escriu <code>:q!</code> + Enter. Milers de programadors s'han quedat
+            atrapats a vim per primera vegada!
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>⚡ Redirecció: crear fitxers des de la terminal</h3>
+          <p>
+            Sense obrir cap editor, podem crear i escriure fitxers usant
+            <strong>redireccions</strong>:
+          </p>
+          <pre><span class="cm"># Crear un fitxer amb contingut (sobreescriu si existeix)</span>
+<span class="cmd">echo</span> <span class="val">"Hola món"</span> <span class="op">></span> <span class="path">fitxer.txt</span>
+
+<span class="cm"># Afegir contingut al final (no sobreescriu)</span>
+<span class="cmd">echo</span> <span class="val">"Segona línia"</span> <span class="op">>></span> <span class="path">fitxer.txt</span>
+
+<span class="cm"># Veure el contingut</span>
+<span class="cmd">cat</span> <span class="path">fitxer.txt</span>
+<span class="out">Hola món</span>
+<span class="out">Segona línia</span></pre>
+        </div>
+      </div>
+
+      <!-- ===== 9: FITXERS I DIRECTORIS ===== -->
+      <div class="topic-panel" id="panel-9">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #020817, #1a1a0f);
+            border: 1px solid #2a2a0f;
+          "
+        >
+          <div class="sb-icon">📄</div>
+          <div>
+            <h2>Fitxers i directoris</h2>
+            <p>
+              Crear, copiar, moure, renombrar i eliminar fitxers i carpetes.
+            </p>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>📁 Crear fitxers i directoris</h3>
+          <pre><span class="cm"># Crear fitxers buits</span>
+<span class="cmd">touch</span> <span class="path">fitxer.txt</span>
+<span class="cmd">touch</span> <span class="path">a.txt b.txt c.txt</span>    <span class="cm"># crear múltiples alhora</span>
+
+<span class="cm"># Crear directoris</span>
+<span class="cmd">mkdir</span> <span class="path">nova_carpeta</span>
+<span class="cmd">mkdir -p</span> <span class="path">carpeta/subcarpeta/subsubcarpeta</span>  <span class="cm"># crea tota la jerarquia</span></pre>
+        </div>
+
+        <div class="theory-card">
+          <h3>📋 Copiar fitxers i directoris</h3>
+          <pre><span class="cm"># Copiar fitxers</span>
+<span class="cmd">cp</span> <span class="path">origen.txt</span> <span class="path">desti.txt</span>          <span class="cm"># copia amb nou nom</span>
+<span class="cmd">cp</span> <span class="path">fitxer.txt</span> <span class="path">/tmp/</span>             <span class="cm"># copia a una altra carpeta</span>
+<span class="cmd">cp</span> <span class="path">*.txt</span> <span class="path">/tmp/</span>                  <span class="cm"># copia tots els .txt</span>
+
+<span class="cm"># Copiar directoris (cal -r de "recursiu")</span>
+<span class="cmd">cp -r</span> <span class="path">carpeta_origen/</span> <span class="path">carpeta_desti/</span></pre>
+        </div>
+
+        <div class="theory-card">
+          <h3>🚚 Moure i renombrar</h3>
+          <p>
+            A Linux, <code>mv</code> serveix tant per moure com per renombrar —
+            és la mateixa operació.
+          </p>
+          <pre><span class="cm"># Renombrar un fitxer</span>
+<span class="cmd">mv</span> <span class="path">nom_antic.txt</span> <span class="path">nom_nou.txt</span>
+
+<span class="cm"># Moure a una altra carpeta</span>
+<span class="cmd">mv</span> <span class="path">fitxer.txt</span> <span class="path">/tmp/</span>
+
+<span class="cm"># Moure i renombrar alhora</span>
+<span class="cmd">mv</span> <span class="path">fitxer.txt</span> <span class="path">/tmp/nou_nom.txt</span>
+
+<span class="cm"># Moure múltiples fitxers</span>
+<span class="cmd">mv</span> <span class="path">*.txt</span> <span class="path">/tmp/</span></pre>
+        </div>
+
+        <div class="theory-card">
+          <h3>🗑️ Eliminar fitxers i directoris</h3>
+          <pre><span class="cm"># Eliminar fitxers</span>
+<span class="cmd">rm</span> <span class="path">fitxer.txt</span>
+<span class="cmd">rm</span> <span class="path">*.txt</span>                  <span class="cm"># eliminar tots els .txt</span>
+
+<span class="cm"># Eliminar directoris buits</span>
+<span class="cmd">rmdir</span> <span class="path">carpeta_buida/</span>
+
+<span class="cm"># Eliminar directoris amb contingut</span>
+<span class="cmd">rm -r</span> <span class="path">carpeta/</span>             <span class="cm"># recursiu</span>
+<span class="cmd">rm -rf</span> <span class="path">carpeta/</span>            <span class="cm"># recursiu i forçat (sense demanar confirmació)</span></pre>
+          <div class="info-box red">
+            ⚠️ <code>rm -rf</code> és <strong>irreversible</strong>. A Linux no
+            hi ha paperera de reciclatge a la terminal. Un
+            <code>rm -rf /</code> esborraria tot el sistema. Comprova sempre el
+            que escrius abans de prémer Enter.
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🔎 Visualitzar contingut de fitxers</h3>
+          <pre><span class="cmd">cat</span> <span class="path">fitxer.txt</span>          <span class="cm"># mostra tot el contingut</span>
+<span class="cmd">head</span> <span class="path">fitxer.txt</span>         <span class="cm"># primeres 10 línies</span>
+<span class="cmd">head -n 5</span> <span class="path">fitxer.txt</span>    <span class="cm"># primeres 5 línies</span>
+<span class="cmd">tail</span> <span class="path">fitxer.txt</span>         <span class="cm"># últimes 10 línies</span>
+<span class="cmd">tail -f</span> <span class="path">/var/log/syslog</span> <span class="cm"># veure el log en temps real</span>
+<span class="cmd">less</span> <span class="path">fitxer.txt</span>         <span class="cm"># paginat (q per sortir)</span>
+<span class="cmd">wc -l</span> <span class="path">fitxer.txt</span>        <span class="cm"># comptar línies</span></pre>
+        </div>
+      </div>
+
+      <!-- ===== 10: AUTOMATITZACIÓ ===== -->
+      <div class="topic-panel" id="panel-10">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #020817, #0f1a0f);
+            border: 1px solid #1a3a1a;
+          "
+        >
+          <div class="sb-icon">⚙️</div>
+          <div>
+            <h2>Automatització i fluxos</h2>
+            <p>
+              Pipes, redireccions i encadenament de comandes per automatitzar
+              tasques.
+            </p>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>➡️ Redirecció de sortida</h3>
+          <p>
+            Per defecte, les comandes mostren el resultat per pantalla. Amb
+            redireccions podem enviar-lo a un fitxer.
+          </p>
+          <pre><span class="cm"># > sobreescriu el fitxer</span>
+<span class="cmd">ls -la</span> <span class="op">></span> <span class="path">llista.txt</span>         <span class="cm"># guarda la llista al fitxer</span>
+
+<span class="cm"># >> afegeix al final</span>
+<span class="cmd">date</span> <span class="op">>></span> <span class="path">log.txt</span>             <span class="cm"># afegeix la data al final del log</span>
+
+<span class="cm"># 2> redirigeix errors</span>
+<span class="cmd">ls fitxer_inexistent</span> <span class="op">2></span> <span class="path">errors.txt</span>
+
+<span class="cm"># &> redirigeix sortida normal i errors</span>
+<span class="cmd">make</span> <span class="op">&></span> <span class="path">build.log</span></pre>
+        </div>
+
+        <div class="theory-card">
+          <h3>🔗 Pipes (canonades) |</h3>
+          <p>
+            El pipe <code>|</code> connecta la sortida d'una comanda amb
+            l'entrada d'una altra. Permet encadenar comandes per fer operacions
+            complexes.
+          </p>
+          <pre><span class="cm"># Comptar quants fitxers hi ha a /etc</span>
+<span class="cmd">ls /etc</span> <span class="op">|</span> <span class="cmd">wc -l</span>
+
+<span class="cm"># Cercar "error" als logs i mostrar-ho paginat</span>
+<span class="cmd">cat /var/log/syslog</span> <span class="op">|</span> <span class="cmd">grep</span> <span class="val">"error"</span> <span class="op">|</span> <span class="cmd">less</span>
+
+<span class="cm"># Llistar processos i cercar-ne un concret</span>
+<span class="cmd">ps aux</span> <span class="op">|</span> <span class="cmd">grep</span> <span class="val">"firefox"</span>
+
+<span class="cm"># Els 5 fitxers més grans d'una carpeta</span>
+<span class="cmd">du -sh *</span> <span class="op">|</span> <span class="cmd">sort -rh</span> <span class="op">|</span> <span class="cmd">head -5</span></pre>
+          <div class="info-box blue">
+            💡 El pipe és una de les idees més brillants de Unix: cada programa
+            fa una sola cosa molt bé, i els pipes els connecten per resoldre
+            tasques complexes.
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>⛓️ Encadenament de comandes</h3>
+          <pre><span class="cm"># && executa la segona SOLS si la primera té èxit</span>
+<span class="cmd">mkdir nova_carpeta</span> <span class="op">&&</span> <span class="cmd">cd nova_carpeta</span>
+<span class="cmd">sudo apt update</span> <span class="op">&&</span> <span class="cmd">sudo apt upgrade</span>
+
+<span class="cm"># || executa la segona SOLS si la primera falla</span>
+<span class="cmd">ping -c1 google.com</span> <span class="op">||</span> <span class="cmd">echo</span> <span class="val">"Sense connexió!"</span>
+
+<span class="cm"># ; executa les dues sempre (independentment del resultat)</span>
+<span class="cmd">cd /tmp</span> <span class="op">;</span> <span class="cmd">ls</span></pre>
+        </div>
+
+        <div class="theory-card">
+          <h3>⏰ Cron — programar tasques automàtiques</h3>
+          <p>
+            <strong>Cron</strong> és el servei de Linux per executar comandes o
+            scripts de forma automàtica en un moment determinat (cada hora, cada
+            dia, cada dilluns...).
+          </p>
+          <pre><span class="cm"># Editar el crontab de l'usuari actual</span>
+<span class="cmd">crontab -e</span>
+
+<span class="cm"># Format: minut hora dia_mes mes dia_setmana comanda</span>
+<span class="cm"># ┌───── minut (0-59)</span>
+<span class="cm"># │ ┌─── hora (0-23)</span>
+<span class="cm"># │ │ ┌─ dia del mes (1-31)</span>
+<span class="cm"># │ │ │ ┌ mes (1-12)</span>
+<span class="cm"># │ │ │ │ ┌ dia setmana (0=diumenge)</span>
+<span class="val">0 2 * * *</span> <span class="cmd">/home/alumne/backup.sh</span>   <span class="cm"># cada dia a les 2:00</span>
+<span class="val">*/5 * * * *</span> <span class="cmd">date >> /tmp/log.txt</span>  <span class="cm"># cada 5 minuts</span>
+<span class="val">0 9 * * 1</span> <span class="cmd">sudo apt update</span>        <span class="cm"># cada dilluns a les 9:00</span></pre>
+        </div>
+      </div>
+
+      <!-- ===== 11: SCRIPTS ===== -->
+      <div class="topic-panel" id="panel-11">
+        <div class="noentra-banner">
+          📜 Aquest tema <strong>NO ENTRA</strong> a l'examen, però és important
+          per entendre l'automatització avançada.
+        </div>
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #1a0a2e, #2e1a3e);
+            border: 1px solid #3a1a4a;
+          "
+        >
+          <div class="sb-icon">📜</div>
+          <div>
+            <h2>Scripts de Shell (Bash)</h2>
+            <p>Crear programes que automatitzen seqüències de comandes.</p>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>📜 Què és un script?</h3>
+          <p>
+            Un <strong>script de shell</strong> és un fitxer de text que conté
+            una seqüència de comandes de Bash. En executar-lo, el sistema
+            executa les comandes una per una, com si les escrivíssim a mà.
+            Permeten automatitzar tasques repetitives.
+          </p>
+          <pre><span class="cm">#!/bin/bash</span>
+<span class="cm"># La primera línia (shebang) indica quin intèrpret usar</span>
+
+<span class="cmd">echo</span> <span class="val">"Hola, soc un script!"</span>
+<span class="cmd">echo</span> <span class="val">"La data actual és:"</span>
+<span class="cmd">date</span>
+<span class="cmd">echo</span> <span class="val">"El directori actual és:"</span>
+<span class="cmd">pwd</span></pre>
+        </div>
+
+        <div class="theory-card">
+          <h3>▶️ Crear i executar un script</h3>
+          <div class="step-list">
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num">1</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <h4>Crear el fitxer</h4>
+                <pre><span class="cmd">nano script.sh</span></pre>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num">2</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <h4>Donar permisos d'execució</h4>
+                <pre><span class="cmd">chmod +x script.sh</span></pre>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left"><div class="step-num">3</div></div>
+              <div class="step-content">
+                <h4>Executar-lo</h4>
+                <pre><span class="cmd">./script.sh</span>       <span class="cm"># amb ./</span>
+<span class="cmd">bash script.sh</span>    <span class="cm"># o amb bash explícit</span></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🔤 Variables, condicionals i bucles</h3>
+          <pre><span class="cm">#!/bin/bash</span>
+
+<span class="cm"># Variables</span>
+<span class="val">NOM</span>=<span class="st">"Anna"</span>
+<span class="cmd">echo</span> <span class="val">"Hola, $NOM"</span>
+
+<span class="cm"># Condicional</span>
+<span class="kw">if</span> [ <span class="val">$NOM</span> == <span class="st">"Anna"</span> ]; <span class="kw">then</span>
+    <span class="cmd">echo</span> <span class="val">"Ets l'Anna!"</span>
+<span class="kw">else</span>
+    <span class="cmd">echo</span> <span class="val">"No ets l'Anna"</span>
+<span class="kw">fi</span>
+
+<span class="cm"># Bucle for</span>
+<span class="kw">for</span> <span class="val">i</span> <span class="kw">in</span> 1 2 3 4 5; <span class="kw">do</span>
+    <span class="cmd">echo</span> <span class="val">"Número: $i"</span>
+<span class="kw">done</span>
+
+<span class="cm"># Bucle while</span>
+<span class="val">COMPTE</span>=0
+<span class="kw">while</span> [ <span class="val">$COMPTE</span> -lt 5 ]; <span class="kw">do</span>
+    <span class="cmd">echo</span> <span class="val">"Compte: $COMPTE"</span>
+    <span class="val">COMPTE</span>=$((COMPTE+1))
+<span class="kw">done</span></pre>
+        </div>
+      </div>
+
+      <!-- ===== 12: USUARI ROOT ===== -->
+      <div class="topic-panel" id="panel-12">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #1a0000, #3a0000);
+            border: 1px solid #4a0000;
+          "
+        >
+          <div class="sb-icon">👑</div>
+          <div>
+            <h2>L'usuari root</h2>
+            <p>
+              El superusuari de Linux: poders absoluts i responsabilitat total.
+            </p>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>👑 Qui és root?</h3>
+          <p>
+            <strong>root</strong> és el superusuari del sistema. Té permisos
+            absolutament il·limitats: pot llegir, escriure i esborrar qualsevol
+            fitxer del sistema, gestionar tots els serveis, i realitzar
+            qualsevol operació sense restriccions.
+          </p>
+          <div class="two-col">
+            <div class="col-card">
+              <h4>Usuari normal</h4>
+              <ul>
+                <li>UID (User ID): ≥ 1000</li>
+                <li>Prompte: <code>$</code></li>
+                <li>Accés limitat al seu /home</li>
+                <li>No pot modificar fitxers del sistema</li>
+              </ul>
+            </div>
+            <div class="col-card">
+              <h4>root</h4>
+              <ul>
+                <li>UID: 0 (sempre)</li>
+                <li>Prompte: <code>#</code></li>
+                <li>Accés total a tot el sistema</li>
+                <li>Pot fer i desfer absolutament tot</li>
+              </ul>
+            </div>
+          </div>
+          <div class="info-box red">
+            ⚠️ Treballar sempre com a root és molt perillós. Un error tipogràfic
+            podria esborrar tot el sistema. La bona pràctica és treballar com a
+            usuari normal i elevar permisos solo quan calgui.
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🔑 sudo — elevació puntual de permisos</h3>
+          <p>
+            <strong>sudo</strong> (SuperUser DO) permet executar una comanda
+            concreta amb permisos de root sense necessitat de ser root. Demana
+            la teva contrasenya per confirmar.
+          </p>
+          <pre><span class="cm"># Sense sudo: permís denegat</span>
+<span class="cmd">apt update</span>
+<span class="out">E: Could not open lock file - open (13: Permission denied)</span>
+
+<span class="cm"># Amb sudo: funciona</span>
+<span class="cmd">sudo apt update</span>
+<span class="out">[sudo] password for alumne: </span>
+
+<span class="cm"># Executar una shell com a root (usar amb precaució!)</span>
+<span class="cmd">sudo -i</span>           <span class="cm"># shell root interactiva</span>
+<span class="cmd">sudo su</span>           <span class="cm"># canviar a l'usuari root</span>
+<span class="cmd">exit</span>              <span class="cm"># tornar a l'usuari normal</span></pre>
+          <div class="info-box yellow">
+            💡 Quan el prompte mostra <code>#</code> en lloc de <code>$</code>,
+            ets root. Actua amb màxima precaució.
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>👥 Fitxer sudoers — qui pot usar sudo</h3>
+          <p>
+            No tots els usuaris poden usar <code>sudo</code> per defecte. El
+            fitxer <code>/etc/sudoers</code> defineix qui té permís. A
+            Ubuntu/Lubuntu, els usuaris del grup <strong>sudo</strong> poden
+            usar-lo.
+          </p>
+          <pre><span class="cm"># Afegir un usuari al grup sudo (com a root)</span>
+<span class="cmd">usermod -aG sudo nom_usuari</span>
+
+<span class="cm"># Veure a quins grups pertanys</span>
+<span class="cmd">groups</span>
+<span class="out">alumne sudo adm cdrom...</span></pre>
+        </div>
+      </div>
+
+      <!-- ===== 13: GESTIÓ PAQUETS ===== -->
+      <div class="topic-panel" id="panel-13">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #020817, #0f2a1a);
+            border: 1px solid #1a3a1a;
+          "
+        >
+          <div class="sb-icon">📦</div>
+          <div>
+            <h2>Gestió de paquets amb apt</h2>
+            <p>
+              Instal·lar, actualitzar i eliminar programes a
+              Lubuntu/Ubuntu/Debian.
+            </p>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>📦 Què és un paquet?</h3>
+          <p>
+            A Linux, els programes es distribueixen en
+            <strong>paquets</strong> (fitxers <code>.deb</code> a
+            Debian/Ubuntu). El <strong>gestor de paquets</strong> s'encarrega
+            d'instal·lar-los, resoldre dependències, actualitzar-los i
+            eliminar-los automàticament.
+          </p>
+          <div class="info-box blue">
+            💡 Linux no necessita cercar programes a llocs web. Tot és al
+            <strong>repositori oficial</strong>: una col·lecció de milers de
+            programes verificats que pots instal·lar amb una sola comanda.
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>⚙️ Comandes apt essencials</h3>
+          <pre><span class="cm"># Actualitzar la llista de paquets disponibles (NO instal·la res)</span>
+<span class="cmd">sudo apt update</span>
+
+<span class="cm"># Instal·lar les actualitzacions disponibles</span>
+<span class="cmd">sudo apt upgrade</span>
+<span class="cmd">sudo apt upgrade -y</span>          <span class="cm"># confirmar automàticament</span>
+
+<span class="cm"># Instal·lar un programa</span>
+<span class="cmd">sudo apt install</span> <span class="val">nom_paquet</span>
+<span class="cmd">sudo apt install</span> <span class="val">curl wget git vim tree</span>  <span class="cm"># diversos alhora</span>
+
+<span class="cm"># Eliminar un programa</span>
+<span class="cmd">sudo apt remove</span> <span class="val">nom_paquet</span>
+<span class="cmd">sudo apt purge</span> <span class="val">nom_paquet</span>    <span class="cm"># elimina també fitxers de configuració</span>
+
+<span class="cm"># Cercar un programa als repositoris</span>
+<span class="cmd">apt search</span> <span class="val">nom_paquet</span>
+
+<span class="cm"># Informació d'un paquet</span>
+<span class="cmd">apt show</span> <span class="val">nom_paquet</span>
+
+<span class="cm"># Netejar paquets que ja no calen</span>
+<span class="cmd">sudo apt autoremove</span></pre>
+        </div>
+
+        <div class="theory-card">
+          <h3>🛠️ Paquets útils per instal·lar</h3>
+          <table class="tt">
+            <thead>
+              <tr>
+                <th>Paquet</th>
+                <th>Per a què serveix</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>curl</code></td>
+                <td>Fer peticions HTTP des de la terminal</td>
+              </tr>
+              <tr>
+                <td><code>wget</code></td>
+                <td>Descarregar fitxers des d'URLs</td>
+              </tr>
+              <tr>
+                <td><code>git</code></td>
+                <td>Control de versions</td>
+              </tr>
+              <tr>
+                <td><code>python3</code></td>
+                <td>L'intèrpret de Python 3</td>
+              </tr>
+              <tr>
+                <td><code>python3-pip</code></td>
+                <td>Gestor de paquets de Python</td>
+              </tr>
+              <tr>
+                <td><code>openssh-server</code></td>
+                <td>Servidor SSH per a accés remot</td>
+              </tr>
+              <tr>
+                <td><code>nginx</code> / <code>apache2</code></td>
+                <td>Servidor web</td>
+              </tr>
+              <tr>
+                <td><code>tree</code></td>
+                <td>Visualitzar arbre de directoris</td>
+              </tr>
+              <tr>
+                <td><code>htop</code></td>
+                <td>Monitor de processos interactiu</td>
+              </tr>
+              <tr>
+                <td><code>net-tools</code></td>
+                <td>Eines de xarxa: ifconfig, netstat...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ===== 14: USUARIS ===== -->
+      <div class="topic-panel" id="panel-14">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #020817, #1a1a2e);
+            border: 1px solid #2a2a3a;
+          "
+        >
+          <div class="sb-icon">👥</div>
+          <div>
+            <h2>Gestió d'usuaris</h2>
+            <p>Crear, modificar i eliminar usuaris i grups al sistema Linux.</p>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>👤 Fitxers del sistema d'usuaris</h3>
+          <p>
+            Linux guarda la informació dels usuaris en fitxers de text al
+            directori <code>/etc</code>:
+          </p>
+          <table class="tt">
+            <thead>
+              <tr>
+                <th>Fitxer</th>
+                <th>Contingut</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>/etc/passwd</code></td>
+                <td>Llista d'usuaris: nom, UID, GID, home, shell</td>
+              </tr>
+              <tr>
+                <td><code>/etc/shadow</code></td>
+                <td>Contrasenyes encriptades (sols root pot llegir-lo)</td>
+              </tr>
+              <tr>
+                <td><code>/etc/group</code></td>
+                <td>Llista de grups i els seus membres</td>
+              </tr>
+            </tbody>
+          </table>
+          <pre><span class="cm"># Veure els usuaris del sistema</span>
+<span class="cmd">cat /etc/passwd</span>
+<span class="out">root:x:0:0:root:/root:/bin/bash</span>
+<span class="out">alumne:x:1000:1000:Alumne:/home/alumne:/bin/bash</span>
+<span class="cm">#nom:x:UID:GID:descripció:home:shell</span></pre>
+        </div>
+
+        <div class="theory-card">
+          <h3>➕ Crear i gestionar usuaris</h3>
+          <pre><span class="cm"># Crear un usuari nou (amb carpeta home)</span>
+<span class="cmd">sudo adduser</span> <span class="val">nom_usuari</span>      <span class="cm"># interactiu, crea home</span>
+<span class="cmd">sudo useradd -m</span> <span class="val">nom_usuari</span>   <span class="cm"># no interactiu</span>
+
+<span class="cm"># Canviar la contrasenya d'un usuari</span>
+<span class="cmd">sudo passwd</span> <span class="val">nom_usuari</span>
+
+<span class="cm"># Eliminar un usuari</span>
+<span class="cmd">sudo deluser</span> <span class="val">nom_usuari</span>
+<span class="cmd">sudo deluser --remove-home</span> <span class="val">nom_usuari</span>  <span class="cm"># i esborra el /home</span>
+
+<span class="cm"># Modificar un usuari</span>
+<span class="cmd">sudo usermod -aG sudo</span> <span class="val">nom_usuari</span>  <span class="cm"># afegir al grup sudo</span>
+<span class="cmd">sudo usermod -s /bin/bash</span> <span class="val">nom</span>    <span class="cm"># canviar shell</span>
+
+<span class="cm"># Canviar d'usuari</span>
+<span class="cmd">su</span> <span class="val">nom_usuari</span>                     <span class="cm"># canviar a un altre usuari</span>
+<span class="cmd">su -</span>                              <span class="cm"># canviar a root</span></pre>
+        </div>
+
+        <div class="theory-card">
+          <h3>👥 Gestió de grups</h3>
+          <pre><span class="cm"># Crear un grup</span>
+<span class="cmd">sudo groupadd</span> <span class="val">nom_grup</span>
+
+<span class="cm"># Afegir un usuari a un grup</span>
+<span class="cmd">sudo usermod -aG</span> <span class="val">nom_grup nom_usuari</span>
+
+<span class="cm"># Veure els grups d'un usuari</span>
+<span class="cmd">groups</span> <span class="val">nom_usuari</span>
+
+<span class="cm"># Eliminar un grup</span>
+<span class="cmd">sudo groupdel</span> <span class="val">nom_grup</span>
+
+<span class="cm"># Veure tots els grups</span>
+<span class="cmd">cat /etc/group</span></pre>
+          <div class="info-box yellow">
+            💡 Grups importants: <strong>sudo</strong> (pot usar sudo),
+            <strong>www-data</strong> (servidor web),
+            <strong>docker</strong> (contenidors), <strong>adm</strong> (llegir
+            logs del sistema).
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 15: PERMISOS ===== -->
+      <div class="topic-panel" id="panel-15">
+        <div class="noentra-banner">
+          🔐 Aquest tema <strong>NO ENTRA</strong> a l'examen, però és
+          fonamental per entendre la seguretat de Linux.
+        </div>
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #1a0a2e, #2a1a3e);
+            border: 1px solid #3a1a4a;
+          "
+        >
+          <div class="sb-icon">🔐</div>
+          <div>
+            <h2>Permisos de fitxers</h2>
+            <p>
+              El sistema de permisos rwx de Linux: qui pot llegir, escriure i
+              executar.
+            </p>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🔐 El sistema de permisos rwx</h3>
+          <p>
+            Cada fitxer i directori de Linux té tres conjunts de permisos: per
+            al <strong>propietari</strong>, per al <strong>grup</strong> i per a
+            <strong>tots els altres</strong>. Cadascun pot tenir tres permisos:
+            llegir, escriure i executar.
+          </p>
+          <pre><span class="cmd">ls -l fitxer.txt</span>
+<span class="out">-rwxr-xr-- 1 alumne alumne 1234 gen 15 10:30 fitxer.txt</span>
+<span class="cm"> │││││││││ │ │       │</span>
+<span class="cm"> │││││││││ │ │       └── grup propietari</span>
+<span class="cm"> │││││││││ │ └────────── usuari propietari</span>
+<span class="cm"> │││││││││ └──────────── nombre d'enllaços</span>
+<span class="cm"> ││└──┘└──┘└── permisos del grup | altres</span>
+<span class="cm"> │└──┘──────── permisos del propietari</span>
+<span class="cm"> └──────────── tipus: - fitxer, d directori, l enllaç</span></pre>
+          <div class="perm-box">
+            <div class="perm-cell">
+              <span class="letter perm-r">r</span>
+              <p>read<br />Llegir</p>
+            </div>
+            <div class="perm-cell">
+              <span class="letter perm-w">w</span>
+              <p>write<br />Escriure</p>
+            </div>
+            <div class="perm-cell">
+              <span class="letter perm-x">x</span>
+              <p>execute<br />Executar</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🔢 Notació octal (numèrica)</h3>
+          <p>
+            Els permisos es poden expressar com a nombres. Cada permís té un
+            valor: r=4, w=2, x=1. Se sumen per a cada conjunt:
+          </p>
+          <table class="tt">
+            <thead>
+              <tr>
+                <th>Número</th>
+                <th>Permisos</th>
+                <th>Significat</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>7</strong></td>
+                <td>rwx</td>
+                <td>Llegir + escriure + executar</td>
+              </tr>
+              <tr>
+                <td><strong>6</strong></td>
+                <td>rw-</td>
+                <td>Llegir + escriure</td>
+              </tr>
+              <tr>
+                <td><strong>5</strong></td>
+                <td>r-x</td>
+                <td>Llegir + executar</td>
+              </tr>
+              <tr>
+                <td><strong>4</strong></td>
+                <td>r--</td>
+                <td>Sols llegir</td>
+              </tr>
+              <tr>
+                <td><strong>0</strong></td>
+                <td>---</td>
+                <td>Cap permís</td>
+              </tr>
+            </tbody>
+          </table>
+          <pre><span class="cm"># chmod: canviar permisos</span>
+<span class="cmd">chmod 755</span> <span class="path">script.sh</span>    <span class="cm"># propietari=rwx, grup=rx, altres=rx</span>
+<span class="cmd">chmod 644</span> <span class="path">fitxer.txt</span>   <span class="cm"># propietari=rw, grup=r, altres=r</span>
+<span class="cmd">chmod +x</span>  <span class="path">script.sh</span>    <span class="cm"># afegir permís d'execució a tothom</span>
+<span class="cmd">chmod -r</span>  <span class="path">privat.txt</span>   <span class="cm"># treure permisos de lectura</span>
+<span class="cmd">chmod u+x</span> <span class="path">fitxer</span>      <span class="cm"># afegir execució sols al propietari (u)</span>
+
+<span class="cm"># chown: canviar propietari</span>
+<span class="cmd">sudo chown alumne:alumne</span> <span class="path">fitxer.txt</span>    <span class="cm"># usuari:grup</span>
+<span class="cmd">sudo chown -R alumne</span> <span class="path">carpeta/</span>          <span class="cm"># recursiu</span></pre>
+        </div>
+      </div>
+
+      <!-- ===== 16: ACCÉS REMOT ===== -->
+      <div class="topic-panel" id="panel-16">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #020817, #0a1a2e);
+            border: 1px solid #0a2a3a;
+          "
+        >
+          <div class="sb-icon">🌐</div>
+          <div>
+            <h2>Accés remot amb SSH</h2>
+            <p>
+              Connectar-se a un servidor Linux des d'un altre ordinador de forma
+              segura.
+            </p>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🔐 Què és SSH?</h3>
+          <p>
+            <strong>SSH (Secure Shell)</strong> és un protocol que permet
+            accedir de forma segura a una màquina remota a través de la xarxa.
+            Tota la comunicació va encriptada.
+          </p>
+          <div class="two-col">
+            <div class="col-card">
+              <h4>Usos principals</h4>
+              <ul>
+                <li>Administrar servidors remots</li>
+                <li>Transferir fitxers de forma segura</li>
+                <li>Tunel·litzar connexions</li>
+                <li>Accedir a la MV des del host</li>
+              </ul>
+            </div>
+            <div class="col-card">
+              <h4>Components</h4>
+              <ul>
+                <li>
+                  <strong>Servidor SSH</strong>: <code>openssh-server</code> (a
+                  la MV Linux)
+                </li>
+                <li>
+                  <strong>Client SSH</strong>: <code>ssh</code> comanda (a
+                  qualsevol Linux/Mac) o <code>PuTTY</code> (Windows)
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>⚙️ Configurar SSH a la MV Lubuntu</h3>
+          <div class="step-list">
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num">1</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <h4>Instal·lar el servidor SSH</h4>
+                <pre><span class="cmd">sudo apt install openssh-server</span></pre>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num">2</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <h4>Verificar que el servei està actiu</h4>
+                <pre><span class="cmd">sudo systemctl status ssh</span>
+<span class="out">● ssh.service - OpenBSD Secure Shell server</span>
+<span class="out">   Active: <span style="color:#86efac">active (running)</span></span></pre>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num">3</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <h4>Configurar la xarxa de la MV</h4>
+                <p>
+                  A VirtualBox: Configuració → Xarxa → Adaptador en mode
+                  <strong>Adaptador pont</strong> (Bridged) per obtenir una IP
+                  de la xarxa real, o NAT amb reenvio de ports.
+                </p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left"><div class="step-num">4</div></div>
+              <div class="step-content">
+                <h4>Saber la IP de la MV</h4>
+                <pre><span class="cmd">ip a</span>      <span class="cm"># o ifconfig si tens net-tools</span></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🖥️ Connectar-se per SSH</h3>
+          <pre><span class="cm"># Sintaxi bàsica</span>
+<span class="cmd">ssh</span> <span class="val">usuari</span><span class="op">@</span><span class="val">ip_o_nom_maquina</span>
+
+<span class="cm"># Exemple: connectar a la MV Lubuntu</span>
+<span class="cmd">ssh alumne@192.168.1.50</span>
+
+<span class="cm"># Connectar per un port diferent al 22 (el port per defecte)</span>
+<span class="cmd">ssh -p 2222 alumne@192.168.1.50</span>
+
+<span class="cm"># Quan es connecta per primera vegada, demana confirmar la clau:</span>
+<span class="out">The authenticity of host '192.168.1.50' can't be established.</span>
+<span class="out">Are you sure you want to continue connecting (yes/no)? </span><span class="val">yes</span>
+
+<span class="cm"># Un cop connecto, el prompte canvia al de la màquina remota:</span>
+<span class="root">alumne@lubuntu-vm</span>:<span class="path">~</span><span class="op">$</span>   <span class="cm">← ara estem a la MV!</span></pre>
+          <div class="info-box green">
+            ✅ Un cop connectat per SSH, treballes a la terminal de la màquina
+            remota com si estiguessis davant seu físicament. Tot el que escrius
+            s'executa a la màquina remota.
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>📁 Transferir fitxers amb SCP i SFTP</h3>
+          <pre><span class="cm"># SCP: Secure Copy — copiar fitxers per SSH</span>
+<span class="cm"># Des del local a la remota:</span>
+<span class="cmd">scp fitxer.txt alumne@192.168.1.50:/home/alumne/</span>
+
+<span class="cm"># Des de la remota al local:</span>
+<span class="cmd">scp alumne@192.168.1.50:/home/alumne/fitxer.txt .</span>
+
+<span class="cm"># Carpeta sencera (-r recursiu):</span>
+<span class="cmd">scp -r carpeta/ alumne@192.168.1.50:/tmp/</span></pre>
+        </div>
+      </div>
+
+      <!-- ===== 17: SERVIDOR WEB ===== -->
+      <div class="topic-panel" id="panel-17">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #020817, #0f1a2e);
+            border: 1px solid #1a2a3a;
+          "
+        >
+          <div class="sb-icon">🖥️</div>
+          <div>
+            <h2>Servidor web amb Apache/Nginx</h2>
+            <p>Configurar Linux com a servidor web per servir pàgines HTML.</p>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🌐 Què és un servidor web?</h3>
+          <p>
+            Un <strong>servidor web</strong> és un programa que escolta
+            peticions HTTP (navegadors, aplicacions) i retorna el contingut
+            sol·licitat: pàgines HTML, imatges, fitxers, etc.
+          </p>
+          <div class="two-col">
+            <div class="col-card">
+              <h4>🔴 Apache</h4>
+              <p>
+                El servidor web més antic i usat. Molt configurable, gran
+                comunitat. Fitxer de configuració: <code>/etc/apache2/</code>
+              </p>
+            </div>
+            <div class="col-card">
+              <h4>🟢 Nginx</h4>
+              <p>
+                Més modern i eficient per a moltes connexions simultànies. Usat
+                per llocs d'alt tràfic. Fitxer de config:
+                <code>/etc/nginx/</code>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>⚙️ Instal·lar i configurar Apache</h3>
+          <div class="step-list">
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num">1</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <h4>Instal·lar Apache</h4>
+                <pre><span class="cmd">sudo apt update</span>
+<span class="cmd">sudo apt install apache2</span></pre>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num">2</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <h4>Verificar que funciona</h4>
+                <pre><span class="cmd">sudo systemctl status apache2</span>
+<span class="cm"># Obrir el navegador i anar a: http://localhost</span>
+<span class="cm"># Ha d'aparèixer la pàgina de benvinguda d'Apache</span></pre>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left">
+                <div class="step-num">3</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <h4>Directori arrel del web</h4>
+                <p>
+                  Les pàgines web es serveixen des de
+                  <code>/var/www/html/</code>. El fitxer principal és
+                  <code>index.html</code>.
+                </p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-left"><div class="step-num">4</div></div>
+              <div class="step-content">
+                <h4>Publicar la nostra pàgina</h4>
+                <pre><span class="cmd">sudo nano /var/www/html/index.html</span>
+<span class="cm"># Escriure el nostre HTML i guardar</span></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>🔧 Gestionar el servei Apache</h3>
+          <pre><span class="cm"># Iniciar, aturar i reiniciar el servei</span>
+<span class="cmd">sudo systemctl start apache2</span>
+<span class="cmd">sudo systemctl stop apache2</span>
+<span class="cmd">sudo systemctl restart apache2</span>
+<span class="cmd">sudo systemctl reload apache2</span>    <span class="cm"># recarrega config sense aturar</span>
+
+<span class="cm"># Activar l'inici automàtic en arrencar Linux</span>
+<span class="cmd">sudo systemctl enable apache2</span>
+
+<span class="cm"># Veure l'estat</span>
+<span class="cmd">sudo systemctl status apache2</span></pre>
+          <div class="info-box blue">
+            💡 <code>systemctl</code> és la comanda per gestionar
+            <strong>serveis</strong> (daemons) a Linux modern. Funciona igual
+            per a SSH, MySQL, Nginx i qualsevol altre servei.
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <h3>📄 Servir la nostra pàgina web</h3>
+          <pre><span class="cm"># Crear una pàgina HTML pròpia</span>
+<span class="cmd">sudo nano /var/www/html/index.html</span></pre>
+          <pre><span class="cm">&lt;!-- Contingut del fitxer index.html --&gt;</span>
+&lt;<span class="kw">html</span>&gt;
+  &lt;<span class="kw">head</span>&gt;&lt;<span class="kw">title</span>&gt;El meu servidor Linux&lt;/<span class="kw">title</span>&gt;&lt;/<span class="kw">head</span>&gt;
+  &lt;<span class="kw">body</span>&gt;
+    &lt;<span class="kw">h1</span>&gt;Servidor funcionant!&lt;/<span class="kw">h1</span>&gt;
+    &lt;<span class="kw">p</span>&gt;Lubuntu + Apache2 a VirtualBox.&lt;/<span class="kw">p</span>&gt;
+  &lt;/<span class="kw">body</span>&gt;
+&lt;/<span class="kw">html</span>&gt;</pre>
+          <pre><span class="cm"># Donar permisos correctes al fitxer</span>
+<span class="cmd">sudo chown www-data:www-data /var/www/html/index.html</span>
+<span class="cmd">sudo chmod 644 /var/www/html/index.html</span>
+
+<span class="cm"># Accedir des del navegador del host (si la MV té IP 192.168.1.50)</span>
+<span class="cm"># http://192.168.1.50</span></pre>
+          <div class="info-box green">
+            ✅ Si accedeixes a la IP de la MV des del navegador del teu
+            ordinador real i veus la teva pàgina HTML, el servidor web està
+            funcionant correctament!
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-btns">
+        <button
+          class="nav-btn prev"
+          id="btn-prev"
+          onclick="navigate(-1)"
+          disabled
+        >
+          ← Tema anterior
+        </button>
+        <button class="nav-btn next" id="btn-next" onclick="navigate(1)">
+          Tema següent →
+        </button>
+      </div>
     </div>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  <script src="../../script.js"></script>
-</body>
+    <script>
+      let cur = 0;
+      const total = 18;
+      function go(i) {
+        document
+          .querySelectorAll(".topic-panel")
+          .forEach((p, j) => p.classList.toggle("active", j === i));
+        document
+          .querySelectorAll(".topic-tab")
+          .forEach((t, j) => t.classList.toggle("active", j === i));
+        cur = i;
+        document.getElementById("btn-prev").disabled = i === 0;
+        document.getElementById("btn-next").disabled = i === total - 1;
+        document.getElementById("btn-next").textContent =
+          i === total - 1 ? "✓ Final" : "Tema següent →";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+      function navigate(dir) {
+        const n = cur + dir;
+        if (n >= 0 && n < total) go(n);
+      }
+    </script>
+  </body>
 </html>

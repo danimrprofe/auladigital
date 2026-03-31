@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UP7. Seguretat, privacitat i benestar - IES Ramon Llull</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', sans-serif; background: #f0f4ff; min-height: 100vh; }
+.container { max-width: 820px; margin: 0 auto; padding: 20px; }
+header { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border-radius: 14px; padding: 32px 36px; margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; }
+header h1 { font-size: 1.4rem; flex: 1; }
+header p { opacity: .8; font-size: .85rem; margin-top: 2px; width: 100%; }
+.header-back { background: rgba(255,255,255,.15); color: white; padding: 10px 18px; border-radius: 99px; text-decoration: none; font-size: .9rem; font-weight: 600; transition: all .2s; order: 3; width: 100%; text-align: center; margin-top: 12px; }
+.header-back:hover { background: rgba(255,255,255,.25); color: white; }
+.main-nav { display: flex; gap: 8px; margin-bottom: 22px; }
+.main-nav-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-size: .95rem; font-weight: 600; transition: all .2s; background: white; color: #5a6a8a; box-shadow: 0 2px 8px rgba(0,0,0,.07); }
+.main-nav-btn.active { background: #ef4444; color: white; }
+.topic-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+.topic-tab { padding: 7px 14px; border: 2px solid #e0e7ff; border-radius: 99px; cursor: pointer; font-size: .82rem; font-weight: 600; color: #5a6a8a; background: white; transition: all .2s; white-space: nowrap; }
+.topic-tab:hover { border-color: #ef4444; color: #ef4444; }
+.topic-tab.active { background: #ef4444; color: white; border-color: #ef4444; }
+.topic-panel { display: none; }
+.topic-panel.active { display: block; animation: fadeIn .3s; }
+.theory-card { background: white; border-radius: 14px; padding: 24px; margin-bottom: 14px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+.theory-card h3 { color: #dc2626; font-size: 1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.theory-card p { color: #3a4a6a; font-size: .92rem; line-height: 1.65; margin-bottom: 10px; }
+.theory-card ul { color: #3a4a6a; font-size: .92rem; line-height: 1.7; padding-left: 20px; margin-bottom: 10px; }
+.info-box { background: #fef2f2; border-left: 4px solid #ef4444; border-radius: 0 10px 10px 0; padding: 12px 16px; margin: 12px 0; font-size: .88rem; color: #4a1a1a; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)} }
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg sticky-top shadow-sm" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+  <div class="container" style="max-width: 820px;">
+    <a class="navbar-brand fw-semibold text-white" href="../../index.html">Aula digital · IES Ramon Llull</a>
+  </div>
+</nav>
+
+<div class="container">
+  <header>
+    <div>
+      <div style="font-size: .9rem; opacity: .9;">Digitalització</div>
+      <h1>🔒 UP7. Seguretat, privacitat i benestar digital</h1>
+      <p>Protegeix-te en línia i cura el teu benestar</p>
+    </div>
+    <a href="../index.html" class="header-back">← Tornar a Temes</a>
+  </header>
+
+  <div class="main-nav">
+    <button class="main-nav-btn active" onclick="showSection('theory')">Teoria</button>
+    <button class="main-nav-btn" onclick="showSection('resources')">Recursos</button>
+  </div>
+
+  <div id="theory-area">
+    <div class="topic-tabs">
+      <button class="topic-tab active" onclick="switchTopic(this, 'topic1')">Ciberseguretat</button>
+      <button class="topic-tab" onclick="switchTopic(this, 'topic2')">Privacitat</button>
+      <button class="topic-tab" onclick="switchTopic(this, 'topic3')">Benestar</button>
+    </div>
+
+    <div class="topic-panel active" id="topic1">
+      <div class="theory-card">
+        <h3>🔐 Ciberseguretat i protecció contra amenaces</h3>
+        <p>Defensat de riscos en línia:</p>
+        <ul>
+          <li><strong>Contrasenya forta:</strong> +12 caràcters, variats (majúsc, minúsc, números, símbols)</li>
+          <li><strong>2FA:</strong> Autenticació en dos factors (app, SMS) per a comptes importants</li>
+          <li><strong>Phishing:</strong> Desconfia d'emails sospitosos, no cliques enllaços desconeguts</li>
+          <li><strong>Malware:</strong> Mantén antivirus actualitzat, no descarregues de fonts dubtoses</li>
+          <li><strong>Xarxa pública:</strong> Usa VPN en WiFi públic, no accedeixis a dades sensibles</li>
+        </ul>
+        <div class="info-box">
+          ⚠️ Alerta: Canvia contrasenya si reps avisos de login sospitós o breach de dades.
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-panel" id="topic2">
+      <div class="theory-card">
+        <h3>🔍 Privacitat de dades personals</h3>
+        <p>Controla la teva informació digital:</p>
+        <ul>
+          <li><strong>RGPD:</strong> Dret a saber, corregir i eliminar teves dades</li>
+          <li><strong>Perfil públic:</strong> Revisa privacitat de xarxes: qui pot veure posts, photos, ubicació</li>
+          <li><strong>Huella digital:</strong> Tot el que publiques és permanent (screenshots, archives)</li>
+          <li><strong>Comparticó:</strong> Pensa avant de compartir informació personal (email, tel, direcció)</li>
+          <li><strong>Cookies:</strong> Configura navegador per limitar seguiment, usa modo privat</li>
+        </ul>
+        <div class="info-box">
+          📱 Consell: Revisa setmanalment els permisos d'apps (ubicació, câmera, contactes).
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-panel" id="topic3">
+      <div class="theory-card">
+        <h3>😊 Benestar digital i salut mental</h3>
+        <p>Cuida't mentre estàs en línia:</p>
+        <ul>
+          <li><strong>Temps pantalla:</strong> Limita ús diàri per evitar fatiga visual, problemes de son</li>
+          <li><strong>Ciberassetjament:</strong> No toleres bullying online, bloqueja i reporta</li>
+          <li><strong>Adicció:</strong> Reconeix si tecnologia afecta estudis, relacions, salut física</li>
+          <li><strong>Identitat:</strong> No et compareu amb normes irreaals de xarxes (filtered, fake)</li>
+          <li><strong>Sexting:</strong> No compartas imatges intimes, risc de sextorsió, llei</li>
+        </ul>
+        <div class="info-box">
+          💚 Important: Si pateixs assetjament online, habla amb un adult de confianza o contacta telèfons d'ajuda.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="resources-area" style="display:none;">
+    <div class="theory-card">
+      <h3>📚 Recursos útils</h3>
+      <ul>
+        <li><strong>Have I Been Pwned:</strong> Comprova si teu email apareix en breaches</li>
+        <li><strong>Bitwarden o 1Password:</strong> Gestor de contrasenyes segur</li>
+        <li><strong>ExpressVPN, Mullvad:</strong> VPN per privacitat</li>
+        <li><strong>Silenciador de notificacions:</strong> Limita interrupción digital</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+function showSection(section) {
+  document.querySelectorAll('.main-nav-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('theory-area').style.display = section === 'theory' ? 'block' : 'none';
+  document.getElementById('resources-area').style.display = section === 'resources' ? 'block' : 'none';
+}
+
+function switchTopic(btn, topicId) {
+  document.querySelectorAll('.topic-tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.topic-panel').forEach(panel => panel.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(topicId).classList.add('active');
+}
+</script>
+</body>
+</html>
