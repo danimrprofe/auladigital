@@ -1,4 +1,5 @@
 let subjects = [];
+let materialsModal = null;
 
 const subjectsContainer = document.getElementById("subjectsContainer");
 const resultCount = document.getElementById("resultCount");
@@ -7,7 +8,14 @@ const materialsModalEl = document.getElementById("materialsModal");
 const materialsModalLabel = document.getElementById("materialsModalLabel");
 const materialsModalSubtitle = document.getElementById("materialsModalSubtitle");
 const materialsModalBody = document.getElementById("materialsModalBody");
-const materialsModal = materialsModalEl ? new bootstrap.Modal(materialsModalEl) : null;
+
+// Inicialització segura del modal
+function initModal() {
+  if (materialsModalEl && typeof bootstrap !== "undefined") {
+    materialsModal = new bootstrap.Modal(materialsModalEl);
+  }
+}
+
 const materialsPageContainer = document.getElementById("materialsPageContainer");
 const subjectIndexContainer = document.getElementById("subjectIndexContainer");
 const themeIndexContainer = document.getElementById("themeIndexContainer");
@@ -22,9 +30,13 @@ function renderBreadcrumbs(subject, theme) {
   // Determinem el path base (quants ../ ens calen per anar a l'inici)
   // Si estem en un tema, l'inici està a ../../
   // Si estem en una assignatura, l'inici està a ../
-  const depth = theme ? "../../" : (subject && !materialsModal ? "../" : "");
+  const depth = theme ? "../../" : (subject && !materialsModalEl?.closest('body') ? "../" : "");
+  
+  // Correcció depth per a index.html principal
+  const isMainIndex = !materialsPageContainer && !subjectIndexContainer && !themeIndexContainer;
+  const baseDepth = isMainIndex ? "" : depth;
 
-  let html = `<li class="breadcrumb-item"><a href="${depth}index.html">Inici</a></li>`;
+  let html = `<li class="breadcrumb-item"><a href="${baseDepth}index.html">Inici</a></li>`;
 
   if (subject) {
     if (isTheme) {
@@ -38,13 +50,6 @@ function renderBreadcrumbs(subject, theme) {
   breadcrumbContainer.innerHTML = html;
 }
 
-const subjectMaterialsPages = {
-  "Entorns Digitals": "entorns-digitals/index.html",
-  "Programació i Tractament de Dades I": "programacio-i-tractament-de-dades-i/index.html",
-  "Programació i Tractament de Dades II": "programacio-i-tractament-de-dades-ii/index.html",
-  "Digitalització": "digitalizacio/index.html"
-};
-
 async function loadSubjects() {
   const pathsToTry = ["subjects.json", "../subjects.json", "../../subjects.json"];
   let dataFound = false;
@@ -55,16 +60,21 @@ async function loadSubjects() {
       if (response.ok) {
         subjects = await response.json();
         dataFound = true;
+        console.log(`Dades carregades correctament des de: ${path}`);
         break;
       }
-    } catch (e) {}
+    } catch (e) {
+      console.warn(`No s'ha pogut carregar ${path}:`, e);
+    }
   }
 
   if (dataFound) {
+    initModal();
     init();
   } else {
+    console.error("No s'ha trobat el fitxer subjects.json a cap de les rutes provades.");
     if (subjectsContainer) {
-      subjectsContainer.innerHTML = `<div class="col-12"><div class="alert alert-warning border-0 shadow-sm glass-card">No s'han pogut carregar les dades.</div></div>`;
+      subjectsContainer.innerHTML = `<div class="col-12"><div class="alert alert-warning border-0 shadow-sm glass-card">No s'han pogut carregar les dades (subjects.json no trobat).</div></div>`;
     }
   }
 }
@@ -118,7 +128,7 @@ function renderSubjects(list) {
     const topicsHtml = subject.topics.map((topic) => `<span class="chip">${topic}</span>`).join("");
     const hasMaterials = Array.isArray(subject.materials) && subject.materials.length > 0;
     const col = document.createElement("div");
-    const subjectPage = subjectMaterialsPages[subject.name];
+    const subjectPage = subject.path;
     const footerHtml = subjectPage && hasMaterials
       ? `<a href="${subjectPage}" class="btn btn-primary btn-sm w-100 btn-modern">Veure materials</a>`
       : `<button type="button" class="btn ${hasMaterials ? "btn-primary" : "btn-outline-primary"} btn-sm w-100 btn-modern js-open-materials" ${
@@ -247,7 +257,7 @@ function filterSubjects() {
     if (subject.materials) {
       subject.materials.forEach((section) => {
         if (section.title.toLowerCase().includes(query)) {
-          const subjectPage = subjectMaterialsPages[subject.name];
+          const subjectPage = subject.path;
           const href = section.directHref || (section.slug ? (subjectPage ? `${subjectPage.replace("index.html", "")}${section.slug}/index.html` : `#`) : "#");
           matchedItems.push({ type: "Tema", title: section.title, subject: subject.name, href: href, icon: "📂" });
           materialMatches = true;
@@ -273,7 +283,23 @@ function renderSearchResults(subjectsList, itemsList, query) {
   subjectsContainer.innerHTML = "";
 
   if (subjectsList.length === 0 && itemsList.length === 0) {
-    subjectsContainer.innerHTML = `<div class="col-12 text-center py-5"><h3>Cap resultat per "${query}"</h3></div>`;
+    subjectsContainer.innerHTML = `
+      <div class="col-12 text-center py-5">
+        <div class="empty-state glass-card p-5">
+          <div class="fs-1 mb-3">🔍</div>
+          <h3 class="h4">Cap resultat per "${query}"</h3>
+          <p class="text-muted">Prova amb paraules més genèriques o revisa l'ortografia.</p>
+          <div class="mt-4">
+            <p class="small fw-bold text-uppercase text-muted">Suggeriments:</p>
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+              <button class="btn btn-outline-primary btn-sm btn-modern js-suggestion">Python</button>
+              <button class="btn btn-outline-primary btn-sm btn-modern js-suggestion">Linux</button>
+              <button class="btn btn-outline-primary btn-sm btn-modern js-suggestion">Arduino</button>
+              <button class="btn btn-outline-primary btn-sm btn-modern js-suggestion">Web</button>
+            </div>
+          </div>
+        </div>
+      </div>`;
     resultCount.textContent = "0 resultats";
     return;
   }
@@ -312,7 +338,7 @@ function renderCards(list) {
     const topicsHtml = subject.topics.map((topic) => `<span class="chip">${topic}</span>`).join("");
     const hasMaterials = Array.isArray(subject.materials) && subject.materials.length > 0;
     const col = document.createElement("div");
-    const subjectPage = subjectMaterialsPages[subject.name];
+    const subjectPage = subject.path;
     const footerHtml = subjectPage && hasMaterials
       ? `<a href="${subjectPage}" class="btn btn-primary btn-sm w-100 btn-modern">Veure materials</a>`
       : `<button type="button" class="btn ${hasMaterials ? "btn-primary" : "btn-outline-primary"} btn-sm w-100 btn-modern js-open-materials" ${hasMaterials ? "" : "disabled"} data-subject="${encodeURIComponent(subject.name)}">${hasMaterials ? "Veure materials" : "Properament"}</button>`;
@@ -331,6 +357,36 @@ function renderCards(list) {
         <div class="card-footer bg-transparent border-0 p-4 pt-0">${footerHtml}</div>
       </article>`;
     subjectsContainer.appendChild(col);
+  });
+}
+
+function initCopyButtons() {
+  const codeBlocks = document.querySelectorAll("pre");
+  codeBlocks.forEach((block) => {
+    if (block.querySelector(".copy-btn")) return;
+
+    const button = document.createElement("button");
+    button.className = "copy-btn";
+    button.type = "button";
+    button.innerText = "Copiar";
+
+    button.addEventListener("click", async () => {
+      const code = block.querySelector("code") ? block.querySelector("code").innerText : block.innerText;
+      try {
+        await navigator.clipboard.writeText(code);
+        button.innerText = "Copiat!";
+        button.classList.add("copied");
+        setTimeout(() => {
+          button.innerText = "Copiar";
+          button.classList.remove("copied");
+        }, 2000);
+      } catch (err) {
+        console.error("Error al copiar:", err);
+        button.innerText = "Error";
+      }
+    });
+
+    block.appendChild(button);
   });
 }
 
@@ -356,11 +412,26 @@ function init() {
     renderBreadcrumbs();
     renderSubjects(subjects);
   }
+  
+  // Inicialitzem els botons de copiar després de renderitzar
+  initCopyButtons();
 }
 
 if (searchInput) searchInput.addEventListener("input", filterSubjects);
 document.addEventListener("click", e => {
   const btn = e.target.closest(".js-open-materials");
   if (btn) openMaterials(decodeURIComponent(btn.getAttribute("data-subject") || ""));
+
+  const suggestionBtn = e.target.closest(".js-suggestion");
+  if (suggestionBtn && searchInput) {
+    searchInput.value = suggestionBtn.innerText;
+    filterSubjects();
+  }
 });
-loadSubjects();
+
+// Execució inicial
+document.addEventListener("DOMContentLoaded", initCopyButtons);
+
+if (subjectsContainer || materialsPageContainer || subjectIndexContainer || themeIndexContainer) {
+  loadSubjects();
+}

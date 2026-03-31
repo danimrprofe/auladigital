@@ -1,13 +1,15 @@
 [
   {
     "name": "Recursos Digitals II",
-    "level": "2n curs",
+    "level": "2n d'ESO",
+    "path": "recursos-digitals-ii/index.html",
     "description": "Creació de continguts digitals, gestió d'eines col·laboratives i publicació de projectes.",
     "topics": ["Canva i disseny", "Eines col·laboratives", "Presentacions", "Publicació web"]
   },
   {
     "name": "Entorns Digitals",
-    "level": "1r-2n curs",
+    "level": "1r d'ESO",
+    "path": "entorns-digitals/index.html",
     "description": "Ús responsable dels entorns virtuals de treball, identitat digital i organització personal.",
     "topics": [
       "Funcionalitats comunes",
@@ -81,7 +83,8 @@
   },
   {
     "name": "Programació i Tractament de Dades I",
-    "level": "1r curs",
+    "level": "1r de Batxillerat",
+    "path": "programacio-i-tractament-de-dades-i/index.html",
     "description": "Introducció a la programació i manipulació de dades amb activitats guiades.",
     "topics": ["Thunkable", "LibreOffice Base", "mBot/mBuild", "Arduino", "Python", "Virtualització", "Linux"],
     "materials": [
@@ -134,8 +137,7 @@
         "slug": "tema-5-programacio-python",
         "items": [
           { "icon": "🐍", "label": "Recurs", "title": "Web repàs Python" },
-          { "icon": "🐍", "label": "Teoria", "title": "Teoria Python" },
-          { "icon": "📝", "label": "Exam", "title": "Python exam", "href": "../../python_exam%20(1).html" }
+          { "icon": "🐍", "label": "Teoria", "title": "Teoria Python", "href": "./python_teoria.html" }
         ]
       },
       {
@@ -160,7 +162,8 @@
   },
   {
     "name": "Programació i Tractament de Dades II",
-    "level": "2n curs",
+    "level": "2n de Batxillerat",
+    "path": "programacio-i-tractament-de-dades-ii/index.html",
     "description": "Consolidació de programació aplicada a projectes i anàlisi de dades.",
     "topics": ["mBot/mBuild", "Criptografia", "Bases de dades", "Unity", "POO", "Web avançat", "Blender", "IA"],
     "materials": [
@@ -177,10 +180,13 @@
         ]
       },
       {
-        "title": "Criptografia: Fonaments, Algorismes i Aplicacions Pràctiques",
+        "title": "Criptografia, privacitat i seguretat",
         "slug": "tema-criptografia",
         "items": [
-          { "icon": "📒", "label": "Material", "title": "Teoria criptografia" }
+          { "icon": "🔐", "label": "Teoria", "title": "Criptografia i xifrat", "href": "criptografia_teoria.html" },
+          { "icon": "🆔", "label": "Teoria", "title": "Identitat digital" },
+          { "icon": "🔗", "label": "Teoria", "title": "Blockchain i criptomonedes", "href": "criptomonedes_teoria.html" },
+          { "icon": "🧅", "label": "Teoria", "title": "Xarxes TOR" }
         ]
       },
       {
@@ -198,7 +204,7 @@
         "items": [
           { "icon": "📘", "label": "Introducció", "title": "Introducció al tema" },
           { "icon": "🎯", "label": "Recopilació", "title": "Recopilación jocs plataforma" },
-          { "icon": "🎬", "label": "Vídeos", "title": "Videos plataformas con Unity" },
+          { "icon": "🎬", "label": "Vídeos", "title": "Videos platforms con Unity" },
           { "icon": "🕹️", "label": "Vídeos", "title": "Vídeos Pong con Unity" }
         ]
       },
@@ -228,7 +234,7 @@
           { "icon": "🗂️", "label": "Esquema", "title": "Esquema página web película" },
           { "icon": "🌐", "label": "Tutorial", "title": "W3C Tutorial Bootstrap 5" },
           { "icon": "🌐", "label": "Recurs", "title": "Web oficial de Bootstrap" },
-          { "icon": "🔧", "label": "Guia", "title": "Instrucciones git y github" },
+          { "icon": "🔧", "label": "Guia", "title": "Instrucciones git i github" },
           { "icon": "📦", "label": "Entrega", "title": "Entrega web bootstrap" }
         ]
       },
@@ -246,16 +252,17 @@
       {
         "title": "IA: teoria",
         "slug": "tema-ia",
-        "directHref": "/ia_teoria.html",
+        "directHref": "./ia_teoria.html",
         "items": [
-          { "icon": "🤖", "label": "Teoria", "title": "IA i Programació", "href": "../../ia_teoria.html" }
+          { "icon": "🤖", "label": "Teoria", "title": "IA i Programació", "href": "./ia_teoria.html" }
         ]
       }
     ]
   },
   {
     "name": "Digitalització",
-    "level": "ESO/FP",
+    "level": "4t d'ESO",
+    "path": "digitalizacio/index.html",
     "description": "Competència digital, ciutadania digital i resolució de problemes amb tecnologia.",
     "topics": ["Benestar digital", "Ciutadania digital", "Seguretat", "Privacitat", "Competència digital"],
     "materials": [

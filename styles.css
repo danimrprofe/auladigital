@@ -225,3 +225,48 @@ footer {
   border-top: 1px solid rgba(0, 0, 0, 0.05);
   color: var(--app-muted) !important;
 }
+
+/* Blocs de codi */
+pre {
+  position: relative;
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+  padding: 1.2rem !important;
+  padding-top: 2.8rem !important;
+  border-radius: 0.85rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #e2e8f0;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+  backdrop-filter: blur(4px);
+}
+
+.copy-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.copy-btn.copied {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: #fff;
+}
