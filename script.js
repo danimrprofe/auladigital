@@ -166,30 +166,165 @@ function renderSubjectIndex(subject) {
     return;
   }
 
-  const cards = subject.materials
-    .map((section) => {
-      const slug = section.slug || "";
-      const href = section.directHref || (slug ? `./${slug}/index.html` : "#");
-      return `
-        <div class="col-md-6 col-xl-4">
-          <article class="card h-100 border-0 shadow-sm subject-card">
-            <div class="card-body p-4">
-              <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
-                <h2 class="h5 mb-0">${section.title}</h2>
-                <span class="badge text-bg-primary">${section.items ? section.items.length : 0} ítem/s</span>
+  function themeMatches(section, query, filterTag) {
+    const q = query.trim().toLowerCase();
+    const titleMatch = section.title.toLowerCase().includes(q);
+    const itemsText = (section.items || []).map((it) => `${it.label || ""} ${it.title || ""}`).join(" ").toLowerCase();
+    const itemsMatch = itemsText.includes(q);
+    const queryOk = !q || titleMatch || itemsMatch;
+
+    if (!filterTag) return queryOk;
+    return queryOk && section.title.toLowerCase().includes(filterTag.toLowerCase());
+  }
+
+  function sortThemes(themes, sortMode) {
+    const arr = [...themes];
+    if (sortMode === "az") {
+      arr.sort((a, b) => a.title.localeCompare(b.title, "ca"));
+    } else if (sortMode === "za") {
+      arr.sort((a, b) => b.title.localeCompare(a.title, "ca"));
+    } else if (sortMode === "items-desc") {
+      arr.sort((a, b) => (b.items?.length || 0) - (a.items?.length || 0));
+    } else if (sortMode === "items-asc") {
+      arr.sort((a, b) => (a.items?.length || 0) - (b.items?.length || 0));
+    }
+    return arr;
+  }
+
+  function renderSubjectThemes(query = "", filterTag = "", sortMode = "", viewMode = "detailed") {
+    const filtered = sortThemes(
+      subject.materials.filter((section) => themeMatches(section, query, filterTag)),
+      sortMode
+    );
+
+    const cards = filtered
+      .map((section) => {
+        const isCompact = viewMode === "compact";
+        const colClass = isCompact ? "col-12" : "col-md-6 col-xl-4";
+        const bodyPaddingClass = isCompact ? "p-3" : "p-4";
+        const footerPaddingClass = isCompact ? "p-3 pt-0" : "p-4 pt-0";
+        const titleClass = isCompact ? "h6" : "h5";
+        const buttonClass = isCompact ? "btn btn-outline-primary btn-sm w-100 btn-modern" : "btn btn-primary btn-sm w-100 btn-modern";
+        const slug = section.slug || "";
+        const href = section.directHref || (slug ? `./${slug}/index.html` : "#");
+        return `
+          <div class="${colClass}">
+            <article class="card h-100 border-0 shadow-sm subject-card theme-card ${isCompact ? "theme-card-compact" : ""}">
+              <div class="card-body ${bodyPaddingClass}">
+                <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                  <h2 class="${titleClass} mb-0">${section.title}</h2>
+                  <span class="badge text-bg-primary">${section.items ? section.items.length : 0} ítem/s</span>
+                </div>
+                <p class="text-muted mb-0 small">Toca per veure tasques i teoria del tema.</p>
               </div>
-              <p class="text-muted mb-0 small">Toca per veure tasques i teoria del tema.</p>
-            </div>
-            <div class="card-footer bg-transparent border-0 p-4 pt-0">
-              <a class="btn btn-primary btn-sm w-100 btn-modern" href="${href}">Veure tema</a>
-            </div>
-          </article>
+              <div class="card-footer bg-transparent border-0 ${footerPaddingClass}">
+                <a class="${buttonClass}" href="${href}">Veure tema</a>
+              </div>
+            </article>
+          </div>
+        `;
+      })
+      .join("");
+
+    const emptyState = `
+      <div class="col-12 text-center py-4">
+        <div class="empty-state glass-card p-4">
+          <div class="fs-4 mb-2">🔎</div>
+          <p class="mb-0 text-muted">No s'ha trobat cap tema amb aquests filtres.</p>
         </div>
-      `;
-    })
+      </div>
+    `;
+
+    const grid = subjectIndexContainer.querySelector("#subjectThemeGrid");
+    const count = subjectIndexContainer.querySelector("#subjectThemeCount");
+    if (grid) grid.innerHTML = filtered.length ? cards : emptyState;
+    if (count) count.textContent = `${filtered.length} tema/es`;
+  }
+
+  const topicFilters = (subject.topics || [])
+    .map((topic) => `<button type="button" class="btn btn-outline-primary btn-sm btn-modern js-theme-filter" data-filter="${topic}">${topic}</button>`)
     .join("");
 
-  subjectIndexContainer.innerHTML = `<div class="row g-4 mt-1">${cards}</div>`;
+  subjectIndexContainer.innerHTML = `
+    <div class="subject-index-tools glass-card p-3 mb-3">
+      <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+        <label for="subjectThemeSearch" class="small text-muted mb-0">Cerca tema:</label>
+        <input id="subjectThemeSearch" type="text" class="form-control form-control-sm" placeholder="Ex: Linux, Python, Arduino..." style="max-width: 320px;">
+        <label for="subjectThemeSort" class="small text-muted mb-0">Ordena:</label>
+        <select id="subjectThemeSort" class="form-select form-select-sm" style="max-width: 180px;">
+          <option value="">Rellevància</option>
+          <option value="az">A-Z</option>
+          <option value="za">Z-A</option>
+          <option value="items-desc">Més ítems</option>
+          <option value="items-asc">Menys ítems</option>
+        </select>
+        <div class="btn-group btn-group-sm subject-view-toggle" role="group" aria-label="Canviar vista de temes">
+          <button type="button" class="btn btn-primary btn-modern js-theme-view" data-view="detailed">Detallada</button>
+          <button type="button" class="btn btn-outline-primary btn-modern js-theme-view" data-view="compact">Compacta</button>
+        </div>
+        <span id="subjectThemeCount" class="badge text-bg-light ms-auto">${subject.materials.length} tema/es</span>
+      </div>
+      <div class="d-flex flex-wrap gap-2">
+        <button type="button" class="btn btn-primary btn-sm btn-modern js-theme-filter active" data-filter="">Tots</button>
+        ${topicFilters}
+      </div>
+    </div>
+    <div id="subjectThemeGrid" class="row g-4 mt-1"></div>
+  `;
+
+  const searchEl = subjectIndexContainer.querySelector("#subjectThemeSearch");
+  const sortEl = subjectIndexContainer.querySelector("#subjectThemeSort");
+  const filterButtons = subjectIndexContainer.querySelectorAll(".js-theme-filter");
+  const viewButtons = subjectIndexContainer.querySelectorAll(".js-theme-view");
+  let currentFilter = "";
+  let currentSort = "";
+  let currentView = "detailed";
+
+  function setActiveFilterButton() {
+    filterButtons.forEach((btn) => {
+      const isActive = (btn.getAttribute("data-filter") || "") === currentFilter;
+      btn.classList.toggle("btn-primary", isActive);
+      btn.classList.toggle("btn-outline-primary", !isActive);
+      btn.classList.toggle("active", isActive);
+    });
+  }
+
+  filterButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      currentFilter = btn.getAttribute("data-filter") || "";
+      setActiveFilterButton();
+      renderSubjectThemes(searchEl ? searchEl.value : "", currentFilter, currentSort, currentView);
+    });
+  });
+
+  if (searchEl) {
+    searchEl.addEventListener("input", () => {
+      renderSubjectThemes(searchEl.value, currentFilter, currentSort, currentView);
+    });
+  }
+
+  if (sortEl) {
+    sortEl.addEventListener("change", () => {
+      currentSort = sortEl.value || "";
+      renderSubjectThemes(searchEl ? searchEl.value : "", currentFilter, currentSort, currentView);
+    });
+  }
+
+  if (viewButtons.length) {
+    viewButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        currentView = btn.getAttribute("data-view") || "detailed";
+        viewButtons.forEach((b) => {
+          const active = (b.getAttribute("data-view") || "") === currentView;
+          b.classList.toggle("btn-primary", active);
+          b.classList.toggle("btn-outline-primary", !active);
+        });
+        renderSubjectThemes(searchEl ? searchEl.value : "", currentFilter, currentSort, currentView);
+      });
+    });
+  }
+
+  renderSubjectThemes("", "", "", "detailed");
 }
 
 function renderThemeIndex(subject, themeSlug) {
@@ -496,6 +631,12 @@ document.addEventListener("keydown", (e) => {
     if (searchInput) {
       searchInput.focus();
       searchInput.scrollIntoView({ behavior: "smooth", block: "center" });
+    } else {
+      const subjectThemeSearch = document.getElementById("subjectThemeSearch");
+      if (subjectThemeSearch) {
+        subjectThemeSearch.focus();
+        subjectThemeSearch.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
     }
   }
 });

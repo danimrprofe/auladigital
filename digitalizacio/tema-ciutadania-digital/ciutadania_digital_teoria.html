@@ -1,658 +1,2316 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ca">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ciutadania Digital Crítica</title>
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', sans-serif; background: #0a0f0a; min-height: 100vh; color: #e2e8f0; }
-.container { max-width: 880px; margin: 0 auto; padding: 20px; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ciutadania Digital Crítica</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #0a0f0a;
+        min-height: 100vh;
+        color: #e2e8f0;
+      }
+      .container {
+        max-width: 880px;
+        margin: 0 auto;
+        padding: 20px;
+      }
 
-header { background: linear-gradient(135deg, #0a1a0a, #0f2a1a, #0a1a2e); border: 1px solid #1a3a1a; border-radius: 14px; padding: 26px 28px; margin-bottom: 20px; position: relative; overflow: hidden; }
-header::before { content:''; position:absolute; top:-40px; right:-40px; width:220px; height:220px; background: radial-gradient(circle, rgba(34,197,94,.18), transparent 70%); }
-header h1 { font-size: 1.5rem; color: #f1f5f9; margin-bottom: 4px; position: relative; }
-header p { color: #94a3b8; font-size: .88rem; position: relative; }
-.header-tag { display:inline-block; background:rgba(34,197,94,.15); border:1px solid rgba(34,197,94,.3); color:#86efac; border-radius:99px; padding:3px 12px; font-size:.75rem; margin-top:10px; }
+      header {
+        background: linear-gradient(135deg, #0a1a0a, #0f2a1a, #0a1a2e);
+        border: 1px solid #1a3a1a;
+        border-radius: 14px;
+        padding: 26px 28px;
+        margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
+      }
+      header::before {
+        content: "";
+        position: absolute;
+        top: -40px;
+        right: -40px;
+        width: 220px;
+        height: 220px;
+        background: radial-gradient(
+          circle,
+          rgba(34, 197, 94, 0.18),
+          transparent 70%
+        );
+      }
+      header h1 {
+        font-size: 1.5rem;
+        color: #f1f5f9;
+        margin-bottom: 4px;
+        position: relative;
+      }
+      header p {
+        color: #94a3b8;
+        font-size: 0.88rem;
+        position: relative;
+      }
+      .header-tag {
+        display: inline-block;
+        background: rgba(34, 197, 94, 0.15);
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        color: #86efac;
+        border-radius: 99px;
+        padding: 3px 12px;
+        font-size: 0.75rem;
+        margin-top: 10px;
+      }
 
-.topic-tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:18px; }
-.topic-tab { padding:7px 13px; border:1px solid #1e293b; border-radius:99px; cursor:pointer; font-size:.79rem; font-weight:600; color:#64748b; background:#0a0f0a; transition:all .2s; white-space:nowrap; -webkit-tap-highlight-color:transparent; }
-.topic-tab:hover { border-color:#22c55e; color:#22c55e; }
-.topic-tab.active { background:#22c55e; color:#0a0f0a; border-color:#22c55e; }
+      .topic-tabs {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+      }
+      .topic-tab {
+        padding: 7px 13px;
+        border: 1px solid #1e293b;
+        border-radius: 99px;
+        cursor: pointer;
+        font-size: 0.79rem;
+        font-weight: 600;
+        color: #64748b;
+        background: #0a0f0a;
+        transition: all 0.2s;
+        white-space: nowrap;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .topic-tab:hover {
+        border-color: #22c55e;
+        color: #22c55e;
+      }
+      .topic-tab.active {
+        background: #22c55e;
+        color: #0a0f0a;
+        border-color: #22c55e;
+      }
 
-.topic-panel { display:none; }
-.topic-panel.active { display:block; animation: fadeIn .3s; }
-@keyframes fadeIn { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)} }
+      .topic-panel {
+        display: none;
+      }
+      .topic-panel.active {
+        display: block;
+        animation: fadeIn 0.3s;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-/* REVEAL */
-.reveal-block { overflow:hidden; }
-.reveal-content { opacity:0; max-height:0; overflow:hidden; transition:opacity .5s ease, max-height .6s ease; pointer-events:none; }
-.reveal-content.shown { opacity:1; max-height:3000px; pointer-events:auto; }
-.reveal-trigger { cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:6px 0; user-select:none; -webkit-tap-highlight-color:transparent; transition:color .2s; }
-.reveal-trigger:hover { color:#86efac; }
-.reveal-trigger .arrow { font-size:.75rem; color:#374151; transition:transform .3s, color .3s; flex-shrink:0; }
-.reveal-trigger.open .arrow { transform:rotate(90deg); color:#22c55e; }
-.reveal-trigger.open { color:#86efac; }
-.tap-hint { text-align:center; font-size:.75rem; color:#374151; margin-bottom:10px; letter-spacing:.04em; }
+      /* REVEAL */
+      .reveal-block {
+        overflow: hidden;
+      }
+      .reveal-content {
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition:
+          opacity 0.5s ease,
+          max-height 0.6s ease;
+        pointer-events: none;
+      }
+      .reveal-content.shown {
+        opacity: 1;
+        max-height: 3000px;
+        pointer-events: auto;
+      }
+      .reveal-trigger {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 6px 0;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        transition: color 0.2s;
+      }
+      .reveal-trigger:hover {
+        color: #86efac;
+      }
+      .reveal-trigger .arrow {
+        font-size: 0.75rem;
+        color: #374151;
+        transition:
+          transform 0.3s,
+          color 0.3s;
+        flex-shrink: 0;
+      }
+      .reveal-trigger.open .arrow {
+        transform: rotate(90deg);
+        color: #22c55e;
+      }
+      .reveal-trigger.open {
+        color: #86efac;
+      }
+      .tap-hint {
+        text-align: center;
+        font-size: 0.75rem;
+        color: #374151;
+        margin-bottom: 10px;
+        letter-spacing: 0.04em;
+      }
 
-.stage-badge { display:flex; align-items:center; gap:14px; border-radius:14px; padding:18px 22px; margin-bottom:16px; }
-.stage-badge .sb-icon { font-size:2rem; flex-shrink:0; }
-.stage-badge h2 { font-size:1.05rem; margin-bottom:3px; color:#f1f5f9; }
-.stage-badge p { font-size:.82rem; color:rgba(255,255,255,.65); line-height:1.45; }
+      .stage-badge {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        border-radius: 14px;
+        padding: 18px 22px;
+        margin-bottom: 16px;
+      }
+      .stage-badge .sb-icon {
+        font-size: 2rem;
+        flex-shrink: 0;
+      }
+      .stage-badge h2 {
+        font-size: 1.05rem;
+        margin-bottom: 3px;
+        color: #f1f5f9;
+      }
+      .stage-badge p {
+        font-size: 0.82rem;
+        color: rgba(255, 255, 255, 0.65);
+        line-height: 1.45;
+      }
 
-.theory-card { background:#111a11; border:1px solid #1e3a1e; border-radius:14px; padding:24px; margin-bottom:14px; }
-.theory-card h3 { color:#f1f5f9; font-size:1rem; margin-bottom:12px; }
-.theory-card h3.reveal-trigger { margin-bottom:4px; }
-.theory-card p { color:#94a3b8; font-size:.92rem; line-height:1.7; margin-bottom:10px; }
-.theory-card p:last-child { margin-bottom:0; }
-.theory-card ul { color:#94a3b8; font-size:.92rem; line-height:1.8; padding-left:20px; margin-bottom:10px; }
-.theory-card ul li { margin-bottom:4px; }
-.theory-card ol { color:#94a3b8; font-size:.92rem; line-height:1.85; padding-left:22px; margin-bottom:10px; }
-.theory-card ol li { margin-bottom:6px; }
+      .theory-card {
+        background: #111a11;
+        border: 1px solid #1e3a1e;
+        border-radius: 14px;
+        padding: 24px;
+        margin-bottom: 14px;
+      }
+      .theory-card h3 {
+        color: #f1f5f9;
+        font-size: 1rem;
+        margin-bottom: 12px;
+      }
+      .theory-card h3.reveal-trigger {
+        margin-bottom: 4px;
+      }
+      .theory-card p {
+        color: #94a3b8;
+        font-size: 0.92rem;
+        line-height: 1.7;
+        margin-bottom: 10px;
+      }
+      .theory-card p:last-child {
+        margin-bottom: 0;
+      }
+      .theory-card ul {
+        color: #94a3b8;
+        font-size: 0.92rem;
+        line-height: 1.8;
+        padding-left: 20px;
+        margin-bottom: 10px;
+      }
+      .theory-card ul li {
+        margin-bottom: 4px;
+      }
+      .theory-card ol {
+        color: #94a3b8;
+        font-size: 0.92rem;
+        line-height: 1.85;
+        padding-left: 22px;
+        margin-bottom: 10px;
+      }
+      .theory-card ol li {
+        margin-bottom: 6px;
+      }
 
-.two-col { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:12px 0; }
-.three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin:12px 0; }
-@media(max-width:560px){ .two-col,.three-col{grid-template-columns:1fr;} }
-.col-card { background:#0a1a0a; border:1px solid #1e3a1e; border-radius:10px; padding:14px; }
-.col-card h4 { font-size:.85rem; margin-bottom:8px; font-weight:600; }
-.col-card ul { font-size:.84rem; color:#94a3b8; padding-left:16px; line-height:1.75; }
-.col-card p { font-size:.84rem; color:#94a3b8; line-height:1.6; }
-.col-card.green h4 { color:#86efac; }
-.col-card.blue h4  { color:#93c5fd; }
-.col-card.yellow h4{ color:#fcd34d; }
-.col-card.red h4   { color:#f87171; }
-.col-card.purple h4{ color:#d8b4fe; }
-.col-card.teal h4  { color:#5eead4; }
-.col-card.orange h4{ color:#fb923c; }
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin: 12px 0;
+      }
+      .three-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 10px;
+        margin: 12px 0;
+      }
+      @media (max-width: 560px) {
+        .two-col,
+        .three-col {
+          grid-template-columns: 1fr;
+        }
+      }
+      .col-card {
+        background: #0a1a0a;
+        border: 1px solid #1e3a1e;
+        border-radius: 10px;
+        padding: 14px;
+      }
+      .col-card h4 {
+        font-size: 0.85rem;
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
+      .col-card ul {
+        font-size: 0.84rem;
+        color: #94a3b8;
+        padding-left: 16px;
+        line-height: 1.75;
+      }
+      .col-card p {
+        font-size: 0.84rem;
+        color: #94a3b8;
+        line-height: 1.6;
+      }
+      .col-card.green h4 {
+        color: #86efac;
+      }
+      .col-card.blue h4 {
+        color: #93c5fd;
+      }
+      .col-card.yellow h4 {
+        color: #fcd34d;
+      }
+      .col-card.red h4 {
+        color: #f87171;
+      }
+      .col-card.purple h4 {
+        color: #d8b4fe;
+      }
+      .col-card.teal h4 {
+        color: #5eead4;
+      }
+      .col-card.orange h4 {
+        color: #fb923c;
+      }
 
-.info-box { border-radius:0 10px 10px 0; padding:12px 16px; margin:12px 0; font-size:.88rem; line-height:1.55; }
-.info-box.green  { background:rgba(34,197,94,.08);  border-left:4px solid #22c55e; color:#86efac; }
-.info-box.yellow { background:rgba(234,179,8,.08);  border-left:4px solid #f59e0b; color:#fcd34d; }
-.info-box.blue   { background:rgba(59,130,246,.08); border-left:4px solid #3b82f6; color:#93c5fd; }
-.info-box.red    { background:rgba(239,68,68,.08);  border-left:4px solid #ef4444; color:#fca5a5; }
-.info-box.purple { background:rgba(168,85,247,.08); border-left:4px solid #a855f7; color:#d8b4fe; }
-.info-box.teal   { background:rgba(20,184,166,.08); border-left:4px solid #14b8a6; color:#5eead4; }
-.info-box.orange { background:rgba(249,115,22,.08); border-left:4px solid #f97316; color:#fb923c; }
+      .info-box {
+        border-radius: 0 10px 10px 0;
+        padding: 12px 16px;
+        margin: 12px 0;
+        font-size: 0.88rem;
+        line-height: 1.55;
+      }
+      .info-box.green {
+        background: rgba(34, 197, 94, 0.08);
+        border-left: 4px solid #22c55e;
+        color: #86efac;
+      }
+      .info-box.yellow {
+        background: rgba(234, 179, 8, 0.08);
+        border-left: 4px solid #f59e0b;
+        color: #fcd34d;
+      }
+      .info-box.blue {
+        background: rgba(59, 130, 246, 0.08);
+        border-left: 4px solid #3b82f6;
+        color: #93c5fd;
+      }
+      .info-box.red {
+        background: rgba(239, 68, 68, 0.08);
+        border-left: 4px solid #ef4444;
+        color: #fca5a5;
+      }
+      .info-box.purple {
+        background: rgba(168, 85, 247, 0.08);
+        border-left: 4px solid #a855f7;
+        color: #d8b4fe;
+      }
+      .info-box.teal {
+        background: rgba(20, 184, 166, 0.08);
+        border-left: 4px solid #14b8a6;
+        color: #5eead4;
+      }
+      .info-box.orange {
+        background: rgba(249, 115, 22, 0.08);
+        border-left: 4px solid #f97316;
+        color: #fb923c;
+      }
 
-code { background:#0a1a0a; border:1px solid #1e3a1e; padding:1px 7px; border-radius:4px; font-family:'Consolas',monospace; font-size:.88em; color:#86efac; }
+      code {
+        background: #0a1a0a;
+        border: 1px solid #1e3a1e;
+        padding: 1px 7px;
+        border-radius: 4px;
+        font-family: "Consolas", monospace;
+        font-size: 0.88em;
+        color: #86efac;
+      }
 
-table.tt { width:100%; border-collapse:collapse; margin:12px 0; font-size:.87rem; }
-.tt th { background:#0a1a0a; color:#22c55e; padding:9px 12px; text-align:left; font-size:.77rem; text-transform:uppercase; letter-spacing:.04em; border-bottom:1px solid #1e3a1e; }
-.tt td { padding:9px 12px; border-bottom:1px solid #0a1a0a; color:#94a3b8; vertical-align:top; }
-.tt tr:last-child td { border:none; }
-.tt td strong { color:#e2e8f0; }
+      table.tt {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0;
+        font-size: 0.87rem;
+      }
+      .tt th {
+        background: #0a1a0a;
+        color: #22c55e;
+        padding: 9px 12px;
+        text-align: left;
+        font-size: 0.77rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        border-bottom: 1px solid #1e3a1e;
+      }
+      .tt td {
+        padding: 9px 12px;
+        border-bottom: 1px solid #0a1a0a;
+        color: #94a3b8;
+        vertical-align: top;
+      }
+      .tt tr:last-child td {
+        border: none;
+      }
+      .tt td strong {
+        color: #e2e8f0;
+      }
 
-.step-list { display:flex; flex-direction:column; gap:0; margin:12px 0; }
-.step-item { display:flex; gap:14px; padding:10px 0; }
-.step-left { display:flex; flex-direction:column; align-items:center; width:32px; flex-shrink:0; }
-.step-num { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.82rem; font-weight:700; flex-shrink:0; background:rgba(34,197,94,.15); color:#86efac; border:1px solid rgba(34,197,94,.4); }
-.step-line { width:1px; flex:1; min-height:12px; background:#1e3a1e; margin-top:4px; }
-.step-content { padding-top:4px; flex:1; }
-.step-content h4 { font-size:.92rem; color:#e2e8f0; font-weight:600; margin-bottom:3px; }
-.step-content p { font-size:.86rem; color:#64748b; line-height:1.55; margin:0; }
+      .step-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        margin: 12px 0;
+      }
+      .step-item {
+        display: flex;
+        gap: 14px;
+        padding: 10px 0;
+      }
+      .step-left {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 32px;
+        flex-shrink: 0;
+      }
+      .step-num {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.82rem;
+        font-weight: 700;
+        flex-shrink: 0;
+        background: rgba(34, 197, 94, 0.15);
+        color: #86efac;
+        border: 1px solid rgba(34, 197, 94, 0.4);
+      }
+      .step-line {
+        width: 1px;
+        flex: 1;
+        min-height: 12px;
+        background: #1e3a1e;
+        margin-top: 4px;
+      }
+      .step-content {
+        padding-top: 4px;
+        flex: 1;
+      }
+      .step-content h4 {
+        font-size: 0.92rem;
+        color: #e2e8f0;
+        font-weight: 600;
+        margin-bottom: 3px;
+      }
+      .step-content p {
+        font-size: 0.86rem;
+        color: #64748b;
+        line-height: 1.55;
+        margin: 0;
+      }
 
-.tag-list { display:flex; flex-wrap:wrap; gap:6px; margin:10px 0; }
-.tag { border-radius:99px; padding:3px 12px; font-size:.78rem; font-weight:600; }
-.tag-green  { background:rgba(34,197,94,.15);  color:#86efac; }
-.tag-blue   { background:rgba(59,130,246,.15); color:#93c5fd; }
-.tag-yellow { background:rgba(234,179,8,.15);  color:#fcd34d; }
-.tag-red    { background:rgba(239,68,68,.15);  color:#fca5a5; }
-.tag-purple { background:rgba(168,85,247,.15); color:#d8b4fe; }
-.tag-teal   { background:rgba(20,184,166,.15); color:#5eead4; }
-.tag-orange { background:rgba(249,115,22,.15); color:#fb923c; }
-.tag-gray   { background:rgba(100,116,139,.2); color:#94a3b8; }
+      .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: 10px 0;
+      }
+      .tag {
+        border-radius: 99px;
+        padding: 3px 12px;
+        font-size: 0.78rem;
+        font-weight: 600;
+      }
+      .tag-green {
+        background: rgba(34, 197, 94, 0.15);
+        color: #86efac;
+      }
+      .tag-blue {
+        background: rgba(59, 130, 246, 0.15);
+        color: #93c5fd;
+      }
+      .tag-yellow {
+        background: rgba(234, 179, 8, 0.15);
+        color: #fcd34d;
+      }
+      .tag-red {
+        background: rgba(239, 68, 68, 0.15);
+        color: #fca5a5;
+      }
+      .tag-purple {
+        background: rgba(168, 85, 247, 0.15);
+        color: #d8b4fe;
+      }
+      .tag-teal {
+        background: rgba(20, 184, 166, 0.15);
+        color: #5eead4;
+      }
+      .tag-orange {
+        background: rgba(249, 115, 22, 0.15);
+        color: #fb923c;
+      }
+      .tag-gray {
+        background: rgba(100, 116, 139, 0.2);
+        color: #94a3b8;
+      }
 
-.myth-box { background:#0a1a0a; border:1px solid #1e3a1e; border-radius:10px; padding:14px 16px; margin:10px 0; }
-.myth-box .myth-label { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px; }
-.myth-box p { font-size:.87rem; color:#94a3b8; margin:0; line-height:1.55; }
-.myth-false .myth-label { color:#f87171; }
-.myth-true  .myth-label  { color:#86efac; }
+      .myth-box {
+        background: #0a1a0a;
+        border: 1px solid #1e3a1e;
+        border-radius: 10px;
+        padding: 14px 16px;
+        margin: 10px 0;
+      }
+      .myth-box .myth-label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 4px;
+      }
+      .myth-box p {
+        font-size: 0.87rem;
+        color: #94a3b8;
+        margin: 0;
+        line-height: 1.55;
+      }
+      .myth-false .myth-label {
+        color: #f87171;
+      }
+      .myth-true .myth-label {
+        color: #86efac;
+      }
 
-.nav-btns { display:flex; gap:10px; margin-top:18px; justify-content:space-between; }
-.nav-btn { padding:10px 22px; border:none; border-radius:99px; cursor:pointer; font-size:.9rem; font-weight:600; transition:all .2s; -webkit-tap-highlight-color:transparent; }
-.nav-btn.prev { background:#1e293b; color:#94a3b8; border:1px solid #2a3a2a; }
-.nav-btn.next { background:#22c55e; color:#0a0f0a; }
-.nav-btn:hover { filter:brightness(1.1); }
-.nav-btn:disabled { opacity:.3; cursor:not-allowed; }
-</style>
-</head>
-<body>
-<div class="container">
+      .nav-btns {
+        display: flex;
+        gap: 10px;
+        margin-top: 18px;
+        justify-content: space-between;
+      }
+      .nav-btn {
+        padding: 10px 22px;
+        border: none;
+        border-radius: 99px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: all 0.2s;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .nav-btn.prev {
+        background: #1e293b;
+        color: #94a3b8;
+        border: 1px solid #2a3a2a;
+      }
+      .nav-btn.next {
+        background: #22c55e;
+        color: #0a0f0a;
+      }
+      .nav-btn:hover {
+        filter: brightness(1.1);
+      }
+      .nav-btn:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
 
-<header>
-  <h1>🌐 Ciutadania Digital Crítica</h1>
-  <p>Drets, responsabilitats i pensament crític a l'era digital</p>
-  <span class="header-tag">IES Ramon Llull · 1r Batxillerat · Curs 25-26</span>
-</header>
+      /* Light theme override aligned with IA theory style */
+      body {
+        background: #f0f4ff;
+        color: #3a4a6a;
+      }
+      header {
+        background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+        border: none;
+      }
+      header h1 {
+        color: #f1f5f9;
+      }
+      header p {
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .header-tag {
+        background: rgba(255, 255, 255, 0.12);
+        border: none;
+        color: #e2e8f0;
+      }
 
-<div class="topic-tabs" id="topic-tabs">
-  <div class="topic-tab active"  onclick="go(0)">🗣️ Llibertat i etiqueta</div>
-  <div class="topic-tab"        onclick="go(1)">📰 Informació i fake news</div>
-  <div class="topic-tab"        onclick="go(2)">©️ Propietat intel·lectual</div>
-  <div class="topic-tab"        onclick="go(3)">🏛️ Tràmits en línia</div>
-  <div class="topic-tab"        onclick="go(4)">💳 Economia digital</div>
-  <div class="topic-tab"        onclick="go(5)">🤖 Ètica i IA</div>
-  <div class="topic-tab"        onclick="go(6)">🌱 Sostenibilitat digital</div>
-  <div class="topic-tab"        onclick="go(7)">✊ Activisme i programari lliure</div>
-</div>
+      .topic-tab {
+        background: white;
+        border: 2px solid #e0e7ff;
+        color: #5a6a8a;
+      }
+      .topic-tab:hover {
+        border-color: #6366f1;
+        color: #6366f1;
+      }
+      .topic-tab.active {
+        background: #6366f1;
+        color: white;
+        border-color: #6366f1;
+      }
 
-<!-- ===== 0: LLIBERTAT I ETIQUETA ===== -->
-<div class="topic-panel active" id="panel-0">
-  <div class="stage-badge" style="background:linear-gradient(135deg,#0a1a0a,#0a2a1a);border:1px solid #1a3a1a">
-    <div class="sb-icon">🗣️</div>
-    <div><h2>Llibertat d'expressió i etiqueta digital</h2><p>Drets i responsabilitats a la xarxa: on acaba la llibertat i on comença el dany.</p></div>
-  </div>
-  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+      .theory-card {
+        background: white;
+        border: none;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+      }
+      .theory-card h3,
+      .theory-card p,
+      .theory-card ul,
+      .theory-card ol {
+        color: #3a4a6a;
+      }
 
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">🗣️ La llibertat d'expressió a Internet <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <p>Internet ha democratitzat la paraula: qualsevol persona pot publicar, opinar i difondre informació a escala global. Però la llibertat d'expressió no és absoluta — té límits legals i ètics.</p>
-        <div class="two-col">
-          <div class="col-card green">
-            <h4>✅ Protegit per la llibertat d'expressió</h4>
-            <ul>
-              <li>Criticar governs i institucions</li>
-              <li>Expressar opinions polítiques o religioses</li>
-              <li>Publicar sàtira i humor</li>
-              <li>Denunciar injustícies públicament</li>
-            </ul>
+      .col-card {
+        background: #f8faff;
+        border: none;
+      }
+      .col-card p,
+      .col-card ul,
+      .col-card ol {
+        color: #3a4a6a;
+      }
+
+      .info-box.yellow {
+        background: #fffbeb;
+        border-left-color: #f59e0b;
+        color: #78350f;
+      }
+      .info-box.green {
+        background: #f0fdf4;
+        border-left-color: #22c55e;
+        color: #166534;
+      }
+      .info-box.blue {
+        background: #eff6ff;
+        border-left-color: #3b82f6;
+        color: #1e3a5f;
+      }
+      .info-box.red {
+        background: #fef2f2;
+        border-left-color: #ef4444;
+        color: #991b1b;
+      }
+      .info-box.purple {
+        background: #f5f3ff;
+        border-left-color: #7c3aed;
+        color: #3b1f6e;
+      }
+      .info-box.teal {
+        background: #ecfeff;
+        border-left-color: #14b8a6;
+        color: #134e4a;
+      }
+      .info-box.orange {
+        background: #fff7ed;
+        border-left-color: #f97316;
+        color: #9a3412;
+      }
+
+      pre {
+        background: #0f172a;
+        border: none;
+        color: #e2e8f0;
+      }
+      code {
+        background: #f1f5f9;
+        border: none;
+        color: #4338ca;
+      }
+
+      .tt th {
+        background: #f0f4ff;
+        color: #6366f1;
+        border-bottom: none;
+      }
+      .tt td {
+        color: #3a4a6a;
+        border-bottom: 1px solid #f0f4ff;
+      }
+      .tt td strong {
+        color: #1a1a3e;
+      }
+
+      .step-num {
+        background: #e0e7ff;
+        color: #3b41c0;
+        border: none;
+      }
+      .step-line {
+        background: #e0e7ff;
+      }
+      .step-content h4 {
+        color: #1a1a3e;
+      }
+      .step-content p {
+        color: #5a6a8a;
+      }
+
+      .tag-yellow {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .tag-green {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .tag-blue {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+      .tag-red {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .tag-purple {
+        background: #ede9fe;
+        color: #5b21b6;
+      }
+      .tag-orange {
+        background: #ffedd5;
+        color: #9a3412;
+      }
+      .tag-gray {
+        background: #f1f5f9;
+        color: #475569;
+      }
+
+      .tap-hint {
+        color: #94a3b8;
+      }
+      .reveal-trigger .arrow {
+        color: #94a3b8;
+      }
+
+      .nav-btn.prev {
+        background: #e0e7ff;
+        color: #3b41c0;
+        border: none;
+      }
+      .nav-btn.next {
+        background: #6366f1;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>🌐 Ciutadania Digital Crítica</h1>
+        <p>Drets, responsabilitats i pensament crític a l'era digital</p>
+        <span class="header-tag"
+          >IES Ramon Llull · 1r Batxillerat · Curs 25-26</span
+        >
+      </header>
+
+      <div class="topic-tabs" id="topic-tabs">
+        <div class="topic-tab active" onclick="go(0)">
+          🗣️ Llibertat i etiqueta
+        </div>
+        <div class="topic-tab" onclick="go(1)">📰 Informació i fake news</div>
+        <div class="topic-tab" onclick="go(2)">©️ Propietat intel·lectual</div>
+        <div class="topic-tab" onclick="go(3)">🏛️ Tràmits en línia</div>
+        <div class="topic-tab" onclick="go(4)">💳 Economia digital</div>
+        <div class="topic-tab" onclick="go(5)">🤖 Ètica i IA</div>
+        <div class="topic-tab" onclick="go(6)">🌱 Sostenibilitat digital</div>
+        <div class="topic-tab" onclick="go(7)">
+          ✊ Activisme i programari lliure
+        </div>
+      </div>
+
+      <!-- ===== 0: LLIBERTAT I ETIQUETA ===== -->
+      <div class="topic-panel active" id="panel-0">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #0a1a0a, #0a2a1a);
+            border: 1px solid #1a3a1a;
+          "
+        >
+          <div class="sb-icon">🗣️</div>
+          <div>
+            <h2>Llibertat d'expressió i etiqueta digital</h2>
+            <p>
+              Drets i responsabilitats a la xarxa: on acaba la llibertat i on
+              comença el dany.
+            </p>
           </div>
-          <div class="col-card red">
-            <h4>❌ Fora dels límits (il·legal)</h4>
-            <ul>
-              <li>Incitació a l'odi per raça, religió o orientació</li>
-              <li>Assetjament i ciberbullying</li>
-              <li>Difamació (mentides que danyen la reputació)</li>
-              <li>Amenaces i extorsió en línia</li>
-            </ul>
+        </div>
+        <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              🗣️ La llibertat d'expressió a Internet
+              <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <p>
+                Internet ha democratitzat la paraula: qualsevol persona pot
+                publicar, opinar i difondre informació a escala global. Però la
+                llibertat d'expressió no és absoluta — té límits legals i ètics.
+              </p>
+              <div class="two-col">
+                <div class="col-card green">
+                  <h4>✅ Protegit per la llibertat d'expressió</h4>
+                  <ul>
+                    <li>Criticar governs i institucions</li>
+                    <li>Expressar opinions polítiques o religioses</li>
+                    <li>Publicar sàtira i humor</li>
+                    <li>Denunciar injustícies públicament</li>
+                  </ul>
+                </div>
+                <div class="col-card red">
+                  <h4>❌ Fora dels límits (il·legal)</h4>
+                  <ul>
+                    <li>Incitació a l'odi per raça, religió o orientació</li>
+                    <li>Assetjament i ciberbullying</li>
+                    <li>Difamació (mentides que danyen la reputació)</li>
+                    <li>Amenaces i extorsió en línia</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="info-box yellow">
+                ⚖️ A Europa, la llibertat d'expressió digital està regulada pel
+                <strong>Conveni Europeu de Drets Humans</strong> i, des de 2024,
+                per la <strong>Llei de Serveis Digitals (DSA)</strong> de la UE,
+                que obliga les grans plataformes a eliminar continguts
+                il·legals.
+              </div>
+            </div>
           </div>
         </div>
-        <div class="info-box yellow">⚖️ A Europa, la llibertat d'expressió digital està regulada pel <strong>Conveni Europeu de Drets Humans</strong> i, des de 2024, per la <strong>Llei de Serveis Digitals (DSA)</strong> de la UE, que obliga les grans plataformes a eliminar continguts il·legals.</div>
-      </div>
-    </div>
-  </div>
 
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">📐 L'etiqueta digital (Netiqueta) <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <p>La <strong>netiqueta</strong> és el conjunt de normes de comportament i educació a Internet. Com en el món físic tenim maneres de comportar-nos en públic, en línia també existeixen codis de conducta implícits.</p>
-        <div class="three-col">
-          <div class="col-card teal"><h4>💬 Comunicació</h4><ul><li>No escriure en MAJÚSCULES (equival a cridar)</li><li>Revisar ortografia i gramàtica</li><li>Adaptar el to al context (formal/informal)</li><li>No enviar missatges massius innecessaris</li></ul></div>
-          <div class="col-card blue"><h4>🤝 Respecte</h4><ul><li>No atacar persones, debat idees</li><li>Evitar el <em>trolling</em> i les provocacions</li><li>Respectar opinions diferents a la teva</li><li>Demanar permís abans de compartir fotos d'altri</li></ul></div>
-          <div class="col-card yellow"><h4>📲 Plataformes</h4><ul><li>Llegir les normes de cada comunitat</li><li>No fer <em>spam</em> ni autopromoció excessiva</li><li>Etiquetar contingut sensible correctament</li><li>Citar les fonts del contingut que comparteixes</li></ul></div>
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              📐 L'etiqueta digital (Netiqueta) <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <p>
+                La <strong>netiqueta</strong> és el conjunt de normes de
+                comportament i educació a Internet. Com en el món físic tenim
+                maneres de comportar-nos en públic, en línia també existeixen
+                codis de conducta implícits.
+              </p>
+              <div class="three-col">
+                <div class="col-card teal">
+                  <h4>💬 Comunicació</h4>
+                  <ul>
+                    <li>No escriure en MAJÚSCULES (equival a cridar)</li>
+                    <li>Revisar ortografia i gramàtica</li>
+                    <li>Adaptar el to al context (formal/informal)</li>
+                    <li>No enviar missatges massius innecessaris</li>
+                  </ul>
+                </div>
+                <div class="col-card blue">
+                  <h4>🤝 Respecte</h4>
+                  <ul>
+                    <li>No atacar persones, debat idees</li>
+                    <li>Evitar el <em>trolling</em> i les provocacions</li>
+                    <li>Respectar opinions diferents a la teva</li>
+                    <li>Demanar permís abans de compartir fotos d'altri</li>
+                  </ul>
+                </div>
+                <div class="col-card yellow">
+                  <h4>📲 Plataformes</h4>
+                  <ul>
+                    <li>Llegir les normes de cada comunitat</li>
+                    <li>No fer <em>spam</em> ni autopromoció excessiva</li>
+                    <li>Etiquetar contingut sensible correctament</li>
+                    <li>Citar les fonts del contingut que comparteixes</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="info-box blue">
+                💡 L'efecte <strong>desinhibició en línia</strong>: la distància
+                i l'anonimat d'Internet fan que moltes persones diguin coses que
+                mai dirien cara a cara. Però les paraules digitals tenen
+                conseqüències reals.
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="info-box blue">💡 L'efecte <strong>desinhibició en línia</strong>: la distància i l'anonimat d'Internet fan que moltes persones diguin coses que mai dirien cara a cara. Però les paraules digitals tenen conseqüències reals.</div>
-      </div>
-    </div>
-  </div>
 
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">📝 Periodisme digital i la blogosfera <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <p>Avui, qualsevol pot ser editor. La <strong>blogosfera</strong> és l'ecosistema de blogs i plataformes de publicació personal que ha democratitzat la creació de contingut informatiu.</p>
-        <table class="tt">
-          <thead><tr><th>Format</th><th>Característiques</th><th>Exemples</th></tr></thead>
-          <tbody>
-            <tr><td><strong>Blog personal</strong></td><td>Opinió i experiències d'una persona</td><td>WordPress, Blogspot</td></tr>
-            <tr><td><strong>Newsletter</strong></td><td>Contingut enviat per correu als subscriptors</td><td>Substack, Mailchimp</td></tr>
-            <tr><td><strong>Mèdia digital natiu</strong></td><td>Periodisme professional nascut en línia</td><td>El Confidencial, Crític</td></tr>
-            <tr><td><strong>Xarxes socials</strong></td><td>Difusió immediata, alta viralizació</td><td>X/Twitter, LinkedIn</td></tr>
-            <tr><td><strong>Podcast i vídeo</strong></td><td>Format àudio/visual, llarg o curt</td><td>YouTube, Spotify</td></tr>
-          </tbody>
-        </table>
-        <div class="info-box green">🎯 Estratègies de comunicació en línia eficaç: <strong>coherència</strong> (missatge clar i consistent), <strong>persuasió</strong> (arguments sòlids, no manipulació) i <strong>adaptació al públic</strong> (to, vocabulari i format adequats a qui et llegeix).</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== 1: INFORMACIÓ I FAKE NEWS ===== -->
-<div class="topic-panel" id="panel-1">
-  <div class="stage-badge" style="background:linear-gradient(135deg,#0a0a1a,#1a0a2e);border:1px solid #1a1a3a">
-    <div class="sb-icon">📰</div>
-    <div><h2>Informació digital i Fake News</h2><p>Pensament crític, verificació de fonts i detecció de desinformació.</p></div>
-  </div>
-  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
-
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">🔍 Ús crític de la informació digital <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <p>No tota la informació que circula per Internet és verídica. El pensament crític és la capacitat d'analitzar, qüestionar i verificar el que llegim abans de creure-ho o compartir-ho.</p>
-        <div class="step-list">
-          <div class="step-item"><div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div><div class="step-content"><h4>Identifica la font</h4><p>Qui ho publica? És un mitjà reconegut, un expert o un compte anònim? Busca informació sobre l'autor i el mitjà.</p></div></div>
-          <div class="step-item"><div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div><div class="step-content"><h4>Comprova la data</h4><p>Les notícies antigues es recirculen constantment com si fossin noves. Una notícia de 2018 pot semblar "recent" si se'n treu el context.</p></div></div>
-          <div class="step-item"><div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div><div class="step-content"><h4>Contrasta amb altres fonts</h4><p>Si una notícia important és veritat, apareixerà en múltiples mitjans independents. Si sols ho diu una web, sospita.</p></div></div>
-          <div class="step-item"><div class="step-left"><div class="step-num">4</div></div><div class="step-content"><h4>Analitza el to i les emocions</h4><p>Els titulars que provoquen por, ràbia o indignació excessiva solen ser dissenyats per viralitzar, no per informar.</p></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">🚨 Fake News: tipus i com detectar-les <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <table class="tt">
-          <thead><tr><th>Tipus</th><th>Descripció</th><th>Exemple</th></tr></thead>
-          <tbody>
-            <tr><td><strong>Desinformació</strong></td><td>Informació falsa creada per enganyar deliberadament</td><td>Notícies inventades sobre polítiques</td></tr>
-            <tr><td><strong>Malinformació</strong></td><td>Informació vertadera usada fora de context per causar dany</td><td>Foto real d'un lloc diferent al que es diu</td></tr>
-            <tr><td><strong>Clickbait</strong></td><td>Titular exagerat per generar clics, el contingut no compleix</td><td>"No creuràs el que li va passar a..."</td></tr>
-            <tr><td><strong>Deep Fakes</strong></td><td>Vídeos o àudios falsificats amb IA de forma molt realista</td><td>Vídeo fals d'un polític dient coses que no ha dit</td></tr>
-            <tr><td><strong>Propaganda</strong></td><td>Informació parcialment certa per promoure una ideologia</td><td>Campanyes de desinformació electoral</td></tr>
-          </tbody>
-        </table>
-        <div class="two-col">
-          <div class="col-card green"><h4>🔬 Eines de verificació</h4><ul><li><strong>Maldita.es</strong> — fact-checking en espanyol</li><li><strong>Newtral</strong> — verificació de notícies</li><li><strong>Snopes.com</strong> — mites i hoaxes globals</li><li><strong>TinEye</strong> — cerca inversa d'imatges</li><li><strong>Google Fact Check</strong> — etiquetes de verificació</li></ul></div>
-          <div class="col-card red"><h4>🚩 Senyals d'alarma</h4><ul><li>URL sospitosa o domini estrany</li><li>Sense data ni autor identificat</li><li>Ortografia i gramàtica deficient</li><li>Imatges que no coincideixen amb el text</li><li>Demana que comparteixis urgentment</li></ul></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">🫧 Les bombolles de filtre i les cambres d'eco <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <p>Els algoritmes de les xarxes socials i cercadors mostren contingut que ja et sol agradar, creant una <strong>bombolla de filtre</strong>: un entorn personalitzat on sols veus informació que confirma les teves creences.</p>
-        <div class="two-col">
-          <div class="col-card yellow"><h4>🫧 Bombolla de filtre</h4><p>L'algoritme aprèn els teus gustos i et mostra cada vegada més del mateix. Progressivament, deixa de mostrar-te punts de vista alternatius.</p></div>
-          <div class="col-card orange"><h4>📣 Cambra d'eco</h4><p>Grup de persones que es retroalimenten amb les mateixes opinions. Qualsevol veu discordant és atacada o silenciada. Amplifica la polarització.</p></div>
-        </div>
-        <div class="info-box purple">🧠 Antídot: seguir intencionadament fonts diverses, llegir opinions amb les quals no estàs d'acord i usar cercadors en mode privat per evitar la personalització.</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== 2: PROPIETAT INTEL·LECTUAL ===== -->
-<div class="topic-panel" id="panel-2">
-  <div class="stage-badge" style="background:linear-gradient(135deg,#1a0a1a,#2a0a2e);border:1px solid #2a1a3a">
-    <div class="sb-icon">©️</div>
-    <div><h2>Propietat intel·lectual i llicències</h2><p>Drets d'autor al món digital: qui és propietari del que publiques i del que uses.</p></div>
-  </div>
-  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
-
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">©️ Drets d'autor a Internet <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <p>Tot contingut creat (text, imatge, música, codi, vídeo) queda automàticament protegit pels drets d'autor en el moment de la creació, <strong>sense necessitat de registrar-lo</strong>. Usar-lo sense permís és il·legal, fins i tot si és gratuït i accessible en línia.</p>
-        <div class="info-box red">⚠️ "Està a Internet, per tant és lliure" és un error molt comú i perillós. Una foto de Flickr, una cançó de Spotify o un article d'un blog continuen sent propietat del seu autor.</div>
-        <div class="two-col">
-          <div class="col-card red"><h4>❌ Usos il·legals habituals</h4><ul><li>Baixar música o films sense pagar</li><li>Usar imatges de Google sense llicència</li><li>Copiar text d'un article sense citar</li><li>Fer servir codi propietari en projectes propis</li></ul></div>
-          <div class="col-card green"><h4>✅ Com usar contingut legalment</h4><ul><li>Buscar contingut amb llicències obertes</li><li>Citar sempre la font i l'autor</li><li>Usar bancs d'imatges lliures (Unsplash, Pixabay)</li><li>Crear el teu propi contingut</li></ul></div>
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              📝 Periodisme digital i la blogosfera <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <p>
+                Avui, qualsevol pot ser editor. La
+                <strong>blogosfera</strong> és l'ecosistema de blogs i
+                plataformes de publicació personal que ha democratitzat la
+                creació de contingut informatiu.
+              </p>
+              <table class="tt">
+                <thead>
+                  <tr>
+                    <th>Format</th>
+                    <th>Característiques</th>
+                    <th>Exemples</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Blog personal</strong></td>
+                    <td>Opinió i experiències d'una persona</td>
+                    <td>WordPress, Blogspot</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Newsletter</strong></td>
+                    <td>Contingut enviat per correu als subscriptors</td>
+                    <td>Substack, Mailchimp</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Mèdia digital natiu</strong></td>
+                    <td>Periodisme professional nascut en línia</td>
+                    <td>El Confidencial, Crític</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Xarxes socials</strong></td>
+                    <td>Difusió immediata, alta viralizació</td>
+                    <td>X/Twitter, LinkedIn</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Podcast i vídeo</strong></td>
+                    <td>Format àudio/visual, llarg o curt</td>
+                    <td>YouTube, Spotify</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="info-box green">
+                🎯 Estratègies de comunicació en línia eficaç:
+                <strong>coherència</strong> (missatge clar i consistent),
+                <strong>persuasió</strong> (arguments sòlids, no manipulació) i
+                <strong>adaptació al públic</strong> (to, vocabulari i format
+                adequats a qui et llegeix).
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">🔓 Llicències Creative Commons <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <p>Les llicències <strong>Creative Commons (CC)</strong> permeten als autors especificar exactament com pot usar-se el seu contingut, sense renunciar als drets d'autor.</p>
-        <table class="tt">
-          <thead><tr><th>Llicència</th><th>Permet</th><th>Restriccions</th></tr></thead>
-          <tbody>
-            <tr><td><strong>CC BY</strong></td><td>Usar, modificar, fins i tot comercialment</td><td>Citar l'autor</td></tr>
-            <tr><td><strong>CC BY-SA</strong></td><td>Usar i modificar</td><td>Citar + compartir igual</td></tr>
-            <tr><td><strong>CC BY-NC</strong></td><td>Usar i modificar</td><td>Citar + no comercial</td></tr>
-            <tr><td><strong>CC BY-ND</strong></td><td>Usar sense modificar</td><td>Citar + sense derivades</td></tr>
-            <tr><td><strong>CC0</strong></td><td>Usar lliurement sense restriccions</td><td>Cap (domini públic)</td></tr>
-          </tbody>
-        </table>
-        <div class="info-box teal">🌐 Wikipedia usa la llicència CC BY-SA. Tota la música de la plataforma Free Music Archive usa llicències CC. Pots buscar imatges CC directament a Google (Eines → Drets d'ús).</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">💻 Programari lliure vs. propietari <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <div class="two-col">
-          <div class="col-card red"><h4>🔒 Programari propietari</h4><ul><li>Codi tancat, no es pot veure ni modificar</li><li>Llicència de pagament o subscripció</li><li>L'empresa controla les actualitzacions</li><li>Ex: Windows, Adobe, Microsoft Office</li></ul></div>
-          <div class="col-card green"><h4>🔓 Programari lliure/obert</h4><ul><li>Codi accessible a tothom</li><li>Gratuït i modificable</li><li>Comunitat de voluntaris el manté</li><li>Ex: Linux, LibreOffice, Firefox, VLC</li></ul></div>
+      <!-- ===== 1: INFORMACIÓ I FAKE NEWS ===== -->
+      <div class="topic-panel" id="panel-1">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #0a0a1a, #1a0a2e);
+            border: 1px solid #1a1a3a;
+          "
+        >
+          <div class="sb-icon">📰</div>
+          <div>
+            <h2>Informació digital i Fake News</h2>
+            <p>
+              Pensament crític, verificació de fonts i detecció de
+              desinformació.
+            </p>
+          </div>
         </div>
-        <div class="info-box green">🆓 Les <strong>4 llibertats del programari lliure</strong> (Richard Stallman): usar-lo per qualsevol propòsit, estudiar-ne el funcionament, redistribuir-ne còpies, i millorar-lo i publicar les millores.</div>
-      </div>
-    </div>
-  </div>
-</div>
+        <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
 
-<!-- ===== 3: TRÀMITS EN LÍNIA ===== -->
-<div class="topic-panel" id="panel-3">
-  <div class="stage-badge" style="background:linear-gradient(135deg,#0a1a1a,#0a2a2a);border:1px solid #1a3a3a">
-    <div class="sb-icon">🏛️</div>
-    <div><h2>Tràmits administratius en línia</h2><p>L'administració pública digital: com gestionar els teus drets i obligacions sense cues.</p></div>
-  </div>
-  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
-
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">🏛️ Plataformes digitals de l'administració pública <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <p>L'administració pública espanyola i europea ha digitalitzat gran part dels seus serveis. Pots fer gestions que abans requerien visites presencials des de casa, en qualsevol moment.</p>
-        <table class="tt">
-          <thead><tr><th>Plataforma</th><th>Per a què serveix</th></tr></thead>
-          <tbody>
-            <tr><td><strong>Sede.gob.es</strong></td><td>Seu electrònica del Govern d'Espanya: tràmits, instàncies i notificacions</td></tr>
-            <tr><td><strong>Cl@ve</strong></td><td>Sistema d'identificació digital per a tots els serveis de l'administració</td></tr>
-            <tr><td><strong>DNI electrònic (DNIe)</strong></td><td>Firma digital i identificació en línia amb el xip del DNI</td></tr>
-            <tr><td><strong>Carpeta Ciutadana</strong></td><td>Tots els teus documents i expedients amb l'administració en un sol lloc</td></tr>
-            <tr><td><strong>AEAT (Agència Tributària)</strong></td><td>Declaració de la Renda, consultes fiscals, certificats tributaris</td></tr>
-            <tr><td><strong>Seguretat Social</strong></td><td>Vida laboral, prestacions, cita prèvia</td></tr>
-            <tr><td><strong>Registre Civil en línia</strong></td><td>Certificats de naixement, matrimoni i defunció</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">📜 Certificats digitals oficials <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <p>Un <strong>certificat digital</strong> és un fitxer electrònic que identifica una persona o entitat de forma segura. Permet firmar documents i fer tràmits en línia amb plena validesa legal.</p>
-        <div class="step-list">
-          <div class="step-item"><div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div><div class="step-content"><h4>Sol·licitar el certificat</h4><p>A la web de la FNMT (Fàbrica Nacional de Moneda i Timbre): <code>www.sede.fnmt.gob.es</code>. S'inicia en línia i es rep un codi.</p></div></div>
-          <div class="step-item"><div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div><div class="step-content"><h4>Acreditar la identitat presencialment</h4><p>Portar el DNI a una oficina acreditada (Hisenda, Seguretat Social, alguns ajuntaments). Sols cal fer-ho una vegada.</p></div></div>
-          <div class="step-item"><div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div><div class="step-content"><h4>Descarregar el certificat</h4><p>Tornar a la web de la FNMT amb el codi rebut i descarregar el fitxer <code>.p12</code> al mateix navegador.</p></div></div>
-          <div class="step-item"><div class="step-left"><div class="step-num">4</div></div><div class="step-content"><h4>Instal·lar i usar</h4><p>Importar el certificat al navegador o al sistema operatiu. Ja podràs signar documents i accedir a totes les seus electròniques.</p></div></div>
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              🔍 Ús crític de la informació digital <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <p>
+                No tota la informació que circula per Internet és verídica. El
+                pensament crític és la capacitat d'analitzar, qüestionar i
+                verificar el que llegim abans de creure-ho o compartir-ho.
+              </p>
+              <div class="step-list">
+                <div class="step-item">
+                  <div class="step-left">
+                    <div class="step-num">1</div>
+                    <div class="step-line"></div>
+                  </div>
+                  <div class="step-content">
+                    <h4>Identifica la font</h4>
+                    <p>
+                      Qui ho publica? És un mitjà reconegut, un expert o un
+                      compte anònim? Busca informació sobre l'autor i el mitjà.
+                    </p>
+                  </div>
+                </div>
+                <div class="step-item">
+                  <div class="step-left">
+                    <div class="step-num">2</div>
+                    <div class="step-line"></div>
+                  </div>
+                  <div class="step-content">
+                    <h4>Comprova la data</h4>
+                    <p>
+                      Les notícies antigues es recirculen constantment com si
+                      fossin noves. Una notícia de 2018 pot semblar "recent" si
+                      se'n treu el context.
+                    </p>
+                  </div>
+                </div>
+                <div class="step-item">
+                  <div class="step-left">
+                    <div class="step-num">3</div>
+                    <div class="step-line"></div>
+                  </div>
+                  <div class="step-content">
+                    <h4>Contrasta amb altres fonts</h4>
+                    <p>
+                      Si una notícia important és veritat, apareixerà en
+                      múltiples mitjans independents. Si sols ho diu una web,
+                      sospita.
+                    </p>
+                  </div>
+                </div>
+                <div class="step-item">
+                  <div class="step-left"><div class="step-num">4</div></div>
+                  <div class="step-content">
+                    <h4>Analitza el to i les emocions</h4>
+                    <p>
+                      Els titulars que provoquen por, ràbia o indignació
+                      excessiva solen ser dissenyats per viralitzar, no per
+                      informar.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="info-box teal">🔑 Alternativa ràpida: el sistema <strong>Cl@ve PIN</strong> permet identificar-se sense certificat instal·lat, rebent un PIN per SMS. Ideal per a tràmits puntuals sense necessitat d'instal·lar res.</div>
-      </div>
-    </div>
-  </div>
 
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">⚠️ Detecció de fraus en tràmits digitals <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <p>Els cibercriminals imiten webs oficials per robar dades personals i bancàries durant la realització de tràmits.</p>
-        <div class="two-col">
-          <div class="col-card red"><h4>🚩 Senyals de web falsa</h4><ul><li>URL que no acaba en <code>.gob.es</code> o <code>.gov</code></li><li>Demana pagaments no habituals</li><li>Disseny diferent al lloc oficial</li><li>Certificat de seguretat absent (sense 🔒)</li></ul></div>
-          <div class="col-card green"><h4>✅ Bones pràctiques</h4><ul><li>Accedir sempre escrivint la URL directament</li><li>Mai seguir enllaços de correus o SMS</li><li>Verificar que la URL comença per <code>https://</code></li><li>Usar el portal <code>administracion.gob.es</code> com a punt d'entrada</li></ul></div>
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              🚨 Fake News: tipus i com detectar-les
+              <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <table class="tt">
+                <thead>
+                  <tr>
+                    <th>Tipus</th>
+                    <th>Descripció</th>
+                    <th>Exemple</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Desinformació</strong></td>
+                    <td>Informació falsa creada per enganyar deliberadament</td>
+                    <td>Notícies inventades sobre polítiques</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Malinformació</strong></td>
+                    <td>
+                      Informació vertadera usada fora de context per causar dany
+                    </td>
+                    <td>Foto real d'un lloc diferent al que es diu</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Clickbait</strong></td>
+                    <td>
+                      Titular exagerat per generar clics, el contingut no
+                      compleix
+                    </td>
+                    <td>"No creuràs el que li va passar a..."</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Deep Fakes</strong></td>
+                    <td>
+                      Vídeos o àudios falsificats amb IA de forma molt realista
+                    </td>
+                    <td>Vídeo fals d'un polític dient coses que no ha dit</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Propaganda</strong></td>
+                    <td>
+                      Informació parcialment certa per promoure una ideologia
+                    </td>
+                    <td>Campanyes de desinformació electoral</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="two-col">
+                <div class="col-card green">
+                  <h4>🔬 Eines de verificació</h4>
+                  <ul>
+                    <li>
+                      <strong>Maldita.es</strong> — fact-checking en espanyol
+                    </li>
+                    <li><strong>Newtral</strong> — verificació de notícies</li>
+                    <li>
+                      <strong>Snopes.com</strong> — mites i hoaxes globals
+                    </li>
+                    <li><strong>TinEye</strong> — cerca inversa d'imatges</li>
+                    <li>
+                      <strong>Google Fact Check</strong> — etiquetes de
+                      verificació
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-card red">
+                  <h4>🚩 Senyals d'alarma</h4>
+                  <ul>
+                    <li>URL sospitosa o domini estrany</li>
+                    <li>Sense data ni autor identificat</li>
+                    <li>Ortografia i gramàtica deficient</li>
+                    <li>Imatges que no coincideixen amb el text</li>
+                    <li>Demana que comparteixis urgentment</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- ===== 4: ECONOMIA DIGITAL ===== -->
-<div class="topic-panel" id="panel-4">
-  <div class="stage-badge" style="background:linear-gradient(135deg,#0a1a0a,#1a1a00);border:1px solid #2a2a0a">
-    <div class="sb-icon">💳</div>
-    <div><h2>Economia digital i pagaments</h2><p>Compres en línia, facturació digital, mètodes de pagament i criptomonedes.</p></div>
-  </div>
-  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
-
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">🛒 Plataformes d'intercanvi de béns i serveis <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <p>Les plataformes digitals han transformat el comerç: pots comprar, vendre, llogar o intercanviar gairebé qualsevol cosa des del mòbil.</p>
-        <div class="three-col">
-          <div class="col-card green"><h4>🛍️ Comerç electrònic</h4><ul><li>Amazon, El Corte Inglés</li><li>Zalando, ASOS (moda)</li><li>PCComponentes (tecnologia)</li></ul></div>
-          <div class="col-card blue"><h4>♻️ Economia circular</h4><ul><li>Wallapop, Vinted (roba)</li><li>Milanuncios, eBay</li><li>Too Good To Go (menjar)</li></ul></div>
-          <div class="col-card yellow"><h4>🤝 Economia col·laborativa</h4><ul><li>Airbnb (allotjament)</li><li>BlaBlaCar (transport)</li><li>Fiverr (serveis freelance)</li></ul></div>
-        </div>
-        <div class="info-box yellow">⚠️ En vendre en plataformes com Wallapop o Vinted, les transaccions superiors a 2.000€ anuals han de declarar-se a Hisenda. Des de 2023, les plataformes estan obligades a reportar les dades dels venedors.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">💳 Mètodes de pagament digital segurs <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <table class="tt">
-          <thead><tr><th>Mètode</th><th>Seguretat</th><th>Recomanat per a</th></tr></thead>
-          <tbody>
-            <tr><td><strong>Targeta de crèdit/dèbit</strong></td><td>Alta (amb 3D Secure)</td><td>Compres en llocs coneguts</td></tr>
-            <tr><td><strong>PayPal</strong></td><td>Alta (intermediari)</td><td>Compres a venedors desconeguts, protecció al comprador</td></tr>
-            <tr><td><strong>Bizum</strong></td><td>Alta</td><td>Transferències entre particulars, pagaments ràpids</td></tr>
-            <tr><td><strong>Apple/Google Pay</strong></td><td>Molt alta (tokenització)</td><td>Pagaments en botigues i apps, mai exposa el número real de targeta</td></tr>
-            <tr><td><strong>Targeta virtual</strong></td><td>Molt alta</td><td>Compres en línia, número diferent per a cada compra</td></tr>
-          </tbody>
-        </table>
-        <div class="info-box red">🚨 Mai facis transferències bancàries directes a desconeguts. A diferència de PayPal o targetes, les transferències no tenen protecció al comprador i és gairebé impossible recuperar els diners si et estafa.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">₿ Criptomonedes: monedes digitals alternatives <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <p>Una <strong>criptomoneda</strong> és una moneda digital descentralitzada basada en tecnologia <strong>blockchain</strong>: un registre distribuït i immutable que valida les transaccions sense necessitat d'un banc central.</p>
-        <div class="two-col">
-          <div class="col-card green"><h4>✅ Avantatges</h4><ul><li>Transaccions sense intermediaris bancaris</li><li>Enviaments internacionals ràpids i econòmics</li><li>Transparència: totes les transaccions són públiques</li><li>Resistència a la censura i al control governamental</li></ul></div>
-          <div class="col-card red"><h4>⚠️ Riscos</h4><ul><li>Volatilitat extrema del preu</li><li>Transaccions irreversibles (si t'estafes, no recuperes res)</li><li>Usades en fraus i ransomware</li><li>Impacte ambiental elevat (Bitcoin)</li></ul></div>
-        </div>
-        <div class="info-box blue">💡 Les criptomonedes principals: <strong>Bitcoin (BTC)</strong> — la primera i més coneguda. <strong>Ethereum (ETH)</strong> — permet contractes intel·ligents. <strong>Stablecoins (USDT)</strong> — vinculades al dòlar, sense volatilitat. Totes funcionen sobre la mateixa base: el blockchain.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">🧾 Factures digitals i gestió segura <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <p>La <strong>factura electrònica</strong> és un document fiscal amb la mateixa validesa legal que el paper, però en format digital (habitualment PDF o XML). A Espanya, és obligatòria entre empreses des de 2024.</p>
-        <div class="two-col">
-          <div class="col-card teal"><h4>📋 Bones pràctiques</h4><ul><li>Guardar còpies de seguretat (mínim 4 anys per obligació fiscal)</li><li>Verificar que porteu signatura digital vàlida</li><li>Usar plataformes certificades (FACe, FacturaE)</li><li>No modificar mai una factura rebuda</li></ul></div>
-          <div class="col-card red"><h4>🚩 Fraus habituals</h4><ul><li>Factures falses per correu (Business Email Compromise)</li><li>Canvi de número de compte bancari en l'últim moment</li><li>PDFs infectats amb malware</li><li>Factures duplicades o amb imports incorrectes</li></ul></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== 5: ÈTICA I IA ===== -->
-<div class="topic-panel" id="panel-5">
-  <div class="stage-badge" style="background:linear-gradient(135deg,#1a0a1a,#2a0a1a);border:1px solid #3a1a1a">
-    <div class="sb-icon">🤖</div>
-    <div><h2>Ètica digital i Intel·ligència Artificial</h2><p>Biaixos, responsabilitat i l'ús ètic de les eines digitals i la IA.</p></div>
-  </div>
-  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
-
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">⚖️ Ètica en l'ús de dades i eines digitals <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <p>L'<strong>ètica digital</strong> és el conjunt de principis morals que guien com recollim, usem i compartim dades i com interactuem amb les tecnologies digitals.</p>
-        <div class="three-col">
-          <div class="col-card blue"><h4>🔒 Privacitat</h4><p>Recollir sols les dades necessàries. Informar clarament de l'ús. No vendre dades sense consentiment.</p></div>
-          <div class="col-card green"><h4>🌍 Inclusió</h4><p>Dissenyar tecnologia accessible per a tothom, independentment de les capacitats, l'idioma o els recursos econòmics.</p></div>
-          <div class="col-card yellow"><h4>🎯 Transparència</h4><p>Explicar com funcionen els algoritmes que afecten les persones. Permetre auditories independents.</p></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">🤖 Ús ètic de la Intel·ligència Artificial <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <p>La IA és una eina poderosa amb implicacions ètiques profundes. El seu ús responsable requereix considerar qui en dissenya, qui en controla i a qui afecta.</p>
-        <div class="two-col">
-          <div class="col-card green"><h4>✅ Usos beneficiosos</h4><ul><li>Diagnosi mèdica i recerca científica</li><li>Accessibilitat (traducció, descripció d'imatges)</li><li>Optimització energètica i transport</li><li>Educació personalitzada</li></ul></div>
-          <div class="col-card red"><h4>⚠️ Riscos ètics</h4><ul><li>Vigilància massiva i control social</li><li>Desinformació amb deep fakes</li><li>Discriminació per biaixos algorítmics</li><li>Substitució laboral sense transició justa</li></ul></div>
-        </div>
-        <div class="info-box purple">🇪🇺 La <strong>Llei d'IA de la UE (AI Act, 2024)</strong> classifica els sistemes d'IA per risc: prohibits (reconeixement facial en espais públics), d'alt risc (decisions mèdiques, contratació), i de baix risc (chatbots, recomanacions).</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">🔮 Biaixos algorítmics i ideològics <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <p>Un <strong>biaix algorítmic</strong> és un error sistemàtic en un algoritme que produeix resultats injustos o discriminatoris, generalment perquè ha estat entrenat amb dades que reflecteixen prejudicis humans existents.</p>
-        <div class="step-list">
-          <div class="step-item"><div class="step-left"><div class="step-num">📸</div><div class="step-line"></div></div><div class="step-content"><h4>Exemple: reconeixement facial</h4><p>Sistemes entrenats principalment amb cares blanques i masculines reconeixien pitjor cares de dones i persones d'origen africà. Usar-se per a decisions policials va generar detencions errònies.</p></div></div>
-          <div class="step-item"><div class="step-left"><div class="step-num">💼</div><div class="step-line"></div></div><div class="step-content"><h4>Exemple: selecció de personal</h4><p>Amazon va crear un algoritme de selecció de CV que discriminava dones perquè havia estat entrenat amb dades d'una empresa majoritàriament masculina. El van haver d'abandonar.</p></div></div>
-          <div class="step-item"><div class="step-left"><div class="step-num">💰</div></div><div class="step-content"><h4>Exemple: crèdits bancaris</h4><p>Algoritmes que denegaven crèdits a persones de determinats barris o codis postals, perpetuant desigualtats socioeconòmiques existents.</p></div></div>
-        </div>
-        <div class="info-box orange">🎯 Els biaixos <strong>ideològics</strong> dels algoritmes de recomanació amplifiquen continguts extrems perquè generen més temps de pantalla (engagement), contribuint a la polarització política i social.</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== 6: SOSTENIBILITAT DIGITAL ===== -->
-<div class="topic-panel" id="panel-6">
-  <div class="stage-badge" style="background:linear-gradient(135deg,#0a1a0a,#1a2a0a);border:1px solid #1a3a0a">
-    <div class="sb-icon">🌱</div>
-    <div><h2>Sostenibilitat i sobirania digital</h2><p>L'impacte ambiental de la tecnologia i el dret a controlar la pròpia vida digital.</p></div>
-  </div>
-  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
-
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">🗑️ Obsolescència programada tecnològica <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <p>L'<strong>obsolescència programada</strong> és la pràctica d'alguns fabricants de dissenyar productes perquè deixin de funcionar o siguin percebuts com a antiquats en un temps determinat, forçant la compra d'un nou model.</p>
-        <div class="two-col">
-          <div class="col-card red"><h4>📱 Tipus d'obsolescència</h4><ul><li><strong>Funcional:</strong> el dispositiu deixa de funcionar (bateria ireparable, actualitzacions suspeses)</li><li><strong>Percebuda:</strong> el model "antic" es fa semblar inferior (màrqueting)</li><li><strong>Per programari:</strong> actualitzacions que alenteixen models antics</li></ul></div>
-          <div class="col-card green"><h4>♻️ Alternatives</h4><ul><li>Reparar en lloc de substituir</li><li>Comprar dispositius amb bateria reemplaçable</li><li>Triar marques amb suport llarg (5+ anys d'actualitzacions)</li><li>Instal·lar Linux en dispositius antics per allargar-ne la vida</li></ul></div>
-        </div>
-        <div class="info-box yellow">📜 La <strong>Llei de Dret a Reparació de la UE (2024)</strong> obliga fabricants d'electrodomèstics i dispositius a oferir peces de recanvi i reparació durant almenys 10 anys després de la venda.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">🌍 Digitalització sostenible <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <p>La digitalització té un cost ambiental real i creixent. Les dades no "viuen al núvol" — viuen en centres de dades que consumeixen enormes quantitats d'energia i aigua.</p>
-        <div class="three-col">
-          <div class="col-card red"><h4>⚡ Consum energètic</h4><p>Els centres de dades globals consumeixen el 2% de l'electricitat mundial — tant com tota la indústria aeronàutica. Enviar un correu amb fitxer adjunt gran = encendre una bombeta 15 minuts.</p></div>
-          <div class="col-card yellow"><h4>💧 Consum d'aigua</h4><p>Un centre de dades gran pot consumir milions de litres d'aigua al dia per refrigeració. Entrenar un gran model d'IA pot consumir tanta aigua com 500.000 persones en un dia.</p></div>
-          <div class="col-card green"><h4>🌱 Bones pràctiques</h4><ul><li>Esborrar correus i fitxers antics</li><li>Usar streaming en qualitat adequada</li><li>Preferir serveis amb energia renovable</li><li>Allargar la vida dels dispositius</li></ul></div>
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              🫧 Les bombolles de filtre i les cambres d'eco
+              <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <p>
+                Els algoritmes de les xarxes socials i cercadors mostren
+                contingut que ja et sol agradar, creant una
+                <strong>bombolla de filtre</strong>: un entorn personalitzat on
+                sols veus informació que confirma les teves creences.
+              </p>
+              <div class="two-col">
+                <div class="col-card yellow">
+                  <h4>🫧 Bombolla de filtre</h4>
+                  <p>
+                    L'algoritme aprèn els teus gustos i et mostra cada vegada
+                    més del mateix. Progressivament, deixa de mostrar-te punts
+                    de vista alternatius.
+                  </p>
+                </div>
+                <div class="col-card orange">
+                  <h4>📣 Cambra d'eco</h4>
+                  <p>
+                    Grup de persones que es retroalimenten amb les mateixes
+                    opinions. Qualsevol veu discordant és atacada o silenciada.
+                    Amplifica la polarització.
+                  </p>
+                </div>
+              </div>
+              <div class="info-box purple">
+                🧠 Antídot: seguir intencionadament fonts diverses, llegir
+                opinions amb les quals no estàs d'acord i usar cercadors en mode
+                privat per evitar la personalització.
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">🏴 Sobirania tecnològica <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <p>La <strong>sobirania tecnològica</strong> és el dret de les persones, comunitats i estats a decidir quines tecnologies usem, com funcionen i qui les controla, sense dependre de monopolis o governs estrangers.</p>
-        <div class="two-col">
-          <div class="col-card red"><h4>😟 Dependència tecnològica actual</h4><ul><li>5 empreses (GAFAM) controlen la major part de la infraestructura digital mundial</li><li>Les dades de ciutadans europeus passen per servidors als EUA</li><li>Sistemes crítics (sanitat, educació) depenen de programari privatiu estranger</li></ul></div>
-          <div class="col-card green"><h4>🏴 Cap a la sobirania</h4><ul><li>Promoure programari lliure en administracions públiques</li><li>Núvol europeu sobirà (Gaia-X)</li><li>Xarxes de telecomunicació pròpies</li><li>Educació en tecnologies obertes des de l'escola</li></ul></div>
+      <!-- ===== 2: PROPIETAT INTEL·LECTUAL ===== -->
+      <div class="topic-panel" id="panel-2">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #1a0a1a, #2a0a2e);
+            border: 1px solid #2a1a3a;
+          "
+        >
+          <div class="sb-icon">©️</div>
+          <div>
+            <h2>Propietat intel·lectual i llicències</h2>
+            <p>
+              Drets d'autor al món digital: qui és propietari del que publiques
+              i del que uses.
+            </p>
+          </div>
         </div>
-        <div class="info-box teal">🇪🇺 La Comissió Europea ha llançat la iniciativa <strong>Europa Digital</strong> per reduir la dependència de tecnologia nord-americana i xinesa, invertint en núvol, IA i ciberseguretat europeus.</div>
+        <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              ©️ Drets d'autor a Internet <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <p>
+                Tot contingut creat (text, imatge, música, codi, vídeo) queda
+                automàticament protegit pels drets d'autor en el moment de la
+                creació, <strong>sense necessitat de registrar-lo</strong>.
+                Usar-lo sense permís és il·legal, fins i tot si és gratuït i
+                accessible en línia.
+              </p>
+              <div class="info-box red">
+                ⚠️ "Està a Internet, per tant és lliure" és un error molt comú i
+                perillós. Una foto de Flickr, una cançó de Spotify o un article
+                d'un blog continuen sent propietat del seu autor.
+              </div>
+              <div class="two-col">
+                <div class="col-card red">
+                  <h4>❌ Usos il·legals habituals</h4>
+                  <ul>
+                    <li>Baixar música o films sense pagar</li>
+                    <li>Usar imatges de Google sense llicència</li>
+                    <li>Copiar text d'un article sense citar</li>
+                    <li>Fer servir codi propietari en projectes propis</li>
+                  </ul>
+                </div>
+                <div class="col-card green">
+                  <h4>✅ Com usar contingut legalment</h4>
+                  <ul>
+                    <li>Buscar contingut amb llicències obertes</li>
+                    <li>Citar sempre la font i l'autor</li>
+                    <li>Usar bancs d'imatges lliures (Unsplash, Pixabay)</li>
+                    <li>Crear el teu propi contingut</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              🔓 Llicències Creative Commons <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <p>
+                Les llicències <strong>Creative Commons (CC)</strong> permeten
+                als autors especificar exactament com pot usar-se el seu
+                contingut, sense renunciar als drets d'autor.
+              </p>
+              <table class="tt">
+                <thead>
+                  <tr>
+                    <th>Llicència</th>
+                    <th>Permet</th>
+                    <th>Restriccions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>CC BY</strong></td>
+                    <td>Usar, modificar, fins i tot comercialment</td>
+                    <td>Citar l'autor</td>
+                  </tr>
+                  <tr>
+                    <td><strong>CC BY-SA</strong></td>
+                    <td>Usar i modificar</td>
+                    <td>Citar + compartir igual</td>
+                  </tr>
+                  <tr>
+                    <td><strong>CC BY-NC</strong></td>
+                    <td>Usar i modificar</td>
+                    <td>Citar + no comercial</td>
+                  </tr>
+                  <tr>
+                    <td><strong>CC BY-ND</strong></td>
+                    <td>Usar sense modificar</td>
+                    <td>Citar + sense derivades</td>
+                  </tr>
+                  <tr>
+                    <td><strong>CC0</strong></td>
+                    <td>Usar lliurement sense restriccions</td>
+                    <td>Cap (domini públic)</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="info-box teal">
+                🌐 Wikipedia usa la llicència CC BY-SA. Tota la música de la
+                plataforma Free Music Archive usa llicències CC. Pots buscar
+                imatges CC directament a Google (Eines → Drets d'ús).
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              💻 Programari lliure vs. propietari <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <div class="two-col">
+                <div class="col-card red">
+                  <h4>🔒 Programari propietari</h4>
+                  <ul>
+                    <li>Codi tancat, no es pot veure ni modificar</li>
+                    <li>Llicència de pagament o subscripció</li>
+                    <li>L'empresa controla les actualitzacions</li>
+                    <li>Ex: Windows, Adobe, Microsoft Office</li>
+                  </ul>
+                </div>
+                <div class="col-card green">
+                  <h4>🔓 Programari lliure/obert</h4>
+                  <ul>
+                    <li>Codi accessible a tothom</li>
+                    <li>Gratuït i modificable</li>
+                    <li>Comunitat de voluntaris el manté</li>
+                    <li>Ex: Linux, LibreOffice, Firefox, VLC</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="info-box green">
+                🆓 Les
+                <strong>4 llibertats del programari lliure</strong> (Richard
+                Stallman): usar-lo per qualsevol propòsit, estudiar-ne el
+                funcionament, redistribuir-ne còpies, i millorar-lo i publicar
+                les millores.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 3: TRÀMITS EN LÍNIA ===== -->
+      <div class="topic-panel" id="panel-3">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #0a1a1a, #0a2a2a);
+            border: 1px solid #1a3a3a;
+          "
+        >
+          <div class="sb-icon">🏛️</div>
+          <div>
+            <h2>Tràmits administratius en línia</h2>
+            <p>
+              L'administració pública digital: com gestionar els teus drets i
+              obligacions sense cues.
+            </p>
+          </div>
+        </div>
+        <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              🏛️ Plataformes digitals de l'administració pública
+              <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <p>
+                L'administració pública espanyola i europea ha digitalitzat gran
+                part dels seus serveis. Pots fer gestions que abans requerien
+                visites presencials des de casa, en qualsevol moment.
+              </p>
+              <table class="tt">
+                <thead>
+                  <tr>
+                    <th>Plataforma</th>
+                    <th>Per a què serveix</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Sede.gob.es</strong></td>
+                    <td>
+                      Seu electrònica del Govern d'Espanya: tràmits, instàncies
+                      i notificacions
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Cl@ve</strong></td>
+                    <td>
+                      Sistema d'identificació digital per a tots els serveis de
+                      l'administració
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>DNI electrònic (DNIe)</strong></td>
+                    <td>
+                      Firma digital i identificació en línia amb el xip del DNI
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Carpeta Ciutadana</strong></td>
+                    <td>
+                      Tots els teus documents i expedients amb l'administració
+                      en un sol lloc
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>AEAT (Agència Tributària)</strong></td>
+                    <td>
+                      Declaració de la Renda, consultes fiscals, certificats
+                      tributaris
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Seguretat Social</strong></td>
+                    <td>Vida laboral, prestacions, cita prèvia</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Registre Civil en línia</strong></td>
+                    <td>Certificats de naixement, matrimoni i defunció</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              📜 Certificats digitals oficials <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <p>
+                Un <strong>certificat digital</strong> és un fitxer electrònic
+                que identifica una persona o entitat de forma segura. Permet
+                firmar documents i fer tràmits en línia amb plena validesa
+                legal.
+              </p>
+              <div class="step-list">
+                <div class="step-item">
+                  <div class="step-left">
+                    <div class="step-num">1</div>
+                    <div class="step-line"></div>
+                  </div>
+                  <div class="step-content">
+                    <h4>Sol·licitar el certificat</h4>
+                    <p>
+                      A la web de la FNMT (Fàbrica Nacional de Moneda i Timbre):
+                      <code>www.sede.fnmt.gob.es</code>. S'inicia en línia i es
+                      rep un codi.
+                    </p>
+                  </div>
+                </div>
+                <div class="step-item">
+                  <div class="step-left">
+                    <div class="step-num">2</div>
+                    <div class="step-line"></div>
+                  </div>
+                  <div class="step-content">
+                    <h4>Acreditar la identitat presencialment</h4>
+                    <p>
+                      Portar el DNI a una oficina acreditada (Hisenda, Seguretat
+                      Social, alguns ajuntaments). Sols cal fer-ho una vegada.
+                    </p>
+                  </div>
+                </div>
+                <div class="step-item">
+                  <div class="step-left">
+                    <div class="step-num">3</div>
+                    <div class="step-line"></div>
+                  </div>
+                  <div class="step-content">
+                    <h4>Descarregar el certificat</h4>
+                    <p>
+                      Tornar a la web de la FNMT amb el codi rebut i descarregar
+                      el fitxer <code>.p12</code> al mateix navegador.
+                    </p>
+                  </div>
+                </div>
+                <div class="step-item">
+                  <div class="step-left"><div class="step-num">4</div></div>
+                  <div class="step-content">
+                    <h4>Instal·lar i usar</h4>
+                    <p>
+                      Importar el certificat al navegador o al sistema operatiu.
+                      Ja podràs signar documents i accedir a totes les seus
+                      electròniques.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="info-box teal">
+                🔑 Alternativa ràpida: el sistema
+                <strong>Cl@ve PIN</strong> permet identificar-se sense
+                certificat instal·lat, rebent un PIN per SMS. Ideal per a
+                tràmits puntuals sense necessitat d'instal·lar res.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              ⚠️ Detecció de fraus en tràmits digitals
+              <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <p>
+                Els cibercriminals imiten webs oficials per robar dades
+                personals i bancàries durant la realització de tràmits.
+              </p>
+              <div class="two-col">
+                <div class="col-card red">
+                  <h4>🚩 Senyals de web falsa</h4>
+                  <ul>
+                    <li>
+                      URL que no acaba en <code>.gob.es</code> o
+                      <code>.gov</code>
+                    </li>
+                    <li>Demana pagaments no habituals</li>
+                    <li>Disseny diferent al lloc oficial</li>
+                    <li>Certificat de seguretat absent (sense 🔒)</li>
+                  </ul>
+                </div>
+                <div class="col-card green">
+                  <h4>✅ Bones pràctiques</h4>
+                  <ul>
+                    <li>Accedir sempre escrivint la URL directament</li>
+                    <li>Mai seguir enllaços de correus o SMS</li>
+                    <li>
+                      Verificar que la URL comença per <code>https://</code>
+                    </li>
+                    <li>
+                      Usar el portal <code>administracion.gob.es</code> com a
+                      punt d'entrada
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 4: ECONOMIA DIGITAL ===== -->
+      <div class="topic-panel" id="panel-4">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #0a1a0a, #1a1a00);
+            border: 1px solid #2a2a0a;
+          "
+        >
+          <div class="sb-icon">💳</div>
+          <div>
+            <h2>Economia digital i pagaments</h2>
+            <p>
+              Compres en línia, facturació digital, mètodes de pagament i
+              criptomonedes.
+            </p>
+          </div>
+        </div>
+        <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              🛒 Plataformes d'intercanvi de béns i serveis
+              <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <p>
+                Les plataformes digitals han transformat el comerç: pots
+                comprar, vendre, llogar o intercanviar gairebé qualsevol cosa
+                des del mòbil.
+              </p>
+              <div class="three-col">
+                <div class="col-card green">
+                  <h4>🛍️ Comerç electrònic</h4>
+                  <ul>
+                    <li>Amazon, El Corte Inglés</li>
+                    <li>Zalando, ASOS (moda)</li>
+                    <li>PCComponentes (tecnologia)</li>
+                  </ul>
+                </div>
+                <div class="col-card blue">
+                  <h4>♻️ Economia circular</h4>
+                  <ul>
+                    <li>Wallapop, Vinted (roba)</li>
+                    <li>Milanuncios, eBay</li>
+                    <li>Too Good To Go (menjar)</li>
+                  </ul>
+                </div>
+                <div class="col-card yellow">
+                  <h4>🤝 Economia col·laborativa</h4>
+                  <ul>
+                    <li>Airbnb (allotjament)</li>
+                    <li>BlaBlaCar (transport)</li>
+                    <li>Fiverr (serveis freelance)</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="info-box yellow">
+                ⚠️ En vendre en plataformes com Wallapop o Vinted, les
+                transaccions superiors a 2.000€ anuals han de declarar-se a
+                Hisenda. Des de 2023, les plataformes estan obligades a reportar
+                les dades dels venedors.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              💳 Mètodes de pagament digital segurs <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <table class="tt">
+                <thead>
+                  <tr>
+                    <th>Mètode</th>
+                    <th>Seguretat</th>
+                    <th>Recomanat per a</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Targeta de crèdit/dèbit</strong></td>
+                    <td>Alta (amb 3D Secure)</td>
+                    <td>Compres en llocs coneguts</td>
+                  </tr>
+                  <tr>
+                    <td><strong>PayPal</strong></td>
+                    <td>Alta (intermediari)</td>
+                    <td>
+                      Compres a venedors desconeguts, protecció al comprador
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Bizum</strong></td>
+                    <td>Alta</td>
+                    <td>Transferències entre particulars, pagaments ràpids</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Apple/Google Pay</strong></td>
+                    <td>Molt alta (tokenització)</td>
+                    <td>
+                      Pagaments en botigues i apps, mai exposa el número real de
+                      targeta
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Targeta virtual</strong></td>
+                    <td>Molt alta</td>
+                    <td>Compres en línia, número diferent per a cada compra</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="info-box red">
+                🚨 Mai facis transferències bancàries directes a desconeguts. A
+                diferència de PayPal o targetes, les transferències no tenen
+                protecció al comprador i és gairebé impossible recuperar els
+                diners si et estafa.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              ₿ Criptomonedes: monedes digitals alternatives
+              <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <p>
+                Una <strong>criptomoneda</strong> és una moneda digital
+                descentralitzada basada en tecnologia
+                <strong>blockchain</strong>: un registre distribuït i immutable
+                que valida les transaccions sense necessitat d'un banc central.
+              </p>
+              <div class="two-col">
+                <div class="col-card green">
+                  <h4>✅ Avantatges</h4>
+                  <ul>
+                    <li>Transaccions sense intermediaris bancaris</li>
+                    <li>Enviaments internacionals ràpids i econòmics</li>
+                    <li>Transparència: totes les transaccions són públiques</li>
+                    <li>Resistència a la censura i al control governamental</li>
+                  </ul>
+                </div>
+                <div class="col-card red">
+                  <h4>⚠️ Riscos</h4>
+                  <ul>
+                    <li>Volatilitat extrema del preu</li>
+                    <li>
+                      Transaccions irreversibles (si t'estafes, no recuperes
+                      res)
+                    </li>
+                    <li>Usades en fraus i ransomware</li>
+                    <li>Impacte ambiental elevat (Bitcoin)</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="info-box blue">
+                💡 Les criptomonedes principals:
+                <strong>Bitcoin (BTC)</strong> — la primera i més coneguda.
+                <strong>Ethereum (ETH)</strong> — permet contractes
+                intel·ligents. <strong>Stablecoins (USDT)</strong> — vinculades
+                al dòlar, sense volatilitat. Totes funcionen sobre la mateixa
+                base: el blockchain.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              🧾 Factures digitals i gestió segura <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <p>
+                La <strong>factura electrònica</strong> és un document fiscal
+                amb la mateixa validesa legal que el paper, però en format
+                digital (habitualment PDF o XML). A Espanya, és obligatòria
+                entre empreses des de 2024.
+              </p>
+              <div class="two-col">
+                <div class="col-card teal">
+                  <h4>📋 Bones pràctiques</h4>
+                  <ul>
+                    <li>
+                      Guardar còpies de seguretat (mínim 4 anys per obligació
+                      fiscal)
+                    </li>
+                    <li>Verificar que porteu signatura digital vàlida</li>
+                    <li>Usar plataformes certificades (FACe, FacturaE)</li>
+                    <li>No modificar mai una factura rebuda</li>
+                  </ul>
+                </div>
+                <div class="col-card red">
+                  <h4>🚩 Fraus habituals</h4>
+                  <ul>
+                    <li>
+                      Factures falses per correu (Business Email Compromise)
+                    </li>
+                    <li>Canvi de número de compte bancari en l'últim moment</li>
+                    <li>PDFs infectats amb malware</li>
+                    <li>Factures duplicades o amb imports incorrectes</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 5: ÈTICA I IA ===== -->
+      <div class="topic-panel" id="panel-5">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #1a0a1a, #2a0a1a);
+            border: 1px solid #3a1a1a;
+          "
+        >
+          <div class="sb-icon">🤖</div>
+          <div>
+            <h2>Ètica digital i Intel·ligència Artificial</h2>
+            <p>
+              Biaixos, responsabilitat i l'ús ètic de les eines digitals i la
+              IA.
+            </p>
+          </div>
+        </div>
+        <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              ⚖️ Ètica en l'ús de dades i eines digitals
+              <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <p>
+                L'<strong>ètica digital</strong> és el conjunt de principis
+                morals que guien com recollim, usem i compartim dades i com
+                interactuem amb les tecnologies digitals.
+              </p>
+              <div class="three-col">
+                <div class="col-card blue">
+                  <h4>🔒 Privacitat</h4>
+                  <p>
+                    Recollir sols les dades necessàries. Informar clarament de
+                    l'ús. No vendre dades sense consentiment.
+                  </p>
+                </div>
+                <div class="col-card green">
+                  <h4>🌍 Inclusió</h4>
+                  <p>
+                    Dissenyar tecnologia accessible per a tothom,
+                    independentment de les capacitats, l'idioma o els recursos
+                    econòmics.
+                  </p>
+                </div>
+                <div class="col-card yellow">
+                  <h4>🎯 Transparència</h4>
+                  <p>
+                    Explicar com funcionen els algoritmes que afecten les
+                    persones. Permetre auditories independents.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              🤖 Ús ètic de la Intel·ligència Artificial
+              <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <p>
+                La IA és una eina poderosa amb implicacions ètiques profundes.
+                El seu ús responsable requereix considerar qui en dissenya, qui
+                en controla i a qui afecta.
+              </p>
+              <div class="two-col">
+                <div class="col-card green">
+                  <h4>✅ Usos beneficiosos</h4>
+                  <ul>
+                    <li>Diagnosi mèdica i recerca científica</li>
+                    <li>Accessibilitat (traducció, descripció d'imatges)</li>
+                    <li>Optimització energètica i transport</li>
+                    <li>Educació personalitzada</li>
+                  </ul>
+                </div>
+                <div class="col-card red">
+                  <h4>⚠️ Riscos ètics</h4>
+                  <ul>
+                    <li>Vigilància massiva i control social</li>
+                    <li>Desinformació amb deep fakes</li>
+                    <li>Discriminació per biaixos algorítmics</li>
+                    <li>Substitució laboral sense transició justa</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="info-box purple">
+                🇪🇺 La
+                <strong>Llei d'IA de la UE (AI Act, 2024)</strong> classifica
+                els sistemes d'IA per risc: prohibits (reconeixement facial en
+                espais públics), d'alt risc (decisions mèdiques, contratació), i
+                de baix risc (chatbots, recomanacions).
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              🔮 Biaixos algorítmics i ideològics <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <p>
+                Un <strong>biaix algorítmic</strong> és un error sistemàtic en
+                un algoritme que produeix resultats injustos o discriminatoris,
+                generalment perquè ha estat entrenat amb dades que reflecteixen
+                prejudicis humans existents.
+              </p>
+              <div class="step-list">
+                <div class="step-item">
+                  <div class="step-left">
+                    <div class="step-num">📸</div>
+                    <div class="step-line"></div>
+                  </div>
+                  <div class="step-content">
+                    <h4>Exemple: reconeixement facial</h4>
+                    <p>
+                      Sistemes entrenats principalment amb cares blanques i
+                      masculines reconeixien pitjor cares de dones i persones
+                      d'origen africà. Usar-se per a decisions policials va
+                      generar detencions errònies.
+                    </p>
+                  </div>
+                </div>
+                <div class="step-item">
+                  <div class="step-left">
+                    <div class="step-num">💼</div>
+                    <div class="step-line"></div>
+                  </div>
+                  <div class="step-content">
+                    <h4>Exemple: selecció de personal</h4>
+                    <p>
+                      Amazon va crear un algoritme de selecció de CV que
+                      discriminava dones perquè havia estat entrenat amb dades
+                      d'una empresa majoritàriament masculina. El van haver
+                      d'abandonar.
+                    </p>
+                  </div>
+                </div>
+                <div class="step-item">
+                  <div class="step-left"><div class="step-num">💰</div></div>
+                  <div class="step-content">
+                    <h4>Exemple: crèdits bancaris</h4>
+                    <p>
+                      Algoritmes que denegaven crèdits a persones de determinats
+                      barris o codis postals, perpetuant desigualtats
+                      socioeconòmiques existents.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="info-box orange">
+                🎯 Els biaixos <strong>ideològics</strong> dels algoritmes de
+                recomanació amplifiquen continguts extrems perquè generen més
+                temps de pantalla (engagement), contribuint a la polarització
+                política i social.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 6: SOSTENIBILITAT DIGITAL ===== -->
+      <div class="topic-panel" id="panel-6">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #0a1a0a, #1a2a0a);
+            border: 1px solid #1a3a0a;
+          "
+        >
+          <div class="sb-icon">🌱</div>
+          <div>
+            <h2>Sostenibilitat i sobirania digital</h2>
+            <p>
+              L'impacte ambiental de la tecnologia i el dret a controlar la
+              pròpia vida digital.
+            </p>
+          </div>
+        </div>
+        <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              🗑️ Obsolescència programada tecnològica
+              <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <p>
+                L'<strong>obsolescència programada</strong> és la pràctica
+                d'alguns fabricants de dissenyar productes perquè deixin de
+                funcionar o siguin percebuts com a antiquats en un temps
+                determinat, forçant la compra d'un nou model.
+              </p>
+              <div class="two-col">
+                <div class="col-card red">
+                  <h4>📱 Tipus d'obsolescència</h4>
+                  <ul>
+                    <li>
+                      <strong>Funcional:</strong> el dispositiu deixa de
+                      funcionar (bateria ireparable, actualitzacions suspeses)
+                    </li>
+                    <li>
+                      <strong>Percebuda:</strong> el model "antic" es fa semblar
+                      inferior (màrqueting)
+                    </li>
+                    <li>
+                      <strong>Per programari:</strong> actualitzacions que
+                      alenteixen models antics
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-card green">
+                  <h4>♻️ Alternatives</h4>
+                  <ul>
+                    <li>Reparar en lloc de substituir</li>
+                    <li>Comprar dispositius amb bateria reemplaçable</li>
+                    <li>
+                      Triar marques amb suport llarg (5+ anys d'actualitzacions)
+                    </li>
+                    <li>
+                      Instal·lar Linux en dispositius antics per allargar-ne la
+                      vida
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="info-box yellow">
+                📜 La
+                <strong>Llei de Dret a Reparació de la UE (2024)</strong> obliga
+                fabricants d'electrodomèstics i dispositius a oferir peces de
+                recanvi i reparació durant almenys 10 anys després de la venda.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              🌍 Digitalització sostenible <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <p>
+                La digitalització té un cost ambiental real i creixent. Les
+                dades no "viuen al núvol" — viuen en centres de dades que
+                consumeixen enormes quantitats d'energia i aigua.
+              </p>
+              <div class="three-col">
+                <div class="col-card red">
+                  <h4>⚡ Consum energètic</h4>
+                  <p>
+                    Els centres de dades globals consumeixen el 2% de
+                    l'electricitat mundial — tant com tota la indústria
+                    aeronàutica. Enviar un correu amb fitxer adjunt gran =
+                    encendre una bombeta 15 minuts.
+                  </p>
+                </div>
+                <div class="col-card yellow">
+                  <h4>💧 Consum d'aigua</h4>
+                  <p>
+                    Un centre de dades gran pot consumir milions de litres
+                    d'aigua al dia per refrigeració. Entrenar un gran model d'IA
+                    pot consumir tanta aigua com 500.000 persones en un dia.
+                  </p>
+                </div>
+                <div class="col-card green">
+                  <h4>🌱 Bones pràctiques</h4>
+                  <ul>
+                    <li>Esborrar correus i fitxers antics</li>
+                    <li>Usar streaming en qualitat adequada</li>
+                    <li>Preferir serveis amb energia renovable</li>
+                    <li>Allargar la vida dels dispositius</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              🏴 Sobirania tecnològica <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <p>
+                La <strong>sobirania tecnològica</strong> és el dret de les
+                persones, comunitats i estats a decidir quines tecnologies usem,
+                com funcionen i qui les controla, sense dependre de monopolis o
+                governs estrangers.
+              </p>
+              <div class="two-col">
+                <div class="col-card red">
+                  <h4>😟 Dependència tecnològica actual</h4>
+                  <ul>
+                    <li>
+                      5 empreses (GAFAM) controlen la major part de la
+                      infraestructura digital mundial
+                    </li>
+                    <li>
+                      Les dades de ciutadans europeus passen per servidors als
+                      EUA
+                    </li>
+                    <li>
+                      Sistemes crítics (sanitat, educació) depenen de programari
+                      privatiu estranger
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-card green">
+                  <h4>🏴 Cap a la sobirania</h4>
+                  <ul>
+                    <li>
+                      Promoure programari lliure en administracions públiques
+                    </li>
+                    <li>Núvol europeu sobirà (Gaia-X)</li>
+                    <li>Xarxes de telecomunicació pròpies</li>
+                    <li>Educació en tecnologies obertes des de l'escola</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="info-box teal">
+                🇪🇺 La Comissió Europea ha llançat la iniciativa
+                <strong>Europa Digital</strong> per reduir la dependència de
+                tecnologia nord-americana i xinesa, invertint en núvol, IA i
+                ciberseguretat europeus.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 7: ACTIVISME I PROGRAMARI LLIURE ===== -->
+      <div class="topic-panel" id="panel-7">
+        <div
+          class="stage-badge"
+          style="
+            background: linear-gradient(135deg, #0a1a1a, #0a0a1a);
+            border: 1px solid #1a2a2a;
+          "
+        >
+          <div class="sb-icon">✊</div>
+          <div>
+            <h2>Activisme digital i programari lliure</h2>
+            <p>
+              La ciutadania activa en línia, les comunitats obertes i el
+              cibervoluntariat.
+            </p>
+          </div>
+        </div>
+        <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
+
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              ✊ Activisme ciutadà en línia <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <p>
+                Internet ha amplificat la capacitat dels ciutadans
+                d'organitzar-se, reivindicar drets i influir en decisions
+                polítiques. L'activisme digital pot anar des d'una petició en
+                línia fins a moviments globals.
+              </p>
+              <div class="two-col">
+                <div class="col-card green">
+                  <h4>📢 Formes d'activisme digital</h4>
+                  <ul>
+                    <li>Peticions en línia (Change.org)</li>
+                    <li>Campanyes de conscienciació a xarxes socials</li>
+                    <li>Periodisme ciutadà i documentació d'injustícies</li>
+                    <li>Hactivisme (acció política per mitjans informàtics)</li>
+                    <li>Codi obert com a eina de canvi social</li>
+                  </ul>
+                </div>
+                <div class="col-card blue">
+                  <h4>🏛️ Plataformes d'iniciativa ciutadana</h4>
+                  <ul>
+                    <li><strong>Change.org</strong> — peticions globals</li>
+                    <li>
+                      <strong>Decide Madrid</strong> — participació
+                      pressupostària
+                    </li>
+                    <li>
+                      <strong>Consul</strong> — plataforma de govern obert
+                    </li>
+                    <li>
+                      <strong>Initiativeandpetitions.eu</strong> — iniciatives
+                      europees
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="info-box green">
+                🌍 Exemple: el moviment <strong>#MeToo</strong> va néixer com un
+                hashtag a Twitter el 2017 i va generar canvis legals en desenes
+                de països. Un tweet pot catalitzar un moviment global.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              💙 Cibervoluntariat <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <p>
+                El <strong>cibervoluntariat</strong> és la contribució
+                voluntària de temps, coneixements o habilitats digitals per al
+                benefici de la comunitat, sense remuneració econòmica.
+              </p>
+              <div class="three-col">
+                <div class="col-card blue">
+                  <h4>📖 Coneixement obert</h4>
+                  <ul>
+                    <li>Editar articles a Wikipedia</li>
+                    <li>Traduir programari lliure</li>
+                    <li>Crear subtítols a Ted Talks</li>
+                    <li>Transcriure documents històrics</li>
+                  </ul>
+                </div>
+                <div class="col-card teal">
+                  <h4>🤝 Suport social</h4>
+                  <ul>
+                    <li>Ajudar persones grans amb tecnologia</li>
+                    <li>Crear webs per a ONGs</li>
+                    <li>Formació digital en comunitats vulnerables</li>
+                    <li>Suport en fòrums tècnics gratuïts</li>
+                  </ul>
+                </div>
+                <div class="col-card purple">
+                  <h4>🔬 Ciència ciutadana</h4>
+                  <ul>
+                    <li>SETI@home (cerca vida extraterrestre)</li>
+                    <li>Foldit (proteïnes i medicina)</li>
+                    <li>Galaxy Zoo (classificació de galàxies)</li>
+                    <li>OpenStreetMap (mapes lliures)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              🔧 Maquinari lliure i comunitats obertes
+              <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <p>
+                El <strong>maquinari lliure</strong> (open hardware) és el
+                maquinari els dissenys del qual estan disponibles públicament
+                perquè qualsevol els pugui estudiar, modificar, fabricar i
+                distribuir.
+              </p>
+              <div class="two-col">
+                <div class="col-card green">
+                  <h4>🛠️ Projectes de maquinari lliure</h4>
+                  <ul>
+                    <li>
+                      <strong>Arduino</strong> — placa de prototipatge per a
+                      electrònica i robòtica
+                    </li>
+                    <li>
+                      <strong>Raspberry Pi</strong> — ordinador de baix cost i
+                      alt impacte educatiu
+                    </li>
+                    <li>
+                      <strong>RISC-V</strong> — arquitectura de processador
+                      oberta, alternativa a Intel/ARM
+                    </li>
+                    <li>
+                      <strong>OpenBCI</strong> — interfície cervell-ordinador
+                      oberta per a investigació
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-card blue">
+                  <h4>🌐 Comunitats de programari lliure</h4>
+                  <ul>
+                    <li>
+                      <strong>GitHub / GitLab</strong> — col·laboració en codi
+                      obert
+                    </li>
+                    <li>
+                      <strong>Debian / Ubuntu community</strong> — distribucions
+                      Linux comunitàries
+                    </li>
+                    <li>
+                      <strong>Mozilla Foundation</strong> — Firefox, Thunderbird
+                    </li>
+                    <li>
+                      <strong>Apache Software Foundation</strong> — servidor
+                      web, Hadoop, Kafka
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="info-box teal">
+                🏆 El programari lliure no és sols generositat: empreses com
+                Google, Facebook i Amazon construeixen la seva infraestructura
+                sobre el núcli Linux i altres projectes oberts. Contribuir al
+                codi obert és una habilitat professional molt valorada.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="theory-card">
+          <div class="reveal-block">
+            <h3 class="reveal-trigger" onclick="toggle(this)">
+              🧩 Resum: ser un ciutadà digital crític
+              <span class="arrow">▶</span>
+            </h3>
+            <div class="reveal-content">
+              <div class="tag-list">
+                <span class="tag tag-green">🔍 Verifica la informació</span>
+                <span class="tag tag-blue"
+                  >©️ Respecta la propietat intel·lectual</span
+                >
+                <span class="tag tag-yellow"
+                  >🏛️ Usa els serveis públics digitals</span
+                >
+                <span class="tag tag-teal">💳 Paga de forma segura</span>
+                <span class="tag tag-purple">🤖 Qüestiona els algoritmes</span>
+                <span class="tag tag-orange"
+                  >🗑️ Redueix el consum tecnològic</span
+                >
+                <span class="tag tag-red">🏴 Defensa la sobirania digital</span>
+                <span class="tag tag-gray"
+                  >✊ Participa activament en la democràcia digital</span
+                >
+              </div>
+              <div class="info-box green" style="margin-top: 14px">
+                🌐 La ciutadania digital crítica no és saber usar les eines — és
+                entendre el poder que hi ha darrere, qüestionar-lo i participar
+                activament en la construcció d'un entorn digital més just,
+                sostenible i lliure.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-btns">
+        <button
+          class="nav-btn prev"
+          id="btn-prev"
+          onclick="navigate(-1)"
+          disabled
+        >
+          ← Tema anterior
+        </button>
+        <button class="nav-btn next" id="btn-next" onclick="navigate(1)">
+          Tema següent →
+        </button>
       </div>
     </div>
-  </div>
-</div>
-
-<!-- ===== 7: ACTIVISME I PROGRAMARI LLIURE ===== -->
-<div class="topic-panel" id="panel-7">
-  <div class="stage-badge" style="background:linear-gradient(135deg,#0a1a1a,#0a0a1a);border:1px solid #1a2a2a">
-    <div class="sb-icon">✊</div>
-    <div><h2>Activisme digital i programari lliure</h2><p>La ciutadania activa en línia, les comunitats obertes i el cibervoluntariat.</p></div>
-  </div>
-  <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
-
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">✊ Activisme ciutadà en línia <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <p>Internet ha amplificat la capacitat dels ciutadans d'organitzar-se, reivindicar drets i influir en decisions polítiques. L'activisme digital pot anar des d'una petició en línia fins a moviments globals.</p>
-        <div class="two-col">
-          <div class="col-card green"><h4>📢 Formes d'activisme digital</h4><ul><li>Peticions en línia (Change.org)</li><li>Campanyes de conscienciació a xarxes socials</li><li>Periodisme ciutadà i documentació d'injustícies</li><li>Hactivisme (acció política per mitjans informàtics)</li><li>Codi obert com a eina de canvi social</li></ul></div>
-          <div class="col-card blue"><h4>🏛️ Plataformes d'iniciativa ciutadana</h4><ul><li><strong>Change.org</strong> — peticions globals</li><li><strong>Decide Madrid</strong> — participació pressupostària</li><li><strong>Consul</strong> — plataforma de govern obert</li><li><strong>Initiativeandpetitions.eu</strong> — iniciatives europees</li></ul></div>
-        </div>
-        <div class="info-box green">🌍 Exemple: el moviment <strong>#MeToo</strong> va néixer com un hashtag a Twitter el 2017 i va generar canvis legals en desenes de països. Un tweet pot catalitzar un moviment global.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">💙 Cibervoluntariat <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <p>El <strong>cibervoluntariat</strong> és la contribució voluntària de temps, coneixements o habilitats digitals per al benefici de la comunitat, sense remuneració econòmica.</p>
-        <div class="three-col">
-          <div class="col-card blue"><h4>📖 Coneixement obert</h4><ul><li>Editar articles a Wikipedia</li><li>Traduir programari lliure</li><li>Crear subtítols a Ted Talks</li><li>Transcriure documents històrics</li></ul></div>
-          <div class="col-card teal"><h4>🤝 Suport social</h4><ul><li>Ajudar persones grans amb tecnologia</li><li>Crear webs per a ONGs</li><li>Formació digital en comunitats vulnerables</li><li>Suport en fòrums tècnics gratuïts</li></ul></div>
-          <div class="col-card purple"><h4>🔬 Ciència ciutadana</h4><ul><li>SETI@home (cerca vida extraterrestre)</li><li>Foldit (proteïnes i medicina)</li><li>Galaxy Zoo (classificació de galàxies)</li><li>OpenStreetMap (mapes lliures)</li></ul></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">🔧 Maquinari lliure i comunitats obertes <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <p>El <strong>maquinari lliure</strong> (open hardware) és el maquinari els dissenys del qual estan disponibles públicament perquè qualsevol els pugui estudiar, modificar, fabricar i distribuir.</p>
-        <div class="two-col">
-          <div class="col-card green"><h4>🛠️ Projectes de maquinari lliure</h4><ul><li><strong>Arduino</strong> — placa de prototipatge per a electrònica i robòtica</li><li><strong>Raspberry Pi</strong> — ordinador de baix cost i alt impacte educatiu</li><li><strong>RISC-V</strong> — arquitectura de processador oberta, alternativa a Intel/ARM</li><li><strong>OpenBCI</strong> — interfície cervell-ordinador oberta per a investigació</li></ul></div>
-          <div class="col-card blue"><h4>🌐 Comunitats de programari lliure</h4><ul><li><strong>GitHub / GitLab</strong> — col·laboració en codi obert</li><li><strong>Debian / Ubuntu community</strong> — distribucions Linux comunitàries</li><li><strong>Mozilla Foundation</strong> — Firefox, Thunderbird</li><li><strong>Apache Software Foundation</strong> — servidor web, Hadoop, Kafka</li></ul></div>
-        </div>
-        <div class="info-box teal">🏆 El programari lliure no és sols generositat: empreses com Google, Facebook i Amazon construeixen la seva infraestructura sobre el núcli Linux i altres projectes oberts. Contribuir al codi obert és una habilitat professional molt valorada.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="theory-card">
-    <div class="reveal-block">
-      <h3 class="reveal-trigger" onclick="toggle(this)">🧩 Resum: ser un ciutadà digital crític <span class="arrow">▶</span></h3>
-      <div class="reveal-content">
-        <div class="tag-list">
-          <span class="tag tag-green">🔍 Verifica la informació</span>
-          <span class="tag tag-blue">©️ Respecta la propietat intel·lectual</span>
-          <span class="tag tag-yellow">🏛️ Usa els serveis públics digitals</span>
-          <span class="tag tag-teal">💳 Paga de forma segura</span>
-          <span class="tag tag-purple">🤖 Qüestiona els algoritmes</span>
-          <span class="tag tag-orange">🗑️ Redueix el consum tecnològic</span>
-          <span class="tag tag-red">🏴 Defensa la sobirania digital</span>
-          <span class="tag tag-gray">✊ Participa activament en la democràcia digital</span>
-        </div>
-        <div class="info-box green" style="margin-top:14px">🌐 La ciutadania digital crítica no és saber usar les eines — és entendre el poder que hi ha darrere, qüestionar-lo i participar activament en la construcció d'un entorn digital més just, sostenible i lliure.</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="nav-btns">
-  <button class="nav-btn prev" id="btn-prev" onclick="navigate(-1)" disabled>← Tema anterior</button>
-  <button class="nav-btn next" id="btn-next" onclick="navigate(1)">Tema següent →</button>
-</div>
-
-</div>
-<script>
-let cur = 0;
-const total = 8;
-function toggle(trigger) {
-  const content = trigger.nextElementSibling;
-  const isOpen = trigger.classList.contains('open');
-  trigger.classList.toggle('open', !isOpen);
-  content.classList.toggle('shown', !isOpen);
-}
-function go(i) {
-  document.querySelectorAll('.topic-panel').forEach((p,j) => p.classList.toggle('active', j===i));
-  document.querySelectorAll('.topic-tab').forEach((t,j) => t.classList.toggle('active', j===i));
-  cur = i;
-  document.getElementById('btn-prev').disabled = i===0;
-  document.getElementById('btn-next').disabled = i===total-1;
-  document.getElementById('btn-next').textContent = i===total-1 ? '✓ Final' : 'Tema següent →';
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-function navigate(dir) { const n=cur+dir; if(n>=0&&n<total) go(n); }
-</script>
-</body>
+    <script>
+      let cur = 0;
+      const total = 8;
+      function toggle(trigger) {
+        const content = trigger.nextElementSibling;
+        const isOpen = trigger.classList.contains("open");
+        trigger.classList.toggle("open", !isOpen);
+        content.classList.toggle("shown", !isOpen);
+      }
+      function go(i) {
+        document
+          .querySelectorAll(".topic-panel")
+          .forEach((p, j) => p.classList.toggle("active", j === i));
+        document
+          .querySelectorAll(".topic-tab")
+          .forEach((t, j) => t.classList.toggle("active", j === i));
+        cur = i;
+        document.getElementById("btn-prev").disabled = i === 0;
+        document.getElementById("btn-next").disabled = i === total - 1;
+        document.getElementById("btn-next").textContent =
+          i === total - 1 ? "✓ Final" : "Tema següent →";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+      function navigate(dir) {
+        const n = cur + dir;
+        if (n >= 0 && n < total) go(n);
+      }
+    </script>
+  </body>
 </html>

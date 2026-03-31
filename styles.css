@@ -57,6 +57,23 @@ main {
   position: relative;
 }
 
+.hero-compact {
+  min-height: auto;
+}
+
+.hero-compact .hero-title {
+  font-size: clamp(1.4rem, 2.3vw, 2rem);
+}
+
+.hero-shortcuts .btn {
+  border-color: rgba(59, 130, 246, 0.25);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.hero-shortcuts .btn:hover {
+  background: rgba(59, 130, 246, 0.08);
+}
+
 .hero-badge {
   color: var(--app-muted) !important;
   background: rgba(255, 255, 255, 0.6) !important;
@@ -272,6 +289,38 @@ pre {
   color: #fff;
 }
 
+.subject-index-tools {
+  border-radius: 0.9rem;
+}
+
+.subject-index-tools .form-control {
+  min-height: 34px;
+}
+
+.subject-index-tools .btn {
+  white-space: nowrap;
+}
+
+.subject-view-toggle .btn {
+  min-width: 88px;
+}
+
+.theme-card-compact {
+  border-radius: 0.75rem;
+}
+
+.theme-card-compact .card-body {
+  padding-bottom: 0.6rem !important;
+}
+
+.theme-card-compact .card-footer {
+  padding-top: 0 !important;
+}
+
+.theme-card-compact .text-muted.small {
+  font-size: 0.78rem;
+}
+
 /* Botó tornar a dalt */
 #backToTopBtn {
   position: fixed;
@@ -433,6 +482,25 @@ body.dark-mode .badge.text-bg-primary {
 
 body.dark-mode .hero-title {
   color: #f1f5f9;
+}
+
+body.dark-mode .hero-shortcuts .btn {
+  background: rgba(30, 41, 59, 0.75);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+}
+
+body.dark-mode .hero-shortcuts .btn:hover {
+  background: rgba(59, 130, 246, 0.2);
+  color: #e2e8f0;
+}
+
+body.dark-mode .subject-index-tools {
+  background: rgba(30, 41, 59, 0.75) !important;
+}
+
+body.dark-mode .subject-view-toggle .btn {
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
 body.dark-mode .navbar .navbar-brand {
