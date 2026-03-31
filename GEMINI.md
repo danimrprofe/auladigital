@@ -12,19 +12,24 @@ Aquest projecte és una plataforma web per gestionar i visualitzar materials did
 ## Millores Realitzades (Març 2026)
 
 - **Interfície Clara:** Transformació completa del disseny de mode fosc a mode clar per a una millor llegibilitat.
-- **Cercador Global Intel·ligent:** Ara el cercador troba no només assignatures, sinó també temes i materials concrets dins del JSON.
+- **Cercador Global Intel·ligent:** El cercador troba no només assignatures, sinó també temes i materials concrets dins del JSON.
+- **Millora de l'Empty State:** Afegit un sistema de suggeriments (Python, Linux, etc.) quan no es troben resultats de cerca.
 - **Sistema de Breadcrumbs:** Navegació jeràrquica automàtica (`Inici > Assignatura > Tema`) per facilitar el retorn.
-- **Robustesa de Càrrega:** El JavaScript ara detecta automàticament la ruta del `subjects.json` des de qualsevol subcarpeta.
+- **Botó de Copiar Codi:** Implementada la funcionalitat de "copiar al portapapers" per als blocs de codi (`<pre>`).
+- **Optimització de JSON:** Eliminades les rutes fixes al JavaScript; ara tot el contingut i navegació es genera dinàmicament des de `subjects.json`.
+- **Reorganització de Materials:** Teoria de la IA i Python integrada dins les carpetes d'assignatures corresponents per mantenir una estructura neta.
+- **Robustesa de Càrrega:** El JavaScript detecta automàticament la ruta del `subjects.json` i pot funcionar en pàgines independents (*standalone*).
 
 ## Convencions i Estàndards
 
 - **Idioma:** La interfície i el contingut han d'estar en català.
 - **Responsivitat:** Ús de classes de Bootstrap 5.
 - **Dades:** Totes les actualitzacions de contingut s'han de fer al fitxer `subjects.json`. Els nous fitxers HTML han d'incloure el contenidor `<ul id="breadcrumbContainer" class="app-breadcrumb"></ul>`.
+- **Estructura:** Els nous fitxers de teoria han d'anar dins la carpeta de la seva assignatura corresponent.
 
 ## Full de Ruta (Properes Millores)
 
-1.  **Botó de Copiar Codi:** Afegir funcionalitat de "copiar al portapapers" per als blocs de codi (`<pre><code>`).
-2.  **Checklist d'Estudiant:** Permetre marcar tasques com a completades (usant `localStorage`).
-3.  **Optimització de JSON:** Eliminar les rutes fixes (`subjectMaterialsPages`) al JavaScript i fer que tot depengui del JSON.
-4.  **Millora de l'Empty State:** Afegir suggeriments de cerca quan no es troben resultats.
+1.  **Checklist d'Estudiant:** Permetre marcar tasques com a completades (usant `localStorage`).
+2.  **Suport Offline (PWA):** Convertir la web en una Progressive Web App per a l'ús sense connexió.
+3.  **Mode Fosc/Clar Dinàmic:** Afegir un botó per canviar manualment entre temes visuals.
+4.  **Exportació a PDF:** Botó per generar versions impreses netes de la teoria.
