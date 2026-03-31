@@ -142,7 +142,7 @@ function renderSubjects(list) {
       <article class="card h-100 border-0 shadow-sm subject-card">
         <div class="card-body p-4">
           <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
-            <h3 class="h5 mb-0">${subject.name}</h3>
+            <h3 class="h5 mb-0">${subject.icon ? `<span class="me-2" aria-hidden="true">${subject.icon}</span>` : ""}${subject.name}</h3>
             <span class="badge text-bg-primary">${subject.level}</span>
           </div>
           <p class="text-muted small">${subject.description}</p>
@@ -348,7 +348,7 @@ function renderCards(list) {
       <article class="card h-100 border-0 shadow-sm subject-card">
         <div class="card-body p-4">
           <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
-            <h3 class="h5 mb-0">${subject.name}</h3>
+            <h3 class="h5 mb-0">${subject.icon ? `<span class="me-2" aria-hidden="true">${subject.icon}</span>` : ""}${subject.name}</h3>
             <span class="badge text-bg-primary">${subject.level}</span>
           </div>
           <p class="text-muted small">${subject.description}</p>
@@ -387,6 +387,59 @@ function initCopyButtons() {
     });
 
     block.appendChild(button);
+  });
+}
+
+function initFaviconAndMeta() {
+  if (!document.querySelector('link[rel="icon"]')) {
+    const link = document.createElement("link");
+    link.rel = "icon";
+    link.href = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>\uD83C\uDF93</text></svg>";
+    document.head.appendChild(link);
+  }
+  if (!document.querySelector('meta[name="theme-color"]')) {
+    const meta = document.createElement("meta");
+    meta.name = "theme-color";
+    meta.content = "#3b82f6";
+    document.head.appendChild(meta);
+  }
+}
+
+function initDarkMode() {
+  if (localStorage.getItem("darkMode") === "on") {
+    document.body.classList.add("dark-mode");
+  }
+  const navContainer = document.querySelector(".navbar .container");
+  if (navContainer) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "dark-mode-toggle ms-2";
+    btn.setAttribute("aria-label", "Canviar mode fosc/clar");
+    btn.title = "Mode fosc / clar";
+    btn.innerHTML = document.body.classList.contains("dark-mode") ? "\u2600\uFE0F" : "\uD83C\uDF19";
+    btn.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      const isDark = document.body.classList.contains("dark-mode");
+      localStorage.setItem("darkMode", isDark ? "on" : "off");
+      btn.innerHTML = isDark ? "\u2600\uFE0F" : "\uD83C\uDF19";
+    });
+    navContainer.appendChild(btn);
+  }
+}
+
+function initBackToTop() {
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.id = "backToTopBtn";
+  btn.setAttribute("aria-label", "Tornar a dalt");
+  btn.title = "Tornar a dalt";
+  btn.innerHTML = "\u2191";
+  document.body.appendChild(btn);
+  window.addEventListener("scroll", () => {
+    btn.classList.toggle("visible", window.scrollY > 300);
+  });
+  btn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 }
 
@@ -430,7 +483,22 @@ document.addEventListener("click", e => {
 });
 
 // Execució inicial
-document.addEventListener("DOMContentLoaded", initCopyButtons);
+document.addEventListener("DOMContentLoaded", () => {
+  initCopyButtons();
+  initFaviconAndMeta();
+  initDarkMode();
+  initBackToTop();
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "/" && document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA") {
+    e.preventDefault();
+    if (searchInput) {
+      searchInput.focus();
+      searchInput.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
+});
 
 if (subjectsContainer || materialsPageContainer || subjectIndexContainer || themeIndexContainer) {
   loadSubjects();

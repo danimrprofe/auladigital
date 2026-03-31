@@ -1,6 +1,7 @@
 [
   {
     "name": "Recursos Digitals II",
+    "icon": "\uD83C\uDFA8",
     "level": "2n d'ESO",
     "path": "recursos-digitals-ii/index.html",
     "description": "Creació de continguts digitals, gestió d'eines col·laboratives i publicació de projectes.",
@@ -8,6 +9,7 @@
   },
   {
     "name": "Entorns Digitals",
+    "icon": "\uD83D\uDCBB",
     "level": "1r d'ESO",
     "path": "entorns-digitals/index.html",
     "description": "Ús responsable dels entorns virtuals de treball, identitat digital i organització personal.",
@@ -83,6 +85,7 @@
   },
   {
     "name": "Programació i Tractament de Dades I",
+    "icon": "\uD83D\uDC0D",
     "level": "1r de Batxillerat",
     "path": "programacio-i-tractament-de-dades-i/index.html",
     "description": "Introducció a la programació i manipulació de dades amb activitats guiades.",
@@ -147,7 +150,7 @@
           { "icon": "💻", "label": "Recurs", "title": "ISOs Windows" },
           { "icon": "💻", "label": "Recurs", "title": "Drivers targeta de xarxa" },
           { "icon": "💻", "label": "Recurs", "title": "Controlador de domini" },
-          { "icon": "📄", "label": "Teoria", "title": "Virtualització teoria", "href": "../../virtualitzacio_teoria.html" }
+          { "icon": "📄", "label": "Teoria", "title": "Virtualització teoria", "href": "./virtualitzacio_teoria.html" }
         ]
       },
       {
@@ -162,6 +165,7 @@
   },
   {
     "name": "Programació i Tractament de Dades II",
+    "icon": "\uD83E\uDD16",
     "level": "2n de Batxillerat",
     "path": "programacio-i-tractament-de-dades-ii/index.html",
     "description": "Consolidació de programació aplicada a projectes i anàlisi de dades.",
@@ -175,7 +179,7 @@
           { "icon": "🤖", "label": "mòdul", "title": "mBuild" },
           { "icon": "🤖", "label": "dispositiu", "title": "mBOT" },
           { "icon": "📒", "label": "Recurs", "title": "Video 'Primeres Passes amb mBot2'" },
-          { "icon": "🔨", "label": "Pràctiques", "title": "PRÀCTICAS PYTHON" },
+          { "icon": "🔨", "label": "Pràctiques", "title": "PRÀCTIQUES PYTHON" },
           { "icon": "🔨", "label": "Pràctica", "title": "Ús de Mòduls mBuild (Llum, So, etc.)" }
         ]
       },
@@ -193,9 +197,9 @@
         "title": "Bases de Dades Relacionals",
         "slug": "tema-bases-de-dades-relacionals",
         "items": [
-          { "icon": "🎮", "label": "Pràctica", "title": "Juego adivinador con JSON" },
-          { "icon": "🗄️", "label": "Eina", "title": "Descarga SQLite DB Browser" },
-          { "icon": "📄", "label": "Apunts", "title": "Apuntes bases de datos relacionales" }
+          { "icon": "🎮", "label": "Pràctica", "title": "Joc endevinador amb JSON" },
+          { "icon": "🗄️", "label": "Eina", "title": "Descàrrega SQLite DB Browser" },
+          { "icon": "📄", "label": "Apunts", "title": "Apunts de bases de dades relacionals" }
         ]
       },
       {
@@ -203,20 +207,20 @@
         "slug": "tema-unity-videojocs",
         "items": [
           { "icon": "📘", "label": "Introducció", "title": "Introducció al tema" },
-          { "icon": "🎯", "label": "Recopilació", "title": "Recopilación jocs plataforma" },
-          { "icon": "🎬", "label": "Vídeos", "title": "Videos platforms con Unity" },
-          { "icon": "🕹️", "label": "Vídeos", "title": "Vídeos Pong con Unity" }
+          { "icon": "🎯", "label": "Recopilació", "title": "Recopilació de jocs de plataforma" },
+          { "icon": "🎬", "label": "Vídeos", "title": "Vídeos plataformes amb Unity" },
+          { "icon": "🕹️", "label": "Vídeos", "title": "Vídeos Pong amb Unity" }
         ]
       },
       {
         "title": "Programació orientada a objectes",
         "slug": "tema-poo",
         "items": [
-          { "icon": "🐍", "label": "Repàs", "title": "Cuestionario repaso Python" },
+          { "icon": "🐍", "label": "Repàs", "title": "Qüestionari repàs Python" },
           { "icon": "🧩", "label": "Unitat", "title": "Programació orientada a objectes" },
           { "icon": "🐍", "label": "Activitat", "title": "Repàs Python i bots" },
           { "icon": "📊", "label": "Unitat", "title": "Ciència de dades" },
-          { "icon": "🧾", "label": "Entrega", "title": "Estadistica entrega" },
+          { "icon": "🧾", "label": "Entrega", "title": "Estadística, entrega" },
           { "icon": "🧩", "label": "Unitat", "title": "POO" }
         ]
       },
@@ -224,18 +228,18 @@
         "title": "Desenvolupament web avançat",
         "slug": "tema-web-avancat",
         "items": [
-          { "icon": "📄", "label": "Apunts", "title": "Apuntes HTML" },
+          { "icon": "📄", "label": "Apunts", "title": "Apunts HTML" },
           { "icon": "🧾", "label": "Cheatsheet", "title": "Cheatsheet HTML" },
-          { "icon": "📄", "label": "Apunts", "title": "Apuntes CSS" },
+          { "icon": "📄", "label": "Apunts", "title": "Apunts CSS" },
           { "icon": "🧾", "label": "Cheatsheet", "title": "Cheatsheet CSS" },
-          { "icon": "📄", "label": "Apunts", "title": "Apuntes Javascript" },
-          { "icon": "✅", "label": "Rúbrica", "title": "Rúbrica bootstrap" },
-          { "icon": "📄", "label": "Apunts", "title": "Apuntes Bootstrap" },
-          { "icon": "🗂️", "label": "Esquema", "title": "Esquema página web película" },
+          { "icon": "📄", "label": "Apunts", "title": "Apunts JavaScript" },
+          { "icon": "✅", "label": "Rúbrica", "title": "Rúbrica Bootstrap" },
+          { "icon": "📄", "label": "Apunts", "title": "Apunts Bootstrap" },
+          { "icon": "🗂️", "label": "Esquema", "title": "Esquema pàgina web pel·lícula" },
           { "icon": "🌐", "label": "Tutorial", "title": "W3C Tutorial Bootstrap 5" },
           { "icon": "🌐", "label": "Recurs", "title": "Web oficial de Bootstrap" },
-          { "icon": "🔧", "label": "Guia", "title": "Instrucciones git i github" },
-          { "icon": "📦", "label": "Entrega", "title": "Entrega web bootstrap" }
+          { "icon": "🔧", "label": "Guia", "title": "Instruccions git i GitHub" },
+          { "icon": "📦", "label": "Entrega", "title": "Entrega web Bootstrap" }
         ]
       },
       {
@@ -252,7 +256,7 @@
       {
         "title": "IA: teoria",
         "slug": "tema-ia",
-        "directHref": "./ia_teoria.html",
+        "directHref": "./tema-ia/ia_teoria.html",
         "items": [
           { "icon": "🤖", "label": "Teoria", "title": "IA i Programació", "href": "./ia_teoria.html" }
         ]
@@ -261,6 +265,7 @@
   },
   {
     "name": "Digitalització",
+    "icon": "\uD83C\uDF10",
     "level": "4t d'ESO",
     "path": "digitalizacio/index.html",
     "description": "Competència digital, ciutadania digital i resolució de problemes amb tecnologia.",
@@ -277,8 +282,7 @@
         "title": "Ciutadania digital",
         "slug": "tema-ciutadania-digital",
         "items": [
-          { "icon": "🧑‍🤝‍🧑", "label": "Teoria", "title": "Ciutadania digital", "href": "./ciutadania_digital.html" }
-        ]
+          { "icon": "🧑‍🤝‍🧑", "label": "Teoria", "title": "Ciutadania digital", "href": "./ciutadania_digital_teoria.html" }        ]
       }
     ]
   }
