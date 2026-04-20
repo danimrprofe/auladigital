@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ca">
   <head>
     <meta charset="UTF-8" />
@@ -918,21 +918,117 @@
         >
       </header>
 
-      <div class="topic-tabs" id="topic-tabs">
-        <div class="topic-tab active" onclick="go(0)">
-          ❓ Preguntes inicials
+      <!-- ===== ÍNDEX DE CONTINGUT ===== -->
+      <div
+        style="
+          background: #f0f4ff;
+          border: 2px solid #e0e7ff;
+          border-radius: 12px;
+          padding: 20px;
+          margin-bottom: 24px;
+        "
+      >
+        <h2 style="color: #3b41c0; margin-bottom: 14px; font-size: 1.15rem">
+          📚 Índex del tema
+        </h2>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            color: #2a3a5a;
+          "
+        >
+          <div
+            style="
+              cursor: pointer;
+              padding: 8px 12px;
+              border-radius: 8px;
+              background: white;
+              border: 1px solid #e0e7ff;
+              transition: all 0.2s;
+            "
+            onclick="
+              go(0);
+              this.style.background = '#e0e7ff';
+            "
+          >
+            1️⃣ <strong>Introducció a la Seguretat</strong>
+          </div>
+          <div
+            style="
+              cursor: pointer;
+              padding: 8px 12px;
+              border-radius: 8px;
+              background: white;
+              border: 1px solid #e0e7ff;
+              transition: all 0.2s;
+            "
+            onclick="
+              go(1);
+              this.style.background = '#e0e7ff';
+            "
+          >
+            2️⃣ <strong>Riscos i Amenaces</strong>
+          </div>
+          <div
+            style="
+              cursor: pointer;
+              padding: 8px 12px;
+              border-radius: 8px;
+              background: white;
+              border: 1px solid #e0e7ff;
+              transition: all 0.2s;
+            "
+            onclick="
+              go(2);
+              this.style.background = '#e0e7ff';
+            "
+          >
+            3️⃣ <strong>Protecció i Bones Pràctiques</strong>
+          </div>
+          <div
+            style="
+              cursor: pointer;
+              padding: 8px 12px;
+              border-radius: 8px;
+              background: white;
+              border: 1px solid #e0e7ff;
+              transition: all 0.2s;
+            "
+            onclick="
+              go(3);
+              this.style.background = '#e0e7ff';
+            "
+          >
+            4️⃣ <strong>Identitat i Privacitat</strong>
+          </div>
+          <div
+            style="
+              cursor: pointer;
+              padding: 8px 12px;
+              border-radius: 8px;
+              background: white;
+              border: 1px solid #e0e7ff;
+              transition: all 0.2s;
+            "
+            onclick="
+              go(4);
+              this.style.background = '#e0e7ff';
+            "
+          >
+            5️⃣ <strong>Benestar i Actuació</strong>
+          </div>
         </div>
-        <div class="topic-tab" onclick="go(1)">🔐 Introducció</div>
-        <div class="topic-tab" onclick="go(2)">🎭 Hackers i atacs</div>
-        <div class="topic-tab" onclick="go(3)">🔑 Contrasenyes</div>
-        <div class="topic-tab" onclick="go(4)">💧 Filtracions</div>
-        <div class="topic-tab" onclick="go(5)">📱 2FA i Wifi</div>
-        <div class="topic-tab" onclick="go(6)">🧬 Empremta digital</div>
-        <div class="topic-tab" onclick="go(7)">🕵️ Privacitat</div>
-        <div class="topic-tab" onclick="go(8)">🎯 Enginyeria social</div>
-        <div class="topic-tab" onclick="go(9)">🌱 Benestar digital</div>
-        <div class="topic-tab" onclick="go(10)">🔒 Seguretat personal</div>
-        <div class="topic-tab" onclick="go(11)">🛠️ Activitats</div>
+      </div>
+
+      <!-- ===== NAVEGACIÓ PER TABS (REORGANITZADA A 5) ===== -->
+      <div class="topic-tabs" id="topic-tabs">
+        <div class="topic-tab active" onclick="go(0)">1️⃣ Introducció</div>
+        <div class="topic-tab" onclick="go(1)">2️⃣ Riscos i Amenaces</div>
+        <div class="topic-tab" onclick="go(2)">3️⃣ Protecció</div>
+        <div class="topic-tab" onclick="go(3)">4️⃣ Identitat</div>
+        <div class="topic-tab" onclick="go(4)">5️⃣ Benestar</div>
       </div>
 
       <!-- ===== 0: PREGUNTES INICIALS ===== -->
@@ -949,7 +1045,7 @@
           <h2 style="color: #fca5a5; margin-bottom: 8px; font-size: 1.3rem">
             🧠 Preguntes inicials
           </h2>
-          <p style="color: #94a3b8; font-size: 0.9rem">
+          <p style="color: #cbd5e1; font-size: 0.9rem">
             Avalua els teus coneixements previs. Pensa la resposta abans de
             revelar-la!
           </p>
@@ -969,7 +1065,7 @@
               </div>
               <div class="info-box purple" style="margin-top: 12px">
                 <strong>Cibercriminal:</strong> Una persona que usa aquestes
-                habilitats per fer delictes: robar diners, roba dades, xantatge
+                habilitats per fer crimes: robar diners, roba dades, chantatge
                 digital, etc. El motiu és lucre o venjança.
               </div>
             </div>
@@ -989,7 +1085,7 @@
                 obtenen la teva contrasenya, immediatament provaran aquesta
                 mateixa contrasenya a:
               </p>
-              <ul style="margin-left: 20px; color: #94a3b8">
+              <ul style="margin-left: 20px; color: #cbd5e1">
                 <li>El teu Gmail / Outlook</li>
                 <li>El teu banc</li>
                 <li>Amazon, PayPal, Netflix</li>
@@ -1021,7 +1117,7 @@
                 Aquestes dades (emails, contrasenyes, noms, telèfons, DNI) es
                 venen a la Dark Web i s'usen per:
               </p>
-              <ul style="margin-left: 20px; margin-top: 10px; color: #94a3b8">
+              <ul style="margin-left: 20px; margin-top: 10px; color: #cbd5e1">
                 <li>
                   <strong>Credential stuffing:</strong> Provar les contrasenyes
                   en altres serveis
@@ -1087,7 +1183,7 @@
                 <strong>La teva empremta digital</strong> és tot el rastro que
                 deixes a Internet:
               </p>
-              <ul style="margin-left: 20px; margin-top: 10px; color: #94a3b8">
+              <ul style="margin-left: 20px; margin-top: 10px; color: #cbd5e1">
                 <li>Posts a les xarxes socials</li>
                 <li>Fotos de perfil i ubicacions</li>
                 <li>Webs que visites (Google, Amazon, etc.)</li>
@@ -1099,7 +1195,7 @@
                 tota aquesta informació per vendre'la a publicitaris. Además, si
                 no tens privacitat, bufvors/estafadors poden saber:
               </p>
-              <ul style="margin-left: 20px; margin-top: 10px; color: #94a3b8">
+              <ul style="margin-left: 20px; margin-top: 10px; color: #cbd5e1">
                 <li>Quan no estàs a casa (és un moment perfecte per robar)</li>
                 <li>Quins són els teus hobbies (per personalitzar estafes)</li>
                 <li>On passaràs les vacacions</li>
@@ -1167,7 +1263,7 @@
               <p style="margin-top: 12px">
                 <strong>Tàctiques comunes:</strong>
               </p>
-              <ul style="margin-left: 20px; margin-top: 10px; color: #94a3b8">
+              <ul style="margin-left: 20px; margin-top: 10px; color: #cbd5e1">
                 <li>
                   <strong>Phishing:</strong> Un email que sembla del teu banc,
                   però és fals. "Haz clic aquí para verificar tu cuenta"
@@ -1226,7 +1322,7 @@
               <p style="margin-top: 12px">
                 Si ha estat filtrada, NO t'assustes. Simplement:
               </p>
-              <ul style="margin-left: 20px; margin-top: 10px; color: #94a3b8">
+              <ul style="margin-left: 20px; margin-top: 10px; color: #cbd5e1">
                 <li>Canvia la contrasenya d'aquell servei</li>
                 <li>
                   Si la reutilitzaves en altres llocs, canvia-la ELS ALTRES
@@ -1247,14 +1343,14 @@
             <div class="reveal-content">
               <p>
                 <strong
-                  >Els adolescents passen 7-9 hores diàries a pantalla.</strong
+                  >Els adolescents passen 7-9 hores diari a pantalla.</strong
                 >
                 Les xarxes estan dissenyades per ser adictives.
               </p>
               <p style="margin-top: 12px">
                 <strong>Signes d'addicció:</strong>
               </p>
-              <ul style="margin-left: 20px; color: #94a3b8">
+              <ul style="margin-left: 20px; color: #cbd5e1">
                 <li>No pots estar sense el mòbil més de 10 minuts</li>
                 <li>Comproves Instagram/TikTok primero cosa al despertar</li>
                 <li>Pases 3+ hores diàriament sense adonar-te</li>
@@ -1288,19 +1384,19 @@
                 >
               </p>
               <p style="margin-top: 12px"><strong>Com funciona:</strong></p>
-              <ul style="margin-left: 20px; margin-top: 10px; color: #94a3b8">
+              <ul style="margin-left: 20px; margin-top: 10px; color: #cbd5e1">
                 <li>1. Es fa passar per adolescent</li>
                 <li>
                   2. Guanya la teva confiança ("T'entenc, ningú més ho fa")
                 </li>
                 <li>3. T'aïlla ("No li diguis a ningú")</li>
-                <li>4. Demana fotos ("Només una, promès")</li>
+                <li>4. Demana fotos ("Només une, promès")</li>
                 <li>5. Chantatge ("Si no fas més, mostraré això")</li>
-                <li>6. Pressa per trobar-se amb tú en persona</li>
+                <li>6. Afany marke-te trobar en persona</li>
               </ul>
               <div class="info-box red" style="margin-top: 12px">
                 🚫 <strong>Regles de or:</strong> No respons desconeguts. No
-                envíis fotos/vídeos nua mai. Si algun demana, BLOQUEJA
+                envíis fotos/vídeos nua mai. Si algun demana, BLOCA
                 immeditament. Si t'amenacen, guarda proves i avisa a un adult o
                 policia.
               </div>
@@ -1346,8 +1442,8 @@
                     <h4>😤 Ciberassetjament</h4>
                     <p>
                       Missatges ofensius, exclusió de grups, rumors falsos,
-                      publicació de fotos íntimes sense permís. Si et passa:
-                      bloqueja, guarda proves, reporta, avisa adult.
+                      publicació de fotos íntimes sense permís. Si't passa:
+                      bloca, guarda proves, reporta, avisa adult.
                     </p>
                   </div>
                 </div>
@@ -1359,10 +1455,10 @@
                   <div class="step-content">
                     <h4>📰 Desinformació i Fake News</h4>
                     <p>
-                      Mentides i rumors que es propaguen a TikTok/Twitter en
-                      minuts. Si veus una noticia que t'emociona molt (por,
-                      ira), probablement és fake. Verifica amb Google,
-                      Snopes.com, mitjans oficials.
+                      Lies i rumors que es propaguen a TikTok/Twitter en minuts.
+                      Si veus una noticia que t'emociona molt (por, ira),
+                      probablement és fake. Verifica amb Google, Snopes.com,
+                      mitjans oficials.
                     </p>
                   </div>
                 </div>
@@ -2763,8 +2859,7 @@
         <div class="theory-card">
           <div class="reveal-block">
             <h3 class="reveal-trigger" onclick="toggle(this)">
-              ⚙️ Auditoria de privacitat: llista de verificació de xarxes
-              socials
+              ⚙️ Auditoria de privacitat: check-list de xarxes socials
               <span class="arrow">▶</span>
             </h3>
             <div class="reveal-content">
@@ -2999,26 +3094,13 @@
           </div>
         </div>
         <div class="info-box red" style="margin-bottom: 18px">
-          <strong>🧠 L'arma més efectiva:</strong>
-          <ul style="margin-left: 20px; margin-top: 10px">
-            <li>
-              El <strong>67% dels atacs</strong> funcionen per emocions
-              (urgència, por, confiança falsa).
-            </li>
-            <li>
-              "He perdut el meu telèfon, pots prestar-me diners?" — Scam clàssic
-              a WhatsApp.
-            </li>
-            <li>
-              Els cibercriminals estudien els teus posts per personalitzar els
-              atacs.
-            </li>
-            <li>Els millors hackers no usen codi — parlen bé.</li>
-            <li>
-              Les trucades de "suport tècnic" (scareware) estafen bilions cada
-              any.
-            </li>
-          </ul>
+          🧠 <strong>L'arma més efectiva:</strong> El
+          <strong>67% dels atacs</strong> funcionen per emocions (urgengi, por,
+          confianca falsa). "He perdut el meu telèfon, pots prestar-me diners?"
+          — Scam clàssic a WhatsApp. Els cibercriminals estudien els teus posts
+          per personalitzar els atacs. Els millors hackers no usen codi — parlen
+          bé. Les trucades de "suport tècnic" (scareware) estafan bilions cada
+          any.
         </div>
         <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
 
@@ -3048,43 +3130,36 @@
         <div class="theory-card">
           <div class="reveal-block">
             <h3 class="reveal-trigger" onclick="toggle(this)">
-              🏆 El "concurs" fals
+              🏆 El "concurs" fals i l'"amic" en problemes
               <span class="arrow">▶</span>
             </h3>
             <div class="reveal-content">
-              <p>
-                "Enhorabona! Has guanyat un iPhone 16. Introdueix les teves
-                dades en les properes 24 hores."
-              </p>
-              <div class="info-box yellow" style="margin-top: 12px">
-                <strong>Emocions explorades:</strong> Urgència + Avarícia
-              </div>
-              <div class="info-box red" style="margin-top: 12px">
-                <strong>Pista:</strong> Mai has participat en cap concurs. Si
-                t'arriba, és una estafa.
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="theory-card">
-          <div class="reveal-block">
-            <h3 class="reveal-trigger" onclick="toggle(this)">
-              📱 L'"amic" en problemes
-              <span class="arrow">▶</span>
-            </h3>
-            <div class="reveal-content">
-              <p>
-                "Hola, soc en Marc, he perdut el mòbil. Pots enviar-me el codi
-                SMS que t'arribi?"
-              </p>
-              <div class="info-box blue" style="margin-top: 12px">
-                <strong>Realitat:</strong> En realitat és un cibercriminal
-                intentant prendre el control del teu WhatsApp.
-              </div>
-              <div class="info-box red" style="margin-top: 12px">
-                <strong>Pista:</strong> Els amics reals mai et demanaran el codi
-                SMS. Bloqueja'l immediatament.
+              <div class="step-list">
+                <div class="step-item">
+                  <div class="step-left">
+                    <div class="step-num">🏆</div>
+                    <div class="step-line"></div>
+                  </div>
+                  <div class="step-content">
+                    <h4>El "concurs" fals</h4>
+                    <p>
+                      "Enhorabona! Has guanyat un iPhone 16. Introdueix les
+                      teves dades en les properes 24 hores." → Urgència +
+                      Avarícia. Mai has participat en cap concurs.
+                    </p>
+                  </div>
+                </div>
+                <div class="step-item">
+                  <div class="step-left"><div class="step-num">📱</div></div>
+                  <div class="step-content">
+                    <h4>L'"amic" en problemes</h4>
+                    <p>
+                      "Hola, soc en Marc, he perdut el mòbil. Pots enviar-me el
+                      codi SMS que t'arribi?" → En realitat és un cibercriminal
+                      intentant prendre el control del teu WhatsApp.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -3142,12 +3217,12 @@
               <p>
                 <strong
                   >El ciberassetjament és persecució, intimidació online o abús
-                  repetit.</strong
+                  répétit.</strong
                 >
                 No és "gràcia" ni "ofensa ocasional".
               </p>
               <p style="margin-top: 12px"><strong>Formes comunes:</strong></p>
-              <ul style="margin-left: 20px; margin-top: 10px; color: #94a3b8">
+              <ul style="margin-left: 20px; margin-top: 10px; color: #cbd5e1">
                 <li>
                   <strong>Insults massius:</strong> Comentaris ofensius continus
                   a posts
@@ -3161,7 +3236,7 @@
                 </li>
                 <li>
                   <strong>Violència en parella digital:</strong> Controlador
-                  exigint saber on estàs, qui veus, accés al mòbil
+                  exigint saber mit estàs, qui veus, accés al mòbil
                 </li>
                 <li>
                   <strong>Slutshaming:</strong> Humiliar per comportament sexual
@@ -3176,10 +3251,10 @@
                 </li>
               </ul>
               <div class="info-box green" style="margin-top: 12px">
-                ✅ <strong>Que fer:</strong> Bloqueja a la persona, guarda
-                proves (screenshots), reporta a la xarxa social, avisa a un
-                adult o policia si és greu. <strong>NO et blamejar.</strong> No
-                és culpa teva.
+                ✅ <strong>Que fer:</strong> Bloca a la persona, guarda proves
+                (screenshots), reporta a la xarxa social, avisa a un adult o
+                policia si és greu. <strong>NO et blamejar.</strong> No és culpa
+                teva.
               </div>
             </div>
           </div>
@@ -3225,11 +3300,11 @@
                   <ul>
                     <li>TikTok, Instagram, Twitter es propaga en minuts</li>
                     <li>
-                      Els algoritmes prioritzen "engagement" (reaccions
+                      Els algoritmes prioritzan "engagement" (reaccions
                       controversials)
                     </li>
                     <li>
-                      Fake influencers amb milions de seguidors propaguen
+                      Fake influencers amb milions de seguidors propagan
                       mentides
                     </li>
                     <li>Deepfakes de polítics dient coses que mai van dir</li>
@@ -3239,7 +3314,7 @@
               <p style="margin-top: 12px">
                 <strong>Combat-ho: Verifica la font</strong>
               </p>
-              <ul style="margin-left: 20px; margin-top: 10px; color: #94a3b8">
+              <ul style="margin-left: 20px; margin-top: 10px; color: #cbd5e1">
                 <li>
                   ¿El mitjà és oficial? (BBC, AP News, El País vs bloc anònim?)
                 </li>
@@ -3277,32 +3352,18 @@
           <div>
             <h2>Benestar i salut digital</h2>
             <p>
-              Internet és addictiu per disseny. Els algoritmes volen que passis
+              Internet és adictiu per disseny. Els algoritmes volen que passis
               més temps. Tu controles?
             </p>
           </div>
         </div>
         <div class="info-box purple" style="margin-bottom: 18px">
-          <strong>⚠️ Addicció a les xarxes:</strong>
-          <ul style="margin-left: 20px; margin-top: 10px">
-            <li>
-              L'adolescent mitjà passa <strong>7-9 hores diàries</strong> a
-              pantalla.
-            </li>
-            <li>
-              Els estudis mostren
-              <strong>depressió, ansietat i problemes de son</strong>.
-            </li>
-            <li>
-              TikTok, Instagram i YouTube estan dissenyats perquè siguin
-              adictius.
-            </li>
-            <li>
-              Les notificacions, els "likes" i els algoritmes t'hi mantenen
-              enganxat.
-            </li>
-            <li><strong>Això NO és "culpa teva"</strong> — és intencional.</li>
-          </ul>
+          ⚠️ <strong>Addicció a les xarxes:</strong> L'adolescent mitjà passa
+          7-9 hores diari a pantalla. Els estudis mostren depressió, ansietat i
+          problemes de son. TikTok, Instagram i YouTube estan dissenyats perquè
+          siguin adictius — les notificacions, els "likes" i els algoritmes
+          t'mantenen enganxat. <strong>Això NO és "culpa teva"</strong>, és
+          intencional.
         </div>
         <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
 
@@ -3314,11 +3375,10 @@
             </h3>
             <div class="reveal-content">
               <p>
-                <strong
-                  >Les aplicacions estan dissenyades per ser addictives</strong
-                >. Experts en psicologia del comportament les ajuden a:
+                <strong>Les app estan dissenyades per ser adictives</strong>.
+                Experts en psicologia del comportament les ajuden a:
               </p>
-              <ul style="margin-left: 20px; margin-top: 10px; color: #94a3b8">
+              <ul style="margin-left: 20px; margin-top: 10px; color: #cbd5e1">
                 <li>
                   <strong>Notificacions</strong>: Cada "like" dispara dopamina
                   al teu cervell. Igual que una droga.
@@ -3328,16 +3388,16 @@
                   ha més contingut. El teu cervell mai "para".
                 </li>
                 <li>
-                  <strong>FOMO (Fear of Missing Out)</strong>: Si no consultes
+                  <strong>FOMO (Fear of Missing Out)</strong>: Si no fas check
                   de les xarxes, sents que t'estàs perdent alguna cosa.
                 </li>
                 <li>
-                  <strong>Algoritmes de retenció</strong>: Et mostra exactament
+                  <strong>Algoritmes de retenció</strong>: Te mostra exactament
                   el contingut que sap que t'atraparà més.
                 </li>
                 <li>
                   <strong>Compartir = validació social</strong>: Cada comentari
-                  és dopamina. Vull més validació.
+                  és dopamina. Vull més validates.
                 </li>
               </ul>
               <p style="margin-top: 12px">
@@ -3367,23 +3427,23 @@
                   <ul>
                     <li>
                       <strong>Depressió:</strong> Comparació constant amb altres
-                      (culte a la perfecció).
+                      (ele perfect).
                     </li>
                     <li>
-                      <strong>Ansietat social:</strong> Por a no tenir prou
+                      <strong>Ansietat social:</strong> Miedo a no tenir prou
                       "likes".
                     </li>
                     <li>
-                      <strong>Baixa autoestima:</strong> El meu cos no és prou
+                      <strong>Baja autoestima:</strong> El meu cos no és prou
                       bo.
                     </li>
                     <li>
-                      <strong>Insomni:</strong> La llum blava de la pantalla
-                      afecta el son.
+                      <strong>Insomnio:</strong> La llum blava del poble afecta
+                      el som.
                     </li>
                     <li>
-                      <strong>TDAH:</strong> Especialment en adolescents que
-                      creixen amb constant dopamina.
+                      <strong>ADHD:</strong> Especialment en adolescents que
+                      creixen mit constant dopamina.
                     </li>
                   </ul>
                 </div>
@@ -3394,14 +3454,14 @@
                       60% dels adolescents diu que és addicte a les xarxes.
                     </li>
                     <li>
-                      Els casos d'ansietat infantil s'han disparat amb les
+                      Els casos de ansietat infantil s'han disparat amb les
                       xarxes.
                     </li>
                     <li>
-                      L'ús intensiu està vinculat a risc de suïcidi augmentat.
+                      L'ús intensiu està vinculat a risc de suidici augmentat.
                     </li>
                     <li>
-                      El son perdut afecta rendiment en exàmens i comportament.
+                      El som perdut afecta rend en exàmens i comportament.
                     </li>
                   </ul>
                 </div>
@@ -3418,8 +3478,8 @@
             </h3>
             <div class="reveal-content">
               <p>
-                <strong>Reconeixement:</strong> No pots competir contra
-                algoritmes dissenyats per enganxar-te. Però POTS:
+                <strong>Admissió:</strong> No pots competir contra algoritmes
+                desinats per enganxar-te. Però POTS:
               </p>
               <div class="step-list">
                 <div class="step-item">
@@ -3431,7 +3491,7 @@
                     <h4>Limita el temps</h4>
                     <p>
                       Usa "App Limits" (iOS) o "Digital Wellbeing" (Android).
-                      Fixa't límits: ex 45 min/dia de TikTok.
+                      Fixa-te límits: ex 45 min/dia de TikTok.
                     </p>
                   </div>
                 </div>
@@ -3456,8 +3516,8 @@
                   <div class="step-content">
                     <h4>Apaga notificacions</h4>
                     <p>
-                      Cada notificació és dopamina artificial. Desactiva-les.
-                      Obre-les tu quan VULGUIS, no quan t'avisin.
+                      Cada notificació és dopamina artificial. Disable-les. Obri
+                      tu les apps quan VULGUIS, no quan t'avisin.
                     </p>
                   </div>
                 </div>
@@ -3491,18 +3551,15 @@
         >
           <div class="sb-icon">🔒</div>
           <div>
-            <h2>Seguretat personal i contingut inapropiat</h2>
-            <p>
-              Exposició a desconeguts, contingut sexual i manipulació en línia.
-            </p>
+            <h2>Segurança personal i contingut inapropiat</h2>
+            <p>Exposed a desconeguts, contingut sexual i manipulació online.</p>
           </div>
         </div>
         <div class="info-box red" style="margin-bottom: 18px">
           🚨 <strong>Realitat sombria 2024:</strong> El 60% dels adolescents ha
-          estat exposat a pornografia, sovint de manera accidental. 1 de cada 4
-          ha rebut missatges sexualitzats de desconeguts. Els "deepfakes
-          sexuals" creixen un 350% cada any.
-          <strong>Això és un delicte, no és culpa teva.</strong>
+          estat exposat a pornografia, sovint accidentalment. 1 de cada 4 ha
+          rebut missatges sexualitzats de desconeguts. Els "deepfakes sexuals"
+          creixen 350% l'any. <strong>Això és crime, no culpa teva.</strong>
         </div>
         <p class="tap-hint">▸ Prem cada títol per revelar el contingut</p>
 
@@ -3519,32 +3576,29 @@
               </p>
               <div class="two-col">
                 <div class="col-card yellow">
-                  <h4>Com passa de manera accidental?</h4>
+                  <h4>Com ocorre accidentalment?</h4>
                   <ul>
-                    <li>Enllaços enganyosos a YouTube/TikTok.</li>
-                    <li>Anuncis pop-up en webs poc segurs.</li>
-                    <li>Amics que comparteixen enllaços.</li>
-                    <li>
-                      Sol·licituds de missatgeria (Messenger/DM) de desconeguts.
-                    </li>
-                    <li>Correu brossa (spam) o phishing.</li>
+                    <li>Links enganosos a YouTube/TikTok</li>
+                    <li>Anuncis pop-up en webs descuidats</li>
+                    <li>Amics que comparteixen links</li>
+                    <li>Messenger requests de desconeguts</li>
+                    <li>Correu spam o phishing</li>
                   </ul>
                 </div>
                 <div class="col-card red">
-                  <h4>Per què és un problema?</h4>
+                  <h4>Per què és problema?</h4>
                   <ul>
-                    <li>Afecta la percepció del sexe i els cossos.</li>
-                    <li>Pot ser traumàtic si és violent o extrem.</li>
-                    <li>Crea culpa i vergonya innecessàries.</li>
-                    <li>Els algoritmes te n'ensenyen més.</li>
+                    <li>Afecta percepcions del sexe i els cossos</li>
+                    <li>Pot ser traumàtic si és violent o "extremo"</li>
+                    <li>Crea culpa i vergonya</li>
+                    <li>Els algoritmes t'en mostren més</li>
                   </ul>
                 </div>
               </div>
               <div class="info-box blue" style="margin-top: 12px">
-                💡 <strong>Si veus quelcom que t'incomoda:</strong> No
-                t'espantis, no és culpa teva. Tanca la pestanya, esborra
-                l'historial (CTRL+SHIFT+DEL) i parla amb un adult o psicòleg si
-                t'afecta.
+                💡 <strong>Si veus quelcom que t'incòmoda:</strong> No
+                t'assustes, n'és culpa. Tanca la pestanya, esborra l'historial
+                (CTRL+SHIFT+DEL) i parla amb un adult o psicòleg si t'afecta.
               </div>
             </div>
           </div>
@@ -3565,37 +3619,32 @@
                 Un adulte que es fa passar per adolescent, guanya la teva
                 confiança i t'intenta:
               </p>
-              <ul style="margin-left: 20px; margin-top: 10px; color: #94a3b8">
+              <ul style="margin-left: 20px; margin-top: 10px; color: #cbd5e1">
                 <li>
-                  Aïllar-te: dels amics o la família ("No els diguis que
-                  xerrem").
+                  Aïllar-te dels amics/família ("No els diguis que xerrem")
                 </li>
-                <li>Sexualitzar la conversa: ("Envia'm una foto").</li>
+                <li>Sexualitzar la conversa ("Envía-me una foto")</li>
                 <li>
-                  Xantatge: ("Si no fas el que et dic, mostraré les teves
-                  fotos").
+                  Chantatge ("Si no fas el que digo, mostraré les teves fotos")
                 </li>
-                <li>Trobar-te en persona: per abusar.</li>
+                <li>Trobar-te en persona per abusar</li>
               </ul>
               <p style="margin-top: 12px">
-                <strong>Banderes vermelles d'un perfil fals:</strong>
+                <strong>Banderes roja d'un perfil fals:</strong>
               </p>
-              <ul style="margin-left: 20px; margin-top: 10px; color: #94a3b8">
-                <li>Perfil nou (creat fa pocs dies).</li>
-                <li>
-                  Fotos de models d'Internet (fes una cerca inversa de la
-                  imatge).
-                </li>
-                <li>No té amics en comú.</li>
-                <li>Vol passar ràpidament a privat.</li>
-                <li>Sempre té excuses per no fer videotrucades.</li>
-                <li>Demana fotos o informació personal molt aviat.</li>
+              <ul style="margin-left: 20px; margin-top: 10px; color: #cbd5e1">
+                <li>Perfil nou (creado fa pocs dies)</li>
+                <li>Fotos d'models de Google (busca sa imatge)</li>
+                <li>No té amics en comú</li>
+                <li>Ràpidament quiere pasar a privat</li>
+                <li>Sempre té "excuses" per no video-cridar</li>
+                <li>Demana fotos o informació personal molt aviat</li>
               </ul>
               <div class="info-box green" style="margin-top: 12px">
-                ✅ <strong>Què fer:</strong> No responguis a desconeguts. Si
-                algú et demana fotos, bloqueja'l immediatament i avisa un adult.
-                Si t'amenacen, guarda les proves i reporta-ho a la policia (no
-                esborris res).
+                ✅ <strong>Que fer:</strong> No respongas desconeguts. Si algú
+                te demana fotos, bloca'l immeditament i avisa un adult. Si
+                t'amenacen, guarda les proves i reporta a policia (não borris
+                res).
               </div>
             </div>
           </div>
@@ -3609,26 +3658,26 @@
             </h3>
             <div class="reveal-content">
               <p>
-                <strong>Escenari:</strong> Envies fotos despullat/da a una
-                parella. Després us enfadeu. Ara les publica en grups de
-                Telegram. O pitjor: Li han robat el mòbil i ara utilitzen les
-                fotos per fer-te xantatge.
+                <strong>Scenario:</strong> Envaist "nudes" (fotos nua) a un
+                xicot/a. Despres ens hem enfadat. Ara las publica a groups de
+                telegram. O pior: Li van rober el mòbil i ahora utilitza les
+                fotos per chantatge.
               </p>
-              <p style="margin-top: 12px"><strong>Per què és greu:</strong></p>
-              <ul style="margin-left: 20px; margin-top: 10px; color: #94a3b8">
+              <p style="margin-top: 12px"><strong>Per què és grave:</strong></p>
+              <ul style="margin-left: 20px; margin-top: 10px; color: #cbd5e1">
                 <li>
-                  Una vegada en línia, és per sempre (captures de pantalla,
-                  còpies, etc.).
+                  Una vegada online, és per sempre (screenshots, copies, etc.)
                 </li>
                 <li>
-                  Pot afectar la teva reputació, relacions i accés a estudis
-                  (universitat).
+                  Pot afectar reputació, relacions, acceptació universitari
                 </li>
                 <li>
-                  Tens dret a la privacitat: és un delicte publicar contingut
-                  sense consentiment.
+                  Tens dret a la privacitat — és un delicte publicar sense
+                  consentiment
                 </li>
-                <li>Deepfakes: Poden crear imatges falses teves amb IA.</li>
+                <li>
+                  Deepfakes: Pots tenir "nudes" falses teves creades per IA
+                </li>
               </ul>
               <div class="step-list">
                 <div class="step-item">
@@ -3638,9 +3687,8 @@
                   <div class="step-content">
                     <h4>Regla d'or</h4>
                     <p>
-                      <strong>Mai enviïs fotos despullat/da.</strong> Cap
-                      persona que t'estimi de veritat no t'ho demanaria. Si ho
-                      fa, és un senyal d'alerta (red flag).
+                      <strong>Mai envíis fotos nua.</strong> Cap persona que
+                      t'esti val no t'ho demanaria. Si demana, és un red flag.
                     </p>
                   </div>
                 </div>
@@ -3650,12 +3698,12 @@
                     <div class="step-line"></div>
                   </div>
                   <div class="step-content">
-                    <h4>Si ja ha passat (les fotos s'han publicat)</h4>
+                    <h4>Si ja va ocuiir (hi ha fotos publicadas)</h4>
                     <p>
-                      <strong>Reporta-ho immediatament:</strong> A la xarxa
-                      social, a Google (per eliminar-ho dels cercadors) i a la
-                      policia (és un delicte). Fes servir eines com StopNCII.org
-                      per sol·licitar l'eliminació de les imatges.
+                      <strong>Reporta immediatament:</strong> A la xarxa social,
+                      a Google (per borrar del search), a policia (és crime).
+                      Usa apps com "Revenge porn removal" per solicit borrar les
+                      imatges.
                     </p>
                   </div>
                 </div>
@@ -3664,11 +3712,11 @@
                     <div class="step-num">2</div>
                   </div>
                   <div class="step-content">
-                    <h4>Si t'estan xantatjant</h4>
+                    <h4>Si t'estan chantajeando</h4>
                     <p>
-                      NO PAGUIS NI COMPLEIXIS LES SEVES DEMANDES. Bloqueja'l
-                      immediatament, avisa la policia i guarda les proves. Els
-                      estafadors rarament segueixen (volen diners, no justícia).
+                      NO PAGIS NI COMPLEISC. Bloca'l immediitament, avisa a
+                      polícia, guarda proves. Els estafadors rarament seguixen
+                      (volen diners, no justície).
                     </p>
                   </div>
                 </div>
@@ -3686,35 +3734,32 @@
             <div class="reveal-content">
               <p>
                 <strong
-                  >És un vídeo o una foto falsa creada amb intel·ligència
-                  artificial que sembla real.</strong
+                  >Un deepfake és una vídeo o foto falsa creada amb IA que
+                  semble real.</strong
                 >
               </p>
               <p style="margin-top: 12px; color: #fca5a5">
-                <strong>⚠️ Escenari sombriu:</strong> Un cibercriminal crea un
-                vídeo pornogràfic fals teu i el penja en llocs pornogràfics.
-                Desconeguts creuen que realment ets tu. S'escampa per Telegram o
-                WhatsApp i és gairebé impossible d'esborrar completament.
+                <strong>⚠️ Scenario sombriu:</strong> Un cibercriminal crea un
+                vídeo porno fake teu uploat a sitios porno. Desconeguts creuen
+                que realment es tu. Espargit per telegram, WhatsApp. Imposible
+                de borrar completament.
               </p>
-              <p style="margin-top: 12px">
-                <strong>Per què és delicte:</strong>
-              </p>
-              <ul style="margin-left: 20px; margin-top: 10px; color: #94a3b8">
-                <li>Suplantació d'identitat.</li>
-                <li>Abús sexual (contingut sexual sense consentiment).</li>
-                <li>Difamació.</li>
-                <li>Explotació per sextorsió.</li>
+              <p style="margin-top: 12px"><strong>Per què és crime:</strong></p>
+              <ul style="margin-left: 20px; margin-top: 10px; color: #cbd5e1">
+                <li>Suplantació d'identitat</li>
+                <li>Abús sexual (non-consensual sexual content)</li>
+                <li>Defamació</li>
+                <li>Explotació per sextorsió</li>
               </ul>
               <p style="margin-top: 12px"><strong>Com protegir-te:</strong></p>
-              <ul style="margin-left: 20px; margin-top: 10px; color: #94a3b8">
+              <ul style="margin-left: 20px; margin-top: 10px; color: #cbd5e1">
+                <li>No carreguis fotos nua a cap app sense cifrar</li>
+                <li>Usa Privacy mode en Telegram/Signal</li>
                 <li>
-                  No pengis fotos compromeses a aplicacions sense xifratge.
+                  Si ves algun deepfake teu: reporta a sitios globals
+                  (StopNCII.org, Facebook, etc.)
                 </li>
-                <li>Fes servir el "mode privacitat" a Telegram/Signal.</li>
-                <li>
-                  Si veus algun deepfake teu: reporta-ho a llocs globals
-                  (StopNCII.org, Facebook, etc.) i denuncia-ho a la policia.
-                </li>
+                <li>Denuncia a policia</li>
               </ul>
             </div>
           </div>
@@ -3881,7 +3926,7 @@
     </div>
     <script>
       let cur = 0;
-      const total = 12;
+      const total = 5;
 
       function toggle(trigger) {
         const content = trigger.nextElementSibling;
