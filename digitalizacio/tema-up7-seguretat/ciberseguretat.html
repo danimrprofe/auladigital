@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ciberseguretat — Teoria</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Nunito:wght@700;800;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #eef1f8;
+    --surface: #ffffff;
+    --surface2: #f0f3fa;
+    --border: #c8d0e8;
+    --accent: #1d4ed8;
+    --accent2: #dc2626;
+    --accent3: #15803d;
+    --accent4: #b45309;
+    --text: #0f1629;
+    --muted: #374151;
+    --tag-bg: rgba(29,78,216,0.08);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 19px;
+    line-height: 1.65;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* BG subtle dot grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, #b0bcd8 1px, transparent 1px);
+    background-size: 32px 32px;
+    opacity: 0.45;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* HEADER */
+  header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 56px 40px 44px;
+    border-bottom: 2px solid var(--border);
+    background: linear-gradient(180deg, #fff 0%, var(--bg) 100%);
+  }
+
+  .header-pill {
+    display: inline-block;
+    background: var(--tag-bg);
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 5px 20px;
+    border-radius: 100px;
+    margin-bottom: 22px;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, #0f1629 25%, #1d4ed8 85%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 18px;
+  }
+
+  .header-sub {
+    color: #374151;
+    font-size: 1.15rem;
+    max-width: 700px;
+    margin: 0 auto;
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(238,241,248,0.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 2px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+  nav::-webkit-scrollbar { display: none; }
+
+  nav a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #374151;
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    padding: 16px 20px;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: color .2s, border-color .2s;
+  }
+  nav a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* MAIN LAYOUT — wide 16:9 friendly */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 52px 48px 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+  }
+
+  /* SECTION */
+  section {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(28px);
+    animation: fadeUp .45s ease forwards;
+    box-shadow: 0 2px 16px rgba(15,22,41,0.07);
+  }
+
+  section:nth-child(1)  { animation-delay: .05s; }
+  section:nth-child(2)  { animation-delay: .10s; }
+  section:nth-child(3)  { animation-delay: .15s; }
+  section:nth-child(4)  { animation-delay: .20s; }
+  section:nth-child(5)  { animation-delay: .25s; }
+  section:nth-child(6)  { animation-delay: .30s; }
+  section:nth-child(7)  { animation-delay: .35s; }
+  section:nth-child(8)  { animation-delay: .40s; }
+  section:nth-child(9)  { animation-delay: .45s; }
+  section:nth-child(10) { animation-delay: .50s; }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 26px 36px 22px;
+    border-bottom: 1.5px solid var(--border);
+    background: linear-gradient(90deg, #f8f9ff 0%, #fff 100%);
+  }
+
+  .section-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+  }
+
+  .icon-red    { background: rgba(220,38,38,.12); }
+  .icon-blue   { background: rgba(29,78,216,.10); }
+  .icon-green  { background: rgba(21,128,61,.12); }
+  .icon-yellow { background: rgba(180,83,9,.12); }
+  .icon-purple { background: rgba(126,34,206,.12); }
+
+  .section-title {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+    color: #0f1629;
+  }
+
+  .section-body {
+    padding: 28px 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Two-column layout for wide screens */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+  .two-col > * { min-width: 0; }
+
+  p {
+    color: #1a2340;
+    font-size: 1.05rem;
+    font-weight: 400;
+    line-height: 1.7;
+  }
+
+  /* CARDS GRID */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 22px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: border-color .2s, box-shadow .2s, transform .2s;
+  }
+  .card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 18px rgba(29,78,216,0.10);
+    transform: translateY(-2px);
+  }
+
+  .card-icon { font-size: 28px; }
+  .card-title {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: #0f1629;
+  }
+  .card-desc { color: #2d3a52; font-size: .97rem; line-height: 1.55; font-weight: 400; }
+
+  /* ALERT BOX */
+  .alert {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    background: var(--surface2);
+    border-left: 4px solid var(--accent2);
+    border-radius: 10px;
+    padding: 18px 22px;
+    font-size: 1rem;
+    color: #1a2340;
+  }
+  .alert .alert-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+  .alert.info { border-left-color: var(--accent); background: rgba(29,78,216,0.05); }
+  .alert.success { border-left-color: var(--accent3); background: rgba(21,128,61,0.05); }
+  .alert.warning { border-left-color: var(--accent4); background: rgba(180,83,9,0.05); }
+
+  /* KEY CONCEPT */
+  .key-concept {
+    background: linear-gradient(135deg, rgba(29,78,216,0.07), rgba(21,128,61,0.04));
+    border: 1.5px solid rgba(29,78,216,0.25);
+    border-radius: 12px;
+    padding: 18px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1d4ed8;
+    letter-spacing: .2px;
+  }
+
+  /* FLOW CHAIN */
+  .flow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .flow-item {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: .97rem;
+    font-family: 'DM Mono', monospace;
+    color: #0f1629;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1.4;
+  }
+  .flow-arrow { color: #374151; font-size: 1.3rem; font-weight: 700; }
+
+  /* TABLE */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+  }
+  .compare-table th {
+    background: var(--surface2);
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    font-size: .88rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .compare-table td {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    color: #1a2340;
+    vertical-align: top;
+    font-size: 1rem;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: #f5f7ff; }
+
+  .tag {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 100px;
+    font-size: .85rem;
+    font-family: 'DM Mono', monospace;
+    font-weight: 600;
+  }
+  .tag-safe   { background: rgba(21,128,61,.10); color: #15803d; border: 1.5px solid rgba(21,128,61,.3); }
+  .tag-danger { background: rgba(220,38,38,.10); color: #dc2626; border: 1.5px solid rgba(220,38,38,.3); }
+
+  /* BADGE LIST */
+  .badge-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 1rem;
+    color: #1a2340;
+    font-weight: 400;
+    transition: border-color .2s;
+  }
+  .badge:hover { border-color: var(--accent); }
+  .badge strong {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    color: #0f1629;
+    font-size: 1rem;
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 32px 40px;
+    border-top: 2px solid var(--border);
+    color: #374151;
+    font-family: 'DM Mono', monospace;
+    font-size: .82rem;
+  }
+
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #0f1629;
+    margin-bottom: 4px;
+  }
+
+  /* CARD MINI BULLET LIST */
+  ul.card-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  ul.card-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: .97rem;
+    color: #2d3a52;
+    line-height: 1.45;
+  }
+  ul.card-list li::before {
+    content: '·';
+    color: var(--accent);
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    line-height: 1.2;
+    font-weight: 900;
+  }
+
+  /* BULLET LIST */
+  ul.bullet-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0;
+  }
+  ul.bullet-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 1.05rem;
+    color: #1a2340;
+    line-height: 1.55;
+  }
+  ul.bullet-list li::before {
+    content: '▸';
+    color: var(--accent);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-weight: 700;
+  }
+
+  @media(max-width:900px) {
+    main { padding: 36px 24px 80px; }
+    .section-header { padding: 20px 22px 18px; }
+    .section-body { padding: 22px; }
+    .two-col { grid-template-columns: 1fr; }
+  }
+  @media(max-width:600px) {
+    h1 { font-size: 2.4rem; }
+    nav a { padding: 12px 12px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-pill">Informàtica · Seguretat</div>
+  <h1>Ciberseguretat</h1>
+  <p class="header-sub">Guia teòrica sobre programari maliciós, atacs informàtics i protecció de sistemes</p>
+</header>
+
+<nav>
+  <a href="#malware">🦠 Malware</a>
+  <a href="#bugs">🐞 Bugs</a>
+  <a href="#exploits">🧨 Exploits</a>
+  <a href="#enginyeria">🧠 Eng. Social</a>
+  <a href="#infeccio">🚪 Infecció</a>
+  <a href="#gusanos">🔁 Cucs</a>
+  <a href="#virus">💉 Virus</a>
+  <a href="#troians">🐴 Troians</a>
+  <a href="#antivirus">🛡️ Antivirus</a>
+  <a href="#tallafocs">🔥 Tallafocs</a>
+  <a href="#atacs">⚡ Ciberatacs</a>
+  <a href="#ddos">💥 DDoS</a>
+  <a href="#ransomware">🔒 Ransomware</a>
+</nav>
+
+<main>
+
+  <!-- MALWARE -->
+  <section id="malware">
+    <div class="section-header">
+      <div class="section-icon icon-red">🦠</div>
+      <div>
+        <div class="section-title">Malware</div>
+        <div style="color:#374151;font-size:.92rem;font-family:'DM Mono',monospace;font-weight:500;">programari maliciós</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <ul class="bullet-list">
+        <li><strong>Malware</strong> (de <em>malicious software</em>) és el conjunt de programes dissenyats per causar dany o accedir a sistemes sense autorització.</li>
+        <li>Poden entrar al dispositiu de l'usuari <strong>sense el seu coneixement</strong> ni consentiment.</li>
+        <li>Poden accedir al PC sense permís, provocar fallades i propagar-se ràpidament a altres ordinadors.</li>
+      </ul>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">💉</div>
+          <div class="card-title">Virus</div>
+          <div class="card-desc">S'adjunta a arxius legítims i es replica quan s'executen.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔁</div>
+          <div class="card-title">Cucs (Gusanos)</div>
+          <div class="card-desc">Es propaguen automàticament per xarxes i dispositius sense necessitar un arxiu hoste.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🐴</div>
+          <div class="card-title">Troians</div>
+          <div class="card-desc">Es disfressen de programes legítims per enganyar l'usuari.</div>
+        </div>
+      </div>
+
+      <div class="alert">
+        <span class="alert-icon">⚠️</span>
+        <span>El malware pot accedir al teu PC sense autorització, provocar fallades, danyar l'equip i propagar-se ràpidament a altres ordinadors.</span>
+      </div>
+
+      <div class="key-concept">💡 Clau → Malware = programari dissenyat maliciosament per fer dany o robar informació.</div>
+    </div>
+  </section>
+
+  <!-- BUGS I VULNERABILITATS -->
+  <section id="bugs">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">🐞</div>
+      <div>
+        <div class="section-title">Bugs i Vulnerabilitats</div>
+        <div style="color:#374151;font-size:.92rem;font-family:'DM Mono',monospace;font-weight:500;">errors de programari</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <ul class="bullet-list">
+        <li>Els programes no sempre funcionen perfectament i sovint contenen <strong>errors</strong>.</li>
+        <li>Alguns errors simplement provoquen fallades del programa, però d'altres <strong>obren portes als atacants</strong>.</li>
+        <li>Un error greu pot permetre executar codi no desitjat o introduir malware al sistema.</li>
+      </ul>
+
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Tipus d'error</th>
+            <th>Efecte</th>
+            <th>Perill</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>🐞 Bug (error normal)</strong></td>
+            <td>El programa falla o es tanca</td>
+            <td><span class="tag tag-safe">Baix</span></td>
+          </tr>
+          <tr>
+            <td><strong>🔓 Vulnerabilitat (error greu)</strong></td>
+            <td>Permet accés no autoritzat al sistema</td>
+            <td><span class="tag tag-danger">Alt</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="key-concept">💡 Clau → No tot bug és una vulnerabilitat, però tota vulnerabilitat és un error que pot ser explotat.</div>
+    </div>
+  </section>
+
+  <!-- EXPLOITS I PAYLOAD -->
+  <section id="exploits">
+    <div class="section-header">
+      <div class="section-icon icon-red">🧨</div>
+      <div>
+        <div class="section-title">Exploits i Payloads</div>
+        <div style="color:#374151;font-size:.92rem;font-family:'DM Mono',monospace;font-weight:500;">aprofitament de vulnerabilitats</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <ul class="bullet-list">
+        <li>Un cop existeix una vulnerabilitat, els atacants utilitzen eines específiques per <strong>aprofitar-la</strong>.</li>
+        <li>L'objectiu és introduir codi maliciós al sistema o prendre'n el control.</li>
+      </ul>
+
+      <div class="flow">
+        <div class="flow-item">🔓 Vulnerabilitat<br><small style="color:#374151">porta oberta</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">🧨 Exploit<br><small style="color:#374151">la clau</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">🚚 Payload<br><small style="color:#374151">el dany real</small></div>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🧨</div>
+          <div class="card-title">Exploit</div>
+          <div class="card-desc">Mètode o codi que aprofita una vulnerabilitat per executar codi no autoritzat o accedir al sistema.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📦</div>
+          <div class="card-title">Payload</div>
+          <div class="card-desc">Allò que l'atacant introdueix un cop dins del sistema. Pot ser ransomware, spyware o una porta trasera.</div>
+        </div>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🔒</div>
+          <div class="card-title">Ransomware</div>
+          <div class="card-desc">Xifra els arxius i demana un rescat econòmic per recuperar-los.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🚪</div>
+          <div class="card-title">Backdoor</div>
+          <div class="card-desc">Crea un accés ocult permanent al sistema infectat.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">👀</div>
+          <div class="card-title">Spyware</div>
+          <div class="card-desc">Roba dades i informació personal sense que l'usuari se n'adoni.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENGINYERIA SOCIAL -->
+  <section id="enginyeria">
+    <div class="section-header">
+      <div class="section-icon icon-purple">🧠</div>
+      <div>
+        <div class="section-title">Enginyeria Social</div>
+        <div style="color:#374151;font-size:.92rem;font-family:'DM Mono',monospace;font-weight:500;">manipulació de persones</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <ul class="bullet-list">
+        <li>Tècnica d'atac que <strong>no aprofita errors de programari</strong>, sinó que manipula les persones.</li>
+        <li>L'objectiu és obtenir informació confidencial o accés a sistemes enganyant l'usuari.</li>
+        <li>El punt feble aquí és l'<strong>ésser humà</strong>, no el sistema informàtic.</li>
+      </ul>
+
+      <ul class="bullet-list">
+        <li>Els atacants <strong>suplanten identitats</strong> i envien correus falsos per generar confiança artificial.</li>
+        <li>Busquen aconseguir <strong>contrasenyes, accés a banca</strong> en línia o dades personals.</li>
+      </ul>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">📧</div>
+          <div class="card-title">Phishing</div>
+          <div class="card-desc">Correus electrònics falsificats que imiten entitats de confiança per robar credencials.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🎭</div>
+          <div class="card-title">Suplantació d'identitat</div>
+          <div class="card-desc">L'atacant es fa passar per una persona o empresa de confiança.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">💬</div>
+          <div class="card-title">Missatges falsos</div>
+          <div class="card-desc">Missatges de text o xarxes socials amb enllaços maliciosos.</div>
+        </div>
+      </div>
+
+      <div class="key-concept">💡 Clau → L'atac no sempre és tècnic: moltes vegades el "error" és humà.</div>
+    </div>
+  </section>
+
+  <!-- VIES D'INFECCIÓ -->
+  <section id="infeccio">
+    <div class="section-header">
+      <div class="section-icon icon-blue">🚪</div>
+      <div>
+        <div class="section-title">Vies d'Infecció</div>
+        <div style="color:#374151;font-size:.92rem;font-family:'DM Mono',monospace;font-weight:500;">com entra el malware</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <ul class="bullet-list">
+        <li>El malware normalment arriba a través d'<strong>arxius maliciosos</strong> que l'usuari obre o descarrega.</li>
+        <li>Sovint l'usuari no sap que està instal·lant programari perillós.</li>
+      </ul>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">📧</div>
+          <div class="card-title">Correu electrònic</div>
+          <div class="card-desc">Arxius adjunts infectats o spam (phishing) amb enllaços perillosos.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🌐</div>
+          <div class="card-title">Descàrregues d'Internet</div>
+          <div class="card-desc">Arxius de webs no segures, programes falsos o cracks de software.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔗</div>
+          <div class="card-title">Aplicacions web</div>
+          <div class="card-desc">Execució de contingut maliciós en pàgines web compromeses.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📁</div>
+          <div class="card-title">Xarxes P2P</div>
+          <div class="card-desc">Descàrregues compartides infectades a través de xarxes d'intercanvi d'arxius.</div>
+        </div>
+      </div>
+
+      <div class="key-concept">💡 Clau → El malware entra principalment a través d'arxius que l'usuari obre o descarrega.</div>
+    </div>
+  </section>
+
+  <!-- CUCS -->
+  <section id="gusanos">
+    <div class="section-header">
+      <div class="section-icon icon-green">🔁</div>
+      <div>
+        <div class="section-title">Cucs (Worms)</div>
+        <div style="color:#374151;font-size:.92rem;font-family:'DM Mono',monospace;font-weight:500;">autoreplicació automàtica</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <ul class="bullet-list">
+        <li>Tipus de malware que es <strong>repliquen i es propaguen automàticament</strong> per xarxes i dispositius.</li>
+        <li>No necessiten cap arxiu hoste ni cap acció de l'usuari per estendre's.</li>
+        <li><strong>Diferència clau amb els virus:</strong> els cucs es propaguen per si sols per la xarxa sense que l'usuari faci res.</li>
+      </ul>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">💾</div>
+          <div class="card-title">Dispositius extraïbles</div>
+          <div class="card-desc">Un USB infectat copia el malware al sistema automàticament en connectar-se.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🌐</div>
+          <div class="card-title">Xarxes i Internet</div>
+          <div class="card-desc">Es propaguen a través d'arxius descarregats o connexions de xarxa vulnerables.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">⚙️</div>
+          <div class="card-title">Execució automàtica</div>
+          <div class="card-desc">S'activen en connectar el dispositiu o obrir l'arxiu infectat.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- VIRUS -->
+  <section id="virus">
+    <div class="section-header">
+      <div class="section-icon icon-red">💉</div>
+      <div>
+        <div class="section-title">Virus Informàtics</div>
+        <div style="color:#374151;font-size:.92rem;font-family:'DM Mono',monospace;font-weight:500;">malware amb hoste</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <ul class="bullet-list">
+        <li>Tipus de malware que <strong>s'adjunta a arxius o programes existents</strong> (el seu "hoste").</li>
+        <li>Es copia i propaga quan l'arxiu hoste és executat per l'usuari.</li>
+        <li>Molts virus no actuen de seguida: <strong>esperen una condició</strong> (data, programa, acció) per activar-se.</li>
+      </ul>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🧬</div>
+          <div class="card-title">Autoreplicació</div>
+          <div class="card-desc">Es copia automàticament a altres arxius o programes del sistema infectat.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🤝</div>
+          <div class="card-title">Necessita un hoste</div>
+          <div class="card-desc">No funciona sol: necessita un arxiu o programa com a vehicle d'infecció.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">⏰</div>
+          <div class="card-title">Activació diferida</div>
+          <div class="card-desc">Molts virus no actuen de seguida: esperen una data, un programa o una acció de l'usuari.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📦</div>
+          <div class="card-title">Propagació</div>
+          <div class="card-desc">S'estén per dispositius externs (USB) i xarxes compartides.</div>
+        </div>
+      </div>
+
+      <h3 style="margin-top:4px;">Danys possibles</h3>
+      <div class="badge-list">
+        <div class="badge">😐 <span><strong>Missatges</strong> molestos</span></div>
+        <div class="badge">❌ <span><strong>Pèrdua</strong> de dades</span></div>
+        <div class="badge">🐢 <span><strong>Mal funcionament</strong> del sistema</span></div>
+        <div class="badge">💥 <span><strong>Equip</strong> inutilitzable</span></div>
+      </div>
+
+      <div class="key-concept">💡 Clau → Virus = malware que es copia, necessita un hoste, pot activar-se més tard i es propaga pel sistema o xarxa.</div>
+    </div>
+  </section>
+
+  <!-- TROIANS -->
+  <section id="troians">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">🐴</div>
+      <div>
+        <div class="section-title">Troians</div>
+        <div style="color:#374151;font-size:.92rem;font-family:'DM Mono',monospace;font-weight:500;">el cavall de Troia digital</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <ul class="bullet-list">
+        <li>S'anomenen així pel mite del cavall de Troia: <strong>semblen inofensius però amaguen una amenaça</strong>.</li>
+        <li>No es repliquen per si sols: <strong>depenen de l'usuari</strong> perquè els descarregui i executi.</li>
+        <li>Un cop instal·lats, obren una <strong>porta trasera (backdoor)</strong> que permet a l'atacant accedir al sistema.</li>
+      </ul>
+
+      <div class="flow">
+        <div class="flow-item">⬇️ Descàrrega<br><small style="color:#374151">sembla legítim</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">▶️ Execució<br><small style="color:#374151">l'usuari el run</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">🚪 Backdoor<br><small style="color:#374151">porta oberta</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">💣 Atac<br><small style="color:#374151">control remot</small></div>
+      </div>
+
+      <h3>Tipus comuns de troians</h3>
+      <table class="compare-table">
+        <thead>
+          <tr><th>Tipus</th><th>Què fa</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>📥 <strong>Downloader</strong></td><td>Descarrega i instal·la més malware al sistema</td></tr>
+          <tr><td>⌨️ <strong>Keylogger</strong></td><td>Registra tot el que escriu l'usuari (contrasenyes, missatges)</td></tr>
+          <tr><td>🚪 <strong>Backdoor</strong></td><td>Obre un accés remot ocult per a l'atacant</td></tr>
+          <tr><td>🤖 <strong>Bot</strong></td><td>Pren el control de l'equip per a operacions massives</td></tr>
+          <tr><td>🖱️ <strong>Clicker</strong></td><td>Genera clics automàtics (frau publicitari)</td></tr>
+        </tbody>
+      </table>
+
+      <div class="key-concept">💡 Clau → El troià enganya l'usuari per entrar i obre la porta a l'atacant.</div>
+    </div>
+  </section>
+
+  <!-- ANTIVIRUS -->
+  <section id="antivirus">
+    <div class="section-header">
+      <div class="section-icon icon-green">🛡️</div>
+      <div>
+        <div class="section-title">Antivirus i Protecció</div>
+        <div style="color:#374151;font-size:.92rem;font-family:'DM Mono',monospace;font-weight:500;">primera línia de defensa</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <ul class="bullet-list">
+        <li>Programa de seguretat que actua com el <strong>"guardaespatlles"</strong> del teu ordinador.</li>
+        <li><strong>Detecta, bloqueja i elimina</strong> programari maliciós abans que pugui causar dany.</li>
+        <li>Analitza arxius i programes, i identifica comportaments sospitosos en temps real.</li>
+      </ul>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🔍</div>
+          <div class="card-title">Analitza arxius</div>
+          <div class="card-desc">Examina tots els arxius i programes a la recerca de signatures malicioses.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">⚠️</div>
+          <div class="card-title">Detecta comportaments</div>
+          <div class="card-desc">Identifica comportaments sospitosos encara que no reconegui el malware.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">❌</div>
+          <div class="card-title">Bloqueja i elimina</div>
+          <div class="card-desc">Posa en quarantena o elimina les amenaces detectades.</div>
+        </div>
+      </div>
+
+      <h3>Funcions addicionals de seguretat</h3>
+      <div class="badge-list">
+        <div class="badge">📧 <span><strong>Antispam</strong> → filtra correu brossa</span></div>
+        <div class="badge">🔥 <span><strong>Tallafocs</strong> → controla la xarxa</span></div>
+        <div class="badge">🔒 <span><strong>Xifratge</strong> → protegeix dades</span></div>
+        <div class="badge">📡 <span><strong>Monitor de xarxa</strong> → vigila l'activitat</span></div>
+      </div>
+
+      <h3 style="margin-top:4px;">Cicle d'actualitzacions de seguretat</h3>
+      <div class="flow">
+        <div class="flow-item">🔍 1. Detecció<br><small style="color:#374151">vulnerabilitat</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">🔧 2. Parche<br><small style="color:#374151">el fabricant crea</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">✅ 3. Prova<br><small style="color:#374151">compatibilitat</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">📤 4. Distribució<br><small style="color:#374151">actualització</small></div>
+      </div>
+
+      <div class="badge-list" style="margin-top:4px;">
+        <div class="badge">🛡️ Avast</div>
+        <div class="badge">🛡️ Kaspersky</div>
+        <div class="badge">🛡️ Norton</div>
+        <div class="badge">🛡️ G Data</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TALLAFOCS -->
+  <section id="tallafocs">
+    <div class="section-header">
+      <div class="section-icon icon-blue">🔥</div>
+      <div>
+        <div class="section-title">Tallafocs (Firewall)</div>
+        <div style="color:#374151;font-size:.92rem;font-family:'DM Mono',monospace;font-weight:500;">control del tràfic de xarxa</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>Un tallafocs és un sistema de seguretat que <strong>filtra el tràfic de xarxa</strong> entre l'ordinador i l'exterior.</li>
+        <li>Actua com una <strong>barrera</strong> que decideix quines connexions es permeten i quines es bloquegen.</li>
+        <li>Pot ser programari (instal·lat a l'ordinador) o maquinari (dispositiu físic a la xarxa).</li>
+        <li>És complementari a l'antivirus: mentre l'antivirus detecta malware ja present, el tallafocs <strong>impedeix connexions no autoritzades</strong>.</li>
+      </ul>
+
+      <h3>Com decideix el tallafocs què bloquejar</h3>
+      <table class="compare-table">
+        <thead>
+          <tr><th>Criteri</th><th>Exemple</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>🌐 <strong>Adreça IP</strong></td><td>Bloqueja connexions des d'adreces IP sospitoses o de països concrets</td></tr>
+          <tr><td>🔌 <strong>Port</strong></td><td>Permet el port 443 (HTTPS) i bloqueja ports no necessaris</td></tr>
+          <tr><td>📋 <strong>Protocol</strong></td><td>Permet HTTP/HTTPS però bloqueja protocols no autoritzats</td></tr>
+          <tr><td>📱 <strong>Aplicació</strong></td><td>Permet el navegador però bloqueja una app desconeguda que vol accedir a Internet</td></tr>
+        </tbody>
+      </table>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">✅</div>
+          <div class="card-title">Tràfic permès</div>
+          <div class="card-desc">Connexions reconegudes com a legítimes: navegació web, correu, actualitzacions del sistema.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🚫</div>
+          <div class="card-title">Tràfic bloquejat</div>
+          <div class="card-desc">Intents d'accés no autoritzat, ports perillosos oberts, connexions des d'adreces malicioses.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📋</div>
+          <div class="card-title">Registre (log)</div>
+          <div class="card-desc">El tallafocs registra totes les connexions per poder analitzar incidents de seguretat posteriorment.</div>
+        </div>
+      </div>
+
+      <div class="key-concept">💡 Clau → Tallafocs = vigilant de la xarxa que decideix qui pot entrar i qui no. Antivirus + tallafocs = doble capa de protecció.</div>
+    </div>
+  </section>
+
+  <!-- CIBERATACS -->
+  <section id="atacs">
+    <div class="section-header">
+      <div class="section-icon icon-red">⚡</div>
+      <div>
+        <div class="section-title">Ciberatacs</div>
+        <div style="color:#374151;font-size:.92rem;font-family:'DM Mono',monospace;font-weight:500;">la campanya completa</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <ul class="bullet-list">
+        <li>Esforç coordinat per comprometre un sistema informàtic amb una <strong>meta concreta</strong>.</li>
+        <li>Hi ha sempre un "qui" darrere: un hacker, un grup estatal o un cibercriminal.</li>
+        <li><strong>No sempre usa malware:</strong> pot combinar tècniques molt diverses (DDoS, enginyeria social, exploits…).</li>
+        <li>El malware és una <em>eina</em>; el ciberatac és tota la <em>campanya</em>.</li>
+      </ul>
+
+      <h3>Tipus d'atacs sense malware</h3>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">💥</div>
+          <div class="card-title">DDoS</div>
+          <div class="card-desc">Atac de Denegació de Servei: satura un servidor amb peticions fins que deixa de funcionar.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🧠</div>
+          <div class="card-title">Enginyeria Social</div>
+          <div class="card-desc">Enganya una persona per telèfon o missatge perquè lliuri la seva contrasenya.</div>
+        </div>
+      </div>
+
+      <h3>Formes d'obtenció econòmica</h3>
+      <table class="compare-table">
+        <thead>
+          <tr><th>Mètode</th><th>Descripció</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>🔐 <strong>Robatori d'informació</strong></td><td>Contrasenyes, dades bancàries, correus, dades personals</td></tr>
+          <tr><td>🤖 <strong>Botnets / Xarxa Zombi</strong></td><td>Xarxa d'equips infectats controlats simultàniament per fer spam o atacs DDoS</td></tr>
+          <tr><td>🦠 <strong>Rogueware</strong></td><td>Venda de falsos antivirus o solucions de seguretat que no funcionen</td></tr>
+          <tr><td>🔒 <strong>Ransomware</strong></td><td>Xifra els arxius i demana un rescat per recuperar-los</td></tr>
+        </tbody>
+      </table>
+
+      <ul class="bullet-list">
+        <li><strong>Botnet / Xarxa Zombi:</strong> l'atacant infecta molts ordinadors i els controla remotament tots alhora.</li>
+        <li>S'utilitzen per fer enviaments massius de <strong>spam</strong> o llançar atacs DDoS coordinats.</li>
+      </ul>
+
+      <div class="key-concept">💡 Clau → Els ciberatacs solen combinar diverses tècniques: malware + enginyeria social + exploits, amb una meta concreta.</div>
+    </div>
+  </section>
+
+  <!-- DDOS -->
+  <section id="ddos">
+    <div class="section-header">
+      <div class="section-icon icon-red">💥</div>
+      <div>
+        <div class="section-title">Denegació de Servei i DDoS</div>
+        <div style="color:#374151;font-size:.92rem;font-family:'DM Mono',monospace;font-weight:500;">saturar per bloquejar</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>Un atac de <strong>Denegació de Servei (DoS)</strong> té l'objectiu de fer que un servei o servidor deixi de funcionar.</li>
+        <li>S'aconsegueix <strong>saturant el servidor</strong> amb una quantitat massiva de peticions que no pot gestionar.</li>
+        <li>El resultat és que els usuaris legítims <strong>no poden accedir</strong> al servei (web, app, joc en línia…).</li>
+        <li>El <strong>DDoS</strong> (Distributed DoS) és la versió distribuïda: l'atac prové de milers d'equips alhora.</li>
+      </ul>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🖥️</div>
+          <div class="card-title">DoS (un sol origen)</div>
+          <div class="card-desc">Un únic ordinador envia peticions massives al servidor víctima fins a col·lapsar-lo.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🌐</div>
+          <div class="card-title">DDoS (distribuït)</div>
+          <div class="card-desc">Milers d'equips infectats (botnet) ataquen alhora el mateix objectiu de forma coordinada.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🤖</div>
+          <div class="card-title">Botnet com a arma</div>
+          <div class="card-desc">Els atacants utilitzen xarxes zombi per llançar DDoS sense que els propietaris dels equips ho sàpiguen.</div>
+        </div>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🏦</div>
+          <div class="card-title">Objectius habituals</div>
+          <div class="card-desc"><ul class="card-list"><li>Webs corporatives i bancs</li><li>Plataformes de jocs en línia</li><li>Serveis governamentals</li><li>Infraestructures crítiques</li></ul></div>
+        </div>
+        <div class="card">
+          <div class="card-icon">💰</div>
+          <div class="card-title">Motivacions</div>
+          <div class="card-desc"><ul class="card-list"><li>Extorsió econòmica</li><li>Sabotatge de la competència</li><li>Protesta política (hacktivisme)</li><li>Diversió o vandalisme</li></ul></div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🛡️</div>
+          <div class="card-title">Protecció</div>
+          <div class="card-desc"><ul class="card-list"><li>Tallafocs</li><li>CDN amb filtratge de tràfic</li><li>Limitació de peticions</li><li>Serveis anti-DDoS especialitzats</li></ul></div>
+        </div>
+      </div>
+
+      <div class="key-concept">💡 Clau → DDoS = milers d'equips infectats ataquen alhora un objectiu per deixar-lo fora de servei. No roba dades: destrueix la disponibilitat.</div>
+    </div>
+  </section>
+
+  <!-- RANSOMWARE -->
+  <section id="ransomware">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">🔒</div>
+      <div>
+        <div class="section-title">Ransomware</div>
+        <div style="color:#374151;font-size:.92rem;font-family:'DM Mono',monospace;font-weight:500;">segrest digital de dades</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>Tipus de malware que <strong>xifra tots els arxius</strong> del sistema de la víctima i els fa inaccessibles.</li>
+        <li>L'atacant demana un <strong>rescat econòmic</strong> (normalment en criptomonedes) a canvi de la clau de desxifrat.</li>
+        <li>Afecta tant particulars com empreses, hospitals, ajuntaments i infraestructures crítiques.</li>
+        <li>El pagament del rescat <strong>no garanteix</strong> recuperar les dades: moltes víctimes paguen i no reben la clau.</li>
+      </ul>
+
+      <h3>Com funciona un atac de ransomware</h3>
+      <div class="flow">
+        <div class="flow-item">📧 Infecció<br><small style="color:#374151">phishing o exploit</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">🔍 Reconeixement<br><small style="color:#374151">explora el sistema</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">🔒 Xifratge<br><small style="color:#374151">bloqueja arxius</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">💰 Rescat<br><small style="color:#374151">demana pagament</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">🔑 (Potser) Clau<br><small style="color:#374151">no garantit</small></div>
+      </div>
+
+      <h3>Vies d'entrada més freqüents</h3>
+      <div class="badge-list">
+        <div class="badge">📧 <span><strong>Phishing</strong> → correu amb arxiu maliciós</span></div>
+        <div class="badge">🔓 <span><strong>Vulnerabilitats</strong> → software sense actualitzar</span></div>
+        <div class="badge">🖥️ <span><strong>RDP exposat</strong> → accés remot mal configurat</span></div>
+        <div class="badge">🌐 <span><strong>Webs compromeses</strong> → descàrrega automàtica</span></div>
+      </div>
+
+      <h3>Com protegir-se</h3>
+      <table class="compare-table">
+        <thead>
+          <tr><th>Mesura</th><th>Per què ajuda</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>💾 <strong>Còpies de seguretat (backups)</strong></td><td>Permeten recuperar les dades sense pagar el rescat</td></tr>
+          <tr><td>🔄 <strong>Actualitzar el programari</strong></td><td>Tanca les vulnerabilitats que exploten els atacants</td></tr>
+          <tr><td>📧 <strong>Desconfiar de correus sospitosos</strong></td><td>El phishing és la via d'entrada principal</td></tr>
+          <tr><td>🛡️ <strong>Antivirus actualitzat</strong></td><td>Pot detectar i bloquejar el ransomware abans d'executar-se</td></tr>
+          <tr><td>👤 <strong>Principi de mínim privilegi</strong></td><td>Limita l'abast del dany si un compte és compromès</td></tr>
+        </tbody>
+      </table>
+
+      <div class="key-concept">💡 Clau → Ransomware = xifra les teves dades i et demana diners. La millor defensa és tenir còpies de seguretat actualitzades i no obrir arxius sospitosos.</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span>Ciberseguretat · Teoria — Material educatiu · 2025</span>
+</footer>
+
+</body>
+</html>
