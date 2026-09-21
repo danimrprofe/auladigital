@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Interfície de Windows</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Nunito:wght@700;800;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #eef1f8;
+    --surface: #ffffff;
+    --surface2: #f0f3fa;
+    --border: #c8d0e8;
+    --accent: #1d4ed8;
+    --accent2: #dc2626;
+    --accent3: #15803d;
+    --accent4: #b45309;
+    --text: #0f1629;
+    --muted: #374151;
+    --tag-bg: rgba(29,78,216,0.08);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 19px;
+    line-height: 1.65;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, #b0bcd8 1px, transparent 1px);
+    background-size: 32px 32px;
+    opacity: 0.45;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 56px 40px 44px;
+    border-bottom: 2px solid var(--border);
+    background: linear-gradient(180deg, #fff 0%, var(--bg) 100%);
+  }
+
+  .header-pill {
+    display: inline-block;
+    background: var(--tag-bg);
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 5px 20px;
+    border-radius: 100px;
+    margin-bottom: 22px;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, #0f1629 25%, #1d4ed8 85%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 18px;
+  }
+
+  .header-sub {
+    color: #374151;
+    font-size: 1.15rem;
+    max-width: 700px;
+    margin: 0 auto;
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(238,241,248,0.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 2px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+  nav::-webkit-scrollbar { display: none; }
+  nav a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #374151;
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    padding: 16px 20px;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: color .2s, border-color .2s;
+  }
+  nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 52px 48px 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+  }
+
+  section {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(28px);
+    animation: fadeUp .45s ease forwards;
+    box-shadow: 0 2px 16px rgba(15,22,41,0.07);
+  }
+  section:nth-child(1) { animation-delay: .05s; }
+  section:nth-child(2) { animation-delay: .10s; }
+  section:nth-child(3) { animation-delay: .15s; }
+  section:nth-child(4) { animation-delay: .20s; }
+  section:nth-child(5) { animation-delay: .25s; }
+
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 26px 36px 22px;
+    border-bottom: 1.5px solid var(--border);
+    background: linear-gradient(90deg, #f8f9ff 0%, #fff 100%);
+  }
+
+  .section-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; flex-shrink: 0;
+  }
+  .icon-blue   { background: rgba(29,78,216,.10); }
+  .icon-green  { background: rgba(21,128,61,.12); }
+  .icon-yellow { background: rgba(180,83,9,.12); }
+  .icon-purple { background: rgba(126,34,206,.12); }
+  .icon-red    { background: rgba(220,38,38,.12); }
+  .icon-teal   { background: rgba(13,148,136,.12); }
+
+  .section-title {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.5rem; font-weight: 800;
+    letter-spacing: -0.2px; color: #0f1629;
+  }
+  .section-sub {
+    color: #374151; font-size: .92rem;
+    font-family: 'DM Mono', monospace; font-weight: 500;
+  }
+
+  .section-body {
+    padding: 28px 36px;
+    display: flex; flex-direction: column; gap: 20px;
+  }
+
+  p { color: #1a2340; font-size: 1.05rem; font-weight: 400; line-height: 1.7; }
+
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem; font-weight: 800;
+    color: #0f1629; margin-bottom: 4px;
+  }
+
+  /* CARDS */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 22px 20px;
+    display: flex; flex-direction: column; gap: 10px;
+    transition: border-color .2s, box-shadow .2s, transform .2s;
+  }
+  .card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 18px rgba(29,78,216,0.10);
+    transform: translateY(-2px);
+  }
+  .card-icon { font-size: 28px; }
+  .card-title { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1.05rem; color: #0f1629; }
+  .card-desc { color: #2d3a52; font-size: .97rem; line-height: 1.55; font-weight: 400; }
+
+  /* BULLET LIST */
+  ul.bullet-list {
+    list-style: none; display: flex; flex-direction: column; gap: 10px; padding: 0;
+  }
+  ul.bullet-list li {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 1.05rem; color: #1a2340; line-height: 1.55;
+  }
+  ul.bullet-list li::before {
+    content: '▸'; color: var(--accent); font-size: 1.1rem;
+    flex-shrink: 0; margin-top: 1px; font-weight: 700;
+  }
+
+  /* CARD MINI LIST */
+  ul.card-list {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: 5px;
+  }
+  ul.card-list li {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: .97rem; color: #2d3a52; line-height: 1.45;
+  }
+  ul.card-list li::before {
+    content: '·'; color: var(--accent);
+    font-size: 1.3rem; flex-shrink: 0; line-height: 1.2; font-weight: 900;
+  }
+
+  /* KEY CONCEPT */
+  .key-concept {
+    background: linear-gradient(135deg, rgba(29,78,216,0.07), rgba(21,128,61,0.04));
+    border: 1.5px solid rgba(29,78,216,0.25);
+    border-radius: 12px; padding: 18px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 1rem; font-weight: 500; color: #1d4ed8; letter-spacing: .2px;
+  }
+
+  /* ALERT */
+  .alert {
+    display: flex; gap: 16px; align-items: flex-start;
+    background: var(--surface2); border-left: 4px solid var(--accent2);
+    border-radius: 10px; padding: 18px 22px;
+    font-size: 1rem; color: #1a2340;
+  }
+  .alert .alert-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+  .alert.info    { border-left-color: var(--accent);  background: rgba(29,78,216,0.05); }
+  .alert.success { border-left-color: var(--accent3); background: rgba(21,128,61,0.05); }
+  .alert.warning { border-left-color: var(--accent4); background: rgba(180,83,9,0.05); }
+
+  /* FLOW */
+  .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+  .flow-item {
+    background: var(--surface2); border: 1.5px solid var(--border);
+    border-radius: 10px; padding: 12px 20px;
+    font-size: .97rem; font-family: 'DM Mono', monospace;
+    color: #0f1629; font-weight: 500; line-height: 1.4;
+  }
+  .flow-arrow { color: #374151; font-size: 1.3rem; font-weight: 700; }
+
+  /* TABLE */
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 1rem; }
+  .compare-table th {
+    background: var(--surface2); color: var(--accent);
+    font-family: 'DM Mono', monospace; font-size: .88rem;
+    font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+    padding: 14px 18px; text-align: left; border-bottom: 2px solid var(--border);
+  }
+  .compare-table td {
+    padding: 14px 18px; border-bottom: 1px solid var(--border);
+    color: #1a2340; vertical-align: top; font-size: 1rem;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: #f5f7ff; }
+
+  .tag {
+    display: inline-block; padding: 3px 12px; border-radius: 100px;
+    font-size: .85rem; font-family: 'DM Mono', monospace; font-weight: 600;
+  }
+  .tag-safe   { background: rgba(21,128,61,.10); color: #15803d; border: 1.5px solid rgba(21,128,61,.3); }
+  .tag-danger { background: rgba(220,38,38,.10); color: #dc2626; border: 1.5px solid rgba(220,38,38,.3); }
+  .tag-warn   { background: rgba(180,83,9,.10);  color: #b45309; border: 1.5px solid rgba(180,83,9,.3); }
+
+  /* BADGE LIST */
+  .badge-list { display: flex; flex-wrap: wrap; gap: 10px; }
+  .badge {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--surface2); border: 1.5px solid var(--border);
+    border-radius: 10px; padding: 10px 18px;
+    font-size: 1rem; color: #1a2340; font-weight: 400;
+    transition: border-color .2s;
+  }
+  .badge:hover { border-color: var(--accent); }
+  .badge strong { font-family: 'Syne', sans-serif; font-weight: 800; color: #0f1629; }
+
+  /* KEYBOARD */
+  .shortcuts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+  }
+  .shortcut-row {
+    display: flex; align-items: center; gap: 16px;
+    background: var(--surface2); border: 1.5px solid var(--border);
+    border-radius: 12px; padding: 14px 18px;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .shortcut-row:hover {
+    border-color: var(--accent);
+    box-shadow: 0 2px 12px rgba(29,78,216,0.08);
+  }
+  .keys { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+  kbd {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: #fff; border: 1.5px solid #b0bcd8; border-bottom: 3px solid #8898c0;
+    border-radius: 7px; padding: 4px 10px;
+    font-family: 'DM Mono', monospace; font-size: .88rem;
+    font-weight: 600; color: #0f1629; min-width: 32px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.10); white-space: nowrap;
+  }
+  .key-plus { color: #6b7280; font-size: .9rem; font-weight: 700; margin: 0 1px; }
+  .shortcut-desc { font-size: .97rem; color: #1a2340; line-height: 1.4; }
+  .shortcut-desc strong { display: block; color: #0f1629; font-weight: 700; margin-bottom: 2px; }
+
+  /* EXPLORER diagram */
+  .explorer-tree {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 24px 28px;
+    font-family: 'DM Mono', monospace;
+    font-size: .97rem;
+    color: #1a2340;
+    line-height: 2;
+  }
+  .explorer-tree .tree-root { font-weight: 700; color: #0f1629; font-size: 1.05rem; }
+  .explorer-tree .tree-l1  { padding-left: 24px; }
+  .explorer-tree .tree-l2  { padding-left: 48px; color: #374151; }
+  .explorer-tree .tree-icon { margin-right: 8px; }
+
+  footer {
+    position: relative; z-index: 1; text-align: center;
+    padding: 32px 40px; border-top: 2px solid var(--border);
+    color: #374151; font-family: 'DM Mono', monospace; font-size: .82rem;
+  }
+
+  @media(max-width:900px) {
+    main { padding: 36px 24px 80px; }
+    .section-header { padding: 20px 22px 18px; }
+    .section-body { padding: 22px; }
+  }
+  @media(max-width:600px) {
+    h1 { font-size: 2.4rem; }
+    nav a { padding: 12px 12px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-pill">Informàtica · 1r ESO</div>
+  <h1>Interfície de Windows</h1>
+  <p class="header-sub">Menú Inici, còpia d'arxius, Paperera de reciclatge i Explorador de Windows</p>
+</header>
+
+<nav>
+  <a href="#menu-inici">🪟 Menú Inici</a>
+  <a href="#copiar">📋 Copiar arxius</a>
+  <a href="#paperera">🗑️ Paperera</a>
+  <a href="#explorador">📁 Explorador</a>
+</nav>
+
+<main>
+
+  <!-- MENÚ INICI -->
+  <section id="menu-inici">
+    <div class="section-header">
+      <div class="section-icon icon-blue">🪟</div>
+      <div>
+        <div class="section-title">Menú Inici de Windows</div>
+        <div class="section-sub">el punt de partida del sistema</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>És el <strong>punt principal d'accés</strong> a programes, arxius i configuracions del sistema.</li>
+        <li>S'obre fent clic al botó d'inici 🪟 situat a la <strong>barra de tasques</strong>.</li>
+        <li>Des d'aquí pots buscar qualsevol cosa, obrir aplicacions o apagar l'ordinador.</li>
+      </ul>
+
+      <h3>Com obrir el Menú Inici</h3>
+      <div class="shortcuts-grid">
+        <div class="shortcut-row">
+          <div class="keys"><kbd>⊞ Win</kbd></div>
+          <div class="shortcut-desc"><strong>Obre o tanca el Menú Inici</strong>La drecera principal per accedir-hi</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>Esc</kbd></div>
+          <div class="shortcut-desc"><strong>Alternativa al Menú Inici</strong>Útil si la tecla Windows no funciona</div>
+        </div>
+      </div>
+
+      <h3>Parts del Menú Inici</h3>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🔎</div>
+          <div class="card-title">Cercador</div>
+          <div class="card-desc">Busca aplicacions, arxius o configuracions. Escriu directament i apareixeran els resultats a l'instant.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📋</div>
+          <div class="card-title">Llista d'aplicacions</div>
+          <div class="card-desc">Mostra tots els programes instal·lats a l'ordinador, ordenats alfabèticament.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📌</div>
+          <div class="card-title">Aplicacions fixades</div>
+          <div class="card-desc">Accés ràpid als programes que uses més sovint. Pots personalitzar quins hi apareixen.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">⚙️</div>
+          <div class="card-title">Configuració</div>
+          <div class="card-desc">Obre els paràmetres del sistema: xarxa, pantalla, so, comptes d'usuari i molt més.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">👤</div>
+          <div class="card-title">Compte d'usuari</div>
+          <div class="card-desc">Permet tancar sessió, bloquejar la pantalla o canviar a un altre usuari.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">⏻</div>
+          <div class="card-title">Opcions d'energia</div>
+          <div class="card-desc"><ul class="card-list"><li>Apagar l'ordinador</li><li>Reiniciar el sistema</li><li>Suspendre (mode repòs)</li></ul></div>
+        </div>
+      </div>
+
+      <h3>Accions habituals</h3>
+      <table class="compare-table">
+        <thead>
+          <tr><th>Acció</th><th>Com fer-ho</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>🖱️ <strong>Obrir una aplicació</strong></td><td>Fes clic sobre la icona de l'aplicació</td></tr>
+          <tr><td>📌 <strong>Fixar a l'Inici o a la barra</strong></td><td>Clic dret sobre l'aplicació → "Fixa a l'Inici" o "Fixa a la barra de tasques"</td></tr>
+          <tr><td>🔍 <strong>Buscar programes o arxius</strong></td><td>Escriu directament quan tens el menú obert</td></tr>
+          <tr><td>⏻ <strong>Apagar o reiniciar</strong></td><td>Clic al botó d'energia → tria l'opció desitjada</td></tr>
+        </tbody>
+      </table>
+
+      <div class="key-concept">💡 Clau → El Menú Inici és la porta d'entrada al sistema. Des d'aquí arribes a tot: programes, arxius, configuració i opcions d'energia.</div>
+    </div>
+  </section>
+
+  <!-- COPIAR I AFERRAR ARXIUS -->
+  <section id="copiar">
+    <div class="section-header">
+      <div class="section-icon icon-green">📋</div>
+      <div>
+        <div class="section-title">Copiar i Aferrar Arxius</div>
+        <div class="section-sub">duplicar i moure arxius a Windows</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>Copiar un arxiu crea una <strong>còpia idèntica</strong> en un altre lloc, sense eliminar l'original.</li>
+        <li>Retallar mou l'arxiu: l'elimina del lloc d'origen i el col·loca al destí.</li>
+        <li>Les accions es fan a través de <strong>dreceres de teclat</strong> o fent <strong>clic dret</strong> amb el ratolí.</li>
+      </ul>
+
+      <h3>Flux de treball</h3>
+      <div class="flow">
+        <div class="flow-item">1️⃣ Selecciona<br><small>l'arxiu o arxius</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">2️⃣ Copia o retalla<br><small>Ctrl+C / Ctrl+X</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">3️⃣ Ves al destí<br><small>carpeta on vols posar-lo</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">4️⃣ Aferra<br><small>Ctrl+V</small></div>
+      </div>
+
+      <h3>Seleccionar arxius</h3>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🖱️</div>
+          <div class="card-title">Un sol arxiu</div>
+          <div class="card-desc">Fes clic sobre l'arxiu per seleccionar-lo.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">➕</div>
+          <div class="card-title">Diversos arxius</div>
+          <div class="card-desc">Mantén <kbd>Ctrl</kbd> i fes clic sobre cada arxiu que vols seleccionar.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📂</div>
+          <div class="card-title">Rang d'arxius</div>
+          <div class="card-desc">Fes clic al primer, mantén <kbd>Shift</kbd> i fes clic a l'últim per seleccionar tot el rang.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔲</div>
+          <div class="card-title">Tots els arxius</div>
+          <div class="card-desc">Prem <kbd>Ctrl</kbd> + <kbd>A</kbd> per seleccionar tots els arxius de la carpeta alhora.</div>
+        </div>
+      </div>
+
+      <h3>Dreceres de teclat</h3>
+      <div class="shortcuts-grid">
+        <div class="shortcut-row">
+          <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>C</kbd></div>
+          <div class="shortcut-desc"><strong>Copiar</strong>Desa una còpia a la memòria (porta-retalls)</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>X</kbd></div>
+          <div class="shortcut-desc"><strong>Retallar</strong>Prepara l'arxiu per moure'l (desapareix en enganxar)</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>V</kbd></div>
+          <div class="shortcut-desc"><strong>Aferra (enganxa)</strong>Col·loca l'arxiu copiat o retallat al destí</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>A</kbd></div>
+          <div class="shortcut-desc"><strong>Selecciona-ho tot</strong>Selecciona tots els arxius de la carpeta</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>Z</kbd></div>
+          <div class="shortcut-desc"><strong>Desfer</strong>Desfà l'última acció realitzada</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>Supr</kbd></div>
+          <div class="shortcut-desc"><strong>Esborrar</strong>Envia l'arxiu seleccionat a la Paperera</div>
+        </div>
+      </div>
+
+      <h3>Copiar vs Retallar</h3>
+      <table class="compare-table">
+        <thead>
+          <tr><th>Acció</th><th>Drecera</th><th>L'original queda?</th><th>Resultat</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>📋 <strong>Copiar</strong></td>
+            <td><kbd>Ctrl</kbd> + <kbd>C</kbd></td>
+            <td><span class="tag tag-safe">Sí, intacte</span></td>
+            <td>Hi ha l'arxiu en dos llocs</td>
+          </tr>
+          <tr>
+            <td>✂️ <strong>Retallar</strong></td>
+            <td><kbd>Ctrl</kbd> + <kbd>X</kbd></td>
+            <td><span class="tag tag-danger">No, es mou</span></td>
+            <td>L'arxiu canvia de lloc</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="alert info">
+        <span class="alert-icon">💡</span>
+        <span>El <strong>porta-retalls</strong> és una memòria temporal del sistema. Quan copies o retallas, l'arxiu es guarda allà fins que n'copies un altre o apaguis l'ordinador.</span>
+      </div>
+
+      <div class="key-concept">💡 Clau → Ctrl+C copia, Ctrl+X retalla, Ctrl+V enganxa. Sempre selecciona primer, després actua.</div>
+    </div>
+  </section>
+
+  <!-- PAPERERA DE RECICLATGE -->
+  <section id="paperera">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">🗑️</div>
+      <div>
+        <div class="section-title">Paperera de Reciclatge</div>
+        <div class="section-sub">la segona oportunitat dels arxius</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>És una <strong>carpeta especial</strong> on van els arxius eliminats temporalment.</li>
+        <li>Permet <strong>recuperar arxius</strong> que s'han esborrat per error.</li>
+        <li>Els arxius <strong>no s'eliminen definitivament</strong> fins que buides la paperera.</li>
+        <li>Mentre l'arxiu és a la paperera, ocupa espai al disc dur però no és accessible des de la seva ubicació original.</li>
+      </ul>
+
+      <h3>Com funciona</h3>
+      <div class="flow">
+        <div class="flow-item">📄 Arxiu original<br><small>a la seva carpeta</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">Supr / clic dret<br><small>eliminar</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">🗑️ Paperera<br><small>arxiu en espera</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">🔄 Restaurar<br><small>torna al lloc original</small></div>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🗑️</div>
+          <div class="card-title">Enviar a la Paperera</div>
+          <div class="card-desc"><ul class="card-list"><li>Selecciona l'arxiu i prem <kbd>Supr</kbd></li><li>O arrossega'l a la icona de la Paperera</li><li>O clic dret → Elimina</li></ul></div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔄</div>
+          <div class="card-title">Recuperar un arxiu</div>
+          <div class="card-desc"><ul class="card-list"><li>Obre la Paperera de reciclatge</li><li>Clic dret sobre l'arxiu</li><li>Tria "Restaura"</li><li>Tornarà al seu lloc original</li></ul></div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🧹</div>
+          <div class="card-title">Buidar la Paperera</div>
+          <div class="card-desc"><ul class="card-list"><li>Clic dret sobre la icona de la Paperera</li><li>Tria "Buida la paperera de reciclatge"</li><li>Els arxius s'eliminen definitivament</li></ul></div>
+        </div>
+        <div class="card">
+          <div class="card-icon">⚙️</div>
+          <div class="card-title">Configuració</div>
+          <div class="card-desc"><ul class="card-list"><li>Pots ajustar la mida màxima de la paperera</li><li>O fer que els arxius s'esborrin directament sense passar-hi</li></ul></div>
+        </div>
+      </div>
+
+      <div class="alert warning">
+        <span class="alert-icon">⚠️</span>
+        <span><strong>Compte!</strong> Un cop buidada la paperera, els arxius no es poden recuperar fàcilment. Revisa sempre el contingut abans de buidar-la.</span>
+      </div>
+
+      <div class="alert info">
+        <span class="alert-icon">💡</span>
+        <span>Si vols eliminar un arxiu <strong>directament</strong> sense passar per la paperera, prem <kbd>Shift</kbd> + <kbd>Supr</kbd>. Atenció: no hi ha marxa enrere!</span>
+      </div>
+
+      <h3>Consells pràctics</h3>
+      <div class="badge-list">
+        <div class="badge">✅ <span>Revisa la paperera abans de buidar-la</span></div>
+        <div class="badge">🕒 <span>Pots veure la data d'eliminació de cada arxiu</span></div>
+        <div class="badge">📦 <span>La paperera ocupa espai del disc fins que es buida</span></div>
+        <div class="badge">🔍 <span>Pots buscar arxius dins la paperera pel seu nom</span></div>
+      </div>
+
+      <div class="key-concept">💡 Clau → La Paperera és la xarxa de seguretat. Eliminar envia a la Paperera; buidar elimina per sempre. Pensa abans de buidar!</div>
+    </div>
+  </section>
+
+  <!-- EXPLORADOR DE WINDOWS -->
+  <section id="explorador">
+    <div class="section-header">
+      <div class="section-icon icon-teal">📁</div>
+      <div>
+        <div class="section-title">Explorador de Windows</div>
+        <div class="section-sub">navegar per arxius i carpetes</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>L'<strong>Explorador de Windows</strong> és el programa per navegar per tots els arxius i carpetes de l'ordinador.</li>
+        <li>Permet veure, obrir, copiar, moure, reanomenar i eliminar arxius i carpetes.</li>
+        <li>S'obre amb <kbd>⊞ Win</kbd> + <kbd>E</kbd> o fent clic a la icona de carpeta de la barra de tasques.</li>
+      </ul>
+
+      <h3>Parts de l'Explorador</h3>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🔝</div>
+          <div class="card-title">Barra d'adreces</div>
+          <div class="card-desc">Mostra la ruta de la carpeta on ets. Pots escriure directament una ruta per anar-hi.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">⬅️</div>
+          <div class="card-title">Botons de navegació</div>
+          <div class="card-desc">Enrere, endavant i amunt. Permeten moure's entre les carpetes visitades.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🌲</div>
+          <div class="card-title">Panell esquerre (arbre)</div>
+          <div class="card-desc">Mostra l'estructura de carpetes. Pots expandir o contraure per navegar ràpidament.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📄</div>
+          <div class="card-title">Panell principal</div>
+          <div class="card-desc">Mostra el contingut de la carpeta seleccionada: arxius i subcarpetes.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔎</div>
+          <div class="card-title">Cercador</div>
+          <div class="card-desc">Busca arxius dins la carpeta actual pel nom o extensió.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🗂️</div>
+          <div class="card-title">Barra d'eines</div>
+          <div class="card-desc">Accions ràpides: nova carpeta, ordenar, canviar la vista (icones, llista, detalls…).</div>
+        </div>
+      </div>
+
+      <h3>Estructura de carpetes principals</h3>
+      <div class="explorer-tree">
+        <div class="tree-root">🖥️ Aquest equip</div>
+        <div class="tree-l1"><span class="tree-icon">📁</span> Escriptori</div>
+        <div class="tree-l1"><span class="tree-icon">📁</span> Documents</div>
+        <div class="tree-l2"><span class="tree-icon">📄</span> treballs, apunts, projectes…</div>
+        <div class="tree-l1"><span class="tree-icon">📁</span> Descàrregues</div>
+        <div class="tree-l2"><span class="tree-icon">📄</span> arxius baixats d'Internet</div>
+        <div class="tree-l1"><span class="tree-icon">📁</span> Imatges</div>
+        <div class="tree-l1"><span class="tree-icon">📁</span> Música</div>
+        <div class="tree-l1"><span class="tree-icon">📁</span> Vídeos</div>
+        <div class="tree-l1"><span class="tree-icon">💾</span> Disc local (C:) — el sistema operatiu</div>
+        <div class="tree-l1"><span class="tree-icon">💾</span> Disc local (D:) — dades de l'usuari (si n'hi ha)</div>
+      </div>
+
+      <h3>Accions habituals a l'Explorador</h3>
+      <div class="shortcuts-grid">
+        <div class="shortcut-row">
+          <div class="keys"><kbd>⊞ Win</kbd><span class="key-plus">+</span><kbd>E</kbd></div>
+          <div class="shortcut-desc"><strong>Obrir l'Explorador</strong>Obre l'Explorador de Windows directament</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>F2</kbd></div>
+          <div class="shortcut-desc"><strong>Reanomenar</strong>Reanomena l'arxiu o carpeta seleccionat</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>Alt</kbd><span class="key-plus">+</span><kbd>←</kbd></div>
+          <div class="shortcut-desc"><strong>Enrere</strong>Torna a la carpeta anterior</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>Alt</kbd><span class="key-plus">+</span><kbd>↑</kbd></div>
+          <div class="shortcut-desc"><strong>Carpeta superior</strong>Puja un nivell a l'estructura de carpetes</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>Maj</kbd><span class="key-plus">+</span><kbd>N</kbd></div>
+          <div class="shortcut-desc"><strong>Nova carpeta</strong>Crea una nova carpeta al lloc actual</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>F5</kbd></div>
+          <div class="shortcut-desc"><strong>Actualitzar</strong>Refresca el contingut de la carpeta actual</div>
+        </div>
+      </div>
+
+      <h3>Vistes disponibles</h3>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🔲</div>
+          <div class="card-title">Icones grans</div>
+          <div class="card-desc">Mostra previsualitzacions grans, ideal per a imatges i documents visuals.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">☰</div>
+          <div class="card-title">Llista</div>
+          <div class="card-desc">Mostra molts arxius en poc espai. Ideal quan hi ha molts arxius en una carpeta.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📊</div>
+          <div class="card-title">Detalls</div>
+          <div class="card-desc">Mostra nom, data, mida i tipus de cada arxiu. La vista més completa per gestionar arxius.</div>
+        </div>
+      </div>
+
+      <div class="key-concept">💡 Clau → L'Explorador de Windows és el gestor d'arxius del sistema. Dominar-lo et permet organitzar, trobar i gestionar tota la informació de l'ordinador.</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Interfície de Windows · Informàtica 1r ESO — Material educatiu · 2025
+</footer>
+
+</body>
+</html>
