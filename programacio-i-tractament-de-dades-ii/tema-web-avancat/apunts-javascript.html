@@ -1,0 +1,793 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Apunts de JavaScript</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #f5f4f0;
+    --card: #ffffff;
+    --ink: #1c1c1c;
+    --muted: #6b6b63;
+    --border: #e7e4da;
+    --primary: #ca8a04;
+    --primary-dark: #8a5d03;
+    --primary-light: #fdf3d6;
+    --js-yellow: #f0db4f;
+    --amber: #e8973a;
+    --green: #2fb380;
+    --green-bg: #e6f7f0;
+    --red: #e5484d;
+    --red-bg: #fdecec;
+    font-family:'Inter', sans-serif;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.65;
+  }
+  h1,h2,h3{ font-family:'Space Grotesk', sans-serif; font-weight:600; margin:0 0 .5em; color:var(--ink); }
+  code, .mono{ font-family:'JetBrains Mono', monospace; }
+  p{ margin:0 0 1em; max-width:70ch; }
+  .muted{ color:var(--muted); }
+
+  /* ---------- top bar ---------- */
+  header.top{
+    background: linear-gradient(120deg, #1b1b1b, #2c2812);
+    color:#fff;
+    padding:28px 24px 68px;
+  }
+  .top-inner{ max-width:960px; margin:0 auto; }
+  .top-inner h1{
+    color:#fff;
+    font-size:clamp(26px, 4vw, 34px);
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .top-inner h1 .hl{ color: var(--js-yellow); }
+  .top-inner p{ color:#e9e6d8; max-width:60ch; margin:0; font-size:15px; }
+
+  .wrap{ max-width:960px; margin:-44px auto 60px; padding:0 20px 60px; }
+
+  /* ---------- mode tabs ---------- */
+  .mode-tabs{
+    display:flex; gap:8px; background:var(--card); border:1px solid var(--border);
+    border-radius:16px; padding:8px; box-shadow:0 12px 30px -18px rgba(20,20,10,.25); margin-bottom:24px;
+  }
+  .mode-tab{
+    flex:1; text-align:center; padding:12px 10px; border-radius:11px; border:none; background:transparent;
+    color:var(--muted); font-family:'Space Grotesk'; font-weight:600; font-size:14.5px; cursor:pointer;
+    transition:background .15s, color .15s;
+  }
+  .mode-tab.active{ background:var(--primary); color:#fff; }
+  .mode-panel{ display:none; }
+  .mode-panel.active{ display:block; }
+
+  /* ---------- sub tabs ---------- */
+  .sub-tabs{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+  .sub-tab{
+    white-space:nowrap; padding:9px 16px; border-radius:999px; border:1px solid var(--border);
+    background:var(--card); color:var(--muted); font-size:13.5px; font-weight:600; cursor:pointer;
+  }
+  .sub-tab.active{ background:var(--primary-light); border-color:var(--primary); color:var(--primary-dark); }
+
+  .card{
+    background:var(--card); border:1px solid var(--border); border-radius:16px; padding:28px 30px;
+    box-shadow:0 12px 30px -20px rgba(20,20,10,.15);
+  }
+  .topic-panel{ display:none; }
+  .topic-panel.active{ display:block; }
+  .topic-panel h2{ font-size:22px; margin-bottom:14px; }
+
+  /* code blocks */
+  pre.code{
+    background:#1e1e1e; color:#e8e6df; border-radius:10px; padding:16px 18px; overflow-x:auto;
+    font-size:13.5px; margin:14px 0; border:1px solid #333;
+  }
+  .tok-kw{ color:#f0db4f; }
+  .tok-fn{ color:#7fb4d8; }
+  .tok-str{ color:#9fd68c; }
+  .tok-punc{ color:#9b9b93; }
+  .tok-comment{ color:#7d7d75; font-style:italic; }
+  .tok-tag{ color:#e4738c; }
+  .tok-attr{ color:#7fb4d8; }
+  .tok-num{ color:#e8973a; }
+
+  .cards3{ display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin-top:16px; }
+  @media (max-width:800px){ .cards3{ grid-template-columns:1fr; } }
+  .mini-card{ border:1px solid var(--border); border-radius:12px; padding:16px 18px; background:#fbfaf6; }
+  .mini-card h3{ font-size:15px; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+  .mini-card .dot{ width:9px;height:9px;border-radius:50%; flex-shrink:0; }
+  .mini-card p{ font-size:13.5px; color:var(--muted); margin:0 0 8px; }
+  .mini-card pre.code{ margin:0; font-size:12px; padding:12px 14px; }
+
+  table.props, table.summary{ width:100%; border-collapse:collapse; margin-top:14px; font-size:14px; }
+  table.props th, table.summary th{
+    text-align:left; font-family:'Space Grotesk'; font-weight:600; font-size:12.5px;
+    color:var(--muted); padding:0 12px 10px; border-bottom:1px solid var(--border);
+  }
+  table.props td, table.summary td{ padding:11px 12px; border-bottom:1px solid var(--border); vertical-align:top; color:var(--ink); }
+  table.props tr:last-child td, table.summary tr:last-child td{ border-bottom:none; }
+  table.props code{ color:var(--primary-dark); }
+  table.summary td:first-child{ font-weight:600; }
+
+  .live-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px; }
+  @media (max-width:820px){ .live-grid{ grid-template-columns:1fr; } }
+  .panel-label{ font-family:'JetBrains Mono'; font-size:11.5px; color:var(--muted); margin-bottom:6px; }
+
+  /* demo box for live interactive JS examples */
+  .demo-box{
+    background:#fbfaf6; border:1px solid var(--border); border-radius:10px; padding:18px 20px;
+  }
+  .demo-box input[type=text]{
+    border:1px solid var(--border); border-radius:8px; padding:9px 12px; font-family:'Inter'; font-size:14px; width:100%; margin-bottom:10px;
+  }
+  .demo-box button{
+    background:var(--primary); color:#fff; border:none; border-radius:8px; padding:9px 16px;
+    font-family:'Inter'; font-weight:600; font-size:13.5px; cursor:pointer;
+  }
+  .demo-box button:hover{ background:var(--primary-dark); }
+  .demo-output{
+    margin-top:12px; padding:12px 14px; border-radius:8px; background:#fff; border:1px dashed var(--border);
+    min-height:20px; font-size:14.5px;
+  }
+
+  .topic-nav{ display:flex; justify-content:space-between; margin-top:22px; gap:10px; }
+  .nav-btn{
+    padding:11px 18px; border-radius:10px; border:1px solid var(--border); background:#fff; color:var(--ink);
+    font-family:'Inter'; font-weight:600; font-size:13.5px; cursor:pointer;
+  }
+  .nav-btn.primary{ background:var(--primary); color:#fff; border-color:var(--primary); }
+  .nav-btn:disabled{ opacity:.35; cursor:default; }
+
+  /* ---------- exam ---------- */
+  .exam-stats{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px; }
+  .stat-pill{
+    flex:1; min-width:120px; background:var(--card); border:1px solid var(--border); border-radius:12px;
+    padding:12px 16px; text-align:center;
+  }
+  .stat-pill .num{ font-family:'Space Grotesk'; font-size:22px; font-weight:700; }
+  .stat-pill .lbl{ font-size:12px; color:var(--muted); }
+  .stat-pill.ok .num{ color:var(--green); }
+  .stat-pill.bad .num{ color:var(--red); }
+  .stat-pill.score .num{ color:var(--primary); }
+
+  .exam-progress{ height:6px; border-radius:99px; background:var(--border); overflow:hidden; margin-bottom:20px; }
+  .exam-progress-fill{ height:100%; background:var(--primary); width:0%; transition:width .25s; }
+
+  .q-num{ font-family:'JetBrains Mono'; font-size:12px; color:var(--primary-dark); margin-bottom:8px; display:block; }
+  .q-text{ font-size:17px; font-weight:600; margin-bottom:16px; }
+  .q-options{ display:grid; gap:9px; }
+  .q-option{
+    text-align:left; background:#fbfaf6; border:1px solid var(--border); color:var(--ink);
+    padding:12px 15px; border-radius:10px; font-size:14.5px; font-family:'Inter'; cursor:pointer;
+    display:flex; gap:10px; transition:border-color .15s, background .15s;
+  }
+  .q-option .letter{ font-family:'JetBrains Mono'; color:var(--muted); flex-shrink:0; }
+  .q-option:hover:not(:disabled){ border-color:var(--primary); }
+  .q-option:disabled{ cursor:default; }
+  .q-option.correct{ border-color:var(--green); background:var(--green-bg); }
+  .q-option.correct .letter{ color:var(--green); }
+  .q-option.wrong{ border-color:var(--red); background:var(--red-bg); }
+  .q-option.wrong .letter{ color:var(--red); }
+  .q-feedback{ margin-top:14px; font-size:13.5px; color:var(--muted); display:none; }
+  .q-feedback.show{ display:block; }
+  .q-feedback strong{ color:var(--ink); }
+
+  .exam-footer{ display:flex; justify-content:flex-end; margin-top:20px; }
+
+  #exam-final{ text-align:center; display:none; }
+  #exam-final.show{ display:block; }
+  #exam-final .big{ font-family:'Space Grotesk'; font-size:32px; }
+  #exam-final .big span{ color:var(--primary); }
+  .save-row{ display:flex; gap:8px; justify-content:center; margin-top:18px; flex-wrap:wrap; }
+  .save-row input{ border:1px solid var(--border); border-radius:10px; padding:10px 14px; font-family:'Inter'; font-size:14px; width:220px; }
+  .btn{ border:none; border-radius:10px; padding:10px 18px; font-family:'Inter'; font-weight:600; font-size:14px; cursor:pointer; }
+  .btn.primary{ background:var(--primary); color:#fff; }
+  .btn.ghost{ background:#fff; border:1px solid var(--border); color:var(--ink); }
+
+  /* ---------- ranking ---------- */
+  .rank-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .rank-list{ display:flex; flex-direction:column; gap:8px; }
+  .rank-row{ display:flex; align-items:center; gap:14px; padding:12px 16px; border:1px solid var(--border); border-radius:12px; background:#fbfaf6; }
+  .rank-row .pos{ font-family:'Space Grotesk'; font-weight:700; color:var(--primary); width:26px; }
+  .rank-row .name{ flex:1; font-weight:600; }
+  .rank-row .date{ font-size:12px; color:var(--muted); }
+  .rank-row .pts{ font-family:'JetBrains Mono'; font-weight:600; }
+  .empty-rank{ color:var(--muted); font-size:14px; text-align:center; padding:30px 0; }
+
+  footer{ text-align:center; color:var(--muted); font-size:13px; padding:20px; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <h1>⚡ Apunts de <span class="hl">JavaScript</span></h1>
+    <p>El llenguatge que dona vida a l'HTML i el CSS: respon a accions, modifica contingut en temps real i es comunica amb servidors.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="mode-tabs">
+    <button class="mode-tab active" data-mode="teoria">📖 Teoria</button>
+    <button class="mode-tab" data-mode="test">📝 Test</button>
+    <button class="mode-tab" data-mode="ranking">🏆 Rànquing</button>
+  </div>
+
+  <!-- ===================== TEORIA ===================== -->
+  <div class="mode-panel active" id="mode-teoria">
+    <div class="sub-tabs">
+      <button class="sub-tab active" data-topic="0">Introducció</button>
+      <button class="sub-tab" data-topic="1">L'etiqueta script</button>
+      <button class="sub-tab" data-topic="2">Característiques</button>
+      <button class="sub-tab" data-topic="3">Variables</button>
+      <button class="sub-tab" data-topic="4">Funcions i alert</button>
+      <button class="sub-tab" data-topic="5">Events i onclick</button>
+      <button class="sub-tab" data-topic="6">getElementById</button>
+      <button class="sub-tab" data-topic="7">Valors i innerHTML</button>
+      <button class="sub-tab" data-topic="8">Exemple en viu</button>
+      <button class="sub-tab" data-topic="9">Exemple: login</button>
+      <button class="sub-tab" data-topic="10">Exemple: preu resident</button>
+      <button class="sub-tab" data-topic="11">Resum</button>
+    </div>
+
+    <div class="card">
+
+      <div class="topic-panel active" data-topic="0">
+        <h2>Què és JavaScript?</h2>
+        <p>Si l'HTML construeix l'esquelet d'una pàgina i el CSS li dona estil, <strong>JavaScript</strong> és qui li dona comportament: fa que la pàgina respongui a les accions de l'usuari, modifiqui el seu propi contingut i es comuniqui amb servidors, tot això sense haver de recarregar-se.</p>
+        <div class="cards3">
+          <div class="mini-card">
+            <h3><span class="dot" style="background:#e4738c"></span> HTML</h3>
+            <p>L'estructura: títols, paràgrafs, imatges, formularis...</p>
+          </div>
+          <div class="mini-card">
+            <h3><span class="dot" style="background:#1572b6"></span> CSS</h3>
+            <p>L'aparença: colors, tipografies, disposició dels elements.</p>
+          </div>
+          <div class="mini-card">
+            <h3><span class="dot" style="background:var(--primary)"></span> JavaScript</h3>
+            <p>El comportament: interactivitat, lògica i comunicació.</p>
+          </div>
+        </div>
+        <h2 style="margin-top:28px;">Pàgines estàtiques vs. dinàmiques</h2>
+        <p>Una pàgina <strong>estàtica</strong> mostra sempre el mateix contingut: es carrega un cop i no canvia fins que es torna a demanar al servidor. Una pàgina <strong>dinàmica</strong>, gràcies a JavaScript, pot:</p>
+        <ul style="margin:-6px 0 14px; padding-left:20px;">
+          <li>Respondre a accions de l'usuari en <strong>temps real</strong> (clics, tecles, moviments del ratolí...).</li>
+          <li><strong>Modificar el contingut</strong> de la pàgina sense recarregar-la.</li>
+          <li><strong>Comunicar-se amb servidors</strong> per enviar o rebre dades de fons.</li>
+        </ul>
+      </div>
+
+      <div class="topic-panel" data-topic="1">
+        <h2>Què és un script i l'etiqueta &lt;script&gt;</h2>
+        <p>Un <strong>script</strong> és un fragment de codi JavaScript que el navegador executa. Es col·loca dins d'una pàgina HTML amb l'etiqueta <code class="mono">&lt;script&gt;</code>, i hi ha dues maneres de fer-ho:</p>
+        <div class="cards3">
+          <div class="mini-card">
+            <h3><span class="dot" style="background:var(--amber)"></span> Directe (inline)</h3>
+            <p>El codi s'escriu directament entre les etiquetes.</p>
+            <pre class="code"><code>&lt;<span class="tok-tag">script</span>&gt;
+  <span class="tok-fn">alert</span><span class="tok-punc">(</span><span class="tok-str">"Hola!"</span><span class="tok-punc">);</span>
+&lt;/<span class="tok-tag">script</span>&gt;</code></pre>
+          </div>
+          <div class="mini-card">
+            <h3><span class="dot" style="background:var(--primary)"></span> Fitxer extern (src)</h3>
+            <p>El codi viu en un fitxer <code class="mono">.js</code> a part, enllaçat amb l'atribut <code class="mono">src</code>.</p>
+            <pre class="code"><code>&lt;<span class="tok-tag">script</span> <span class="tok-attr">src</span>=<span class="tok-str">"script.js"</span>&gt;
+&lt;/<span class="tok-tag">script</span>&gt;</code></pre>
+          </div>
+        </div>
+        <p style="margin-top:14px;">Normalment l'etiqueta <code class="mono">&lt;script&gt;</code> es col·loca al final del <code class="mono">&lt;body&gt;</code>, perquè el navegador ja hagi carregat tot l'HTML abans d'executar el codi que hi treballa.</p>
+      </div>
+
+      <div class="topic-panel" data-topic="2">
+        <h2>Característiques del llenguatge</h2>
+        <div class="cards3">
+          <div class="mini-card">
+            <h3><span class="dot" style="background:var(--primary)"></span> Distingeix Majúscules/minúscules</h3>
+            <p>JavaScript és <em>case sensitive</em>: <code class="mono">nom</code> i <code class="mono">Nom</code> es consideren dues variables diferents.</p>
+            <pre class="code"><code><span class="tok-kw">let</span> nom <span class="tok-punc">=</span> <span class="tok-str">"Anna"</span><span class="tok-punc">;</span>
+<span class="tok-kw">let</span> Nom <span class="tok-punc">=</span> <span class="tok-str">"Jordi"</span><span class="tok-punc">;</span>
+<span class="tok-comment">// són dues variables diferents</span></code></pre>
+          </div>
+          <div class="mini-card">
+            <h3><span class="dot" style="background:var(--amber)"></span> Punt i coma</h3>
+            <p>Cada instrucció acaba, per convenció, amb un punt i coma <code class="mono">;</code></p>
+            <pre class="code"><code><span class="tok-kw">let</span> edat <span class="tok-punc">=</span> <span class="tok-num">16</span><span class="tok-punc">;</span>
+<span class="tok-fn">alert</span><span class="tok-punc">(</span>edat<span class="tok-punc">);</span></code></pre>
+          </div>
+          <div class="mini-card">
+            <h3><span class="dot" style="background:#7fb4d8"></span> Comentaris</h3>
+            <p>Amb <code class="mono">//</code> per a una línia, o <code class="mono">/* ... */</code> per a diverses.</p>
+            <pre class="code"><code><span class="tok-comment">// una línia</span>
+<span class="tok-comment">/* diverses
+   línies */</span></code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-panel" data-topic="3">
+        <h2>Variables</h2>
+        <p>Una <strong>variable</strong> és un espai amb nom on guardem un valor perquè el puguem fer servir més tard. Es declaren amb <code class="mono">let</code>, <code class="mono">const</code> o l'antiga <code class="mono">var</code>.</p>
+        <pre class="code"><code><span class="tok-kw">let</span> nom <span class="tok-punc">=</span> <span class="tok-str">"Marta"</span><span class="tok-punc">;</span>    <span class="tok-comment">// text (string)</span>
+<span class="tok-kw">let</span> edat <span class="tok-punc">=</span> <span class="tok-num">17</span><span class="tok-punc">;</span>          <span class="tok-comment">// número</span>
+<span class="tok-kw">const</span> PI <span class="tok-punc">=</span> <span class="tok-num">3.1416</span><span class="tok-punc">;</span>   <span class="tok-comment">// valor fix, no canvia</span></code></pre>
+        <ul style="margin:-6px 0 0; padding-left:20px;">
+          <li><code class="mono">let</code>: variable que pot canviar de valor.</li>
+          <li><code class="mono">const</code>: valor fix, no es pot reassignar.</li>
+          <li><code class="mono">var</code>: forma antiga, avui es fa servir poc.</li>
+        </ul>
+      </div>
+
+      <div class="topic-panel" data-topic="4">
+        <h2>Funcions i alert()</h2>
+        <p>Una <strong>funció</strong> és un bloc de codi reutilitzable que agrupa una sèrie d'instruccions sota un nom. S'executa quan la <strong>cridem</strong>.</p>
+        <pre class="code"><code><span class="tok-kw">function</span> <span class="tok-fn">saluda</span><span class="tok-punc">(</span>nom<span class="tok-punc">)</span> <span class="tok-punc">{</span>
+  <span class="tok-fn">alert</span><span class="tok-punc">(</span><span class="tok-str">"Hola, "</span> <span class="tok-punc">+</span> nom<span class="tok-punc">);</span>
+<span class="tok-punc">}</span>
+
+<span class="tok-fn">saluda</span><span class="tok-punc">(</span><span class="tok-str">"Pau"</span><span class="tok-punc">);</span> <span class="tok-comment">// mostra "Hola, Pau"</span></code></pre>
+        <p><code class="mono">alert()</code> és una funció incorporada al navegador que mostra un missatge emergent a l'usuari. És molt útil per fer proves ràpides.</p>
+      </div>
+
+      <div class="topic-panel" data-topic="5">
+        <h2>Events i onclick</h2>
+        <p>Un <strong>event</strong> (esdeveniment) és una acció que passa a la pàgina: un clic, prémer una tecla, moure el ratolí... JavaScript pot "escoltar" aquests events i reaccionar-hi.</p>
+        <p>L'atribut <code class="mono">onclick</code> permet executar codi quan es fa clic sobre un element:</p>
+        <pre class="code"><code>&lt;<span class="tok-tag">button</span> <span class="tok-attr">onclick</span>=<span class="tok-str">"saluda()"</span>&gt;
+  Fes clic aquí
+&lt;/<span class="tok-tag">button</span>&gt;</code></pre>
+        <p>Altres events habituals: <code class="mono">onchange</code> (quan canvia un valor), <code class="mono">onmouseover</code> (quan el ratolí passa per sobre), <code class="mono">onkeyup</code> (quan es deixa anar una tecla).</p>
+      </div>
+
+      <div class="topic-panel" data-topic="6">
+        <h2>getElementById</h2>
+        <p>Per poder modificar un element amb JavaScript, primer l'hem de <strong>seleccionar</strong>. El mètode <code class="mono">document.getElementById()</code> retorna l'element HTML que té l'ID indicat.</p>
+        <pre class="code"><code>&lt;<span class="tok-tag">p</span> <span class="tok-attr">id</span>=<span class="tok-str">"missatge"</span>&gt;Hola&lt;/<span class="tok-tag">p</span>&gt;
+
+&lt;<span class="tok-tag">script</span>&gt;
+  <span class="tok-kw">let</span> element <span class="tok-punc">=</span> document<span class="tok-punc">.</span><span class="tok-fn">getElementById</span><span class="tok-punc">(</span><span class="tok-str">"missatge"</span><span class="tok-punc">);</span>
+&lt;/<span class="tok-tag">script</span>&gt;</code></pre>
+        <p>A partir d'aquí, la variable <code class="mono">element</code> ja representa aquell paràgraf i en podem llegir o canviar les propietats.</p>
+      </div>
+
+      <div class="topic-panel" data-topic="7">
+        <h2>Obtenir valors de camps i modificar contingut (innerHTML)</h2>
+        <p>Per llegir el que un usuari ha escrit en un camp de text, fem servir la propietat <code class="mono">.value</code>:</p>
+        <pre class="code"><code>&lt;<span class="tok-tag">input</span> <span class="tok-attr">id</span>=<span class="tok-str">"campNom"</span> <span class="tok-attr">type</span>=<span class="tok-str">"text"</span>&gt;
+
+<span class="tok-kw">let</span> valor <span class="tok-punc">=</span> document<span class="tok-punc">.</span><span class="tok-fn">getElementById</span><span class="tok-punc">(</span><span class="tok-str">"campNom"</span><span class="tok-punc">).</span>value<span class="tok-punc">;</span></code></pre>
+        <p>Per canviar el contingut HTML d'un element, fem servir la propietat <code class="mono">.innerHTML</code>:</p>
+        <pre class="code"><code><span class="tok-kw">let</span> caixa <span class="tok-punc">=</span> document<span class="tok-punc">.</span><span class="tok-fn">getElementById</span><span class="tok-punc">(</span><span class="tok-str">"resultat"</span><span class="tok-punc">);</span>
+caixa<span class="tok-punc">.</span>innerHTML <span class="tok-punc">=</span> <span class="tok-str">"Hola, "</span> <span class="tok-punc">+</span> valor<span class="tok-punc">;</span></code></pre>
+        <table class="props">
+          <tr><th>Propietat</th><th>Per a què serveix</th></tr>
+          <tr><td><code>.value</code></td><td>Llegeix (o escriu) el valor d'un camp de formulari (input, textarea...).</td></tr>
+          <tr><td><code>.innerHTML</code></td><td>Llegeix o canvia el contingut HTML de dins d'un element.</td></tr>
+        </table>
+      </div>
+
+      <div class="topic-panel" data-topic="8">
+        <h2>Exemple en viu</h2>
+        <p>Prova-ho tu mateix: escriu un nom i fes clic al botó. El codi de sota és exactament el que fa que això funcioni.</p>
+        <div class="live-grid">
+          <div>
+            <div class="panel-label">codi.html</div>
+            <pre class="code"><code>&lt;<span class="tok-tag">input</span> <span class="tok-attr">id</span>=<span class="tok-str">"campNom"</span> <span class="tok-attr">type</span>=<span class="tok-str">"text"</span>&gt;
+&lt;<span class="tok-tag">button</span> <span class="tok-attr">onclick</span>=<span class="tok-str">"saluda()"</span>&gt;Saluda'm&lt;/<span class="tok-tag">button</span>&gt;
+&lt;<span class="tok-tag">p</span> <span class="tok-attr">id</span>=<span class="tok-str">"resultat"</span>&gt;&lt;/<span class="tok-tag">p</span>&gt;
+
+&lt;<span class="tok-tag">script</span>&gt;
+<span class="tok-kw">function</span> <span class="tok-fn">saluda</span><span class="tok-punc">()</span> <span class="tok-punc">{</span>
+  <span class="tok-kw">let</span> valor <span class="tok-punc">=</span> document<span class="tok-punc">.</span><span class="tok-fn">getElementById</span><span class="tok-punc">(</span><span class="tok-str">"campNom"</span><span class="tok-punc">).</span>value<span class="tok-punc">;</span>
+  document<span class="tok-punc">.</span><span class="tok-fn">getElementById</span><span class="tok-punc">(</span><span class="tok-str">"resultat"</span><span class="tok-punc">).</span>innerHTML <span class="tok-punc">=</span>
+    <span class="tok-str">"Hola, "</span> <span class="tok-punc">+</span> valor <span class="tok-punc">+</span> <span class="tok-str">"! 👋"</span><span class="tok-punc">;</span>
+<span class="tok-punc">}</span>
+&lt;/<span class="tok-tag">script</span>&gt;</code></pre>
+          </div>
+          <div>
+            <div class="panel-label">resultat en directe</div>
+            <div class="demo-box">
+              <input type="text" id="demo-nom" placeholder="Escriu el teu nom...">
+              <button id="demo-btn">Saluda'm</button>
+              <div class="demo-output" id="demo-output"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-panel" data-topic="9">
+        <h2>Exemple complet: formulari de login</h2>
+        <p>Un formulari senzill amb usuari i contrasenya, i una funció que comprova les dades quan es fa clic al botó. Si coincideixen amb un usuari vàlid, mostra un missatge d'èxit; si no, un d'error.</p>
+        <div class="live-grid">
+          <div>
+            <div class="panel-label">codi.html</div>
+            <pre class="code"><code>&lt;<span class="tok-tag">input</span> <span class="tok-attr">id</span>=<span class="tok-str">"usuari"</span> <span class="tok-attr">type</span>=<span class="tok-str">"text"</span>
+       <span class="tok-attr">placeholder</span>=<span class="tok-str">"Usuari"</span>&gt;
+&lt;<span class="tok-tag">input</span> <span class="tok-attr">id</span>=<span class="tok-str">"contrasenya"</span> <span class="tok-attr">type</span>=<span class="tok-str">"password"</span>
+       <span class="tok-attr">placeholder</span>=<span class="tok-str">"Contrasenya"</span>&gt;
+&lt;<span class="tok-tag">button</span> <span class="tok-attr">onclick</span>=<span class="tok-str">"comprovaLogin()"</span>&gt;
+  Entrar
+&lt;/<span class="tok-tag">button</span>&gt;
+&lt;<span class="tok-tag">p</span> <span class="tok-attr">id</span>=<span class="tok-str">"missatgeLogin"</span>&gt;&lt;/<span class="tok-tag">p</span>&gt;
+
+&lt;<span class="tok-tag">script</span>&gt;
+<span class="tok-kw">function</span> <span class="tok-fn">comprovaLogin</span><span class="tok-punc">()</span> <span class="tok-punc">{</span>
+  <span class="tok-kw">let</span> usuari <span class="tok-punc">=</span>
+    document<span class="tok-punc">.</span><span class="tok-fn">getElementById</span><span class="tok-punc">(</span><span class="tok-str">"usuari"</span><span class="tok-punc">).</span>value<span class="tok-punc">;</span>
+  <span class="tok-kw">let</span> pass <span class="tok-punc">=</span>
+    document<span class="tok-punc">.</span><span class="tok-fn">getElementById</span><span class="tok-punc">(</span><span class="tok-str">"contrasenya"</span><span class="tok-punc">).</span>value<span class="tok-punc">;</span>
+  <span class="tok-kw">let</span> missatge <span class="tok-punc">=</span>
+    document<span class="tok-punc">.</span><span class="tok-fn">getElementById</span><span class="tok-punc">(</span><span class="tok-str">"missatgeLogin"</span><span class="tok-punc">);</span>
+
+  <span class="tok-kw">if</span> <span class="tok-punc">(</span>usuari <span class="tok-punc">===</span> <span class="tok-str">"admin"</span> <span class="tok-punc">&amp;&amp;</span> pass <span class="tok-punc">===</span> <span class="tok-str">"1234"</span><span class="tok-punc">)</span> <span class="tok-punc">{</span>
+    missatge<span class="tok-punc">.</span>innerHTML <span class="tok-punc">=</span> <span class="tok-str">"✅ Sessió iniciada"</span><span class="tok-punc">;</span>
+  <span class="tok-punc">}</span> <span class="tok-kw">else</span> <span class="tok-punc">{</span>
+    missatge<span class="tok-punc">.</span>innerHTML <span class="tok-punc">=</span> <span class="tok-str">"❌ Usuari o contrasenya incorrectes"</span><span class="tok-punc">;</span>
+  <span class="tok-punc">}</span>
+<span class="tok-punc">}</span>
+&lt;/<span class="tok-tag">script</span>&gt;</code></pre>
+          </div>
+          <div>
+            <div class="panel-label">prova-ho (usuari: admin · contrasenya: 1234)</div>
+            <div class="demo-box">
+              <input type="text" id="login-usuari" placeholder="Usuari">
+              <input type="password" id="login-pass" placeholder="Contrasenya" style="margin-top:-2px;">
+              <button id="login-btn" style="margin-top:6px;">Entrar</button>
+              <div class="demo-output" id="login-output"></div>
+            </div>
+          </div>
+        </div>
+        <p style="margin-top:14px;">Fixa't que la lògica és sempre la mateixa: <strong>llegim valors</strong> amb <code class="mono">.value</code>, els <strong>comparem</strong> amb un <code class="mono">if</code>, i <strong>canviem el contingut</strong> de la pàgina amb <code class="mono">.innerHTML</code> segons el resultat.</p>
+      </div>
+
+      <div class="topic-panel" data-topic="10">
+        <h2>Exemple complet: preu de vol per a resident</h2>
+        <p>Un formulari que calcula el preu final d'un vol aplicant el descompte de resident quan correspon. La funció llegeix el preu base i si la casella de resident està marcada, aplica un percentatge de descompte.</p>
+        <div class="live-grid">
+          <div>
+            <div class="panel-label">codi.html</div>
+            <pre class="code"><code>&lt;<span class="tok-tag">input</span> <span class="tok-attr">id</span>=<span class="tok-str">"preuBase"</span> <span class="tok-attr">type</span>=<span class="tok-str">"number"</span>
+       <span class="tok-attr">placeholder</span>=<span class="tok-str">"Preu base (€)"</span>&gt;
+&lt;<span class="tok-tag">label</span>&gt;
+  &lt;<span class="tok-tag">input</span> <span class="tok-attr">id</span>=<span class="tok-str">"esResident"</span> <span class="tok-attr">type</span>=<span class="tok-str">"checkbox"</span>&gt;
+  Ets resident?
+&lt;/<span class="tok-tag">label</span>&gt;
+&lt;<span class="tok-tag">button</span> <span class="tok-attr">onclick</span>=<span class="tok-str">"calculaPreu()"</span>&gt;
+  Calcula
+&lt;/<span class="tok-tag">button</span>&gt;
+&lt;<span class="tok-tag">p</span> <span class="tok-attr">id</span>=<span class="tok-str">"resultatPreu"</span>&gt;&lt;/<span class="tok-tag">p</span>&gt;
+
+&lt;<span class="tok-tag">script</span>&gt;
+<span class="tok-kw">function</span> <span class="tok-fn">calculaPreu</span><span class="tok-punc">()</span> <span class="tok-punc">{</span>
+  <span class="tok-kw">const</span> DESCOMPTE_RESIDENT <span class="tok-punc">=</span> <span class="tok-num">0.75</span><span class="tok-punc">;</span> <span class="tok-comment">// 75%</span>
+
+  <span class="tok-kw">let</span> preuBase <span class="tok-punc">=</span> <span class="tok-fn">Number</span><span class="tok-punc">(</span>
+    document<span class="tok-punc">.</span><span class="tok-fn">getElementById</span><span class="tok-punc">(</span><span class="tok-str">"preuBase"</span><span class="tok-punc">).</span>value
+  <span class="tok-punc">);</span>
+  <span class="tok-kw">let</span> esResident <span class="tok-punc">=</span>
+    document<span class="tok-punc">.</span><span class="tok-fn">getElementById</span><span class="tok-punc">(</span><span class="tok-str">"esResident"</span><span class="tok-punc">).</span>checked<span class="tok-punc">;</span>
+
+  <span class="tok-kw">let</span> preuFinal <span class="tok-punc">=</span> preuBase<span class="tok-punc">;</span>
+  <span class="tok-kw">if</span> <span class="tok-punc">(</span>esResident<span class="tok-punc">)</span> <span class="tok-punc">{</span>
+    preuFinal <span class="tok-punc">=</span> preuBase <span class="tok-punc">-</span> <span class="tok-punc">(</span>preuBase <span class="tok-punc">*</span> DESCOMPTE_RESIDENT<span class="tok-punc">);</span>
+  <span class="tok-punc">}</span>
+
+  document<span class="tok-punc">.</span><span class="tok-fn">getElementById</span><span class="tok-punc">(</span><span class="tok-str">"resultatPreu"</span><span class="tok-punc">).</span>innerHTML <span class="tok-punc">=</span>
+    <span class="tok-str">"Preu final: "</span> <span class="tok-punc">+</span> preuFinal<span class="tok-punc">.</span><span class="tok-fn">toFixed</span><span class="tok-punc">(</span><span class="tok-num">2</span><span class="tok-punc">)</span> <span class="tok-punc">+</span> <span class="tok-str">" €"</span><span class="tok-punc">;</span>
+<span class="tok-punc">}</span>
+&lt;/<span class="tok-tag">script</span>&gt;</code></pre>
+          </div>
+          <div>
+            <div class="panel-label">prova-ho</div>
+            <div class="demo-box">
+              <input type="number" id="vol-preu" placeholder="Preu base (€)">
+              <label style="display:flex; align-items:center; gap:8px; font-size:14px; margin:10px 0;">
+                <input type="checkbox" id="vol-resident" style="width:auto;">
+                Ets resident?
+              </label>
+              <button id="vol-btn">Calcula</button>
+              <div class="demo-output" id="vol-output"></div>
+            </div>
+          </div>
+        </div>
+        <p style="margin-top:14px;">La part important és la funció <code class="mono">calculaPreu()</code>: converteix el text del camp a número amb <code class="mono">Number()</code>, comprova la casella amb <code class="mono">.checked</code>, calcula el descompte amb un simple <code class="mono">if</code>, i mostra el resultat amb <code class="mono">.toFixed(2)</code> per arrodonir a dos decimals.</p>
+      </div>
+
+      <div class="topic-panel" data-topic="11">
+        <h2>Resum</h2>
+        <table class="summary">
+          <tr><th>Concepte</th><th>Per a què serveix</th></tr>
+          <tr><td>&lt;script&gt;</td><td>Incloure codi JavaScript, directe o amb <code class="mono">src</code>.</td></tr>
+          <tr><td>Variable (let/const)</td><td>Guardar un valor per fer-lo servir més tard.</td></tr>
+          <tr><td>Funció</td><td>Agrupar instruccions sota un nom per reutilitzar-les.</td></tr>
+          <tr><td>alert()</td><td>Mostrar un missatge emergent a l'usuari.</td></tr>
+          <tr><td>Event (onclick...)</td><td>Reaccionar a una acció de l'usuari.</td></tr>
+          <tr><td>getElementById()</td><td>Seleccionar un element HTML pel seu ID.</td></tr>
+          <tr><td>.value</td><td>Llegir el valor d'un camp de formulari.</td></tr>
+          <tr><td>.innerHTML</td><td>Canviar el contingut HTML d'un element.</td></tr>
+        </table>
+      </div>
+
+      <div class="topic-nav">
+        <button class="nav-btn" id="topic-prev">← Anterior</button>
+        <button class="nav-btn primary" id="topic-next">Següent →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== TEST ===================== -->
+  <div class="mode-panel" id="mode-test">
+    <div class="exam-stats">
+      <div class="stat-pill ok"><div class="num" id="stat-correct">0</div><div class="lbl">Correctes ✅</div></div>
+      <div class="stat-pill bad"><div class="num" id="stat-wrong">0</div><div class="lbl">Incorrectes ❌</div></div>
+      <div class="stat-pill score"><div class="num" id="stat-score">0/11</div><div class="lbl">Puntuació</div></div>
+    </div>
+    <div class="exam-progress"><div class="exam-progress-fill" id="exam-progress-fill"></div></div>
+
+    <div class="card" id="exam-card">
+      <span class="q-num" id="q-num">Pregunta 1 / 11</span>
+      <div class="q-text" id="q-text"></div>
+      <div class="q-options" id="q-options"></div>
+      <div class="q-feedback" id="q-feedback"></div>
+      <div class="exam-footer">
+        <button class="btn primary" id="q-next" style="display:none;">Següent →</button>
+      </div>
+    </div>
+
+    <div class="card" id="exam-final">
+      <div class="big">Has encertat <span id="final-score"></span></div>
+      <p class="muted" id="final-message" style="margin:8px auto 0; max-width:50ch;"></p>
+      <div class="save-row">
+        <input type="text" id="player-name" placeholder="El teu nom (opcional)" maxlength="24">
+        <button class="btn primary" id="save-rank-btn">🏆 Guardar al rànquing</button>
+      </div>
+      <div class="save-row">
+        <button class="btn ghost" id="retry-btn">🔄 Repetir el test</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== RANKING ===================== -->
+  <div class="mode-panel" id="mode-ranking">
+    <div class="card">
+      <div class="rank-header">
+        <h2 style="margin:0;">🏆 Rànquing</h2>
+        <button class="btn ghost" id="clear-rank-btn">🗑️ Esborrar rànquing</button>
+      </div>
+      <div class="rank-list" id="rank-list"></div>
+      <div class="empty-rank" id="rank-empty" style="display:none;">Encara no hi ha cap puntuació guardada. Fes el test i guarda la teva!</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>Apunts de JavaScript — relació amb HTML i CSS, l'etiqueta script, variables, funcions, events i manipulació del DOM.</footer>
+
+<script>
+  /* ---------- mode tabs ---------- */
+  const modeTabs = document.querySelectorAll(".mode-tab");
+  const modePanels = { teoria: document.getElementById("mode-teoria"), test: document.getElementById("mode-test"), ranking: document.getElementById("mode-ranking") };
+  modeTabs.forEach(btn => {
+    btn.addEventListener("click", () => {
+      modeTabs.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      Object.values(modePanels).forEach(p => p.classList.remove("active"));
+      modePanels[btn.dataset.mode].classList.add("active");
+      if (btn.dataset.mode === "ranking") renderRanking();
+    });
+  });
+  function goToMode(name){
+    modeTabs.forEach(b => b.classList.toggle("active", b.dataset.mode === name));
+    Object.entries(modePanels).forEach(([k,p]) => p.classList.toggle("active", k === name));
+    if (name === "ranking") renderRanking();
+  }
+
+  /* ---------- teoria sub-tabs ---------- */
+  const subTabs = document.querySelectorAll(".sub-tab");
+  const topicPanels = document.querySelectorAll(".topic-panel");
+  let topicIndex = 0;
+  function showTopic(i){
+    topicIndex = i;
+    subTabs.forEach(t => t.classList.toggle("active", Number(t.dataset.topic) === i));
+    topicPanels.forEach(p => p.classList.toggle("active", Number(p.dataset.topic) === i));
+    document.getElementById("topic-prev").disabled = i === 0;
+    const nextBtn = document.getElementById("topic-next");
+    nextBtn.textContent = (i === topicPanels.length - 1) ? "Anar al test →" : "Següent →";
+    document.querySelector(".card").scrollIntoView({behavior:"smooth", block:"start"});
+  }
+  subTabs.forEach(t => t.addEventListener("click", () => showTopic(Number(t.dataset.topic))));
+  document.getElementById("topic-prev").addEventListener("click", () => { if (topicIndex > 0) showTopic(topicIndex - 1); });
+  document.getElementById("topic-next").addEventListener("click", () => {
+    if (topicIndex < topicPanels.length - 1) showTopic(topicIndex + 1);
+    else goToMode("test");
+  });
+
+  /* ---------- live demo (exemple en viu) ---------- */
+  document.getElementById("demo-btn").addEventListener("click", () => {
+    const valor = document.getElementById("demo-nom").value || "amic";
+    document.getElementById("demo-output").innerHTML = "Hola, " + valor + "! 👋";
+  });
+
+  /* ---------- demo: formulari de login ---------- */
+  document.getElementById("login-btn").addEventListener("click", () => {
+    const usuari = document.getElementById("login-usuari").value;
+    const pass = document.getElementById("login-pass").value;
+    const missatge = document.getElementById("login-output");
+    if (usuari === "admin" && pass === "1234"){
+      missatge.innerHTML = "✅ Sessió iniciada";
+    } else {
+      missatge.innerHTML = "❌ Usuari o contrasenya incorrectes";
+    }
+  });
+
+  /* ---------- demo: preu de vol per a resident ---------- */
+  document.getElementById("vol-btn").addEventListener("click", () => {
+    const DESCOMPTE_RESIDENT = 0.75; // 75%
+    const preuBase = Number(document.getElementById("vol-preu").value) || 0;
+    const esResident = document.getElementById("vol-resident").checked;
+    let preuFinal = preuBase;
+    if (esResident){
+      preuFinal = preuBase - (preuBase * DESCOMPTE_RESIDENT);
+    }
+    document.getElementById("vol-output").innerHTML = "Preu final: " + preuFinal.toFixed(2) + " €";
+  });
+
+  /* ---------- exam ---------- */
+  const questions = [
+    { q: "Quina és la funció principal de JavaScript en una pàgina web?", options: ["Estructurar el contingut", "Definir l'aparença visual", "Afegir interactivitat i respondre a accions", "Emmagatzemar dades en una base de dades"], correct: 2,
+      explain: "JavaScript s'encarrega del comportament: respon a accions, modifica contingut i es comunica amb servidors. L'HTML estructura i el CSS dona aparença." },
+    { q: "Quina etiqueta HTML es fa servir per incloure codi JavaScript?", options: ["<js>", "<script>", "<code>", "<javascript>"], correct: 1,
+      explain: "El codi JavaScript s'inclou dins de l'etiqueta <script>, ja sigui escrit directament o enllaçant un fitxer extern." },
+    { q: "Quin atribut de l'etiqueta <script> permet enllaçar un fitxer JavaScript extern?", options: ["href", "link", "src", "source"], correct: 2,
+      explain: "L'atribut src indica la ruta del fitxer .js extern, igual que passa amb les imatges." },
+    { q: "JavaScript és \"case sensitive\". Què significa això?", options: ["Que \"nom\" i \"Nom\" són la mateixa variable", "Que \"nom\" i \"Nom\" es consideren variables diferents", "Que només es poden fer servir minúscules", "Que les majúscules donen error sempre"], correct: 1,
+      explain: "El llenguatge distingeix majúscules de minúscules, així que nom i Nom són dues variables diferents." },
+    { q: "Com ha d'acabar, normalment, cada instrucció en JavaScript?", options: ["Amb una coma (,)", "Amb dos punts (:)", "Amb un punt i coma (;)", "Amb un punt (.)"], correct: 2,
+      explain: "El punt i coma marca el final d'una instrucció, encara que en alguns casos el navegador el pot inferir." },
+    { q: "Quina paraula clau es fa servir per declarar una variable en JavaScript?", options: ["let / const", "dim", "int", "def"], correct: 0,
+      explain: "let i const (i l'antiga var) declaren variables en JavaScript." },
+    { q: "Quina funció mostra un missatge emergent a l'usuari?", options: ["print()", "show()", "alert()", "message()"], correct: 2,
+      explain: "alert() és una funció incorporada del navegador que mostra una finestra emergent amb un missatge." },
+    { q: "Quin atribut HTML executa una funció JavaScript quan es fa clic sobre un element?", options: ["onchange", "onclick", "onclickevent", "onaction"], correct: 1,
+      explain: "onclick és l'esdeveniment que s'activa en fer clic sobre l'element." },
+    { q: "Quin mètode selecciona un element HTML a partir del seu ID?", options: ["getElementById()", "selectById()", "findById()", "getById()"], correct: 0,
+      explain: "document.getElementById() retorna l'element que té l'ID indicat." },
+    { q: "Com s'obté el valor escrit en un camp de text (input)?", options: [".text", ".content", ".value", ".innerHTML"], correct: 2,
+      explain: "La propietat .value conté el que l'usuari ha escrit en un camp de formulari." },
+    { q: "Quina propietat es fa servir per canviar el contingut HTML d'un element des de JavaScript?", options: [".value", ".innerHTML", ".style", ".content"], correct: 1,
+      explain: ".innerHTML permet llegir o substituir el contingut HTML de dins d'un element." }
+  ];
+  const letters = ["A","B","C","D"];
+  let qi = 0, correctCount = 0, wrongCount = 0;
+  document.getElementById("stat-score").textContent = "0/" + questions.length;
+  document.getElementById("q-num").textContent = "Pregunta 1 / " + questions.length;
+
+  function renderQuestion(){
+    const item = questions[qi];
+    document.getElementById("q-num").textContent = "Pregunta " + (qi+1) + " / " + questions.length;
+    document.getElementById("q-text").textContent = item.q;
+    document.getElementById("exam-progress-fill").style.width = (qi/questions.length*100) + "%";
+    const opts = document.getElementById("q-options");
+    opts.innerHTML = "";
+    item.options.forEach((optText, oi) => {
+      const btn = document.createElement("button");
+      btn.className = "q-option";
+      btn.innerHTML = '<span class="letter">' + letters[oi] + '</span><span>' + optText + '</span>';
+      btn.addEventListener("click", () => selectAnswer(oi));
+      opts.appendChild(btn);
+    });
+    document.getElementById("q-feedback").classList.remove("show");
+    document.getElementById("q-next").style.display = "none";
+  }
+
+  function selectAnswer(oi){
+    const item = questions[qi];
+    const allBtns = document.querySelectorAll("#q-options .q-option");
+    allBtns.forEach(b => b.disabled = true);
+    if (oi === item.correct){
+      allBtns[oi].classList.add("correct");
+      correctCount++;
+    } else {
+      allBtns[oi].classList.add("wrong");
+      allBtns[item.correct].classList.add("correct");
+      wrongCount++;
+    }
+    document.getElementById("stat-correct").textContent = correctCount;
+    document.getElementById("stat-wrong").textContent = wrongCount;
+    document.getElementById("stat-score").textContent = correctCount + "/" + questions.length;
+
+    const fb = document.getElementById("q-feedback");
+    fb.classList.add("show");
+    fb.innerHTML = "<strong>" + (oi === item.correct ? "Correcte. " : "No exactament. ") + "</strong>" + item.explain;
+
+    document.getElementById("q-next").textContent = (qi === questions.length - 1) ? "Veure resultat →" : "Següent →";
+    document.getElementById("q-next").style.display = "inline-block";
+  }
+
+  document.getElementById("q-next").addEventListener("click", () => {
+    if (qi < questions.length - 1){
+      qi++;
+      renderQuestion();
+    } else {
+      document.getElementById("exam-progress-fill").style.width = "100%";
+      document.getElementById("exam-card").style.display = "none";
+      const finalBox = document.getElementById("exam-final");
+      finalBox.classList.add("show");
+      document.getElementById("final-score").textContent = correctCount + " de " + questions.length;
+      let msg;
+      if (correctCount === questions.length) msg = "Domines els conceptes bàsics de JavaScript.";
+      else if (correctCount >= questions.length * 0.6) msg = "Bona base; repassa les preguntes que has fallat.";
+      else msg = "Torna a la Teoria i repassa variables, events i el DOM abans de tornar-ho a intentar.";
+      document.getElementById("final-message").textContent = msg;
+    }
+  });
+
+  function resetExam(){
+    qi = 0; correctCount = 0; wrongCount = 0;
+    document.getElementById("stat-correct").textContent = "0";
+    document.getElementById("stat-wrong").textContent = "0";
+    document.getElementById("stat-score").textContent = "0/" + questions.length;
+    document.getElementById("exam-card").style.display = "block";
+    document.getElementById("exam-final").classList.remove("show");
+    document.getElementById("player-name").value = "";
+    renderQuestion();
+  }
+  document.getElementById("retry-btn").addEventListener("click", resetExam);
+
+  /* ---------- ranking (localStorage) ---------- */
+  const RANK_KEY = "js-apunts-ranking";
+  function loadRanking(){
+    try { return JSON.parse(localStorage.getItem(RANK_KEY)) || []; }
+    catch(e){ return []; }
+  }
+  function saveRanking(list){
+    try { localStorage.setItem(RANK_KEY, JSON.stringify(list)); } catch(e){}
+  }
+  function renderRanking(){
+    const list = loadRanking().sort((a,b) => b.score - a.score || new Date(b.date) - new Date(a.date));
+    const container = document.getElementById("rank-list");
+    const empty = document.getElementById("rank-empty");
+    container.innerHTML = "";
+    if (list.length === 0){ empty.style.display = "block"; return; }
+    empty.style.display = "none";
+    list.slice(0, 20).forEach((entry, i) => {
+      const row = document.createElement("div");
+      row.className = "rank-row";
+      row.innerHTML =
+        '<span class="pos">#' + (i+1) + '</span>' +
+        '<span class="name">' + entry.name + '</span>' +
+        '<span class="date">' + entry.date + '</span>' +
+        '<span class="pts">' + entry.score + '/' + entry.total + '</span>';
+      container.appendChild(row);
+    });
+  }
+  document.getElementById("save-rank-btn").addEventListener("click", () => {
+    const nameInput = document.getElementById("player-name").value.trim();
+    const name = nameInput === "" ? "Anònim" : nameInput;
+    const list = loadRanking();
+    list.push({ name, score: correctCount, total: questions.length, date: new Date().toLocaleDateString("ca-ES") });
+    saveRanking(list);
+    goToMode("ranking");
+  });
+  document.getElementById("clear-rank-btn").addEventListener("click", () => {
+    saveRanking([]);
+    renderRanking();
+  });
+
+  /* ---------- init ---------- */
+  renderQuestion();
+  showTopic(0);
+</script>
+
+</body>
+</html>
