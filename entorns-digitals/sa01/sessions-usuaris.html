@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Sessions i Comptes d'Usuari</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Nunito:wght@700;800;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #eef1f8;
+    --surface: #ffffff;
+    --surface2: #f0f3fa;
+    --border: #c8d0e8;
+    --accent: #1d4ed8;
+    --accent2: #dc2626;
+    --accent3: #15803d;
+    --accent4: #b45309;
+    --text: #0f1629;
+    --muted: #374151;
+    --tag-bg: rgba(29,78,216,0.08);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 19px;
+    line-height: 1.65;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, #b0bcd8 1px, transparent 1px);
+    background-size: 32px 32px;
+    opacity: 0.45;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* HEADER */
+  header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 56px 40px 44px;
+    border-bottom: 2px solid var(--border);
+    background: linear-gradient(180deg, #fff 0%, var(--bg) 100%);
+  }
+
+  .header-pill {
+    display: inline-block;
+    background: var(--tag-bg);
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 5px 20px;
+    border-radius: 100px;
+    margin-bottom: 22px;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, #0f1629 25%, #1d4ed8 85%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 18px;
+  }
+
+  .header-sub {
+    color: #374151;
+    font-size: 1.15rem;
+    max-width: 700px;
+    margin: 0 auto;
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(238,241,248,0.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 2px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+  nav::-webkit-scrollbar { display: none; }
+  nav a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #374151;
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    padding: 16px 20px;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: color .2s, border-color .2s;
+  }
+  nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* MAIN */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 52px 48px 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+  }
+
+  /* SECTION */
+  section {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(28px);
+    animation: fadeUp .45s ease forwards;
+    box-shadow: 0 2px 16px rgba(15,22,41,0.07);
+  }
+  section:nth-child(1) { animation-delay: .05s; }
+  section:nth-child(2) { animation-delay: .10s; }
+  section:nth-child(3) { animation-delay: .15s; }
+  section:nth-child(4) { animation-delay: .20s; }
+  section:nth-child(5) { animation-delay: .25s; }
+  section:nth-child(6) { animation-delay: .30s; }
+  section:nth-child(7) { animation-delay: .35s; }
+  section:nth-child(8) { animation-delay: .40s; }
+
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 26px 36px 22px;
+    border-bottom: 1.5px solid var(--border);
+    background: linear-gradient(90deg, #f8f9ff 0%, #fff 100%);
+  }
+
+  .section-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+  }
+  .icon-blue   { background: rgba(29,78,216,.10); }
+  .icon-green  { background: rgba(21,128,61,.12); }
+  .icon-yellow { background: rgba(180,83,9,.12); }
+  .icon-purple { background: rgba(126,34,206,.12); }
+  .icon-red    { background: rgba(220,38,38,.12); }
+  .icon-teal   { background: rgba(13,148,136,.12); }
+
+  .section-title {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+    color: #0f1629;
+  }
+  .section-sub {
+    color: #374151;
+    font-size: .92rem;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+  }
+
+  .section-body {
+    padding: 28px 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  p { color: #1a2340; font-size: 1.05rem; font-weight: 400; line-height: 1.7; }
+
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #0f1629;
+    margin-bottom: 4px;
+  }
+
+  /* CARDS */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 22px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: border-color .2s, box-shadow .2s, transform .2s;
+  }
+  .card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 18px rgba(29,78,216,0.10);
+    transform: translateY(-2px);
+  }
+  .card-icon { font-size: 28px; }
+  .card-title {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: #0f1629;
+  }
+  .card-desc { color: #2d3a52; font-size: .97rem; line-height: 1.55; font-weight: 400; }
+
+  /* BULLET LIST */
+  ul.bullet-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0;
+  }
+  ul.bullet-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 1.05rem;
+    color: #1a2340;
+    line-height: 1.55;
+  }
+  ul.bullet-list li::before {
+    content: '▸';
+    color: var(--accent);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-weight: 700;
+  }
+
+  /* CARD MINI LIST */
+  ul.card-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  ul.card-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: .97rem;
+    color: #2d3a52;
+    line-height: 1.45;
+  }
+  ul.card-list li::before {
+    content: '·';
+    color: var(--accent);
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    line-height: 1.2;
+    font-weight: 900;
+  }
+
+  /* KEY CONCEPT */
+  .key-concept {
+    background: linear-gradient(135deg, rgba(29,78,216,0.07), rgba(21,128,61,0.04));
+    border: 1.5px solid rgba(29,78,216,0.25);
+    border-radius: 12px;
+    padding: 18px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1d4ed8;
+    letter-spacing: .2px;
+  }
+
+  /* ALERT */
+  .alert {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    background: var(--surface2);
+    border-left: 4px solid var(--accent2);
+    border-radius: 10px;
+    padding: 18px 22px;
+    font-size: 1rem;
+    color: #1a2340;
+  }
+  .alert .alert-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+  .alert.info    { border-left-color: var(--accent);  background: rgba(29,78,216,0.05); }
+  .alert.success { border-left-color: var(--accent3); background: rgba(21,128,61,0.05); }
+  .alert.warning { border-left-color: var(--accent4); background: rgba(180,83,9,0.05); }
+
+  /* FLOW */
+  .flow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .flow-item {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: .97rem;
+    font-family: 'DM Mono', monospace;
+    color: #0f1629;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .flow-arrow { color: #374151; font-size: 1.3rem; font-weight: 700; }
+
+  /* TABLE */
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 1rem; }
+  .compare-table th {
+    background: var(--surface2);
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    font-size: .88rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .compare-table td {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    color: #1a2340;
+    vertical-align: top;
+    font-size: 1rem;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: #f5f7ff; }
+
+  .tag {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 100px;
+    font-size: .85rem;
+    font-family: 'DM Mono', monospace;
+    font-weight: 600;
+  }
+  .tag-safe   { background: rgba(21,128,61,.10); color: #15803d; border: 1.5px solid rgba(21,128,61,.3); }
+  .tag-danger { background: rgba(220,38,38,.10); color: #dc2626; border: 1.5px solid rgba(220,38,38,.3); }
+  .tag-warn   { background: rgba(180,83,9,.10);  color: #b45309; border: 1.5px solid rgba(180,83,9,.3); }
+
+  /* BADGE LIST */
+  .badge-list { display: flex; flex-wrap: wrap; gap: 10px; }
+  .badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 1rem;
+    color: #1a2340;
+    font-weight: 400;
+    transition: border-color .2s;
+  }
+  .badge:hover { border-color: var(--accent); }
+  .badge strong { font-family: 'Syne', sans-serif; font-weight: 800; color: #0f1629; }
+
+  /* KEYBOARD SHORTCUTS */
+  .shortcuts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+  }
+  .shortcut-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .shortcut-row:hover {
+    border-color: var(--accent);
+    box-shadow: 0 2px 12px rgba(29,78,216,0.08);
+  }
+  .keys {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 1.5px solid #b0bcd8;
+    border-bottom: 3px solid #8898c0;
+    border-radius: 7px;
+    padding: 4px 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: .88rem;
+    font-weight: 600;
+    color: #0f1629;
+    min-width: 32px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+    white-space: nowrap;
+  }
+  .key-plus {
+    color: #6b7280;
+    font-size: .9rem;
+    font-weight: 700;
+    margin: 0 1px;
+  }
+  .shortcut-desc {
+    font-size: .97rem;
+    color: #1a2340;
+    line-height: 1.4;
+  }
+  .shortcut-desc strong {
+    display: block;
+    color: #0f1629;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .shortcut-os {
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: .75rem;
+    color: #6b7280;
+    flex-shrink: 0;
+  }
+
+  /* FOOTER */
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 32px 40px;
+    border-top: 2px solid var(--border);
+    color: #374151;
+    font-family: 'DM Mono', monospace;
+    font-size: .82rem;
+  }
+
+  @media(max-width:900px) {
+    main { padding: 36px 24px 80px; }
+    .section-header { padding: 20px 22px 18px; }
+    .section-body { padding: 22px; }
+  }
+  @media(max-width:600px) {
+    h1 { font-size: 2.4rem; }
+    nav a { padding: 12px 12px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-pill">Informàtica · 1r ESO</div>
+  <h1>Sessions i Usuaris</h1>
+  <p class="header-sub">Comptes d'usuari, iniciar sessió, perfil, bloqueig i permisos d'administrador</p>
+</header>
+
+<nav>
+  <a href="#comptes">👤 Comptes</a>
+  <a href="#sessio">🔑 Iniciar sessió</a>
+  <a href="#perfil">🪪 Perfil</a>
+  <a href="#bloqueig">🔒 Bloquejar i tancar</a>
+  <a href="#suspensio">😴 Suspensió</a>
+  <a href="#administrador">🛡️ Administrador</a>
+  <a href="#permisos">⚙️ Permisos</a>
+  <a href="#dreceres">⌨️ Dreceres</a>
+</nav>
+
+<main>
+
+  <!-- COMPTES D'USUARI -->
+  <section id="comptes">
+    <div class="section-header">
+      <div class="section-icon icon-blue">👤</div>
+      <div>
+        <div class="section-title">Comptes d'Usuari</div>
+        <div class="section-sub">qui ets davant de l'ordinador</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>Un <strong>compte d'usuari</strong> és la identitat digital d'una persona dins d'un sistema informàtic.</li>
+        <li>Permet que <strong>diverses persones</strong> comparteixin el mateix ordinador, cadascuna amb el seu espai privat.</li>
+        <li>Cada compte té el seu propi <strong>escriptori, arxius, configuració i contrassenya</strong>.</li>
+        <li>El sistema sap qui ets gràcies al teu compte: així pot donar-te els permisos adequats.</li>
+      </ul>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🏠</div>
+          <div class="card-title">Espai personal</div>
+          <div class="card-desc">Cada compte té la seva pròpia carpeta d'usuari on es guarden documents, descàrregues i configuració.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔐</div>
+          <div class="card-title">Protecció amb contrasenya</div>
+          <div class="card-desc">Només qui coneix la contrasenya pot accedir al compte i als seus arxius.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">👥</div>
+          <div class="card-title">Multiusuari</div>
+          <div class="card-desc">En un mateix ordinador hi pot haver diversos comptes: un per a cada membre de la família o alumne.</div>
+        </div>
+      </div>
+
+      <div class="key-concept">💡 Clau → Compte d'usuari = la teva identitat a l'ordinador. Sense compte, el sistema no sap qui ets ni quins drets tens.</div>
+
+      <h3>Els comptes al nostre centre</h3>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🏫</div>
+          <div class="card-title">Format del nom d'usuari</div>
+          <div class="card-desc">El nom d'usuari segueix el format: <strong>curs + grup + número de llista</strong>.<br><br>
+            <ul class="card-list">
+              <li><kbd style="background:#fff;border:1.5px solid #b0bcd8;border-bottom:3px solid #8898c0;border-radius:6px;padding:2px 10px;font-family:'DM Mono',monospace;font-size:.9rem;color:#0f1629;">1esoa01</kbd> → 1r ESO grup A, número 1</li>
+              <li><kbd style="background:#fff;border:1.5px solid #b0bcd8;border-bottom:3px solid #8898c0;border-radius:6px;padding:2px 10px;font-family:'DM Mono',monospace;font-size:.9rem;color:#0f1629;">4esoa12</kbd> → 4t ESO grup A, número 12</li>
+              <li><kbd style="background:#fff;border:1.5px solid #b0bcd8;border-bottom:3px solid #8898c0;border-radius:6px;padding:2px 10px;font-family:'DM Mono',monospace;font-size:.9rem;color:#0f1629;">1btc08</kbd> → 1r Batxillerat C, número 8</li>
+              <li><kbd style="background:#fff;border:1.5px solid #b0bcd8;border-bottom:3px solid #8898c0;border-radius:6px;padding:2px 10px;font-family:'DM Mono',monospace;font-size:.9rem;color:#0f1629;">2esob01</kbd> → 2n ESO grup B, número 1</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔑</div>
+          <div class="card-title">Contrasenya inicial</div>
+          <div class="card-desc">La contrasenya que el centre assigna per defecte a tots els alumnes és:<br><br>
+            <kbd style="background:#fff;border:1.5px solid #b0bcd8;border-bottom:3px solid #8898c0;border-radius:6px;padding:6px 16px;font-family:'DM Mono',monospace;font-size:1.1rem;font-weight:700;color:#1d4ed8;display:inline-block;margin-top:4px;">A7777777</kbd>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-icon">⚠️</div>
+          <div class="card-title">Canvia la contrasenya!</div>
+          <div class="card-desc">
+            <ul class="card-list">
+              <li>La primera vegada que entris, <strong>has de canviar</strong> la contrasenya inicial.</li>
+              <li>Tria una contrasenya que <strong>només sàpigues tu</strong>.</li>
+              <li>No la comparteixis amb ningú, ni amb amics.</li>
+              <li>Si la oblides, demana ajuda al professor o al tècnic.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INICIAR SESSIÓ -->
+  <section id="sessio">
+    <div class="section-header">
+      <div class="section-icon icon-green">🔑</div>
+      <div>
+        <div class="section-title">Iniciar Sessió</div>
+        <div class="section-sub">entrar al sistema</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li><strong>Iniciar sessió</strong> (o fer <em>login</em>) és el procés d'identificar-se davant del sistema per accedir al teu compte.</li>
+        <li>Normalment cal introduir un <strong>nom d'usuari</strong> i una <strong>contrasenya</strong>.</li>
+        <li>Si les dades són correctes, el sistema obre el teu entorn personal.</li>
+        <li>Si les dades són incorrectes, l'accés és <strong>denegat</strong> per protegir la seguretat.</li>
+      </ul>
+
+      <h3>Com funciona el procés</h3>
+      <div class="flow">
+        <div class="flow-item">🖥️ Pantalla<br><small>d'inici</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">👤 Nom<br><small>d'usuari</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">🔑 Contrasenya<br><small>secreta</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">✅ Verificació<br><small>del sistema</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">🏠 Escriptori<br><small>personal</small></div>
+      </div>
+
+      <h3>Formes d'iniciar sessió</h3>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">⌨️</div>
+          <div class="card-title">Contrasenya</div>
+          <div class="card-desc">La forma més habitual. Escrius una clau secreta que només tu hauries de saber.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔢</div>
+          <div class="card-title">PIN</div>
+          <div class="card-desc">Codi numèric curt (normalment de 4 o 6 dígits) per accedir ràpidament al sistema.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">👁️</div>
+          <div class="card-title">Biometria</div>
+          <div class="card-desc">Empremta digital, reconeixement facial o d'iris. El cos és la clau.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🖼️</div>
+          <div class="card-title">Contrasenya gràfica</div>
+          <div class="card-desc">Dibuixes un patró o fas clics sobre una imatge en un ordre concret.</div>
+        </div>
+      </div>
+
+      <div class="alert warning">
+        <span class="alert-icon">⚠️</span>
+        <span><strong>Consell de seguretat:</strong> mai comparteixis la teva contrasenya amb ningú, ni amb amics. Una bona contrasenya combina lletres, números i símbols.</span>
+      </div>
+
+      <div class="key-concept">💡 Clau → Iniciar sessió = demostrar al sistema que ets tu. La contrasenya és la clau de la porta del teu espai digital.</div>
+    </div>
+  </section>
+
+  <!-- PERFIL D'USUARI -->
+  <section id="perfil">
+    <div class="section-header">
+      <div class="section-icon icon-purple">🪪</div>
+      <div>
+        <div class="section-title">Perfil d'Usuari</div>
+        <div class="section-sub">la teva configuració personal</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>El <strong>perfil d'usuari</strong> és el conjunt d'informació i configuració associada al teu compte.</li>
+        <li>Inclou des de la teva foto i nom fins a la <strong>personalització</strong> de l'escriptori, l'idioma o les aplicacions favorites.</li>
+        <li>Quan inicies sessió, el sistema carrega automàticament <strong>el teu perfil</strong> i tot queda tal com ho vas deixar.</li>
+      </ul>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🖼️</div>
+          <div class="card-title">Foto i nom</div>
+          <div class="card-desc">La imatge i el nom que apareixen a la pantalla d'inici i al menú del sistema.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🎨</div>
+          <div class="card-title">Personalització</div>
+          <div class="card-desc">Fons de pantalla, colors, mida de lletra i tema visual triats per l'usuari.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📁</div>
+          <div class="card-title">Carpetes pròpies</div>
+          <div class="card-desc">Documents, Descàrregues, Imatges i Música: carpetes exclusives de cada usuari.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">⚙️</div>
+          <div class="card-title">Configuració</div>
+          <div class="card-desc">Idioma, zona horària, accessibilitat i preferències d'aplicacions guardades al perfil.</div>
+        </div>
+      </div>
+
+      <div class="alert info">
+        <span class="alert-icon">💡</span>
+        <span>Si un ordinador té diversos usuaris, cada perfil és independent: els canvis que fa un usuari <strong>no afecten els altres</strong>.</span>
+      </div>
+
+      <div class="key-concept">💡 Clau → Perfil = la teva "habitació digital". Tota la teva configuració i arxius, sempre llestos quan entres.</div>
+    </div>
+  </section>
+
+  <!-- BLOQUEJAR I TANCAR SESSIÓ -->
+  <section id="bloqueig">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">🔒</div>
+      <div>
+        <div class="section-title">Bloquejar i Tancar Sessió</div>
+        <div class="section-sub">protegir l'accés quan t'absentes</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>Quan t'allunyis de l'ordinador, és important <strong>protegir el teu compte</strong> perquè ningú pugui accedir-hi.</li>
+        <li>Hi ha dues opcions principals: <strong>bloquejar la sessió</strong> o <strong>tancar la sessió</strong>.</li>
+        <li>Triar una o altra depèn de si tornaràs aviat o deixes l'equip per a algú altre.</li>
+      </ul>
+
+      <h3>Diferència entre bloquejar, suspendre i tancar</h3>
+      <table class="compare-table">
+        <thead>
+          <tr><th>Acció</th><th>Què fa</th><th>Quan usar-la</th><th>Programes oberts</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>🔒 <strong>Bloquejar sessió</strong></td>
+            <td>Posa una pantalla de bloqueig però manté la sessió activa</td>
+            <td>T'absentes una estona i tornes aviat</td>
+            <td><span class="tag tag-safe">Es mantenen oberts</span></td>
+          </tr>
+          <tr>
+            <td>😴 <strong>Suspendre</strong></td>
+            <td>Guarda l'estat a la memòria RAM i redueix el consum al mínim</td>
+            <td>Pausa llarga sense apagar del tot</td>
+            <td><span class="tag tag-safe">Es mantenen oberts</span></td>
+          </tr>
+          <tr>
+            <td>🚪 <strong>Tancar sessió</strong></td>
+            <td>Tanca tots els programes i torna a la pantalla d'inici</td>
+            <td>Acabes de treballar o deixes l'equip a algú altre</td>
+            <td><span class="tag tag-danger">Es tanquen tots</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🔒</div>
+          <div class="card-title">Bloquejar sessió</div>
+          <div class="card-desc"><ul class="card-list"><li>La sessió segueix activa en segon pla</li><li>Cal la contrasenya per desbloquejar</li><li>Els programes continuen oberts</li><li>Ideal per a absències curtes</li></ul></div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🚪</div>
+          <div class="card-title">Tancar sessió</div>
+          <div class="card-desc"><ul class="card-list"><li>Es tanquen tots els programes i arxius</li><li>Torna a la pantalla de selecció d'usuari</li><li>Un altre usuari pot iniciar la seva sessió</li><li>Ideal quan acabes de treballar</li></ul></div>
+        </div>
+        <div class="card">
+          <div class="card-icon">⏻</div>
+          <div class="card-title">Apagar o reiniciar</div>
+          <div class="card-desc"><ul class="card-list"><li>Tanca la sessió i apaga l'equip</li><li>Cal guardar tots els arxius abans</li><li>Recomanat al final del dia</li></ul></div>
+        </div>
+      </div>
+
+      <div class="alert warning">
+        <span class="alert-icon">⚠️</span>
+        <span><strong>Important:</strong> mai deixis la sessió oberta en un ordinador compartit (aula, biblioteca…). Qualsevol podria accedir als teus arxius i compte.</span>
+      </div>
+
+      <div class="key-concept">💡 Clau → Bloquejar = pausa protegida. Tancar sessió = sortir completament. Sempre fes-ho quan t'allunyis d'un ordinador compartit.</div>
+    </div>
+  </section>
+
+  <!-- SUSPENSIÓ -->
+  <section id="suspensio">
+    <div class="section-header">
+      <div class="section-icon icon-blue">😴</div>
+      <div>
+        <div class="section-title">Suspensió (Mode Repòs)</div>
+        <div class="section-sub">pausa de baix consum</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>La <strong>suspensió</strong> (o mode repòs) és un estat de baixíssim consum energètic en el qual l'ordinador sembla apagat però <strong>no ho està del tot</strong>.</li>
+        <li>L'estat actual de la sessió (programes oberts, documents, pestanyes…) es guarda a la <strong>memòria RAM</strong>.</li>
+        <li>En despertar l'equip, tot torna <strong>exactament igual</strong> com ho havies deixat, en pocs segons.</li>
+        <li>És ideal per a pauses llargues sense voler apagar ni perdre la feina en curs.</li>
+      </ul>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">Consum mínim</div>
+          <div class="card-desc">Només consumeix l'energia necessària per mantenir la RAM activa. Molt eficient en portàtils.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">⏱️</div>
+          <div class="card-title">Represa ràpida</div>
+          <div class="card-desc">En obrir la tapa o prémer una tecla, l'ordinador es desperta en 1-3 segons amb tot obert.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">💾</div>
+          <div class="card-title">Estat guardat a RAM</div>
+          <div class="card-desc">Tots els programes i arxius oberts es mantenen a la memòria fins que l'equip es desperta.</div>
+        </div>
+      </div>
+
+      <h3>Suspensió vs Hibernació</h3>
+      <table class="compare-table">
+        <thead>
+          <tr><th>Mode</th><th>On es guarda l'estat</th><th>Velocitat de represa</th><th>Consum</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>😴 <strong>Suspensió</strong></td>
+            <td>Memòria RAM (volàtil)</td>
+            <td><span class="tag tag-safe">Molt ràpid (1-3 seg)</span></td>
+            <td>Molt baix (RAM activa)</td>
+          </tr>
+          <tr>
+            <td>🗄️ <strong>Hibernació</strong></td>
+            <td>Disc dur (permanent)</td>
+            <td><span class="tag tag-warn">Més lent (10-30 seg)</span></td>
+            <td>Zero (equip apagat del tot)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="alert warning">
+        <span class="alert-icon">⚠️</span>
+        <span><strong>Atenció:</strong> si es va la llum mentre l'ordinador està suspès, es pot perdre la feina no guardada, ja que la RAM necessita corrent per conservar les dades.</span>
+      </div>
+
+      <div class="key-concept">💡 Clau → Suspensió = pausa ràpida i eficient. L'equip "dorm" però recorda tot el que tenies obert i es desperta en segons.</div>
+    </div>
+  </section>
+
+  <!-- ADMINISTRADOR -->
+  <section id="administrador">
+    <div class="section-header">
+      <div class="section-icon icon-red">🛡️</div>
+      <div>
+        <div class="section-title">Compte d'Administrador</div>
+        <div class="section-sub">el compte amb més poder</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>L'<strong>administrador</strong> és el tipus de compte amb màxim control sobre el sistema.</li>
+        <li>Pot instal·lar i desinstal·lar programes, crear o eliminar altres comptes d'usuari i canviar la configuració del sistema.</li>
+        <li>En un ordinador de casa, normalment és un dels pares o el propietari de l'equip.</li>
+        <li>En un institut, és el professor o el tècnic informàtic: <strong>els alumnes no solen tenir permisos d'administrador</strong>.</li>
+      </ul>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">💿</div>
+          <div class="card-title">Instal·lar programes</div>
+          <div class="card-desc">Només l'administrador pot instal·lar o desinstal·lar programes al sistema.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">👥</div>
+          <div class="card-title">Gestionar usuaris</div>
+          <div class="card-desc">Crear nous comptes, eliminar-los, canviar contrasenyes i assignar tipus de compte.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔧</div>
+          <div class="card-title">Configurar el sistema</div>
+          <div class="card-desc">Canviar la configuració de xarxa, seguretat, actualitzacions i maquinari.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📁</div>
+          <div class="card-title">Accés a tots els arxius</div>
+          <div class="card-desc">Pot accedir a les carpetes de tots els usuaris del sistema si cal.</div>
+        </div>
+      </div>
+
+      <div class="alert warning">
+        <span class="alert-icon">⚠️</span>
+        <span><strong>Compte!</strong> Treballar sempre com a administrador és perillós: si s'executa un virus accidentalment, tindrà accés total al sistema. Millor usar un compte estàndard per al dia a dia.</span>
+      </div>
+
+      <div class="key-concept">💡 Clau → Administrador = el "cap" de l'ordinador. Té tots els permisos, però s'ha d'usar amb responsabilitat.</div>
+    </div>
+  </section>
+
+  <!-- PERMISOS -->
+  <section id="permisos">
+    <div class="section-header">
+      <div class="section-icon icon-teal">⚙️</div>
+      <div>
+        <div class="section-title">Permisos d'Usuari</div>
+        <div class="section-sub">qui pot fer què</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>Els <strong>permisos</strong> determinen quines accions pot realitzar cada compte d'usuari al sistema.</li>
+        <li>No tots els usuaris poden fer el mateix: el sistema controla l'accés a arxius, programes i configuració.</li>
+        <li>Això protegeix el sistema d'errors accidentals i d'usos no autoritzats.</li>
+      </ul>
+
+      <h3>Tipus de comptes i els seus permisos</h3>
+      <table class="compare-table">
+        <thead>
+          <tr><th>Tipus de compte</th><th>Pot fer</th><th>No pot fer</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>🛡️ <strong>Administrador</strong></td>
+            <td>Tot: instal·lar, configurar, gestionar usuaris</td>
+            <td>— (accés total)</td>
+          </tr>
+          <tr>
+            <td>👤 <strong>Estàndard</strong></td>
+            <td>Usar programes instal·lats, gestionar els seus arxius</td>
+            <td>Instal·lar programes, canviar configuració del sistema</td>
+          </tr>
+          <tr>
+            <td>👶 <strong>Infantil / Restringit</strong></td>
+            <td>Usar aplicacions aprovades, navegar en llocs permesos</td>
+            <td>Instal·lar res, canviar configuració, accedir a contingut no adequat</td>
+          </tr>
+          <tr>
+            <td>👥 <strong>Convidat</strong></td>
+            <td>Ús temporal i molt limitat de l'equip</td>
+            <td>Guardar arxius permanentment, instal·lar res, accedir a altres carpetes</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Permisos sobre arxius i carpetes</h3>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">👁️</div>
+          <div class="card-title">Lectura</div>
+          <div class="card-desc">Pots obrir i veure el contingut d'un arxiu o carpeta, però no modificar-lo.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">✏️</div>
+          <div class="card-title">Escriptura</div>
+          <div class="card-desc">Pots crear, modificar i guardar arxius dins d'una carpeta.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">▶️</div>
+          <div class="card-title">Execució</div>
+          <div class="card-desc">Pots executar un programa o script. Sense aquest permís, el programa no s'obre.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🗑️</div>
+          <div class="card-title">Eliminació</div>
+          <div class="card-desc">Pots esborrar arxius o carpetes. Normalment reservat al propietari o a l'administrador.</div>
+        </div>
+      </div>
+
+      <div class="alert success">
+        <span class="alert-icon">✅</span>
+        <span><strong>Per què existeixen els permisos?</strong> Per protegir la privacitat de cada usuari, evitar errors accidentals i impedir que programes maliciosos facin canvis no autoritzats al sistema.</span>
+      </div>
+
+      <div class="key-concept">💡 Clau → Permisos = regles que decideixen qui pot llegir, modificar, executar o esborrar cada arxiu o programa del sistema.</div>
+    </div>
+  </section>
+
+  <!-- DRECERES DE TECLAT -->
+  <section id="dreceres">
+    <div class="section-header">
+      <div class="section-icon icon-teal">⌨️</div>
+      <div>
+        <div class="section-title">Dreceres de Teclat</div>
+        <div class="section-sub">accions ràpides sense ratolí</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>Les <strong>dreceres de teclat</strong> (o combinacions de tecles) permeten fer accions habituals de forma ràpida sense usar el ratolí.</li>
+        <li>S'activen prement diverses tecles <strong>alhora</strong>: primer les tecles modificadores (Ctrl, Alt, ⊞…) i després la tecla principal.</li>
+        <li>Aprendre les dreceres principals <strong>estalvia molt de temps</strong> i fa el treball molt més eficient.</li>
+      </ul>
+
+      <h3>Sessions i sistema</h3>
+      <div class="shortcuts-grid">
+        <div class="shortcut-row">
+          <div class="keys"><kbd>⊞ Win</kbd><span class="key-plus">+</span><kbd>L</kbd></div>
+          <div class="shortcut-desc"><strong>Bloquejar sessió</strong>Bloqueja l'escriptori immediatament</div>
+          <div class="shortcut-os">Windows</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>Alt</kbd><span class="key-plus">+</span><kbd>Supr</kbd></div>
+          <div class="shortcut-desc"><strong>Menú de seguretat</strong>Bloquejar, tancar sessió, canviar contrasenya…</div>
+          <div class="shortcut-os">Windows</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>Alt</kbd><span class="key-plus">+</span><kbd>F4</kbd></div>
+          <div class="shortcut-desc"><strong>Tancar programa / apagar</strong>Tanca la finestra activa o obre el menú d'apagada</div>
+          <div class="shortcut-os">Windows</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>⌘ Cmd</kbd><span class="key-plus">+</span><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>Q</kbd></div>
+          <div class="shortcut-desc"><strong>Bloquejar sessió</strong>Bloqueja la pantalla a macOS</div>
+          <div class="shortcut-os">macOS</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>⊞ Win</kbd><span class="key-plus">+</span><kbd>X</kbd></div>
+          <div class="shortcut-desc"><strong>Menú d'inici avançat</strong>Accés ràpid a opcions d'apagada i usuari</div>
+          <div class="shortcut-os">Windows</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>⌘ Cmd</kbd><span class="key-plus">+</span><kbd>Maj</kbd><span class="key-plus">+</span><kbd>Q</kbd></div>
+          <div class="shortcut-desc"><strong>Tancar sessió</strong>Tanca la sessió de l'usuari actual a macOS</div>
+          <div class="shortcut-os">macOS</div>
+        </div>
+      </div>
+
+      <h3>Gestió de finestres i escriptori</h3>
+      <div class="shortcuts-grid">
+        <div class="shortcut-row">
+          <div class="keys"><kbd>Alt</kbd><span class="key-plus">+</span><kbd>Tab</kbd></div>
+          <div class="shortcut-desc"><strong>Canviar de programa</strong>Navega entre les aplicacions obertes</div>
+          <div class="shortcut-os">Windows / Linux</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>⊞ Win</kbd><span class="key-plus">+</span><kbd>D</kbd></div>
+          <div class="shortcut-desc"><strong>Mostrar escriptori</strong>Minimitza totes les finestres i mostra l'escriptori</div>
+          <div class="shortcut-os">Windows</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>⊞ Win</kbd><span class="key-plus">+</span><kbd>↑</kbd></div>
+          <div class="shortcut-desc"><strong>Maximitzar finestra</strong>Expandeix la finestra activa a pantalla completa</div>
+          <div class="shortcut-os">Windows</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>⊞ Win</kbd><span class="key-plus">+</span><kbd>↓</kbd></div>
+          <div class="shortcut-desc"><strong>Minimitzar finestra</strong>Minimitza la finestra activa a la barra de tasques</div>
+          <div class="shortcut-os">Windows</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>⊞ Win</kbd><span class="key-plus">+</span><kbd>←</kbd> / <kbd>→</kbd></div>
+          <div class="shortcut-desc"><strong>Dividir pantalla</strong>Col·loca la finestra a la meitat esquerra o dreta</div>
+          <div class="shortcut-os">Windows</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>⌘ Cmd</kbd><span class="key-plus">+</span><kbd>Tab</kbd></div>
+          <div class="shortcut-desc"><strong>Canviar d'aplicació</strong>Navega entre les aplicacions obertes a macOS</div>
+          <div class="shortcut-os">macOS</div>
+        </div>
+      </div>
+
+      <h3>Arxius i accions generals</h3>
+      <div class="shortcuts-grid">
+        <div class="shortcut-row">
+          <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>C</kbd></div>
+          <div class="shortcut-desc"><strong>Copiar</strong>Copia el text o arxiu seleccionat</div>
+          <div class="shortcut-os">Windows / Linux</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>V</kbd></div>
+          <div class="shortcut-desc"><strong>Enganxar</strong>Enganxa el contingut copiat o tallat</div>
+          <div class="shortcut-os">Windows / Linux</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>Z</kbd></div>
+          <div class="shortcut-desc"><strong>Desfer</strong>Desfà l'última acció realitzada</div>
+          <div class="shortcut-os">Windows / Linux</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>S</kbd></div>
+          <div class="shortcut-desc"><strong>Guardar</strong>Guarda el document o arxiu actual</div>
+          <div class="shortcut-os">Windows / Linux</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>Ctrl</kbd><span class="key-plus">+</span><kbd>Alt</kbd><span class="key-plus">+</span><kbd>T</kbd></div>
+          <div class="shortcut-desc"><strong>Obrir terminal</strong>Obre el terminal de comandes (Linux/Ubuntu)</div>
+          <div class="shortcut-os">Linux</div>
+        </div>
+        <div class="shortcut-row">
+          <div class="keys"><kbd>Impr Pant</kbd></div>
+          <div class="shortcut-desc"><strong>Captura de pantalla</strong>Fa una foto de la pantalla sencera</div>
+          <div class="shortcut-os">Windows / Linux</div>
+        </div>
+      </div>
+
+      <div class="key-concept">💡 Clau → Dreceres = combinacions de tecles que fan accions habituals sense ratolí. Les més importants: <kbd style="background:#fff;border:1.5px solid #b0bcd8;border-bottom:3px solid #8898c0;border-radius:6px;padding:2px 8px;font-family:'DM Mono',monospace;font-size:.88rem;color:#0f1629;">⊞ Win</kbd> + <kbd style="background:#fff;border:1.5px solid #b0bcd8;border-bottom:3px solid #8898c0;border-radius:6px;padding:2px 8px;font-family:'DM Mono',monospace;font-size:.88rem;color:#0f1629;">L</kbd> per bloquejar i <kbd style="background:#fff;border:1.5px solid #b0bcd8;border-bottom:3px solid #8898c0;border-radius:6px;padding:2px 8px;font-family:'DM Mono',monospace;font-size:.88rem;color:#0f1629;">Ctrl</kbd> + <kbd style="background:#fff;border:1.5px solid #b0bcd8;border-bottom:3px solid #8898c0;border-radius:6px;padding:2px 8px;font-family:'DM Mono',monospace;font-size:.88rem;color:#0f1629;">Alt</kbd> + <kbd style="background:#fff;border:1.5px solid #b0bcd8;border-bottom:3px solid #8898c0;border-radius:6px;padding:2px 8px;font-family:'DM Mono',monospace;font-size:.88rem;color:#0f1629;">Supr</kbd> per al menú de seguretat.</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Sessions i Comptes d'Usuari · Informàtica 1r ESO — Material educatiu · 2025
+</footer>
+
+</body>
+</html>
