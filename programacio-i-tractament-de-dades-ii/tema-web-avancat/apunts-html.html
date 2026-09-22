@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Apunts d'HTML</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #faf6f3;
+    --card: #ffffff;
+    --ink: #241a14;
+    --muted: #7a6e66;
+    --border: #ece2da;
+    --primary: #e34f26;
+    --primary-dark: #ab3919;
+    --primary-light: #fdeee8;
+    --blue: #2965c9;
+    --green: #2fb380;
+    --green-bg: #e6f7f0;
+    --red: #e5484d;
+    --red-bg: #fdecec;
+    font-family:'Inter', sans-serif;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); line-height:1.65; }
+  h1,h2,h3{ font-family:'Space Grotesk', sans-serif; font-weight:600; margin:0 0 .5em; color:var(--ink); }
+  code, .mono{ font-family:'JetBrains Mono', monospace; }
+  p{ margin:0 0 1em; max-width:70ch; }
+  .muted{ color:var(--muted); }
+
+  header.top{
+    background: linear-gradient(120deg, var(--primary), #f16529);
+    color:#fff;
+    padding:28px 24px 68px;
+  }
+  .top-inner{ max-width:960px; margin:0 auto; }
+  .top-inner h1{ color:#fff; font-size:clamp(26px, 4vw, 34px); display:flex; align-items:center; gap:12px; }
+  .top-inner p{ color:#ffe9df; max-width:60ch; margin:0; font-size:15px; }
+
+  .wrap{ max-width:960px; margin:-44px auto 60px; padding:0 20px 60px; }
+
+  .mode-tabs{
+    display:flex; gap:8px; background:var(--card); border:1px solid var(--border);
+    border-radius:16px; padding:8px; box-shadow:0 12px 30px -18px rgba(80,30,10,.2); margin-bottom:24px;
+  }
+  .mode-tab{
+    flex:1; text-align:center; padding:12px 10px; border-radius:11px; border:none; background:transparent;
+    color:var(--muted); font-family:'Space Grotesk'; font-weight:600; font-size:14.5px; cursor:pointer;
+    transition:background .15s, color .15s;
+  }
+  .mode-tab.active{ background:var(--primary); color:#fff; }
+  .mode-panel{ display:none; }
+  .mode-panel.active{ display:block; }
+
+  .sub-tabs{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+  .sub-tab{
+    white-space:nowrap; padding:9px 16px; border-radius:999px; border:1px solid var(--border);
+    background:var(--card); color:var(--muted); font-size:13.5px; font-weight:600; cursor:pointer;
+  }
+  .sub-tab.active{ background:var(--primary-light); border-color:var(--primary); color:var(--primary-dark); }
+
+  .card{
+    background:var(--card); border:1px solid var(--border); border-radius:16px; padding:28px 30px;
+    box-shadow:0 12px 30px -20px rgba(80,30,10,.12);
+  }
+  .topic-panel{ display:none; }
+  .topic-panel.active{ display:block; }
+  .topic-panel h2{ font-size:22px; margin-bottom:14px; }
+
+  pre.code{
+    background:#241a14; color:#f3ece6; border-radius:10px; padding:16px 18px; overflow-x:auto;
+    font-size:13.5px; margin:14px 0; border:1px solid #3a2c22;
+  }
+  .tok-tag{ color:#f2977a; }
+  .tok-attr{ color:#7fb4d8; }
+  .tok-str{ color:#9fd68c; }
+  .tok-punc{ color:#a99b90; }
+  .tok-comment{ color:#8a7c72; font-style:italic; }
+  .tok-sel{ color:#f2a65a; }
+  .tok-prop{ color:#7fb4d8; }
+  .tok-val{ color:#9fd68c; }
+
+  .cards3{ display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin-top:16px; }
+  @media (max-width:800px){ .cards3{ grid-template-columns:1fr; } }
+  .cards2{ display:grid; grid-template-columns:repeat(2, 1fr); gap:14px; margin-top:16px; }
+  @media (max-width:800px){ .cards2{ grid-template-columns:1fr; } }
+  .mini-card{ border:1px solid var(--border); border-radius:12px; padding:16px 18px; background:#fdfaf8; }
+  .mini-card h3{ font-size:15px; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+  .mini-card .dot{ width:9px;height:9px;border-radius:50%; flex-shrink:0; }
+  .mini-card p{ font-size:13.5px; color:var(--muted); margin:0 0 8px; }
+  .mini-card pre.code{ margin:0; font-size:12px; padding:12px 14px; }
+
+  table.props, table.summary{ width:100%; border-collapse:collapse; margin-top:14px; font-size:14px; }
+  table.props th, table.summary th{
+    text-align:left; font-family:'Space Grotesk'; font-weight:600; font-size:12.5px;
+    color:var(--muted); padding:0 12px 10px; border-bottom:1px solid var(--border);
+  }
+  table.props td, table.summary td{ padding:11px 12px; border-bottom:1px solid var(--border); vertical-align:top; color:var(--ink); }
+  table.props tr:last-child td, table.summary tr:last-child td{ border-bottom:none; }
+  table.props code{ color:var(--primary-dark); }
+  table.summary td:first-child{ font-weight:600; }
+  .swatch{ display:inline-block; width:14px; height:14px; border-radius:4px; border:1px solid var(--border); margin-right:8px; vertical-align:middle; }
+
+  .live-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px; }
+  @media (max-width:820px){ .live-grid{ grid-template-columns:1fr; } }
+  .panel-label{ font-family:'JetBrains Mono'; font-size:11.5px; color:var(--muted); margin-bottom:6px; }
+  .preview-window{ background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+  .preview-window iframe{ width:100%; height:230px; border:none; display:block; }
+  pre.code.tall{ height:230px; }
+
+  .topic-nav{ display:flex; justify-content:space-between; margin-top:22px; gap:10px; }
+  .nav-btn{
+    padding:11px 18px; border-radius:10px; border:1px solid var(--border); background:#fff; color:var(--ink);
+    font-family:'Inter'; font-weight:600; font-size:13.5px; cursor:pointer;
+  }
+  .nav-btn.primary{ background:var(--primary); color:#fff; border-color:var(--primary); }
+  .nav-btn:disabled{ opacity:.35; cursor:default; }
+
+  .exam-stats{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px; }
+  .stat-pill{ flex:1; min-width:120px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:12px 16px; text-align:center; }
+  .stat-pill .num{ font-family:'Space Grotesk'; font-size:22px; font-weight:700; }
+  .stat-pill .lbl{ font-size:12px; color:var(--muted); }
+  .stat-pill.ok .num{ color:var(--green); }
+  .stat-pill.bad .num{ color:var(--red); }
+  .stat-pill.score .num{ color:var(--primary); }
+
+  .exam-progress{ height:6px; border-radius:99px; background:var(--border); overflow:hidden; margin-bottom:20px; }
+  .exam-progress-fill{ height:100%; background:var(--primary); width:0%; transition:width .25s; }
+
+  .q-num{ font-family:'JetBrains Mono'; font-size:12px; color:var(--primary-dark); margin-bottom:8px; display:block; }
+  .q-text{ font-size:17px; font-weight:600; margin-bottom:16px; }
+  .q-options{ display:grid; gap:9px; }
+  .q-option{
+    text-align:left; background:#fdfaf8; border:1px solid var(--border); color:var(--ink);
+    padding:12px 15px; border-radius:10px; font-size:14.5px; font-family:'Inter'; cursor:pointer;
+    display:flex; gap:10px; transition:border-color .15s, background .15s;
+  }
+  .q-option .letter{ font-family:'JetBrains Mono'; color:var(--muted); flex-shrink:0; }
+  .q-option:hover:not(:disabled){ border-color:var(--primary); }
+  .q-option:disabled{ cursor:default; }
+  .q-option.correct{ border-color:var(--green); background:var(--green-bg); }
+  .q-option.correct .letter{ color:var(--green); }
+  .q-option.wrong{ border-color:var(--red); background:var(--red-bg); }
+  .q-option.wrong .letter{ color:var(--red); }
+  .q-feedback{ margin-top:14px; font-size:13.5px; color:var(--muted); display:none; }
+  .q-feedback.show{ display:block; }
+  .q-feedback strong{ color:var(--ink); }
+
+  .exam-footer{ display:flex; justify-content:flex-end; margin-top:20px; }
+
+  #exam-final{ text-align:center; display:none; }
+  #exam-final.show{ display:block; }
+  #exam-final .big{ font-family:'Space Grotesk'; font-size:32px; }
+  #exam-final .big span{ color:var(--primary); }
+  .save-row{ display:flex; gap:8px; justify-content:center; margin-top:18px; flex-wrap:wrap; }
+  .save-row input{ border:1px solid var(--border); border-radius:10px; padding:10px 14px; font-family:'Inter'; font-size:14px; width:220px; }
+  .btn{ border:none; border-radius:10px; padding:10px 18px; font-family:'Inter'; font-weight:600; font-size:14px; cursor:pointer; }
+  .btn.primary{ background:var(--primary); color:#fff; }
+  .btn.ghost{ background:#fff; border:1px solid var(--border); color:var(--ink); }
+
+  .rank-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .rank-list{ display:flex; flex-direction:column; gap:8px; }
+  .rank-row{ display:flex; align-items:center; gap:14px; padding:12px 16px; border:1px solid var(--border); border-radius:12px; background:#fdfaf8; }
+  .rank-row .pos{ font-family:'Space Grotesk'; font-weight:700; color:var(--primary); width:26px; }
+  .rank-row .name{ flex:1; font-weight:600; }
+  .rank-row .date{ font-size:12px; color:var(--muted); }
+  .rank-row .pts{ font-family:'JetBrains Mono'; font-weight:600; }
+  .empty-rank{ color:var(--muted); font-size:14px; text-align:center; padding:30px 0; }
+
+  footer{ text-align:center; color:var(--muted); font-size:13px; padding:20px; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <h1>🌐 Apunts d'HTML</h1>
+    <p>El llenguatge que estructura el contingut de qualsevol pàgina web: text, imatges, enllaços, taules, formularis i molt més.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="mode-tabs">
+    <button class="mode-tab active" data-mode="teoria">📖 Teoria</button>
+    <button class="mode-tab" data-mode="test">📝 Test</button>
+    <button class="mode-tab" data-mode="ranking">🏆 Rànquing</button>
+  </div>
+
+  <!-- ===================== TEORIA ===================== -->
+  <div class="mode-panel active" id="mode-teoria">
+    <div class="sub-tabs">
+      <button class="sub-tab active" data-topic="0">Introducció</button>
+      <button class="sub-tab" data-topic="1">Estructura</button>
+      <button class="sub-tab" data-topic="2">Text i paràgrafs</button>
+      <button class="sub-tab" data-topic="3">Colors</button>
+      <button class="sub-tab" data-topic="4">Enllaços</button>
+      <button class="sub-tab" data-topic="5">Imatges</button>
+      <button class="sub-tab" data-topic="6">Llistes</button>
+      <button class="sub-tab" data-topic="7">Taules</button>
+      <button class="sub-tab" data-topic="8">Capes (div)</button>
+      <button class="sub-tab" data-topic="9">Formularis</button>
+      <button class="sub-tab" data-topic="10">Àudio i vídeo</button>
+      <button class="sub-tab" data-topic="11">Exemple en viu</button>
+      <button class="sub-tab" data-topic="12">Resum</button>
+    </div>
+
+    <div class="card">
+
+      <div class="topic-panel active" data-topic="0">
+        <h2>Què és l'HTML?</h2>
+        <p><strong>HTML</strong> (<em>Hyper Text Markup Language</em>) és el llenguatge que fem servir per crear pàgines web. Permet escriure text estructurat i afegir-hi enllaços que porten a altres pàgines o recursos, ja siguin locals o a Internet.</p>
+        <p>Amb HTML també podem incloure imatges i gràfics, animacions i sons. Els <strong>navegadors</strong> (Chrome, Firefox, Edge, Opera...) llegeixen aquest codi i el mostren tal com hem indicat.</p>
+        <p>Una pàgina HTML és, en essència, text normal escrit amb qualsevol editor, però amb <strong>etiquetes</strong> que indiquen com s'ha de mostrar cada part del contingut.</p>
+      </div>
+
+      <div class="topic-panel" data-topic="1">
+        <h2>Estructura d'un document HTML</h2>
+        <p>Les etiquetes (<em>tags</em>) marquen on comença i on acaba cada part del contingut. Les lletres poden ser majúscules o minúscules, però per convenció s'escriuen en minúscules.</p>
+        <pre class="code"><code>&lt;<span class="tok-tag">etiqueta</span>&gt;Contingut afectat per l'etiqueta&lt;/<span class="tok-tag">etiqueta</span>&gt;</code></pre>
+        <p>Tot document comença amb <code class="mono">&lt;html&gt;</code> i acaba amb <code class="mono">&lt;/html&gt;</code>. L'estructura bàsica d'un document HTML5 és sempre la mateixa:</p>
+        <pre class="code"><code>&lt;!<span class="tok-tag">DOCTYPE</span> <span class="tok-attr">html</span>&gt;
+&lt;<span class="tok-tag">html</span> <span class="tok-attr">lang</span>=<span class="tok-str">"ca"</span>&gt;
+  &lt;<span class="tok-tag">head</span>&gt;
+    &lt;<span class="tok-tag">meta</span> <span class="tok-attr">charset</span>=<span class="tok-str">"UTF-8"</span> /&gt;
+    &lt;<span class="tok-tag">meta</span> <span class="tok-attr">name</span>=<span class="tok-str">"viewport"</span>
+          <span class="tok-attr">content</span>=<span class="tok-str">"width=device-width, initial-scale=1.0"</span> /&gt;
+    &lt;<span class="tok-tag">title</span>&gt;El teu títol aquí&lt;/<span class="tok-tag">title</span>&gt;
+  &lt;/<span class="tok-tag">head</span>&gt;
+  &lt;<span class="tok-tag">body</span>&gt;
+    &lt;<span class="tok-tag">h1</span>&gt;Hola, món!&lt;/<span class="tok-tag">h1</span>&gt;
+    &lt;<span class="tok-tag">p</span>&gt;Aquest és el contingut de la pàgina.&lt;/<span class="tok-tag">p</span>&gt;
+  &lt;/<span class="tok-tag">body</span>&gt;
+&lt;/<span class="tok-tag">html</span>&gt;</code></pre>
+        <p class="muted" style="font-size:13px;">💡 A l'editor Visual Studio Code pots escriure <code class="mono">html:5</code> i prémer Tab per generar aquesta plantilla automàticament.</p>
+        <div class="cards2">
+          <div class="mini-card">
+            <h3><span class="dot" style="background:var(--primary)"></span> &lt;head&gt;</h3>
+            <p>Capçalera del document: informació que normalment l'usuari no veu directament. Configura el navegador i hi enllacem estils i scripts (<code class="mono">&lt;title&gt;</code>, <code class="mono">&lt;meta&gt;</code>, <code class="mono">&lt;link&gt;</code>, <code class="mono">&lt;script&gt;</code>).</p>
+          </div>
+          <div class="mini-card">
+            <h3><span class="dot" style="background:var(--blue)"></span> &lt;body&gt;</h3>
+            <p>Cos del document: tot el que veurà l'usuari (textos, imatges, enllaços, botons, taules, vídeos...).</p>
+          </div>
+        </div>
+        <p style="margin-top:14px;"><strong>Regla fàcil de recordar:</strong> el <code class="mono">head</code> conté coses que <em>configuren</em> la pàgina, i el <code class="mono">body</code> conté coses que es <em>veuen</em>.</p>
+      </div>
+
+      <div class="topic-panel" data-topic="2">
+        <h2>Text, paràgrafs i formats</h2>
+        <p>Els salts de línia i els espais extra dins del codi <strong>no afecten</strong> com es mostra el text al navegador. Per fer que un text comenci en una línia nova cal l'etiqueta <code class="mono">&lt;br&gt;</code>:</p>
+        <pre class="code"><code>&lt;<span class="tok-tag">p</span>&gt;
+  Aquesta és la primera línia.&lt;<span class="tok-tag">br</span> /&gt;
+  Aquesta és la segona línia.
+&lt;/<span class="tok-tag">p</span>&gt;</code></pre>
+        <p>Els <strong>paràgrafs</strong> separen blocs de text amb l'etiqueta <code class="mono">&lt;p&gt;</code>. Cada paràgraf s'ha de tancar amb <code class="mono">&lt;/p&gt;</code>:</p>
+        <pre class="code"><code>&lt;<span class="tok-tag">p</span>&gt;Aquest és el primer paràgraf.&lt;/<span class="tok-tag">p</span>&gt;
+&lt;<span class="tok-tag">p</span>&gt;Aquest és el segon, separat del primer.&lt;/<span class="tok-tag">p</span>&gt;</code></pre>
+        <p>Per donar format al text tenim etiquetes semàntiques i estils inline:</p>
+        <div class="cards3">
+          <div class="mini-card">
+            <h3>Negreta</h3>
+            <pre class="code"><code>&lt;<span class="tok-tag">strong</span>&gt;important&lt;/<span class="tok-tag">strong</span>&gt;
+&lt;<span class="tok-tag">b</span>&gt;en negreta&lt;/<span class="tok-tag">b</span>&gt;</code></pre>
+          </div>
+          <div class="mini-card">
+            <h3>Cursiva</h3>
+            <pre class="code"><code>&lt;<span class="tok-tag">i</span>&gt;en cursiva&lt;/<span class="tok-tag">i</span>&gt;</code></pre>
+          </div>
+          <div class="mini-card">
+            <h3>Subratllat</h3>
+            <pre class="code"><code>&lt;<span class="tok-tag">u</span>&gt;subratllat&lt;/<span class="tok-tag">u</span>&gt;</code></pre>
+          </div>
+        </div>
+        <p style="margin-top:14px;">També podem donar estil directament amb l'atribut <code class="mono">style</code>:</p>
+        <pre class="code"><code>&lt;<span class="tok-tag">p</span> <span class="tok-attr">style</span>=<span class="tok-str">"color:red;"</span>&gt;Sóc vermell&lt;/<span class="tok-tag">p</span>&gt;
+&lt;<span class="tok-tag">p</span> <span class="tok-attr">style</span>=<span class="tok-str">"font-size:50px;"</span>&gt;Sóc gran&lt;/<span class="tok-tag">p</span>&gt;</code></pre>
+      </div>
+
+      <div class="topic-panel" data-topic="3">
+        <h2>Colors</h2>
+        <p>HTML té colors predefinits amb nom (<code class="mono">red</code>, <code class="mono">blue</code>...), però també els podem definir amb un codi <strong>hexadecimal</strong>: tres parells de dígits precedits del símbol <code class="mono">#</code>, on cada dígit va del 0 al 9 i de la A a la F.</p>
+        <pre class="code"><code>&lt;<span class="tok-tag">p</span> <span class="tok-attr">style</span>=<span class="tok-str">"color:red;"</span>&gt;Això és vermell&lt;/<span class="tok-tag">p</span>&gt;
+&lt;<span class="tok-tag">p</span> <span class="tok-attr">style</span>=<span class="tok-str">"color:#FF0000;"</span>&gt;Això també és vermell&lt;/<span class="tok-tag">p</span>&gt;</code></pre>
+        <table class="props">
+          <tr><th>Codi</th><th>Color</th></tr>
+          <tr><td><span class="swatch" style="background:#FF0000"></span><code>#FF0000</code></td><td>Vermell</td></tr>
+          <tr><td><span class="swatch" style="background:#00FF00"></span><code>#00FF00</code></td><td>Verd</td></tr>
+          <tr><td><span class="swatch" style="background:#0000FF"></span><code>#0000FF</code></td><td>Blau</td></tr>
+          <tr><td><span class="swatch" style="background:#FFFFFF"></span><code>#FFFFFF</code></td><td>Blanc</td></tr>
+          <tr><td><span class="swatch" style="background:#000000"></span><code>#000000</code></td><td>Negre</td></tr>
+          <tr><td><span class="swatch" style="background:#FFFF00"></span><code>#FFFF00</code></td><td>Groc</td></tr>
+        </table>
+        <p style="margin-top:14px;"><strong>Enfosquir</strong> un color vol dir reduir el número d'un dels seus components: el vermell <code class="mono">#FF0000</code> es pot enfosquir amb <code class="mono">#AA0000</code>, o encara més amb <code class="mono">#550000</code>. <strong>Aclarir-lo</strong> vol dir apujar els altres dos components per igual: així el vermell es pot convertir en rosa amb <code class="mono">#FF7070</code>.</p>
+      </div>
+
+      <div class="topic-panel" data-topic="4">
+        <h2>Enllaços (&lt;a&gt;)</h2>
+        <p>L'etiqueta <code class="mono">&lt;a&gt;</code> serveix per enllaçar a una altra pàgina, fitxer o lloc web. El seu atribut principal és <code class="mono">href</code>, que indica la URL de destinació. Amb <code class="mono">target="_blank"</code> l'enllaç s'obre en una pestanya nova.</p>
+        <div class="cards2">
+          <div class="mini-card">
+            <h3>Enllaç extern</h3>
+            <pre class="code"><code>&lt;<span class="tok-tag">a</span> <span class="tok-attr">href</span>=<span class="tok-str">"https://www.wikipedia.org"</span>
+   <span class="tok-attr">target</span>=<span class="tok-str">"_blank"</span>&gt;
+  Visita Viquipèdia
+&lt;/<span class="tok-tag">a</span>&gt;</code></pre>
+          </div>
+          <div class="mini-card">
+            <h3>Enllaç a una altra pàgina del lloc</h3>
+            <pre class="code"><code>&lt;<span class="tok-tag">a</span> <span class="tok-attr">href</span>=<span class="tok-str">"pagina2.html"</span>&gt;
+  Zona activa
+&lt;/<span class="tok-tag">a</span>&gt;</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-panel" data-topic="5">
+        <h2>Imatges</h2>
+        <p>Amb l'etiqueta <code class="mono">&lt;img&gt;</code> indiquem el nom i la ubicació d'una imatge amb l'atribut <code class="mono">src</code>. Hi ha diferents tipus de ruta:</p>
+        <table class="props">
+          <tr><th>Tipus de ruta</th><th>Exemple</th></tr>
+          <tr><td>Absoluta (servidor extern)</td><td><code>https://exemple.com/img.jpg</code></td></tr>
+          <tr><td>Relativa a l'arrel del lloc</td><td><code>/imatges/img.jpg</code></td></tr>
+          <tr><td>Relativa a l'arxiu actual</td><td><code>imatges/img.jpg</code></td></tr>
+          <tr><td>Directori superior</td><td><code>../imatges/img.jpg</code></td></tr>
+        </table>
+        <p style="margin-top:14px;">L'atribut <code class="mono">alt</code> proporciona un text alternatiu quan la imatge no es pot mostrar, i és clau per l'accessibilitat (els lectors de pantalla el fan servir). Amb <code class="mono">width</code> podem definir l'amplada.</p>
+        <pre class="code"><code>&lt;<span class="tok-tag">img</span> <span class="tok-attr">src</span>=<span class="tok-str">"imatges/foto.jpg"</span>
+     <span class="tok-attr">alt</span>=<span class="tok-str">"Descripció de la imatge"</span>
+     <span class="tok-attr">width</span>=<span class="tok-str">"300"</span> /&gt;</code></pre>
+        <p>Una imatge també pot funcionar com a enllaç si l'envoltem amb <code class="mono">&lt;a&gt;</code>:</p>
+        <pre class="code"><code>&lt;<span class="tok-tag">a</span> <span class="tok-attr">href</span>=<span class="tok-str">"https://exemple.com"</span>&gt;
+  &lt;<span class="tok-tag">img</span> <span class="tok-attr">src</span>=<span class="tok-str">"boto.jpg"</span> <span class="tok-attr">alt</span>=<span class="tok-str">"Botó"</span> /&gt;
+&lt;/<span class="tok-tag">a</span>&gt;</code></pre>
+      </div>
+
+      <div class="topic-panel" data-topic="6">
+        <h2>Llistes</h2>
+        <p>Les llistes organitzen un document i el fan més fàcil de llegir. HTML en defineix dos tipus:</p>
+        <div class="cards2">
+          <div class="mini-card">
+            <h3>No ordenada (&lt;ul&gt;)</h3>
+            <p>Els elements van amb vinyetes, sense ordre concret.</p>
+            <pre class="code"><code>&lt;<span class="tok-tag">ul</span>&gt;
+  &lt;<span class="tok-tag">li</span>&gt;Oli&lt;/<span class="tok-tag">li</span>&gt;
+  &lt;<span class="tok-tag">li</span>&gt;Ceba&lt;/<span class="tok-tag">li</span>&gt;
+  &lt;<span class="tok-tag">li</span>&gt;All&lt;/<span class="tok-tag">li</span>&gt;
+&lt;/<span class="tok-tag">ul</span>&gt;</code></pre>
+          </div>
+          <div class="mini-card">
+            <h3>Ordenada (&lt;ol&gt;)</h3>
+            <p>Els elements es numeren automàticament, en ordre.</p>
+            <pre class="code"><code>&lt;<span class="tok-tag">ol</span>&gt;
+  &lt;<span class="tok-tag">li</span>&gt;Escalfar l'oli&lt;/<span class="tok-tag">li</span>&gt;
+  &lt;<span class="tok-tag">li</span>&gt;Afegir ceba&lt;/<span class="tok-tag">li</span>&gt;
+  &lt;<span class="tok-tag">li</span>&gt;Picar l'all&lt;/<span class="tok-tag">li</span>&gt;
+&lt;/<span class="tok-tag">ol</span>&gt;</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-panel" data-topic="7">
+        <h2>Taules</h2>
+        <p>Les taules presenten dades de manera estructurada. L'etiqueta <code class="mono">&lt;table&gt;</code> engloba totes les altres: <code class="mono">&lt;thead&gt;</code> (capçalera), <code class="mono">&lt;tr&gt;</code> (fila), <code class="mono">&lt;th&gt;</code> (cel·la de capçalera) i <code class="mono">&lt;td&gt;</code> (cel·la de dades).</p>
+        <pre class="code"><code>&lt;<span class="tok-tag">table</span> <span class="tok-attr">border</span>=<span class="tok-str">"1"</span>&gt;
+  &lt;<span class="tok-tag">tr</span>&gt;
+    &lt;<span class="tok-tag">td</span>&gt;fila1-cel·la1&lt;/<span class="tok-tag">td</span>&gt;
+    &lt;<span class="tok-tag">td</span>&gt;fila1-cel·la2&lt;/<span class="tok-tag">td</span>&gt;
+  &lt;/<span class="tok-tag">tr</span>&gt;
+  &lt;<span class="tok-tag">tr</span>&gt;
+    &lt;<span class="tok-tag">td</span>&gt;fila2-cel·la1&lt;/<span class="tok-tag">td</span>&gt;
+    &lt;<span class="tok-tag">td</span>&gt;fila2-cel·la2&lt;/<span class="tok-tag">td</span>&gt;
+  &lt;/<span class="tok-tag">tr</span>&gt;
+&lt;/<span class="tok-tag">table</span>&gt;</code></pre>
+        <table class="props">
+          <tr><th>Atribut</th><th>Per a què serveix</th></tr>
+          <tr><td><code>border</code></td><td>Mida del contorn de la taula.</td></tr>
+          <tr><td><code>cellpadding</code></td><td>Espai dins de cada cel·la.</td></tr>
+          <tr><td><code>cellspacing</code></td><td>Espai entre cel·les.</td></tr>
+          <tr><td><code>colspan</code> / <code>rowspan</code></td><td>Combinar cel·les en columna o fila.</td></tr>
+        </table>
+        <p style="margin-top:14px;">Amb CSS podem millorar-ne l'estil, per exemple ajuntant tots els contorns en un de sol:</p>
+        <pre class="code"><code><span class="tok-sel">table, th, td</span> <span class="tok-punc">{</span>
+  <span class="tok-prop">border</span><span class="tok-punc">:</span> <span class="tok-val">1px solid black</span><span class="tok-punc">;</span>
+  <span class="tok-prop">border-collapse</span><span class="tok-punc">:</span> <span class="tok-val">collapse</span><span class="tok-punc">;</span>
+<span class="tok-punc">}</span></code></pre>
+      </div>
+
+      <div class="topic-panel" data-topic="8">
+        <h2>Capes (&lt;div&gt;)</h2>
+        <p>L'etiqueta <code class="mono">&lt;div&gt;</code> agrupa contingut sense presentar-lo de cap manera especial per si mateixa; el seu valor ve de combinar-la amb CSS per crear "capes" o blocs que després podem posicionar i estilitzar.</p>
+        <pre class="code"><code>&lt;<span class="tok-tag">div</span>
+  <span class="tok-attr">style</span>=<span class="tok-str">"background-color:#cccccc; width:200px; padding:10px;"</span>&gt;
+  Aquí va el contingut
+&lt;/<span class="tok-tag">div</span>&gt;</code></pre>
+        <p>Combinant diversos <code class="mono">&lt;div&gt;</code> amb classes i CSS es poden construir disposicions completes de pàgina (capçalera, menú, contingut principal), com veuràs a l'exemple en viu.</p>
+      </div>
+
+      <div class="topic-panel" data-topic="9">
+        <h2>Formularis</h2>
+        <p>Un <strong>formulari</strong> serveix per recollir dades de l'usuari i enviar-les a un servidor o processar-les amb JavaScript. Es defineix amb l'etiqueta <code class="mono">&lt;form&gt;</code>.</p>
+        <pre class="code"><code>&lt;<span class="tok-tag">form</span> <span class="tok-attr">action</span>=<span class="tok-str">"processa.php"</span> <span class="tok-attr">method</span>=<span class="tok-str">"post"</span>&gt;
+  <span class="tok-comment">&lt;!-- camps del formulari --&gt;</span>
+&lt;/<span class="tok-tag">form</span>&gt;</code></pre>
+        <p>Camps bàsics amb <code class="mono">&lt;input&gt;</code>: l'atribut <code class="mono">type</code> defineix el tipus de camp, <code class="mono">name</code> és la clau amb què s'envia la dada, i <code class="mono">value</code> pot ser el valor per defecte.</p>
+        <pre class="code"><code>&lt;<span class="tok-tag">input</span> <span class="tok-attr">type</span>=<span class="tok-str">"text"</span> <span class="tok-attr">name</span>=<span class="tok-str">"usuari"</span> /&gt;
+&lt;<span class="tok-tag">input</span> <span class="tok-attr">type</span>=<span class="tok-str">"password"</span> <span class="tok-attr">name</span>=<span class="tok-str">"clau"</span> /&gt;
+&lt;<span class="tok-tag">input</span> <span class="tok-attr">type</span>=<span class="tok-str">"email"</span> <span class="tok-attr">name</span>=<span class="tok-str">"correu"</span> /&gt;
+&lt;<span class="tok-tag">input</span> <span class="tok-attr">type</span>=<span class="tok-str">"checkbox"</span> <span class="tok-attr">name</span>=<span class="tok-str">"accepta"</span> /&gt;
+&lt;<span class="tok-tag">input</span> <span class="tok-attr">type</span>=<span class="tok-str">"radio"</span> <span class="tok-attr">name</span>=<span class="tok-str">"color"</span> <span class="tok-attr">value</span>=<span class="tok-str">"vermell"</span> /&gt;
+&lt;<span class="tok-tag">input</span> <span class="tok-attr">type</span>=<span class="tok-str">"submit"</span> <span class="tok-attr">value</span>=<span class="tok-str">"Enviar"</span> /&gt;</code></pre>
+        <div class="cards2">
+          <div class="mini-card">
+            <h3>&lt;textarea&gt;</h3>
+            <p>Per a textos llargs de diverses línies (comentaris, missatges). Necessita etiqueta d'obertura i tancament.</p>
+            <pre class="code"><code>&lt;<span class="tok-tag">textarea</span> <span class="tok-attr">name</span>=<span class="tok-str">"missatge"</span>&gt;&lt;/<span class="tok-tag">textarea</span>&gt;</code></pre>
+          </div>
+          <div class="mini-card">
+            <h3>Radiobuttons</h3>
+            <p>Per triar una sola opció d'un grup: han de compartir el mateix <code class="mono">name</code>.</p>
+            <pre class="code"><code>&lt;<span class="tok-tag">input</span> <span class="tok-attr">type</span>=<span class="tok-str">"radio"</span> <span class="tok-attr">name</span>=<span class="tok-str">"sexe"</span> <span class="tok-attr">value</span>=<span class="tok-str">"home"</span>/&gt; Home
+&lt;<span class="tok-tag">input</span> <span class="tok-attr">type</span>=<span class="tok-str">"radio"</span> <span class="tok-attr">name</span>=<span class="tok-str">"sexe"</span> <span class="tok-attr">value</span>=<span class="tok-str">"dona"</span>/&gt; Dona</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-panel" data-topic="10">
+        <h2>Àudio i vídeo</h2>
+        <p>L'element <code class="mono">&lt;video&gt;</code> permet incrustar vídeo fàcilment; l'atribut <code class="mono">controls</code> mostra els controls de reproducció:</p>
+        <pre class="code"><code>&lt;<span class="tok-tag">video</span> <span class="tok-attr">src</span>=<span class="tok-str">"video.webm"</span> <span class="tok-attr">controls</span>&gt;
+  &lt;<span class="tok-tag">p</span>&gt;El teu navegador no suporta vídeo HTML5.&lt;/<span class="tok-tag">p</span>&gt;
+&lt;/<span class="tok-tag">video</span>&gt;</code></pre>
+        <p>L'element <code class="mono">&lt;audio&gt;</code> funciona exactament igual, per a fitxers de so:</p>
+        <pre class="code"><code>&lt;<span class="tok-tag">audio</span> <span class="tok-attr">src</span>=<span class="tok-str">"so.mp3"</span> <span class="tok-attr">controls</span>&gt;
+  &lt;<span class="tok-tag">p</span>&gt;El teu navegador no suporta àudio HTML5.&lt;/<span class="tok-tag">p</span>&gt;
+&lt;/<span class="tok-tag">audio</span>&gt;</code></pre>
+      </div>
+
+      <div class="topic-panel" data-topic="11">
+        <h2>Exemple en viu: capes amb colors</h2>
+        <p>Aquest exemple combina tres <code class="mono">&lt;div&gt;</code> amb classes diferents, estilitzades amb CSS intern, per crear una capçalera, un menú i un contingut principal.</p>
+        <div class="live-grid">
+          <div>
+            <div class="panel-label">codi.html</div>
+            <pre class="code tall"><code>&lt;<span class="tok-tag">style</span>&gt;
+  <span class="tok-sel">div.cabecera</span> <span class="tok-punc">{</span>
+    <span class="tok-prop">background-color</span><span class="tok-punc">:</span> <span class="tok-val">#da543c</span><span class="tok-punc">;</span>
+  <span class="tok-punc">}</span>
+  <span class="tok-sel">div.menu</span> <span class="tok-punc">{</span>
+    <span class="tok-prop">background-color</span><span class="tok-punc">:</span> <span class="tok-val">green</span><span class="tok-punc">;</span>
+    <span class="tok-prop">float</span><span class="tok-punc">:</span> <span class="tok-val">left</span><span class="tok-punc">;</span> <span class="tok-prop">width</span><span class="tok-punc">:</span> <span class="tok-val">30%</span><span class="tok-punc">;</span>
+  <span class="tok-punc">}</span>
+  <span class="tok-sel">div.principal</span> <span class="tok-punc">{</span>
+    <span class="tok-prop">background-color</span><span class="tok-punc">:</span> <span class="tok-val">#2965c9</span><span class="tok-punc">;</span>
+    <span class="tok-prop">float</span><span class="tok-punc">:</span> <span class="tok-val">left</span><span class="tok-punc">;</span> <span class="tok-prop">width</span><span class="tok-punc">:</span> <span class="tok-val">70%</span><span class="tok-punc">;</span>
+  <span class="tok-punc">}</span>
+&lt;/<span class="tok-tag">style</span>&gt;
+
+&lt;<span class="tok-tag">div</span> <span class="tok-attr">class</span>=<span class="tok-str">"cabecera"</span>&gt;
+  &lt;<span class="tok-tag">h1</span>&gt;Capçalera&lt;/<span class="tok-tag">h1</span>&gt;
+&lt;/<span class="tok-tag">div</span>&gt;
+&lt;<span class="tok-tag">div</span> <span class="tok-attr">class</span>=<span class="tok-str">"menu"</span>&gt;
+  &lt;<span class="tok-tag">p</span>&gt;Menú&lt;/<span class="tok-tag">p</span>&gt;
+&lt;/<span class="tok-tag">div</span>&gt;
+&lt;<span class="tok-tag">div</span> <span class="tok-attr">class</span>=<span class="tok-str">"principal"</span>&gt;
+  &lt;<span class="tok-tag">p</span>&gt;Contingut principal&lt;/<span class="tok-tag">p</span>&gt;
+&lt;/<span class="tok-tag">div</span>&gt;</code></pre>
+          </div>
+          <div>
+            <div class="panel-label">resultat al navegador</div>
+            <div class="preview-window">
+              <iframe title="vista prèvia" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset='UTF-8'&gt;&lt;style&gt;body{font-family:sans-serif;margin:0;color:#fff}h1{margin:0;font-size:18px;padding:14px}p{margin:0;padding:14px}div.cabecera{background-color:#da543c;}div.menu{background-color:green;float:left;width:30%;box-sizing:border-box;min-height:150px;}div.principal{background-color:#2965c9;float:left;width:70%;box-sizing:border-box;min-height:150px;}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class='cabecera'&gt;&lt;h1&gt;Capçalera&lt;/h1&gt;&lt;/div&gt;&lt;div class='menu'&gt;&lt;p&gt;Menú&lt;/p&gt;&lt;/div&gt;&lt;div class='principal'&gt;&lt;p&gt;Contingut principal&lt;/p&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-panel" data-topic="12">
+        <h2>Resum</h2>
+        <table class="summary">
+          <tr><th>Etiqueta / atribut</th><th>Per a què serveix</th></tr>
+          <tr><td>&lt;html&gt; / &lt;head&gt; / &lt;body&gt;</td><td>Esquelet de tot document HTML.</td></tr>
+          <tr><td>&lt;p&gt; / &lt;br&gt;</td><td>Paràgrafs i salts de línia.</td></tr>
+          <tr><td>&lt;strong&gt; / &lt;i&gt; / &lt;u&gt;</td><td>Negreta, cursiva i subratllat.</td></tr>
+          <tr><td>Color hexadecimal</td><td>#RRGGBB per definir qualsevol color.</td></tr>
+          <tr><td>&lt;a href="..."&gt;</td><td>Enllaços a altres pàgines o llocs.</td></tr>
+          <tr><td>&lt;img src="..." alt="..."&gt;</td><td>Imatges, amb text alternatiu per accessibilitat.</td></tr>
+          <tr><td>&lt;ul&gt; / &lt;ol&gt; / &lt;li&gt;</td><td>Llistes sense ordre o numerades.</td></tr>
+          <tr><td>&lt;table&gt; / &lt;tr&gt; / &lt;th&gt; / &lt;td&gt;</td><td>Taules de dades.</td></tr>
+          <tr><td>&lt;div&gt;</td><td>Agrupar contingut per estilitzar-lo amb CSS.</td></tr>
+          <tr><td>&lt;form&gt; / &lt;input&gt; / &lt;textarea&gt;</td><td>Formularis per recollir dades de l'usuari.</td></tr>
+          <tr><td>&lt;video&gt; / &lt;audio&gt;</td><td>Contingut multimèdia amb controls de reproducció.</td></tr>
+        </table>
+      </div>
+
+      <div class="topic-nav">
+        <button class="nav-btn" id="topic-prev">← Anterior</button>
+        <button class="nav-btn primary" id="topic-next">Següent →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== TEST ===================== -->
+  <div class="mode-panel" id="mode-test">
+    <div class="exam-stats">
+      <div class="stat-pill ok"><div class="num" id="stat-correct">0</div><div class="lbl">Correctes ✅</div></div>
+      <div class="stat-pill bad"><div class="num" id="stat-wrong">0</div><div class="lbl">Incorrectes ❌</div></div>
+      <div class="stat-pill score"><div class="num" id="stat-score">0/12</div><div class="lbl">Puntuació</div></div>
+    </div>
+    <div class="exam-progress"><div class="exam-progress-fill" id="exam-progress-fill"></div></div>
+
+    <div class="card" id="exam-card">
+      <span class="q-num" id="q-num">Pregunta 1 / 12</span>
+      <div class="q-text" id="q-text"></div>
+      <div class="q-options" id="q-options"></div>
+      <div class="q-feedback" id="q-feedback"></div>
+      <div class="exam-footer">
+        <button class="btn primary" id="q-next" style="display:none;">Següent →</button>
+      </div>
+    </div>
+
+    <div class="card" id="exam-final">
+      <div class="big">Has encertat <span id="final-score"></span></div>
+      <p class="muted" id="final-message" style="margin:8px auto 0; max-width:50ch;"></p>
+      <div class="save-row">
+        <input type="text" id="player-name" placeholder="El teu nom (opcional)" maxlength="24">
+        <button class="btn primary" id="save-rank-btn">🏆 Guardar al rànquing</button>
+      </div>
+      <div class="save-row">
+        <button class="btn ghost" id="retry-btn">🔄 Repetir el test</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== RANKING ===================== -->
+  <div class="mode-panel" id="mode-ranking">
+    <div class="card">
+      <div class="rank-header">
+        <h2 style="margin:0;">🏆 Rànquing</h2>
+        <button class="btn ghost" id="clear-rank-btn">🗑️ Esborrar rànquing</button>
+      </div>
+      <div class="rank-list" id="rank-list"></div>
+      <div class="empty-rank" id="rank-empty" style="display:none;">Encara no hi ha cap puntuació guardada. Fes el test i guarda la teva!</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>Apunts d'HTML — estructura, text, colors, enllaços, imatges, llistes, taules, capes, formularis i multimèdia.</footer>
+
+<script>
+  /* ---------- mode tabs ---------- */
+  const modeTabs = document.querySelectorAll(".mode-tab");
+  const modePanels = { teoria: document.getElementById("mode-teoria"), test: document.getElementById("mode-test"), ranking: document.getElementById("mode-ranking") };
+  modeTabs.forEach(btn => {
+    btn.addEventListener("click", () => {
+      modeTabs.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      Object.values(modePanels).forEach(p => p.classList.remove("active"));
+      modePanels[btn.dataset.mode].classList.add("active");
+      if (btn.dataset.mode === "ranking") renderRanking();
+    });
+  });
+  function goToMode(name){
+    modeTabs.forEach(b => b.classList.toggle("active", b.dataset.mode === name));
+    Object.entries(modePanels).forEach(([k,p]) => p.classList.toggle("active", k === name));
+    if (name === "ranking") renderRanking();
+  }
+
+  /* ---------- teoria sub-tabs ---------- */
+  const subTabs = document.querySelectorAll(".sub-tab");
+  const topicPanels = document.querySelectorAll(".topic-panel");
+  let topicIndex = 0;
+  function showTopic(i){
+    topicIndex = i;
+    subTabs.forEach(t => t.classList.toggle("active", Number(t.dataset.topic) === i));
+    topicPanels.forEach(p => p.classList.toggle("active", Number(p.dataset.topic) === i));
+    document.getElementById("topic-prev").disabled = i === 0;
+    const nextBtn = document.getElementById("topic-next");
+    nextBtn.textContent = (i === topicPanels.length - 1) ? "Anar al test →" : "Següent →";
+    document.querySelector(".card").scrollIntoView({behavior:"smooth", block:"start"});
+  }
+  subTabs.forEach(t => t.addEventListener("click", () => showTopic(Number(t.dataset.topic))));
+  document.getElementById("topic-prev").addEventListener("click", () => { if (topicIndex > 0) showTopic(topicIndex - 1); });
+  document.getElementById("topic-next").addEventListener("click", () => {
+    if (topicIndex < topicPanels.length - 1) showTopic(topicIndex + 1);
+    else goToMode("test");
+  });
+
+  /* ---------- exam ---------- */
+  const questions = [
+    { q: "Què significa la sigla HTML?", options: ["Hyper Text Markup Language", "High Text Modern Language", "Hyperlink and Text Markup Language", "Home Tool Markup Language"], correct: 0,
+      explain: "HTML és l'abreviatura de Hyper Text Markup Language, el llenguatge de marques per crear pàgines web." },
+    { q: "Quina etiqueta ha d'obrir i tancar sempre tot document HTML?", options: ["<body>", "<html>", "<head>", "<doc>"], correct: 1,
+      explain: "Tot document HTML comença amb <html> i acaba amb </html>; dins hi ha el head i el body." },
+    { q: "On s'ha de col·locar l'etiqueta <title> d'una pàgina?", options: ["Dins de <body>", "Dins de <head>", "Just abans de </html>", "Dins de <footer>"], correct: 1,
+      explain: "<title> defineix el text de la pestanya del navegador i va dins de <head>, ja que configura la pàgina." },
+    { q: "Quina etiqueta fa un salt de línia dins d'un paràgraf?", options: ["<p>", "<br>", "<hr>", "<ln>"], correct: 1,
+      explain: "<br> força un salt de línia; els salts de línia normals al codi no es respecten al navegador." },
+    { q: "Quina etiqueta marca un text com a important, mostrant-lo en negreta?", options: ["<i>", "<u>", "<strong>", "<small>"], correct: 2,
+      explain: "<strong> (com també <b>) mostra el text en negreta; <i> és cursiva i <u> és subratllat." },
+    { q: "Quin codi hexadecimal correspon al color blanc?", options: ["#000000", "#FF0000", "#FFFFFF", "#00FF00"], correct: 2,
+      explain: "#FFFFFF és el valor màxim als tres components (vermell, verd, blau), que dona blanc; #000000 és negre." },
+    { q: "Quin atribut de l'etiqueta <a> indica la URL de destinació?", options: ["src", "href", "link", "target"], correct: 1,
+      explain: "href indica cap a on porta l'enllaç. target només defineix si s'obre en una pestanya nova." },
+    { q: "Quin atribut de <img> proporciona un text alternatiu per accessibilitat?", options: ["title", "alt", "src", "desc"], correct: 1,
+      explain: "alt descriu la imatge per als lectors de pantalla i quan la imatge no es pot carregar." },
+    { q: "Quina etiqueta crea una llista amb vinyetes, sense ordre?", options: ["<ol>", "<ul>", "<li>", "<dl>"], correct: 1,
+      explain: "<ul> crea una llista no ordenada; <ol> és la ordenada i <li> defineix cada element dins de qualsevol de les dues." },
+    { q: "Dins d'una taula, quina etiqueta defineix una cel·la d'encapçalament?", options: ["<td>", "<tr>", "<th>", "<table>"], correct: 2,
+      explain: "<th> és la cel·la de capçalera (normalment en negreta); <td> és una cel·la de dades normal i <tr> és la fila." },
+    { q: "Quina etiqueta es fa servir per agrupar contingut i crear \"capes\" que després es poden estilitzar amb CSS?", options: ["<span>", "<div>", "<section>", "<group>"], correct: 1,
+      explain: "<div> agrupa contingut en un bloc, sense estil propi, perquè el puguem posicionar i estilitzar amb CSS." },
+    { q: "Quina etiqueta defineix un formulari en HTML?", options: ["<input>", "<form>", "<field>", "<data>"], correct: 1,
+      explain: "<form> engloba tots els camps del formulari (inputs, textarea, botons...) i defineix com i on s'envien les dades." }
+  ];
+  const letters = ["A","B","C","D"];
+  let qi = 0, correctCount = 0, wrongCount = 0;
+  document.getElementById("stat-score").textContent = "0/" + questions.length;
+  document.getElementById("q-num").textContent = "Pregunta 1 / " + questions.length;
+
+  function renderQuestion(){
+    const item = questions[qi];
+    document.getElementById("q-num").textContent = "Pregunta " + (qi+1) + " / " + questions.length;
+    document.getElementById("q-text").textContent = item.q;
+    document.getElementById("exam-progress-fill").style.width = (qi/questions.length*100) + "%";
+    const opts = document.getElementById("q-options");
+    opts.innerHTML = "";
+    item.options.forEach((optText, oi) => {
+      const btn = document.createElement("button");
+      btn.className = "q-option";
+      btn.innerHTML = '<span class="letter">' + letters[oi] + '</span><span>' + optText + '</span>';
+      btn.addEventListener("click", () => selectAnswer(oi));
+      opts.appendChild(btn);
+    });
+    document.getElementById("q-feedback").classList.remove("show");
+    document.getElementById("q-next").style.display = "none";
+  }
+
+  function selectAnswer(oi){
+    const item = questions[qi];
+    const allBtns = document.querySelectorAll("#q-options .q-option");
+    allBtns.forEach(b => b.disabled = true);
+    if (oi === item.correct){
+      allBtns[oi].classList.add("correct");
+      correctCount++;
+    } else {
+      allBtns[oi].classList.add("wrong");
+      allBtns[item.correct].classList.add("correct");
+      wrongCount++;
+    }
+    document.getElementById("stat-correct").textContent = correctCount;
+    document.getElementById("stat-wrong").textContent = wrongCount;
+    document.getElementById("stat-score").textContent = correctCount + "/" + questions.length;
+
+    const fb = document.getElementById("q-feedback");
+    fb.classList.add("show");
+    fb.innerHTML = "<strong>" + (oi === item.correct ? "Correcte. " : "No exactament. ") + "</strong>" + item.explain;
+
+    document.getElementById("q-next").textContent = (qi === questions.length - 1) ? "Veure resultat →" : "Següent →";
+    document.getElementById("q-next").style.display = "inline-block";
+  }
+
+  document.getElementById("q-next").addEventListener("click", () => {
+    if (qi < questions.length - 1){
+      qi++;
+      renderQuestion();
+    } else {
+      document.getElementById("exam-progress-fill").style.width = "100%";
+      document.getElementById("exam-card").style.display = "none";
+      const finalBox = document.getElementById("exam-final");
+      finalBox.classList.add("show");
+      document.getElementById("final-score").textContent = correctCount + " de " + questions.length;
+      let msg;
+      if (correctCount === questions.length) msg = "Domines els conceptes bàsics d'HTML.";
+      else if (correctCount >= questions.length * 0.6) msg = "Bona base; repassa les preguntes que has fallat.";
+      else msg = "Torna a la Teoria i repassa l'estructura del document i les etiquetes bàsiques abans de tornar-ho a intentar.";
+      document.getElementById("final-message").textContent = msg;
+    }
+  });
+
+  function resetExam(){
+    qi = 0; correctCount = 0; wrongCount = 0;
+    document.getElementById("stat-correct").textContent = "0";
+    document.getElementById("stat-wrong").textContent = "0";
+    document.getElementById("stat-score").textContent = "0/" + questions.length;
+    document.getElementById("exam-card").style.display = "block";
+    document.getElementById("exam-final").classList.remove("show");
+    document.getElementById("player-name").value = "";
+    renderQuestion();
+  }
+  document.getElementById("retry-btn").addEventListener("click", resetExam);
+
+  /* ---------- ranking (localStorage) ---------- */
+  const RANK_KEY = "html-apunts-ranking";
+  function loadRanking(){
+    try { return JSON.parse(localStorage.getItem(RANK_KEY)) || []; }
+    catch(e){ return []; }
+  }
+  function saveRanking(list){
+    try { localStorage.setItem(RANK_KEY, JSON.stringify(list)); } catch(e){}
+  }
+  function renderRanking(){
+    const list = loadRanking().sort((a,b) => b.score - a.score || new Date(b.date) - new Date(a.date));
+    const container = document.getElementById("rank-list");
+    const empty = document.getElementById("rank-empty");
+    container.innerHTML = "";
+    if (list.length === 0){ empty.style.display = "block"; return; }
+    empty.style.display = "none";
+    list.slice(0, 20).forEach((entry, i) => {
+      const row = document.createElement("div");
+      row.className = "rank-row";
+      row.innerHTML =
+        '<span class="pos">#' + (i+1) + '</span>' +
+        '<span class="name">' + entry.name + '</span>' +
+        '<span class="date">' + entry.date + '</span>' +
+        '<span class="pts">' + entry.score + '/' + entry.total + '</span>';
+      container.appendChild(row);
+    });
+  }
+  document.getElementById("save-rank-btn").addEventListener("click", () => {
+    const nameInput = document.getElementById("player-name").value.trim();
+    const name = nameInput === "" ? "Anònim" : nameInput;
+    const list = loadRanking();
+    list.push({ name, score: correctCount, total: questions.length, date: new Date().toLocaleDateString("ca-ES") });
+    saveRanking(list);
+    goToMode("ranking");
+  });
+  document.getElementById("clear-rank-btn").addEventListener("click", () => {
+    saveRanking([]);
+    renderRanking();
+  });
+
+  /* ---------- init ---------- */
+  renderQuestion();
+  showTopic(0);
+</script>
+
+</body>
+</html>
