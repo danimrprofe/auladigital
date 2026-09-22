@@ -341,8 +341,16 @@ function renderThemeIndex(subject, themeSlug) {
     return;
   }
 
-  const itemsHtml = (section.items || [])
-    .map((it) => {
+  const groupedItems = (section.items || []).reduce((groups, item) => {
+    const moduleName = item.module || "Recursos del tema";
+    if (!groups[moduleName]) groups[moduleName] = [];
+    groups[moduleName].push(item);
+    return groups;
+  }, {});
+
+  const modulesHtml = Object.entries(groupedItems)
+    .map(([moduleName, items]) => {
+      const itemsHtml = items.map((it) => {
       const safeHref = it.href || "";
       const hasLink = Boolean(safeHref);
       return `
@@ -357,6 +365,17 @@ function renderThemeIndex(subject, themeSlug) {
           </div>
         </li>
       `;
+      }).join("");
+
+      return `
+        <section class="theme-module mb-4">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="theme-module-marker" aria-hidden="true"></span>
+            <h2 class="h5 mb-0">${moduleName}</h2>
+          </div>
+          <ul class="list-group list-group-flush glass-list shadow-sm">${itemsHtml}</ul>
+        </section>
+      `;
     })
     .join("");
 
@@ -365,7 +384,7 @@ function renderThemeIndex(subject, themeSlug) {
       <div class="small text-muted mb-1">${subject.name}</div>
       <h1 class="h3 mb-0">${section.title}</h1>
     </div>
-    <ul class="list-group list-group-flush glass-list shadow-sm">${itemsHtml}</ul>
+    ${modulesHtml}
   `;
 }
 

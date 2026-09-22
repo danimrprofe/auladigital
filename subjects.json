@@ -325,18 +325,18 @@
         "slug": "tema-web-avancat",
         "technologies": ["HTML", "CSS", "JavaScript", "Bootstrap"],
         "items": [
-          { "icon": "📄", "label": "Apunts", "title": "Apunts HTML" },
-          { "icon": "🧾", "label": "Cheatsheet", "title": "Cheatsheet HTML" },
-          { "icon": "📄", "label": "Apunts", "title": "Apunts CSS" },
-          { "icon": "🧾", "label": "Cheatsheet", "title": "Cheatsheet CSS" },
-          { "icon": "📄", "label": "Apunts", "title": "Apunts JavaScript" },
-          { "icon": "✅", "label": "Rúbrica", "title": "Rúbrica Bootstrap" },
-          { "icon": "📄", "label": "Apunts", "title": "Apunts Bootstrap" },
-          { "icon": "🗂️", "label": "Esquema", "title": "Esquema pàgina web pel·lícula" },
-          { "icon": "🌐", "label": "Tutorial", "title": "W3C Tutorial Bootstrap 5" },
-          { "icon": "🌐", "label": "Recurs", "title": "Web oficial de Bootstrap" },
-          { "icon": "🔧", "label": "Guia", "title": "Instruccions git i GitHub" },
-          { "icon": "📦", "label": "Entrega", "title": "Entrega web Bootstrap" }
+          { "module": "Mòdul 1: Fonaments Web (HTML & CSS)", "icon": "📄", "label": "Apunts", "title": "HTML", "href": "./index.html" },
+          { "module": "Mòdul 1: Fonaments Web (HTML & CSS)", "icon": "📄", "label": "Apunts", "title": "CSS", "href": "./apunts-css.html" },
+          { "module": "Mòdul 1: Fonaments Web (HTML & CSS)", "icon": "🧾", "label": "Cheatsheet", "title": "Cheatsheet HTML" },
+          { "module": "Mòdul 1: Fonaments Web (HTML & CSS)", "icon": "🧾", "label": "Cheatsheet", "title": "Cheatsheet CSS" },
+          { "module": "Mòdul 2: Disseny Responsive i Frameworks (Bootstrap)", "icon": "📄", "label": "Apunts", "title": "Bootstrap" },
+          { "module": "Mòdul 2: Disseny Responsive i Frameworks (Bootstrap)", "icon": "🌐", "label": "Recurs extern", "title": "Web oficial de Bootstrap" },
+          { "module": "Mòdul 2: Disseny Responsive i Frameworks (Bootstrap)", "icon": "🌐", "label": "Recurs extern", "title": "W3C Tutorial Bootstrap 5" },
+          { "module": "Mòdul 2: Disseny Responsive i Frameworks (Bootstrap)", "icon": "✅", "label": "Rúbrica", "title": "Rúbrica Bootstrap" },
+          { "module": "Mòdul 2: Disseny Responsive i Frameworks (Bootstrap)", "icon": "📦", "label": "Entrega", "title": "Entrega de projecte: Web Bootstrap" },
+          { "module": "Mòdul 3: Programació Client (JavaScript)", "icon": "📄", "label": "Apunts", "title": "JavaScript", "href": "./apunts-javascript.html" },
+          { "module": "Eines de desenvolupament i projectes", "icon": "🔧", "label": "Guia", "title": "Git i GitHub" },
+          { "module": "Eines de desenvolupament i projectes", "icon": "🗂️", "label": "Esquema / plantilla", "title": "Pàgina web de pel·lícula" }
         ]
       },
       {
