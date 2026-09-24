@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Bootstrap — Teoria</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Nunito:wght@700;800;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #eef1f8;
+    --surface: #ffffff;
+    --surface2: #f0f3fa;
+    --border: #c8d0e8;
+    --accent: #7c3aed;
+    --accent2: #dc2626;
+    --accent3: #15803d;
+    --accent4: #b45309;
+    --text: #0f1629;
+    --muted: #374151;
+    --tag-bg: rgba(124,58,237,0.08);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 19px;
+    line-height: 1.65;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, #b0bcd8 1px, transparent 1px);
+    background-size: 32px 32px;
+    opacity: 0.45;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 56px 40px 44px;
+    border-bottom: 2px solid var(--border);
+    background: linear-gradient(180deg, #fff 0%, var(--bg) 100%);
+  }
+
+  .header-pill {
+    display: inline-block;
+    background: var(--tag-bg);
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 5px 20px;
+    border-radius: 100px;
+    margin-bottom: 22px;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, #0f1629 25%, #7c3aed 85%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 18px;
+  }
+
+  .header-sub {
+    color: #374151;
+    font-size: 1.15rem;
+    max-width: 700px;
+    margin: 0 auto;
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(238,241,248,0.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 2px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+  nav::-webkit-scrollbar { display: none; }
+  nav a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #374151;
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 13.5px;
+    font-weight: 500;
+    padding: 16px 20px;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: color .2s, border-color .2s;
+  }
+  nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 52px 48px 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+  }
+
+  section {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(28px);
+    animation: fadeUp .45s ease forwards;
+    box-shadow: 0 2px 16px rgba(15,22,41,0.07);
+  }
+  section:nth-child(1) { animation-delay: .05s; }
+  section:nth-child(2) { animation-delay: .10s; }
+  section:nth-child(3) { animation-delay: .15s; }
+  section:nth-child(4) { animation-delay: .20s; }
+  section:nth-child(5) { animation-delay: .25s; }
+  section:nth-child(6) { animation-delay: .30s; }
+  section:nth-child(7) { animation-delay: .35s; }
+
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 26px 36px 22px;
+    border-bottom: 1.5px solid var(--border);
+    background: linear-gradient(90deg, #f8f9ff 0%, #fff 100%);
+  }
+
+  .section-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(124,58,237,.10); }
+  .icon-blue   { background: rgba(29,78,216,.10); }
+  .icon-green  { background: rgba(21,128,61,.12); }
+  .icon-yellow { background: rgba(180,83,9,.12); }
+  .icon-red    { background: rgba(220,38,38,.12); }
+  .icon-teal   { background: rgba(13,148,136,.12); }
+  .icon-pink   { background: rgba(219,39,119,.12); }
+
+  .section-title {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.5rem; font-weight: 800;
+    letter-spacing: -0.2px; color: #0f1629;
+  }
+  .section-sub {
+    color: #374151; font-size: .92rem;
+    font-family: 'DM Mono', monospace; font-weight: 500;
+  }
+
+  .section-body {
+    padding: 28px 36px;
+    display: flex; flex-direction: column; gap: 20px;
+  }
+
+  p { color: #1a2340; font-size: 1.05rem; line-height: 1.7; }
+
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem; font-weight: 800;
+    color: #0f1629; margin-bottom: 4px;
+  }
+
+  /* CARDS */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 22px 20px;
+    display: flex; flex-direction: column; gap: 10px;
+    transition: border-color .2s, box-shadow .2s, transform .2s;
+  }
+  .card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 18px rgba(124,58,237,0.10);
+    transform: translateY(-2px);
+  }
+  .card-icon { font-size: 28px; }
+  .card-title { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1.05rem; color: #0f1629; }
+  .card-desc { color: #2d3a52; font-size: .97rem; line-height: 1.55; }
+
+  /* BULLET LIST */
+  ul.bullet-list {
+    list-style: none; display: flex; flex-direction: column; gap: 10px; padding: 0;
+  }
+  ul.bullet-list li {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 1.05rem; color: #1a2340; line-height: 1.55;
+  }
+  ul.bullet-list li::before {
+    content: '▸'; color: var(--accent); font-size: 1.1rem;
+    flex-shrink: 0; margin-top: 1px; font-weight: 700;
+  }
+
+  /* CARD MINI LIST */
+  ul.card-list {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: 5px;
+  }
+  ul.card-list li {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: .97rem; color: #2d3a52; line-height: 1.45;
+  }
+  ul.card-list li::before {
+    content: '·'; color: var(--accent);
+    font-size: 1.3rem; flex-shrink: 0; line-height: 1.2; font-weight: 900;
+  }
+
+  /* KEY CONCEPT */
+  .key-concept {
+    background: linear-gradient(135deg, rgba(124,58,237,0.07), rgba(21,128,61,0.04));
+    border: 1.5px solid rgba(124,58,237,0.25);
+    border-radius: 12px; padding: 18px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 1rem; font-weight: 500; color: #7c3aed;
+  }
+
+  /* ALERT */
+  .alert {
+    display: flex; gap: 16px; align-items: flex-start;
+    background: var(--surface2); border-left: 4px solid var(--accent2);
+    border-radius: 10px; padding: 18px 22px;
+    font-size: 1rem; color: #1a2340;
+  }
+  .alert .alert-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+  .alert.info    { border-left-color: var(--accent);  background: rgba(124,58,237,0.05); }
+  .alert.success { border-left-color: var(--accent3); background: rgba(21,128,61,0.05); }
+  .alert.warning { border-left-color: var(--accent4); background: rgba(180,83,9,0.05); }
+
+  /* FLOW */
+  .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+  .flow-item {
+    background: var(--surface2); border: 1.5px solid var(--border);
+    border-radius: 10px; padding: 12px 20px;
+    font-size: .97rem; font-family: 'DM Mono', monospace;
+    color: #0f1629; font-weight: 500; line-height: 1.4;
+  }
+  .flow-arrow { color: #374151; font-size: 1.3rem; font-weight: 700; }
+
+  /* TABLE */
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 1rem; }
+  .compare-table th {
+    background: var(--surface2); color: var(--accent);
+    font-family: 'DM Mono', monospace; font-size: .88rem;
+    font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+    padding: 14px 18px; text-align: left; border-bottom: 2px solid var(--border);
+  }
+  .compare-table td {
+    padding: 14px 18px; border-bottom: 1px solid var(--border);
+    color: #1a2340; vertical-align: top; font-size: 1rem;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: #f8f5ff; }
+
+  /* KEYBOARD */
+  kbd {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: #fff; border: 1.5px solid #b0bcd8; border-bottom: 3px solid #8898c0;
+    border-radius: 7px; padding: 3px 10px;
+    font-family: 'DM Mono', monospace; font-size: .88rem;
+    font-weight: 600; color: #0f1629;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.10); white-space: nowrap;
+  }
+
+  /* TAG */
+  .tag {
+    display: inline-block; padding: 3px 12px; border-radius: 100px;
+    font-size: .85rem; font-family: 'DM Mono', monospace; font-weight: 600;
+  }
+  .tag-safe   { background: rgba(21,128,61,.10); color: #15803d; border: 1.5px solid rgba(21,128,61,.3); }
+  .tag-danger { background: rgba(220,38,38,.10); color: #dc2626; border: 1.5px solid rgba(220,38,38,.3); }
+  .tag-purple { background: rgba(124,58,237,.10); color: #7c3aed; border: 1.5px solid rgba(124,58,237,.3); }
+
+  /* BADGE LIST */
+  .badge-list { display: flex; flex-wrap: wrap; gap: 10px; }
+  .badge {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--surface2); border: 1.5px solid var(--border);
+    border-radius: 10px; padding: 10px 18px;
+    font-size: 1rem; color: #1a2340;
+    transition: border-color .2s;
+  }
+  .badge:hover { border-color: var(--accent); }
+  .badge strong { font-family: 'Syne', sans-serif; font-weight: 800; color: #0f1629; }
+
+  /* CODE BLOCK */
+  .code-block {
+    background: #1a1f36;
+    border-radius: 12px;
+    padding: 20px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: .92rem;
+    line-height: 1.8;
+    color: #e8eaf6;
+    overflow-x: auto;
+    border: 1.5px solid #252a42;
+  }
+  .code-block .cm { color: #6b7db8; }
+  .code-block .tg { color: #79b8ff; }
+  .code-block .at { color: #f7c94f; }
+  .code-block .vl { color: #85e89d; }
+  .code-block .tx { color: #e8eaf6; }
+  .code-block .cl { color: #f97583; }
+
+  /* GRID DEMO */
+  .grid-demo {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .grid-row {
+    display: flex;
+    gap: 8px;
+  }
+  .grid-col {
+    background: rgba(124,58,237,0.12);
+    border: 1.5px solid rgba(124,58,237,0.3);
+    border-radius: 8px;
+    padding: 10px 8px;
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: .82rem;
+    color: #7c3aed;
+    font-weight: 600;
+    flex: 1;
+  }
+  .grid-col.col2 { flex: 2; }
+  .grid-col.col3 { flex: 3; }
+  .grid-col.col4 { flex: 4; }
+  .grid-col.col6 { flex: 6; }
+  .grid-col.col8 { flex: 8; }
+  .grid-col.col9 { flex: 9; }
+  .grid-col.col12 { flex: 12; }
+  .grid-label {
+    font-family: 'DM Mono', monospace;
+    font-size: .8rem;
+    color: #374151;
+    margin-bottom: 4px;
+  }
+
+  /* BREAKPOINT PILLS */
+  .bp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .bp-card {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .bp-prefix {
+    font-family: 'DM Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #7c3aed;
+  }
+  .bp-size {
+    font-family: 'DM Mono', monospace;
+    font-size: .85rem;
+    color: #374151;
+  }
+  .bp-device {
+    font-size: .92rem;
+    color: #1a2340;
+    font-weight: 500;
+  }
+
+  footer {
+    position: relative; z-index: 1; text-align: center;
+    padding: 32px 40px; border-top: 2px solid var(--border);
+    color: #374151; font-family: 'DM Mono', monospace; font-size: .82rem;
+  }
+
+  @media(max-width:900px) {
+    main { padding: 36px 24px 80px; }
+    .section-header { padding: 20px 22px 18px; }
+    .section-body { padding: 22px; }
+  }
+  @media(max-width:600px) {
+    h1 { font-size: 2.4rem; }
+    nav a { padding: 12px 12px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-pill">Desenvolupament Web · Batxillerat / FP</div>
+  <h1>Bootstrap</h1>
+  <p class="header-sub">Framework CSS per crear webs responsives de manera ràpida i professional</p>
+</header>
+
+<nav>
+  <a href="#introduccio">🧩 Introducció</a>
+  <a href="#installacio">⚙️ Instal·lació</a>
+  <a href="#grid">📐 Grid</a>
+  <a href="#breakpoints">📱 Breakpoints</a>
+  <a href="#utilities">🛠️ Utilitats</a>
+  <a href="#components">🧱 Components</a>
+  <a href="#comparativa">⚖️ Comparativa</a>
+</nav>
+
+<main>
+
+  <!-- INTRODUCCIÓ -->
+  <section id="introduccio">
+    <div class="section-header">
+      <div class="section-icon icon-purple">🧩</div>
+      <div>
+        <div class="section-title">Què és Bootstrap?</div>
+        <div class="section-sub">el framework CSS més usat del món</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li><strong>Bootstrap</strong> és un framework CSS de codi obert creat per Twitter el 2011, ara mantingut per la comunitat.</li>
+        <li>Proporciona un conjunt de <strong>classes CSS predefinides</strong> i components JavaScript per construir interfícies web ràpidament.</li>
+        <li>El seu punt fort és el <strong>disseny responsiu</strong>: les webs s'adapten automàticament a qualsevol mida de pantalla.</li>
+        <li>Evita escriure CSS des de zero per elements comuns: botons, formularis, navegació, targetes, taules…</li>
+        <li>La versió actual és <strong>Bootstrap 5</strong>, que elimina la dependència de jQuery.</li>
+      </ul>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">Rapidesa de desenvolupament</div>
+          <div class="card-desc">Classes llestes per usar: en comptes d'escriure CSS, apliques classes directament a l'HTML.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📱</div>
+          <div class="card-title">Responsiu per defecte</div>
+          <div class="card-desc">Sistema de graella que adapta el disseny a mòbil, tauleta i escriptori automàticament.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🧱</div>
+          <div class="card-title">Components reutilitzables</div>
+          <div class="card-desc">Navbar, cards, modals, formularis, alertes… components visuals llestos per copiar i adaptar.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🌐</div>
+          <div class="card-title">Compatibilitat</div>
+          <div class="card-desc">Funciona en tots els navegadors moderns. Estandarditzat i ben documentat a getbootstrap.com.</div>
+        </div>
+      </div>
+
+      <div class="key-concept">💡 Clau → Bootstrap = biblioteca de classes CSS + components JS. Aplicar classes a l'HTML substitueix escriure CSS manual per a elements habituals.</div>
+    </div>
+  </section>
+
+  <!-- INSTAL·LACIÓ -->
+  <section id="installacio">
+    <div class="section-header">
+      <div class="section-icon icon-blue">⚙️</div>
+      <div>
+        <div class="section-title">Instal·lació i Configuració</div>
+        <div class="section-sub">com afegir Bootstrap al teu projecte</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>Hi ha dues maneres principals d'incloure Bootstrap: via <strong>CDN</strong> (recomanada per aprendre) o descarregant els arxius.</li>
+        <li>La via CDN és la més senzilla: simplement afegim dues etiquetes a l'HTML i Bootstrap ja funciona.</li>
+        <li>Per a projectes professionals s'usa <strong>npm</strong> per gestionar-ho com a dependència del projecte.</li>
+      </ul>
+
+      <h3>Mètode 1 — CDN (més senzill)</h3>
+      <p>Afegeix aquestes línies al teu HTML. El CSS va al <code style="background:var(--surface2);padding:2px 8px;border-radius:5px;font-family:'DM Mono',monospace;font-size:.9rem;">&lt;head&gt;</code> i el JS just abans de tancar el <code style="background:var(--surface2);padding:2px 8px;border-radius:5px;font-family:'DM Mono',monospace;font-size:.9rem;">&lt;/body&gt;</code>:</p>
+
+      <div class="code-block"><span class="cm">&lt;!-- CSS de Bootstrap (dins &lt;head&gt;) --&gt;</span>
+<span class="tg">&lt;link</span> <span class="at">rel</span>=<span class="vl">"stylesheet"</span>
+      <span class="at">href</span>=<span class="vl">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"</span><span class="tg">&gt;</span>
+
+<span class="cm">&lt;!-- JS de Bootstrap (abans de &lt;/body&gt;) --&gt;</span>
+<span class="tg">&lt;script</span> <span class="at">src</span>=<span class="vl">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"</span><span class="tg">&gt;&lt;/script&gt;</span></div>
+
+      <h3>Mètode 2 — npm (projectes professionals)</h3>
+      <div class="code-block"><span class="cm"># Instal·lar Bootstrap com a dependència</span>
+<span class="cl">npm</span> <span class="tx">install bootstrap</span>
+
+<span class="cm"># Importar al fitxer JS/SCSS principal</span>
+<span class="cl">import</span> <span class="vl">'bootstrap/dist/css/bootstrap.min.css'</span><span class="tx">;</span>
+<span class="cl">import</span> <span class="vl">'bootstrap/dist/js/bootstrap.bundle.min.js'</span><span class="tx">;</span></div>
+
+      <h3>Estructura HTML mínima recomanada</h3>
+      <div class="code-block"><span class="tg">&lt;!DOCTYPE html&gt;</span>
+<span class="tg">&lt;html</span> <span class="at">lang</span>=<span class="vl">"ca"</span><span class="tg">&gt;</span>
+<span class="tg">&lt;head&gt;</span>
+  <span class="tg">&lt;meta</span> <span class="at">charset</span>=<span class="vl">"UTF-8"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;meta</span> <span class="at">name</span>=<span class="vl">"viewport"</span> <span class="at">content</span>=<span class="vl">"width=device-width, initial-scale=1"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;link</span> <span class="at">rel</span>=<span class="vl">"stylesheet"</span> <span class="at">href</span>=<span class="vl">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;title&gt;</span><span class="tx">El meu projecte</span><span class="tg">&lt;/title&gt;</span>
+<span class="tg">&lt;/head&gt;</span>
+<span class="tg">&lt;body&gt;</span>
+
+  <span class="cm">&lt;!-- El teu contingut aquí --&gt;</span>
+
+  <span class="tg">&lt;script</span> <span class="at">src</span>=<span class="vl">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"</span><span class="tg">&gt;&lt;/script&gt;</span>
+<span class="tg">&lt;/body&gt;</span>
+<span class="tg">&lt;/html&gt;</span></div>
+
+      <div class="alert warning">
+        <span class="alert-icon">⚠️</span>
+        <span>La metaetiqueta <kbd>viewport</kbd> és <strong>obligatòria</strong> per al correcte funcionament responsiu. Sense ella, el sistema de graella no funciona bé en mòbils.</span>
+      </div>
+
+      <div class="key-concept">💡 Clau → Per a aprenentatge, usa CDN: dos enllaços i Bootstrap ja funciona. Per a producció, instal·la via npm per controlar versions i optimitzar el build.</div>
+    </div>
+  </section>
+
+  <!-- SISTEMA DE GRAELLA -->
+  <section id="grid">
+    <div class="section-header">
+      <div class="section-icon icon-teal">📐</div>
+      <div>
+        <div class="section-title">Sistema de Graella (Grid)</div>
+        <div class="section-sub">12 columnes per organitzar el layout</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>Bootstrap divideix la pantalla en <strong>12 columnes</strong> iguals. Tu decideixes quantes columnes ocupa cada element.</li>
+        <li>L'estructura bàsica és: <strong>container → row → col</strong>. Sempre en aquest ordre.</li>
+        <li>Les columnes s'especifiquen amb classes com <kbd>col-6</kbd> (6 de 12 = 50%) o <kbd>col-4</kbd> (4 de 12 = 33%).</li>
+        <li>Si la suma de columnes supera 12, els elements passen a la línia següent automàticament.</li>
+      </ul>
+
+      <h3>Estructura bàsica</h3>
+      <div class="code-block"><span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"container"</span><span class="tg">&gt;</span>       <span class="cm">&lt;!-- Centra i limita l'amplada --&gt;</span>
+  <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"row"</span><span class="tg">&gt;</span>           <span class="cm">&lt;!-- Fila horitzontal --&gt;</span>
+    <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"col-4"</span><span class="tg">&gt;</span>Columna 1<span class="tg">&lt;/div&gt;</span>  <span class="cm">&lt;!-- 4/12 = 33% --&gt;</span>
+    <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"col-4"</span><span class="tg">&gt;</span>Columna 2<span class="tg">&lt;/div&gt;</span>  <span class="cm">&lt;!-- 4/12 = 33% --&gt;</span>
+    <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"col-4"</span><span class="tg">&gt;</span>Columna 3<span class="tg">&lt;/div&gt;</span>  <span class="cm">&lt;!-- 4/12 = 33% --&gt;</span>
+  <span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;/div&gt;</span></div>
+
+      <h3>Visualització de distribucions habituals</h3>
+      <div class="grid-demo">
+        <div class="grid-label">1 columna → col-12</div>
+        <div class="grid-row"><div class="grid-col col12">col-12</div></div>
+
+        <div class="grid-label">2 columnes iguals → col-6 + col-6</div>
+        <div class="grid-row">
+          <div class="grid-col col6">col-6</div>
+          <div class="grid-col col6">col-6</div>
+        </div>
+
+        <div class="grid-label">3 columnes iguals → col-4 + col-4 + col-4</div>
+        <div class="grid-row">
+          <div class="grid-col col4">col-4</div>
+          <div class="grid-col col4">col-4</div>
+          <div class="grid-col col4">col-4</div>
+        </div>
+
+        <div class="grid-label">Distribució 8+4 (contingut + sidebar)</div>
+        <div class="grid-row">
+          <div class="grid-col col8">col-8 (contingut)</div>
+          <div class="grid-col col4">col-4 (sidebar)</div>
+        </div>
+
+        <div class="grid-label">Distribució 3+9</div>
+        <div class="grid-row">
+          <div class="grid-col col3">col-3</div>
+          <div class="grid-col col9">col-9</div>
+        </div>
+      </div>
+
+      <h3>Tipus de container</h3>
+      <table class="compare-table">
+        <thead>
+          <tr><th>Classe</th><th>Comportament</th><th>Quan usar-la</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><kbd>container</kbd></td><td>Amplada màxima fixa per breakpoint, centrat</td><td>La majoria de casos, contingut centrat</td></tr>
+          <tr><td><kbd>container-fluid</kbd></td><td>Ocupa el 100% de l'amplada sempre</td><td>Seccions a pantalla completa (hero, navbar)</td></tr>
+          <tr><td><kbd>container-xl</kbd></td><td>Fluid fins a xl, fixed a partir d'xl</td><td>Layouts molt amples en pantalles grans</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Grid responsiu: col diferent per mida</h3>
+      <div class="code-block"><span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"row"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"col-12 col-md-6 col-lg-4"</span><span class="tg">&gt;</span>
+    <span class="cm">&lt;!-- Mòbil: 12 cols (100%) --&gt;</span>
+    <span class="cm">&lt;!-- Tauleta: 6 cols (50%) --&gt;</span>
+    <span class="cm">&lt;!-- Escriptori: 4 cols (33%) --&gt;</span>
+  <span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;/div&gt;</span></div>
+
+      <div class="key-concept">💡 Clau → 12 columnes totals. La suma de les col d'una fila ha de ser 12. Combina col-[bp]-[n] per fer layouts que canvien segons la mida de pantalla.</div>
+    </div>
+  </section>
+
+  <!-- BREAKPOINTS -->
+  <section id="breakpoints">
+    <div class="section-header">
+      <div class="section-icon icon-pink">📱</div>
+      <div>
+        <div class="section-title">Breakpoints i Disseny Responsiu</div>
+        <div class="section-sub">adaptar-se a cada pantalla</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>Els <strong>breakpoints</strong> són els punts on el disseny canvia per adaptar-se a la mida de pantalla.</li>
+        <li>Bootstrap segueix un enfocament <strong>mobile-first</strong>: primer es dissenya per a mòbils i es va ampliant.</li>
+        <li>Cada breakpoint té un <strong>prefix</strong> que s'usa a les classes: <kbd>sm</kbd>, <kbd>md</kbd>, <kbd>lg</kbd>, <kbd>xl</kbd>, <kbd>xxl</kbd>.</li>
+        <li>Una classe sense prefix (<kbd>col-6</kbd>) s'aplica a <strong>totes les mides</strong>. Una amb prefix (<kbd>col-md-6</kbd>) s'aplica des d'aquella mida cap amunt.</li>
+      </ul>
+
+      <h3>Taula de breakpoints</h3>
+      <div class="bp-grid">
+        <div class="bp-card">
+          <div class="bp-prefix">col-*</div>
+          <div class="bp-size">&lt; 576px</div>
+          <div class="bp-device">📱 Mòbil petit</div>
+        </div>
+        <div class="bp-card">
+          <div class="bp-prefix">col-sm-*</div>
+          <div class="bp-size">≥ 576px</div>
+          <div class="bp-device">📱 Mòbil gran</div>
+        </div>
+        <div class="bp-card">
+          <div class="bp-prefix">col-md-*</div>
+          <div class="bp-size">≥ 768px</div>
+          <div class="bp-device">📟 Tauleta</div>
+        </div>
+        <div class="bp-card">
+          <div class="bp-prefix">col-lg-*</div>
+          <div class="bp-size">≥ 992px</div>
+          <div class="bp-device">💻 Portàtil</div>
+        </div>
+        <div class="bp-card">
+          <div class="bp-prefix">col-xl-*</div>
+          <div class="bp-size">≥ 1200px</div>
+          <div class="bp-device">🖥️ Escriptori</div>
+        </div>
+        <div class="bp-card">
+          <div class="bp-prefix">col-xxl-*</div>
+          <div class="bp-size">≥ 1400px</div>
+          <div class="bp-device">🖥️ Pantalla gran</div>
+        </div>
+      </div>
+
+      <h3>Exemple pràctic: galeria responsiva</h3>
+      <div class="code-block"><span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"row g-3"</span><span class="tg">&gt;</span>                        <span class="cm">&lt;!-- g-3 = gap entre columnes --&gt;</span>
+  <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"col-12 col-sm-6 col-lg-3"</span><span class="tg">&gt;</span>   <span class="cm">&lt;!-- 1 / 2 / 4 per fila --&gt;</span>
+    <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"card"</span><span class="tg">&gt;</span>...<span class="tg">&lt;/div&gt;</span>
+  <span class="tg">&lt;/div&gt;</span>
+  <span class="cm">&lt;!-- Repeteix per a cada element --&gt;</span>
+<span class="tg">&lt;/div&gt;</span></div>
+
+      <div class="alert info">
+        <span class="alert-icon">💡</span>
+        <span><strong>Mobile-first:</strong> dissenya primer per a mòbils (col-12) i afegeix classes per a pantalles més grans (col-md-6, col-lg-4). Funciona millor que pensar al revés.</span>
+      </div>
+
+      <div class="key-concept">💡 Clau → Breakpoints = punts de canvi del disseny. Mobile-first: <kbd>col-12</kbd> per mòbil, <kbd>col-md-6</kbd> per tauleta, <kbd>col-lg-4</kbd> per escriptori.</div>
+    </div>
+  </section>
+
+  <!-- CLASSES D'UTILITAT -->
+  <section id="utilities">
+    <div class="section-header">
+      <div class="section-icon icon-green">🛠️</div>
+      <div>
+        <div class="section-title">Classes d'Utilitat</div>
+        <div class="section-sub">el CSS que no hauràs d'escriure</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>Les <strong>classes d'utilitat</strong> apliquen una única propietat CSS: estalvien escriure CSS personalitzat per a coses habituals.</li>
+        <li>Segueixen un patró coherent: <strong>propietat-valor</strong> o <strong>propietat-breakpoint-valor</strong>.</li>
+        <li>Es poden combinar múltiples classes al mateix element.</li>
+      </ul>
+
+      <h3>Espaiat: margin i padding</h3>
+      <div class="code-block"><span class="cm">/* Patró: {propietat}{costat}-{valor}  (valor: 0 a 5, o auto) */</span>
+
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"m-3"</span><span class="tg">&gt;</span>         <span class="cm">/* margin tots els costats: 3 */</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"mt-4"</span><span class="tg">&gt;</span>        <span class="cm">/* margin-top: 4 */</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"mb-2"</span><span class="tg">&gt;</span>        <span class="cm">/* margin-bottom: 2 */</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"mx-auto"</span><span class="tg">&gt;</span>     <span class="cm">/* margin horitzontal auto (centra) */</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"p-3"</span><span class="tg">&gt;</span>         <span class="cm">/* padding tots els costats: 3 */</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"py-5 px-3"</span><span class="tg">&gt;</span>   <span class="cm">/* padding vertical 5, horitzontal 3 */</span></div>
+
+      <h3>Tipografia i text</h3>
+      <div class="code-block"><span class="tg">&lt;p</span> <span class="at">class</span>=<span class="vl">"text-center"</span><span class="tg">&gt;</span>    <span class="cm">/* alineat al centre */</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="vl">"text-end"</span><span class="tg">&gt;</span>      <span class="cm">/* alineat a la dreta */</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="vl">"fw-bold"</span><span class="tg">&gt;</span>       <span class="cm">/* font-weight: bold */</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="vl">"fs-4"</span><span class="tg">&gt;</span>          <span class="cm">/* font-size nivell 4 (1 = gran, 6 = petit) */</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="vl">"text-muted"</span><span class="tg">&gt;</span>    <span class="cm">/* text en gris apagat */</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="vl">"text-uppercase"</span><span class="tg">&gt;</span> <span class="cm">/* text en majúscules */</span></div>
+
+      <h3>Colors i fons</h3>
+      <div class="code-block"><span class="cm">/* Colors de text */</span>
+<span class="at">text-primary</span>   <span class="cm">/* blau */</span>    <span class="at">text-success</span>  <span class="cm">/* verd */</span>
+<span class="at">text-danger</span>    <span class="cm">/* vermell */</span> <span class="at">text-warning</span>  <span class="cm">/* groc */</span>
+<span class="at">text-info</span>      <span class="cm">/* cian */</span>    <span class="at">text-dark</span>     <span class="cm">/* fosc */</span>
+<span class="at">text-white</span>     <span class="cm">/* blanc */</span>   <span class="at">text-muted</span>    <span class="cm">/* gris */</span>
+
+<span class="cm">/* Colors de fons */</span>
+<span class="at">bg-primary</span>  <span class="at">bg-success</span>  <span class="at">bg-danger</span>  <span class="at">bg-warning</span>
+<span class="at">bg-light</span>    <span class="at">bg-dark</span>     <span class="at">bg-white</span>   <span class="at">bg-transparent</span></div>
+
+      <h3>Display i visibilitat</h3>
+      <div class="code-block"><span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"d-none"</span><span class="tg">&gt;</span>           <span class="cm">/* display: none (amagat) */</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"d-block"</span><span class="tg">&gt;</span>          <span class="cm">/* display: block */</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"d-flex"</span><span class="tg">&gt;</span>           <span class="cm">/* display: flex */</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"d-none d-md-block"</span><span class="tg">&gt;</span> <span class="cm">/* amagat en mòbil, visible des de md */</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"d-md-none"</span><span class="tg">&gt;</span>        <span class="cm">/* visible en mòbil, amagat des de md */</span></div>
+
+      <div class="key-concept">💡 Clau → Utilitats = una classe = una propietat CSS. Combina-les per estalviar escriure estils. Exemples: <kbd>mt-3 mb-2 text-center fw-bold</kbd>.</div>
+    </div>
+  </section>
+
+  <!-- COMPONENTS -->
+  <section id="components">
+    <div class="section-header">
+      <div class="section-icon icon-yellow">🧱</div>
+      <div>
+        <div class="section-title">Components Principals</div>
+        <div class="section-sub">elements visuals predefinits</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>Els <strong>components</strong> de Bootstrap són elements d'interfície complets llestos per usar: navbar, cards, botons, formularis, modals…</li>
+        <li>S'activen afegint les classes correctes a l'HTML. Alguns necessiten el JS de Bootstrap per funcionar.</li>
+      </ul>
+
+      <h3>Botons</h3>
+      <div class="code-block"><span class="tg">&lt;button</span> <span class="at">class</span>=<span class="vl">"btn btn-primary"</span><span class="tg">&gt;</span><span class="tx">Principal</span><span class="tg">&lt;/button&gt;</span>
+<span class="tg">&lt;button</span> <span class="at">class</span>=<span class="vl">"btn btn-secondary"</span><span class="tg">&gt;</span><span class="tx">Secundari</span><span class="tg">&lt;/button&gt;</span>
+<span class="tg">&lt;button</span> <span class="at">class</span>=<span class="vl">"btn btn-danger"</span><span class="tg">&gt;</span><span class="tx">Eliminar</span><span class="tg">&lt;/button&gt;</span>
+<span class="tg">&lt;button</span> <span class="at">class</span>=<span class="vl">"btn btn-outline-primary"</span><span class="tg">&gt;</span><span class="tx">Contorn</span><span class="tg">&lt;/button&gt;</span>
+<span class="tg">&lt;button</span> <span class="at">class</span>=<span class="vl">"btn btn-primary btn-lg"</span><span class="tg">&gt;</span><span class="tx">Gran</span><span class="tg">&lt;/button&gt;</span>
+<span class="tg">&lt;button</span> <span class="at">class</span>=<span class="vl">"btn btn-primary btn-sm"</span><span class="tg">&gt;</span><span class="tx">Petit</span><span class="tg">&lt;/button&gt;</span></div>
+
+      <h3>Cards (targetes)</h3>
+      <div class="code-block"><span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"card"</span> <span class="at">style</span>=<span class="vl">"width: 18rem"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;img</span> <span class="at">src</span>=<span class="vl">"..."</span> <span class="at">class</span>=<span class="vl">"card-img-top"</span> <span class="at">alt</span>=<span class="vl">"..."</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"card-body"</span><span class="tg">&gt;</span>
+    <span class="tg">&lt;h5</span> <span class="at">class</span>=<span class="vl">"card-title"</span><span class="tg">&gt;</span><span class="tx">Títol</span><span class="tg">&lt;/h5&gt;</span>
+    <span class="tg">&lt;p</span>  <span class="at">class</span>=<span class="vl">"card-text"</span><span class="tg">&gt;</span><span class="tx">Descripció de la targeta.</span><span class="tg">&lt;/p&gt;</span>
+    <span class="tg">&lt;a</span>  <span class="at">href</span>=<span class="vl">"#"</span> <span class="at">class</span>=<span class="vl">"btn btn-primary"</span><span class="tg">&gt;</span><span class="tx">Acció</span><span class="tg">&lt;/a&gt;</span>
+  <span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;/div&gt;</span></div>
+
+      <h3>Navbar (barra de navegació)</h3>
+      <div class="code-block"><span class="tg">&lt;nav</span> <span class="at">class</span>=<span class="vl">"navbar navbar-expand-lg bg-dark navbar-dark"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"container"</span><span class="tg">&gt;</span>
+    <span class="tg">&lt;a</span> <span class="at">class</span>=<span class="vl">"navbar-brand"</span> <span class="at">href</span>=<span class="vl">"#"</span><span class="tg">&gt;</span><span class="tx">Logo</span><span class="tg">&lt;/a&gt;</span>
+    <span class="tg">&lt;button</span> <span class="at">class</span>=<span class="vl">"navbar-toggler"</span> <span class="at">data-bs-toggle</span>=<span class="vl">"collapse"</span>
+            <span class="at">data-bs-target</span>=<span class="vl">"#menu"</span><span class="tg">&gt;&lt;/button&gt;</span>
+    <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"collapse navbar-collapse"</span> <span class="at">id</span>=<span class="vl">"menu"</span><span class="tg">&gt;</span>
+      <span class="tg">&lt;ul</span> <span class="at">class</span>=<span class="vl">"navbar-nav ms-auto"</span><span class="tg">&gt;</span>
+        <span class="tg">&lt;li</span> <span class="at">class</span>=<span class="vl">"nav-item"</span><span class="tg">&gt;&lt;a</span> <span class="at">class</span>=<span class="vl">"nav-link"</span> <span class="at">href</span>=<span class="vl">"#"</span><span class="tg">&gt;</span><span class="tx">Inici</span><span class="tg">&lt;/a&gt;&lt;/li&gt;</span>
+        <span class="tg">&lt;li</span> <span class="at">class</span>=<span class="vl">"nav-item"</span><span class="tg">&gt;&lt;a</span> <span class="at">class</span>=<span class="vl">"nav-link"</span> <span class="at">href</span>=<span class="vl">"#"</span><span class="tg">&gt;</span><span class="tx">Contacte</span><span class="tg">&lt;/a&gt;&lt;/li&gt;</span>
+      <span class="tg">&lt;/ul&gt;</span>
+    <span class="tg">&lt;/div&gt;</span>
+  <span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;/nav&gt;</span></div>
+
+      <h3>Alertes i Badges</h3>
+      <div class="code-block"><span class="cm">&lt;!-- Alertes --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"alert alert-success"</span><span class="tg">&gt;</span><span class="tx">Operació completada!</span><span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"alert alert-danger"</span><span class="tg">&gt;</span><span class="tx">S'ha produït un error.</span><span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"alert alert-warning alert-dismissible fade show"</span><span class="tg">&gt;</span>
+  <span class="tx">Avís important</span>
+  <span class="tg">&lt;button</span> <span class="at">class</span>=<span class="vl">"btn-close"</span> <span class="at">data-bs-dismiss</span>=<span class="vl">"alert"</span><span class="tg">&gt;&lt;/button&gt;</span>
+<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Badges --&gt;</span>
+<span class="tg">&lt;span</span> <span class="at">class</span>=<span class="vl">"badge bg-primary"</span><span class="tg">&gt;</span><span class="tx">Nou</span><span class="tg">&lt;/span&gt;</span>
+<span class="tg">&lt;span</span> <span class="at">class</span>=<span class="vl">"badge bg-danger"</span><span class="tg">&gt;</span><span class="tx">9</span><span class="tg">&lt;/span&gt;</span></div>
+
+      <h3>Formularis</h3>
+      <div class="code-block"><span class="tg">&lt;form&gt;</span>
+  <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"mb-3"</span><span class="tg">&gt;</span>
+    <span class="tg">&lt;label</span> <span class="at">class</span>=<span class="vl">"form-label"</span><span class="tg">&gt;</span><span class="tx">Correu electrònic</span><span class="tg">&lt;/label&gt;</span>
+    <span class="tg">&lt;input</span> <span class="at">type</span>=<span class="vl">"email"</span> <span class="at">class</span>=<span class="vl">"form-control"</span> <span class="at">placeholder</span>=<span class="vl">"nom@exemple.com"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;/div&gt;</span>
+  <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"mb-3"</span><span class="tg">&gt;</span>
+    <span class="tg">&lt;label</span> <span class="at">class</span>=<span class="vl">"form-label"</span><span class="tg">&gt;</span><span class="tx">Contrasenya</span><span class="tg">&lt;/label&gt;</span>
+    <span class="tg">&lt;input</span> <span class="at">type</span>=<span class="vl">"password"</span> <span class="at">class</span>=<span class="vl">"form-control"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;/div&gt;</span>
+  <span class="tg">&lt;button</span> <span class="at">class</span>=<span class="vl">"btn btn-primary"</span><span class="tg">&gt;</span><span class="tx">Entra</span><span class="tg">&lt;/button&gt;</span>
+<span class="tg">&lt;/form&gt;</span></div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🔔</div>
+          <div class="card-title">Modal</div>
+          <div class="card-desc">Finestra emergent. Necessita JS. S'activa amb <kbd>data-bs-toggle="modal"</kbd>.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">📑</div>
+          <div class="card-title">Accordion</div>
+          <div class="card-desc">Llista desplegable per ocultar/mostrar contingut. Necessita JS de Bootstrap.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🎠</div>
+          <div class="card-title">Carousel</div>
+          <div class="card-desc">Presentació de diapositives d'imatges. Configurable amb atributs <kbd>data-bs-*</kbd>.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">💬</div>
+          <div class="card-title">Tooltip / Popover</div>
+          <div class="card-desc">Textos d'ajuda emergents en passar el ratolí o fer clic. Requereixen inicialització JS.</div>
+        </div>
+      </div>
+
+      <div class="key-concept">💡 Clau → La majoria de components funcionen sols amb classes CSS. Els que necessitin interactivitat (modal, accordion, carousel) requereixen el bundle JS de Bootstrap.</div>
+    </div>
+  </section>
+
+  <!-- COMPARATIVA -->
+  <section id="comparativa">
+    <div class="section-header">
+      <div class="section-icon icon-red">⚖️</div>
+      <div>
+        <div class="section-title">Bootstrap vs CSS Propi</div>
+        <div class="section-sub">quan usar-lo i quan no</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <table class="compare-table">
+        <thead>
+          <tr><th>Aspecte</th><th>Bootstrap</th><th>CSS propi</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>⚡ <strong>Velocitat de desenvolupament</strong></td>
+            <td><span class="tag tag-safe">Alta</span> — classes llestes</td>
+            <td>Baixa — cal escriure-ho tot</td>
+          </tr>
+          <tr>
+            <td>🎨 <strong>Personalització</strong></td>
+            <td>Limitada (cal sobreescriure classes)</td>
+            <td><span class="tag tag-safe">Total</span> — control absolut</td>
+          </tr>
+          <tr>
+            <td>📦 <strong>Mida del projecte</strong></td>
+            <td>CSS gran (~200KB sense purge)</td>
+            <td><span class="tag tag-safe">Mínim</span> — només el necessari</td>
+          </tr>
+          <tr>
+            <td>📱 <strong>Responsiu</strong></td>
+            <td><span class="tag tag-safe">Inclòs</span> — grid automàtic</td>
+            <td>Cal implementar-lo manualment</td>
+          </tr>
+          <tr>
+            <td>📚 <strong>Corba d'aprenentatge</strong></td>
+            <td>Baixa — documentació excel·lent</td>
+            <td>Alta — cal dominar CSS complet</td>
+          </tr>
+          <tr>
+            <td>🏢 <strong>Ús professional</strong></td>
+            <td>Prototipus i projectes ràpids</td>
+            <td>Projectes amb identitat visual única</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">✅</div>
+          <div class="card-title">Quan usar Bootstrap</div>
+          <div class="card-desc"><ul class="card-list"><li>Prototipus i demos ràpides</li><li>Projectes d'equip (estil consistent)</li><li>Panells d'administració</li><li>Quan el disseny no és el factor crític</li></ul></div>
+        </div>
+        <div class="card">
+          <div class="card-icon">❌</div>
+          <div class="card-title">Quan NO usar Bootstrap</div>
+          <div class="card-desc"><ul class="card-list"><li>Webs amb identitat visual molt específica</li><li>Projectes on el pes del CSS importa molt</li><li>Quan ja uses Tailwind o un altre framework</li><li>Components molt personalitzats</li></ul></div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔧</div>
+          <div class="card-title">Alternatives a Bootstrap</div>
+          <div class="card-desc"><ul class="card-list"><li>Tailwind CSS (utilitats sense components)</li><li>Bulma (CSS pur, sense JS)</li><li>Foundation (menys popular)</li><li>CSS propi amb variables</li></ul></div>
+        </div>
+      </div>
+
+      <div class="key-concept">💡 Clau → Bootstrap és ideal per a prototipus ràpids i projectes d'equip. Per a webs amb disseny molt personalitzat, CSS propi o Tailwind poden ser millor opció.</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Bootstrap · Desenvolupament Web — Batxillerat / FP · Material educatiu 2025
+</footer>
+
+</body>
+</html>

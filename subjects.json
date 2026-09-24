@@ -561,7 +561,6 @@
     "path": "programacio-i-tractament-de-dades-ii/index.html",
     "description": "Consolidació de programació aplicada a projectes i anàlisi de dades.",
     "topics": [
-      "mBot/mBuild",
       "Criptografia",
       "Bases de dades",
       "Unity",
@@ -572,33 +571,9 @@
     ],
     "materials": [
       {
-        "title": "Crea robots amb mBot i mBuild",
-        "slug": "tema-programacio-robotica-makeblock",
-        "technologies": ["mBot", "mBuild", "Robòtica", "Python"],
-        "items": [
-          {
-            "icon": "🤖",
-            "label": "Robòtica",
-            "title": "Programació i Robòtica amb Makeblock (mBot / mBuild)"
-          },
-          { "icon": "🤖", "label": "mòdul", "title": "mBuild" },
-          { "icon": "🤖", "label": "dispositiu", "title": "mBOT" },
-          {
-            "icon": "📒",
-            "label": "Recurs",
-            "title": "Video 'Primeres Passes amb mBot2'"
-          },
-          { "icon": "🔨", "label": "Pràctiques", "title": "PRÀCTIQUES PYTHON" },
-          {
-            "icon": "🔨",
-            "label": "Pràctica",
-            "title": "Ús de Mòduls mBuild (Llum, So, etc.)"
-          }
-        ]
-      },
-      {
         "title": "Protegeix dades i crea sistemes segurs",
         "slug": "tema-criptografia",
+        "sa": 4,
         "technologies": ["Criptografia", "Seguretat", "Blockchain"],
         "items": [
           {
@@ -620,6 +595,7 @@
       {
         "title": "Construeix la teva base de dades",
         "slug": "tema-bases-de-dades-relacionals",
+        "sa": 5,
         "technologies": ["SQL", "SQLite", "Bases de dades"],
         "items": [
           {
@@ -642,6 +618,7 @@
       {
         "title": "Dissenya els teus propis videojocs",
         "slug": "tema-unity-videojocs",
+        "sa": 6,
         "technologies": ["Unity", "Videojocs", "C#"],
         "items": [
           {
@@ -665,6 +642,7 @@
       {
         "title": "Aprèn programació orientada a objectes",
         "slug": "tema-poo",
+        "sa": 2,
         "technologies": ["Python", "POO", "Programació"],
         "items": [
           {
@@ -690,6 +668,7 @@
       {
         "title": "Crea pàgines web professionals",
         "slug": "tema-web-avancat",
+        "sa": 1,
         "technologies": ["HTML", "CSS", "JavaScript", "Bootstrap"],
         "items": [
           {
@@ -710,7 +689,8 @@
             "module": "Mòdul 2: Disseny Responsive i Frameworks (Bootstrap)",
             "icon": "📄",
             "label": "Apunts",
-            "title": "Bootstrap"
+            "title": "Bootstrap",
+            "href": "./bootstrap-teoria.html"
           },
           {
             "module": "Mòdul 3: Programació Client (JavaScript)",
@@ -730,6 +710,7 @@
       {
         "title": "Dóna vida als teus models 3D",
         "slug": "tema-blender-3d",
+        "sa": 3,
         "technologies": ["Blender", "3D", "Animació"],
         "items": [
           {
@@ -754,6 +735,7 @@
       {
         "title": "Explora la intel·ligència artificial",
         "slug": "tema-ia",
+        "sa": 7,
         "technologies": ["IA", "Machine Learning", "Python"],
         "directHref": "./tema-ia/ia_teoria.html",
         "items": [
