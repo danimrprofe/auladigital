@@ -444,21 +444,32 @@ function renderThemeIndex(subject, themeSlug) {
 
   const modulesHtml = Object.entries(groupedItems)
     .map(([moduleName, items]) => {
+      // Renderitzat tipus 'Classroom' per cada ítem dins del mòdul
       const itemsHtml = items
         .map((it) => {
           const safeHref = it.href || "";
           const hasLink = Boolean(safeHref);
+          const subtitle = it.subtitle || it.module || "";
+          const meta = it.published
+            ? `Publicat el dia ${it.published}`
+            : it.lastModified
+              ? `Darrera modificació: ${it.lastModified}`
+              : "";
           return `
-        <li class="list-group-item d-flex align-items-start gap-3 glass-list-item p-3">
-          <div class="fs-5">${it.icon || "📄"}</div>
-          <div class="flex-grow-1">
-            <div class="d-flex flex-wrap align-items-center gap-2">
-              <span class="badge rounded-pill text-bg-light border small">${it.label || "Recurs"}</span>
-              <span class="fw-semibold">${it.title}</span>
+        <div class="classroom-item d-flex align-items-center justify-content-between p-3 border-bottom">
+          <div class="d-flex align-items-start gap-3">
+            <div class="fs-4 text-secondary" aria-hidden="true">📚</div>
+            <div>
+              <div class="small text-muted mb-1">${it.label || ""}</div>
+              <div class="fw-semibold">${it.title}</div>
+              ${subtitle ? `<div class="text-muted small">${subtitle}</div>` : ""}
             </div>
-            ${hasLink ? `<div class="mt-2"><a class="btn btn-outline-primary btn-sm btn-modern" href="${safeHref}">Obrir fitxer</a></div>` : `<div class="mt-2 text-muted small">Pendent d'afegir.</div>`}
           </div>
-        </li>
+          <div class="text-end small text-muted">
+            ${meta ? `<div>${meta}</div>` : ""}
+            ${hasLink ? `<div class="mt-2"><a class="btn btn-outline-primary btn-sm btn-modern" href="${safeHref}">Obrir</a></div>` : ""}
+          </div>
+        </div>
       `;
         })
         .join("");
@@ -469,7 +480,7 @@ function renderThemeIndex(subject, themeSlug) {
             <span class="theme-module-marker" aria-hidden="true"></span>
             <h2 class="h5 mb-0">${moduleName}</h2>
           </div>
-          <ul class="list-group list-group-flush glass-list shadow-sm">${itemsHtml}</ul>
+          <div class="glass-card border-0 shadow-sm">${itemsHtml}</div>
         </section>
       `;
     })

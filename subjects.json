@@ -676,34 +676,54 @@
             "icon": "📄",
             "label": "Apunts",
             "title": "HTML",
-            "href": "./index.html"
+            "href": "./apunts-html.html",
+            "subtitle": "L'estructura i el contingut",
+            "lastModified": "9:03"
           },
           {
             "module": "Mòdul 1: Fonaments Web (HTML & CSS)",
             "icon": "📄",
             "label": "Apunts",
             "title": "CSS",
-            "href": "./apunts-css.html"
+            "href": "./apunts-css.html",
+            "subtitle": "Disseny, estil i aparença",
+            "lastModified": "9:03"
           },
           {
             "module": "Mòdul 2: Disseny Responsive i Frameworks (Bootstrap)",
             "icon": "📄",
             "label": "Apunts",
             "title": "Bootstrap",
-            "href": "./bootstrap-teoria.html"
+            "href": "./bootstrap-teoria.html",
+            "subtitle": "Disseny web ràpid, modern i adaptable (Responsive)",
+            "lastModified": "17 de set."
           },
           {
             "module": "Mòdul 3: Programació Client (JavaScript)",
             "icon": "📄",
             "label": "Apunts",
             "title": "JavaScript",
-            "href": "./apunts-javascript.html"
+            "href": "./apunts-javascript.html",
+            "subtitle": "Aplicacions interactives",
+            "lastModified": "9:04"
           },
           {
             "module": "Eines de desenvolupament i projectes",
             "icon": "🔧",
             "label": "Guia",
-            "title": "Git i GitHub"
+            "title": "Git i GitHub",
+            "href": "./git-github.html",
+            "subtitle": "Control de versions, portafoli i publicació web",
+            "lastModified": "17 de set."
+          },
+          {
+            "module": "Eines de desenvolupament i projectes",
+            "icon": "📘",
+            "label": "Apunts",
+            "title": "Visual Studio - Instal·lació i configuració inicial",
+            "href": "./visual-studio.html",
+            "subtitle": "Entorn de desenvolupament i configuració",
+            "published": "17 de set."
           }
         ]
       },

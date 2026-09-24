@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Git, GitHub i VS Code</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Nunito:wght@700;800;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #eef1f8;
+    --surface: #ffffff;
+    --surface2: #f0f3fa;
+    --border: #c8d0e8;
+    --accent: #16a34a;
+    --accent2: #dc2626;
+    --accent3: #1d4ed8;
+    --accent4: #b45309;
+    --text: #0f1629;
+    --muted: #374151;
+    --tag-bg: rgba(22,163,74,0.08);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 19px;
+    line-height: 1.65;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: radial-gradient(circle, #b0bcd8 1px, transparent 1px);
+    background-size: 32px 32px;
+    opacity: 0.45;
+    pointer-events: none; z-index: 0;
+  }
+
+  header {
+    position: relative; z-index: 10;
+    text-align: center;
+    padding: 56px 40px 44px;
+    border-bottom: 2px solid var(--border);
+    background: linear-gradient(180deg, #fff 0%, var(--bg) 100%);
+  }
+
+  .header-pill {
+    display: inline-block;
+    background: var(--tag-bg);
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px; font-weight: 500;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    padding: 5px 20px; border-radius: 100px; margin-bottom: 22px;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 800; line-height: 1.0; letter-spacing: -2px;
+    background: linear-gradient(135deg, #0f1629 25%, #16a34a 85%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; margin-bottom: 18px;
+  }
+
+  .header-sub {
+    color: #374151; font-size: 1.15rem;
+    max-width: 700px; margin: 0 auto;
+    font-weight: 400; font-style: italic;
+  }
+
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(238,241,248,0.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 2px solid var(--border);
+    padding: 0 40px;
+    display: flex; gap: 0; overflow-x: auto; scrollbar-width: none;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+  nav::-webkit-scrollbar { display: none; }
+  nav a {
+    display: flex; align-items: center; gap: 6px;
+    color: #374151; text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 13.5px; font-weight: 500;
+    padding: 16px 20px; white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: color .2s, border-color .2s;
+  }
+  nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  main {
+    position: relative; z-index: 1;
+    max-width: 1400px; margin: 0 auto;
+    padding: 52px 48px 100px;
+    display: flex; flex-direction: column; gap: 44px;
+  }
+
+  section {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 18px; overflow: hidden;
+    opacity: 0; transform: translateY(28px);
+    animation: fadeUp .45s ease forwards;
+    box-shadow: 0 2px 16px rgba(15,22,41,0.07);
+  }
+  section:nth-child(1)  { animation-delay: .05s; }
+  section:nth-child(2)  { animation-delay: .10s; }
+  section:nth-child(3)  { animation-delay: .15s; }
+  section:nth-child(4)  { animation-delay: .20s; }
+  section:nth-child(5)  { animation-delay: .25s; }
+  section:nth-child(6)  { animation-delay: .30s; }
+  section:nth-child(7)  { animation-delay: .35s; }
+  section:nth-child(8)  { animation-delay: .40s; }
+  section:nth-child(9)  { animation-delay: .45s; }
+
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+  .section-header {
+    display: flex; align-items: center; gap: 18px;
+    padding: 26px 36px 22px;
+    border-bottom: 1.5px solid var(--border);
+    background: linear-gradient(90deg, #f4fff7 0%, #fff 100%);
+  }
+
+  .section-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; flex-shrink: 0;
+  }
+  .icon-green  { background: rgba(22,163,74,.12); }
+  .icon-blue   { background: rgba(29,78,216,.10); }
+  .icon-orange { background: rgba(234,88,12,.12); }
+  .icon-purple { background: rgba(124,58,237,.10); }
+  .icon-yellow { background: rgba(180,83,9,.12); }
+  .icon-red    { background: rgba(220,38,38,.12); }
+  .icon-teal   { background: rgba(13,148,136,.12); }
+  .icon-gray   { background: rgba(75,85,99,.10); }
+
+  .section-title {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.5rem; font-weight: 800;
+    letter-spacing: -0.2px; color: #0f1629;
+  }
+  .section-sub {
+    color: #374151; font-size: .92rem;
+    font-family: 'DM Mono', monospace; font-weight: 500;
+  }
+
+  .section-body {
+    padding: 28px 36px;
+    display: flex; flex-direction: column; gap: 20px;
+  }
+
+  p { color: #1a2340; font-size: 1.05rem; line-height: 1.7; }
+
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem; font-weight: 800;
+    color: #0f1629; margin-bottom: 4px;
+  }
+
+  /* CARDS */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    background: var(--surface2); border: 1.5px solid var(--border);
+    border-radius: 14px; padding: 22px 22px 20px;
+    display: flex; flex-direction: column; gap: 10px;
+    transition: border-color .2s, box-shadow .2s, transform .2s;
+  }
+  .card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 18px rgba(22,163,74,0.10);
+    transform: translateY(-2px);
+  }
+  .card-icon { font-size: 28px; }
+  .card-title { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1.05rem; color: #0f1629; }
+  .card-desc { color: #2d3a52; font-size: .97rem; line-height: 1.55; }
+
+  /* BULLET LIST */
+  ul.bullet-list {
+    list-style: none; display: flex; flex-direction: column; gap: 10px; padding: 0;
+  }
+  ul.bullet-list li {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 1.05rem; color: #1a2340; line-height: 1.55;
+  }
+  ul.bullet-list li::before {
+    content: '▸'; color: var(--accent); font-size: 1.1rem;
+    flex-shrink: 0; margin-top: 1px; font-weight: 700;
+  }
+
+  /* CARD MINI LIST */
+  ul.card-list {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: 5px;
+  }
+  ul.card-list li {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: .97rem; color: #2d3a52; line-height: 1.45;
+  }
+  ul.card-list li::before {
+    content: '·'; color: var(--accent);
+    font-size: 1.3rem; flex-shrink: 0; line-height: 1.2; font-weight: 900;
+  }
+
+  /* KEY CONCEPT */
+  .key-concept {
+    background: linear-gradient(135deg, rgba(22,163,74,0.07), rgba(29,78,216,0.04));
+    border: 1.5px solid rgba(22,163,74,0.28);
+    border-radius: 12px; padding: 18px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 1rem; font-weight: 500; color: #15803d;
+  }
+
+  /* ALERT */
+  .alert {
+    display: flex; gap: 16px; align-items: flex-start;
+    background: var(--surface2); border-left: 4px solid var(--accent2);
+    border-radius: 10px; padding: 18px 22px;
+    font-size: 1rem; color: #1a2340;
+  }
+  .alert .alert-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+  .alert.info    { border-left-color: var(--accent3); background: rgba(29,78,216,0.05); }
+  .alert.success { border-left-color: var(--accent);  background: rgba(22,163,74,0.05); }
+  .alert.warning { border-left-color: var(--accent4); background: rgba(180,83,9,0.05); }
+  .alert.danger  { border-left-color: var(--accent2); background: rgba(220,38,38,0.05); }
+
+  /* FLOW */
+  .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+  .flow-item {
+    background: var(--surface2); border: 1.5px solid var(--border);
+    border-radius: 10px; padding: 12px 20px;
+    font-size: .97rem; font-family: 'DM Mono', monospace;
+    color: #0f1629; font-weight: 500; line-height: 1.4;
+  }
+  .flow-arrow { color: #374151; font-size: 1.3rem; font-weight: 700; }
+
+  /* TABLE */
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 1rem; }
+  .compare-table th {
+    background: var(--surface2); color: var(--accent);
+    font-family: 'DM Mono', monospace; font-size: .88rem;
+    font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+    padding: 14px 18px; text-align: left; border-bottom: 2px solid var(--border);
+  }
+  .compare-table td {
+    padding: 14px 18px; border-bottom: 1px solid var(--border);
+    color: #1a2340; vertical-align: top; font-size: 1rem;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: #f0fff4; }
+
+  /* KEYBOARD */
+  kbd {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: #fff; border: 1.5px solid #b0bcd8; border-bottom: 3px solid #8898c0;
+    border-radius: 7px; padding: 3px 10px;
+    font-family: 'DM Mono', monospace; font-size: .88rem;
+    font-weight: 600; color: #0f1629;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.10); white-space: nowrap;
+  }
+
+  /* TAG */
+  .tag {
+    display: inline-block; padding: 3px 12px; border-radius: 100px;
+    font-size: .85rem; font-family: 'DM Mono', monospace; font-weight: 600;
+  }
+  .tag-safe   { background: rgba(22,163,74,.10); color: #15803d; border: 1.5px solid rgba(22,163,74,.3); }
+  .tag-danger { background: rgba(220,38,38,.10); color: #dc2626; border: 1.5px solid rgba(220,38,38,.3); }
+  .tag-blue   { background: rgba(29,78,216,.10); color: #1d4ed8; border: 1.5px solid rgba(29,78,216,.3); }
+  .tag-warn   { background: rgba(180,83,9,.10);  color: #b45309; border: 1.5px solid rgba(180,83,9,.3); }
+
+  /* BADGE LIST */
+  .badge-list { display: flex; flex-wrap: wrap; gap: 10px; }
+  .badge {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--surface2); border: 1.5px solid var(--border);
+    border-radius: 10px; padding: 10px 18px;
+    font-size: 1rem; color: #1a2340; transition: border-color .2s;
+  }
+  .badge:hover { border-color: var(--accent); }
+  .badge strong { font-family: 'Syne', sans-serif; font-weight: 800; color: #0f1629; }
+
+  /* CODE BLOCK */
+  .code-block {
+    background: #0d1117;
+    border-radius: 12px; padding: 20px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: .92rem; line-height: 1.9;
+    color: #e6edf3; overflow-x: auto;
+    border: 1.5px solid #21262d;
+  }
+  .code-block .cm  { color: #8b949e; font-style: italic; }
+  .code-block .cmd { color: #79c0ff; font-weight: 600; }
+  .code-block .arg { color: #ffa657; }
+  .code-block .str { color: #a5d6ff; }
+  .code-block .ok  { color: #56d364; }
+  .code-block .err { color: #f85149; }
+  .code-block .hl  { color: #e6edf3; }
+  .code-block .br  { color: #ff7b72; font-weight: 600; }
+
+  /* COMMAND REF */
+  .cmd-grid {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .cmd-row {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 16px; align-items: start;
+    background: var(--surface2); border: 1.5px solid var(--border);
+    border-radius: 12px; padding: 14px 20px;
+    transition: border-color .2s;
+  }
+  .cmd-row:hover { border-color: var(--accent); }
+  .cmd-code {
+    font-family: 'DM Mono', monospace;
+    font-size: .92rem; font-weight: 600;
+    color: #15803d; line-height: 1.5;
+    word-break: break-all;
+  }
+  .cmd-desc {
+    font-size: .97rem; color: #1a2340; line-height: 1.5;
+  }
+  .cmd-desc small { display: block; color: #374151; font-size: .85rem; margin-top: 3px; }
+
+  /* BRANCH DIAGRAM */
+  .branch-diagram {
+    background: #0d1117;
+    border-radius: 12px; padding: 24px 28px;
+    border: 1.5px solid #21262d;
+    font-family: 'DM Mono', monospace;
+    font-size: .92rem; color: #e6edf3;
+    line-height: 2;
+    overflow-x: auto;
+  }
+  .bd-main   { color: #79c0ff; font-weight: 700; }
+  .bd-branch { color: #56d364; font-weight: 700; }
+  .bd-commit { color: #ffa657; }
+  .bd-merge  { color: #ff7b72; font-weight: 700; }
+  .bd-tag    { color: #f2cc60; }
+
+  footer {
+    position: relative; z-index: 1; text-align: center;
+    padding: 32px 40px; border-top: 2px solid var(--border);
+    color: #374151; font-family: 'DM Mono', monospace; font-size: .82rem;
+  }
+
+  @media(max-width:900px) {
+    main { padding: 36px 24px 80px; }
+    .section-header { padding: 20px 22px 18px; }
+    .section-body { padding: 22px; }
+    .cmd-row { grid-template-columns: 1fr; }
+  }
+  @media(max-width:600px) {
+    h1 { font-size: 2.4rem; }
+    nav a { padding: 12px 12px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-pill">Desenvolupament Web · Batxillerat / FP</div>
+  <h1>Git & GitHub</h1>
+  <p class="header-sub">Control de versions, gestió de repositoris i integració amb Visual Studio Code</p>
+</header>
+
+<nav>
+  <a href="#intro">🌱 Introducció</a>
+  <a href="#installacio">⚙️ Instal·lació</a>
+  <a href="#basic">📦 Comandes bàsiques</a>
+  <a href="#branques">🌿 Branques</a>
+  <a href="#github">🐙 GitHub</a>
+  <a href="#remot">☁️ Remot</a>
+  <a href="#vscode">💻 VS Code</a>
+  <a href="#flux">🔄 Flux de treball</a>
+  <a href="#practica">🧪 Pràctica</a>
+</nav>
+
+<main>
+
+  <!-- INTRODUCCIÓ -->
+  <section id="intro">
+    <div class="section-header">
+      <div class="section-icon icon-green">🌱</div>
+      <div>
+        <div class="section-title">Què és Git i per a què serveix?</div>
+        <div class="section-sub">control de versions distribuït</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li><strong>Git</strong> és un sistema de control de versions: guarda un historial complet de tots els canvis fets en un projecte.</li>
+        <li>Permet <strong>tornar a qualsevol versió anterior</strong> del codi en qualsevol moment.</li>
+        <li>Facilita la <strong>col·laboració</strong>: diverses persones poden treballar al mateix projecte sense trepitjar-se els canvis.</li>
+        <li>Funciona <strong>localment</strong> (al teu ordinador) i pot sincronitzar-se amb serveis remots com GitHub.</li>
+        <li><strong>GitHub</strong> és una plataforma web que allotja repositoris Git al núvol i afegeix eines de col·laboració.</li>
+      </ul>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">📸</div>
+          <div class="card-title">Historial de canvis</div>
+          <div class="card-desc">Cada commit és una "foto" del projecte. Pots veure qui va canviar cada línia i quan.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🌿</div>
+          <div class="card-title">Branques (branches)</div>
+          <div class="card-desc">Treballes en una còpia paral·lela del codi sense afectar la versió principal fins que estàs llest.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">👥</div>
+          <div class="card-title">Col·laboració</div>
+          <div class="card-desc">Diversos desenvolupadors treballen en el mateix projecte i fusionen els seus canvis de forma controlada.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">⏪</div>
+          <div class="card-title">Revertir canvis</div>
+          <div class="card-desc">Si alguna cosa falla, pots tornar a qualsevol versió anterior del projecte amb una sola comanda.</div>
+        </div>
+      </div>
+
+      <h3>Git vs GitHub</h3>
+      <table class="compare-table">
+        <thead><tr><th>Git</th><th>GitHub</th></tr></thead>
+        <tbody>
+          <tr><td>Eina de línia de comandes</td><td>Plataforma web</td></tr>
+          <tr><td>Funciona localment (offline)</td><td>Repositoris al núvol</td></tr>
+          <tr><td>Gestiona l'historial de versions</td><td>Afegeix Pull Requests, Issues, Actions…</td></tr>
+          <tr><td>Gratuït i de codi obert</td><td>Gratuït (plans de pagament per a equips grans)</td></tr>
+          <tr><td>S'instal·la a l'ordinador</td><td>Accessible des del navegador</td></tr>
+        </tbody>
+      </table>
+
+      <div class="key-concept">💡 Clau → Git és l'eina de control de versions que corre al teu ordinador. GitHub és el servei al núvol on puges i comparteixes els teus repositoris Git.</div>
+    </div>
+  </section>
+
+  <!-- INSTAL·LACIÓ I CONFIGURACIÓ -->
+  <section id="installacio">
+    <div class="section-header">
+      <div class="section-icon icon-orange">⚙️</div>
+      <div>
+        <div class="section-title">Instal·lació i Configuració inicial</div>
+        <div class="section-sub">primer cop que uses git</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>Descarrega Git des de <strong>git-scm.com</strong>. En Linux, usa el gestor de paquets.</li>
+        <li>Comprova que s'ha instal·lat correctament amb <kbd>git --version</kbd>.</li>
+        <li>Abans de res, configura el teu <strong>nom i correu</strong>: Git els associa a cada commit que fas.</li>
+        <li>Aquesta configuració es desa globalment i no cal repetir-la per a cada projecte.</li>
+      </ul>
+
+      <h3>Verificar la instal·lació</h3>
+      <div class="code-block"><span class="cmd">git</span> <span class="arg">--version</span>
+<span class="cm"># Hauria de mostrar quelcom com:</span>
+<span class="ok">git version 2.43.0</span></div>
+
+      <h3>Configuració inicial (fer-ho una sola vegada)</h3>
+      <div class="code-block"><span class="cm"># El teu nom (apareixerà als commits)</span>
+<span class="cmd">git config</span> <span class="arg">--global</span> <span class="hl">user.name</span> <span class="str">"El teu Nom"</span>
+
+<span class="cm"># El teu correu (ha de coincidir amb el de GitHub)</span>
+<span class="cmd">git config</span> <span class="arg">--global</span> <span class="hl">user.email</span> <span class="str">"correu@exemple.com"</span>
+
+<span class="cm"># Editor per defecte (VS Code)</span>
+<span class="cmd">git config</span> <span class="arg">--global</span> <span class="hl">core.editor</span> <span class="str">"code --wait"</span>
+
+<span class="cm"># Nom de la branca principal (estàndard actual)</span>
+<span class="cmd">git config</span> <span class="arg">--global</span> <span class="hl">init.defaultBranch</span> <span class="str">main</span>
+
+<span class="cm"># Comprovar tota la configuració</span>
+<span class="cmd">git config</span> <span class="arg">--list</span></div>
+
+      <div class="alert info">
+        <span class="alert-icon">💡</span>
+        <span>El correu que poses a <kbd>user.email</kbd> ha de ser el <strong>mateix que tens a GitHub</strong>, perquè els commits quedin associats al teu perfil correctament.</span>
+      </div>
+
+      <div class="key-concept">💡 Clau → Configura nom i correu una sola vegada amb <kbd>--global</kbd>. Afecta tots els repositoris del teu ordinador.</div>
+    </div>
+  </section>
+
+  <!-- COMANDES BÀSIQUES -->
+  <section id="basic">
+    <div class="section-header">
+      <div class="section-icon icon-green">📦</div>
+      <div>
+        <div class="section-title">Comandes Bàsiques</div>
+        <div class="section-sub">el cicle de vida d'un canvi</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>El flux bàsic de Git és: <strong>modificar arxius → afegir a l'stage → fer commit</strong>.</li>
+        <li>L'<strong>stage (àrea de preparació)</strong> és un espai intermedi on tries quins canvis vols incloure al pròxim commit.</li>
+        <li>Un <strong>commit</strong> és una instantània permanent dels arxius afegits a l'stage, amb un missatge descriptiu.</li>
+      </ul>
+
+      <h3>Les tres zones de Git</h3>
+      <div class="flow">
+        <div class="flow-item">📝 Working Directory<br><small>els teus arxius locals</small></div>
+        <span class="flow-arrow">→ git add</span>
+        <div class="flow-item">📋 Staging Area<br><small>canvis preparats</small></div>
+        <span class="flow-arrow">→ git commit</span>
+        <div class="flow-item">📦 Repository<br><small>historial local</small></div>
+        <span class="flow-arrow">→ git push</span>
+        <div class="flow-item">☁️ GitHub<br><small>repositori remot</small></div>
+      </div>
+
+      <h3>Iniciar i clonar repositoris</h3>
+      <div class="cmd-grid">
+        <div class="cmd-row">
+          <div class="cmd-code">git init</div>
+          <div class="cmd-desc">Inicialitza un nou repositori Git a la carpeta actual<small>Crea la carpeta oculta .git</small></div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">git clone &lt;url&gt;</div>
+          <div class="cmd-desc">Copia un repositori remot al teu ordinador<small>Ex: git clone https://github.com/usuari/repo.git</small></div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">git clone &lt;url&gt; &lt;nom&gt;</div>
+          <div class="cmd-desc">Clona el repositori amb un nom de carpeta personalitzat</div>
+        </div>
+      </div>
+
+      <h3>Veure l'estat i l'historial</h3>
+      <div class="cmd-grid">
+        <div class="cmd-row">
+          <div class="cmd-code">git status</div>
+          <div class="cmd-desc">Mostra quins arxius han canviat, quins estan a l'stage i quins no s'han afegit<small>La comanda que més usaràs</small></div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">git log</div>
+          <div class="cmd-desc">Mostra l'historial de commits amb hash, autor, data i missatge</div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">git log --oneline</div>
+          <div class="cmd-desc">Historial compacte: un commit per línia<small>Molt més llegible per veure l'evolució del projecte</small></div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">git diff</div>
+          <div class="cmd-desc">Mostra les línies exactes que han canviat des de l'últim commit</div>
+        </div>
+      </div>
+
+      <h3>Afegir canvis i fer commits</h3>
+      <div class="cmd-grid">
+        <div class="cmd-row">
+          <div class="cmd-code">git add &lt;arxiu&gt;</div>
+          <div class="cmd-desc">Afegeix un arxiu concret a l'stage<small>Ex: git add index.html</small></div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">git add .</div>
+          <div class="cmd-desc">Afegeix tots els arxius modificats a l'stage<small>El punt significa "tot el directori actual"</small></div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">git commit -m "missatge"</div>
+          <div class="cmd-desc">Fa un commit amb els canvis de l'stage i un missatge descriptiu<small>Ex: git commit -m "Afegeix formulari de contacte"</small></div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">git commit -am "missatge"</div>
+          <div class="cmd-desc">Afegeix tots els arxius modificats i fa el commit en una sola comanda<small>No inclou arxius nous (untracked)</small></div>
+        </div>
+      </div>
+
+      <h3>Desfer canvis</h3>
+      <div class="cmd-grid">
+        <div class="cmd-row">
+          <div class="cmd-code">git restore &lt;arxiu&gt;</div>
+          <div class="cmd-desc">Descarta els canvis d'un arxiu i el torna a l'últim commit<small>⚠️ Els canvis es perden definitivament</small></div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">git restore --staged &lt;arxiu&gt;</div>
+          <div class="cmd-desc">Treu un arxiu de l'stage (però manté els canvis al fitxer)</div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">git revert &lt;hash&gt;</div>
+          <div class="cmd-desc">Crea un commit nou que desfà els canvis d'un commit anterior<small>Manera segura de desfer sense reescriure l'historial</small></div>
+        </div>
+      </div>
+
+      <h3>Exemple de sessió típica</h3>
+      <div class="code-block"><span class="cm"># Veiem quins arxius han canviat</span>
+<span class="cmd">git status</span>
+<span class="ok">On branch main
+Changes not staged for commit:
+  modified:   index.html
+Untracked files:
+  styles.css</span>
+
+<span class="cm"># Afegim tots els canvis a l'stage</span>
+<span class="cmd">git add</span> <span class="arg">.</span>
+
+<span class="cm"># Fem el commit amb un missatge clar</span>
+<span class="cmd">git commit</span> <span class="arg">-m</span> <span class="str">"Millora el disseny de la pàgina principal"</span>
+
+<span class="cm"># Veiem l'historial compacte</span>
+<span class="cmd">git log</span> <span class="arg">--oneline</span>
+<span class="ok">a1b2c3d Millora el disseny de la pàgina principal
+9f8e7d6 Afegeix secció de contacte
+3c4d5e6 Commit inicial</span></div>
+
+      <div class="alert warning">
+        <span class="alert-icon">⚠️</span>
+        <span><strong>Bons missatges de commit:</strong> escriu missatges en imperatiu i descriptius. <span style="color:#15803d">✅ "Afegeix validació del formulari"</span> vs <span style="color:#dc2626">❌ "canvis" o "arreglo coses"</span>.</span>
+      </div>
+
+      <div class="key-concept">💡 Clau → El cicle és sempre: <kbd>git status</kbd> → <kbd>git add .</kbd> → <kbd>git commit -m "missatge"</kbd>. Fes commits petits i freqüents amb missatges clars.</div>
+    </div>
+  </section>
+
+  <!-- BRANQUES -->
+  <section id="branques">
+    <div class="section-header">
+      <div class="section-icon icon-teal">🌿</div>
+      <div>
+        <div class="section-title">Branques (Branches)</div>
+        <div class="section-sub">línies de desenvolupament paral·leles</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>Una <strong>branca</strong> és una línia de desenvolupament independent: els canvis que fas no afecten les altres branques.</li>
+        <li>La branca principal s'anomena <strong>main</strong> (o <em>master</em> en projectes antics): conté el codi estable.</li>
+        <li>Es creen branques per a noves funcionalitats, correccions d'errors o experiments.</li>
+        <li>Un cop llest, la branca es <strong>fusiona (merge)</strong> a main i es pot eliminar.</li>
+      </ul>
+
+      <h3>Diagrama de branques</h3>
+      <div class="branch-diagram">
+<span class="bd-main">main</span>     ●───────────────────────────────●──● <span class="bd-tag">v1.0</span>
+                        \                         /
+<span class="bd-branch">feature/login</span>  ●───<span class="bd-commit">●───●</span>──────/
+                                    \         /
+<span class="bd-branch">feature/navbar</span>              ●───<span class="bd-commit">●</span>──/
+      </div>
+
+      <h3>Gestió de branques</h3>
+      <div class="cmd-grid">
+        <div class="cmd-row">
+          <div class="cmd-code">git branch</div>
+          <div class="cmd-desc">Llista totes les branques locals<small>La branca activa es marca amb *</small></div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">git branch &lt;nom&gt;</div>
+          <div class="cmd-desc">Crea una nova branca<small>Ex: git branch feature/login</small></div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">git switch &lt;nom&gt;</div>
+          <div class="cmd-desc">Canvia a una branca existent<small>Equivalent modern de git checkout</small></div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">git switch -c &lt;nom&gt;</div>
+          <div class="cmd-desc">Crea una branca nova i canvia a ella directament<small>La comanda més habitual per iniciar una funcionalitat</small></div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">git merge &lt;nom&gt;</div>
+          <div class="cmd-desc">Fusiona la branca indicada a la branca actual<small>Primer fes switch a main, després git merge feature/login</small></div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">git branch -d &lt;nom&gt;</div>
+          <div class="cmd-desc">Elimina una branca ja fusionada<small>Usa -D per forçar si no s'ha fusionat</small></div>
+        </div>
+      </div>
+
+      <h3>Exemple: crear i fusionar una branca</h3>
+      <div class="code-block"><span class="cm"># Creem i canviem a la nova branca</span>
+<span class="cmd">git switch</span> <span class="arg">-c</span> <span class="str">feature/pagina-contacte</span>
+
+<span class="cm"># Treballem i fem commits a la nova branca</span>
+<span class="cmd">git add</span> <span class="arg">.</span>
+<span class="cmd">git commit</span> <span class="arg">-m</span> <span class="str">"Afegeix pàgina de contacte"</span>
+
+<span class="cm"># Tornem a main i fusionem</span>
+<span class="cmd">git switch</span> <span class="str">main</span>
+<span class="cmd">git merge</span> <span class="str">feature/pagina-contacte</span>
+
+<span class="cm"># Eliminem la branca ja fusionada</span>
+<span class="cmd">git branch</span> <span class="arg">-d</span> <span class="str">feature/pagina-contacte</span></div>
+
+      <div class="alert warning">
+        <span class="alert-icon">⚠️</span>
+        <span><strong>Conflictes de merge:</strong> si dos desenvolupadors modifiquen les mateixes línies d'un arxiu, Git no sap quin canvi escollir i genera un conflicte. Cal resoldre'l manualment editant l'arxiu i fent un commit nou.</span>
+      </div>
+
+      <div class="key-concept">💡 Clau → Norma d'or: <strong>mai treballis directament a main</strong>. Sempre crea una branca nova per a cada funcionalitat o correcció.</div>
+    </div>
+  </section>
+
+  <!-- GITHUB -->
+  <section id="github">
+    <div class="section-header">
+      <div class="section-icon icon-gray">🐙</div>
+      <div>
+        <div class="section-title">GitHub</div>
+        <div class="section-sub">repositoris al núvol i col·laboració</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li><strong>GitHub</strong> és la plataforma de referència per allotjar repositoris Git i col·laborar en projectes.</li>
+        <li>Un <strong>repositori (repo)</strong> a GitHub conté tot el codi, l'historial de commits i les branques del projecte.</li>
+        <li>Permet treballar en equip amb eines com <strong>Pull Requests, Issues i Actions</strong>.</li>
+        <li>Els repositoris poden ser <strong>públics</strong> (accessibles a tothom) o <strong>privats</strong> (només per a convidats).</li>
+      </ul>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🔀</div>
+          <div class="card-title">Pull Request (PR)</div>
+          <div class="card-desc">Sol·licitud per fusionar una branca a main. Permet revisió del codi per part de l'equip abans de fusionar.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🐛</div>
+          <div class="card-title">Issues</div>
+          <div class="card-desc">Sistema de tasques i informes d'errors. Permet organitzar i assignar feina a l'equip.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">GitHub Actions</div>
+          <div class="card-desc">Automatització de tasques: tests automàtics, desplegament, validacions en cada push.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🍴</div>
+          <div class="card-title">Fork</div>
+          <div class="card-desc">Copia un repositori aliè al teu compte per modificar-lo sense afectar l'original.</div>
+        </div>
+      </div>
+
+      <h3>Crear un repositori a GitHub</h3>
+      <div class="code-block"><span class="cm"># Opció A: Crear repositori nou des de zero (a GitHub.com primer)</span>
+<span class="cm"># Després, connectar-lo al teu projecte local:</span>
+<span class="cmd">git remote add</span> <span class="arg">origin</span> <span class="str">https://github.com/usuari/nom-repo.git</span>
+<span class="cmd">git push</span> <span class="arg">-u origin main</span>
+
+<span class="cm"># Opció B: Clonar un repositori existent de GitHub</span>
+<span class="cmd">git clone</span> <span class="str">https://github.com/usuari/nom-repo.git</span></div>
+
+      <div class="key-concept">💡 Clau → Crea el repositori a GitHub.com, copia la URL i usa git remote add origin + git push. A partir d'aquí, tot el teu codi quedarà guardat al núvol.</div>
+    </div>
+  </section>
+
+  <!-- REPOSITORI REMOT -->
+  <section id="remot">
+    <div class="section-header">
+      <div class="section-icon icon-blue">☁️</div>
+      <div>
+        <div class="section-title">Treballar amb el Repositori Remot</div>
+        <div class="section-sub">sincronitzar local i GitHub</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>El repositori <strong>remot</strong> (origin) és la còpia del projecte allotjada a GitHub.</li>
+        <li><kbd>git push</kbd> puja els teus commits locals al remot. <kbd>git pull</kbd> baixa els canvis del remot al local.</li>
+        <li>Sempre fes <kbd>git pull</kbd> <strong>abans de començar a treballar</strong> per tenir el codi actualitzat.</li>
+      </ul>
+
+      <h3>Comandes de sincronització</h3>
+      <div class="cmd-grid">
+        <div class="cmd-row">
+          <div class="cmd-code">git remote -v</div>
+          <div class="cmd-desc">Mostra els repositoris remots connectats i les seves URLs</div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">git push</div>
+          <div class="cmd-desc">Puja els commits de la branca actual al remot<small>La primera vegada: git push -u origin main</small></div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">git push origin &lt;branca&gt;</div>
+          <div class="cmd-desc">Puja una branca concreta al remot<small>Ex: git push origin feature/login</small></div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">git pull</div>
+          <div class="cmd-desc">Baixa i fusiona els canvis del remot a la branca actual<small>Equivalent a git fetch + git merge</small></div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">git fetch</div>
+          <div class="cmd-desc">Baixa els canvis del remot però NO els fusiona<small>Permet revisar-los abans de fusionar</small></div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">git push --delete origin &lt;branca&gt;</div>
+          <div class="cmd-desc">Elimina una branca del repositori remot</div>
+        </div>
+      </div>
+
+      <h3>Flux de treball en equip</h3>
+      <div class="flow">
+        <div class="flow-item">⬇️ git pull<br><small>actualitzar</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">🌿 git switch -c<br><small>nova branca</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">✏️ Codifica<br><small>els teus canvis</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">📦 add + commit<br><small>desa localment</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">⬆️ git push<br><small>puja a GitHub</small></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-item">🔀 Pull Request<br><small>revisió i merge</small></div>
+      </div>
+
+      <div class="alert danger">
+        <span class="alert-icon">🚫</span>
+        <span><strong>Evita fer push forçat (<kbd>git push --force</kbd>)</strong> en repositoris compartits: reescriu l'historial i pot fer perdre commits dels companys. Usa-ho només en branques pròpies.</span>
+      </div>
+
+      <div class="key-concept">💡 Clau → Sempre: <kbd>git pull</kbd> en arribar → treballar a la teva branca → <kbd>git push</kbd> en acabar → Pull Request per fusionar.</div>
+    </div>
+  </section>
+
+  <!-- VS CODE -->
+  <section id="vscode">
+    <div class="section-header">
+      <div class="section-icon icon-blue">💻</div>
+      <div>
+        <div class="section-title">Git amb Visual Studio Code</div>
+        <div class="section-sub">integració visual i terminal integrada</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>VS Code té <strong>integració nativa amb Git</strong>: no cal instal·lar cap extensió extra.</li>
+        <li>La <strong>barra lateral d'Source Control</strong> (icona de branques) mostra els arxius modificats i permet fer commits.</li>
+        <li>El <strong>terminal integrat</strong> de VS Code és el lloc ideal per executar comandes Git.</li>
+        <li>Extensions com <strong>GitLens</strong> afegeixen funcionalitats avançades com veure qui va escriure cada línia.</li>
+      </ul>
+
+      <h3>Obrir el terminal integrat de VS Code</h3>
+      <div class="cmd-grid">
+        <div class="cmd-row">
+          <div class="cmd-code">Ctrl + `</div>
+          <div class="cmd-desc">Obre/tanca el terminal integrat de VS Code<small>El backtick és la tecla a l'esquerra del 1</small></div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">Ctrl + Shift + `</div>
+          <div class="cmd-desc">Obre un terminal nou (si ja n'hi ha un d'obert)</div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">Ctrl + Shift + G</div>
+          <div class="cmd-desc">Obre el panell de Source Control (control de versions visual)</div>
+        </div>
+      </div>
+
+      <h3>Flux de treball típic des de VS Code</h3>
+      <div class="code-block"><span class="cm"># 1. Obrim VS Code a la carpeta del projecte</span>
+<span class="cmd">code</span> <span class="str">.</span>          <span class="cm"># Obre VS Code a la carpeta actual (des del terminal)</span>
+
+<span class="cm"># 2. Obrim el terminal integrat (Ctrl + `)</span>
+<span class="cm"># 3. Iniciem o clonem el repositori</span>
+<span class="cmd">git init</span>
+<span class="cm"># o</span>
+<span class="cmd">git clone</span> <span class="str">https://github.com/usuari/repo.git</span>
+
+<span class="cm"># 4. Fem canvis als arxius (directament a l'editor)</span>
+<span class="cm"># 5. Veiem els canvis (barra lateral Source Control o terminal)</span>
+<span class="cmd">git status</span>
+
+<span class="cm"># 6. Afegim i fem commit</span>
+<span class="cmd">git add</span> <span class="arg">.</span>
+<span class="cmd">git commit</span> <span class="arg">-m</span> <span class="str">"Descripció del canvi"</span>
+
+<span class="cm"># 7. Pugem a GitHub</span>
+<span class="cmd">git push</span></div>
+
+      <h3>Funcions de la barra Source Control de VS Code</h3>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">📝</div>
+          <div class="card-title">Arxius modificats (M)</div>
+          <div class="card-desc">Mostra en groc els arxius modificats. Fes clic per veure les diferències exactes al costat.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">➕</div>
+          <div class="card-title">Stage Changes</div>
+          <div class="card-desc">El botó + a la dreta de cada arxiu l'afegeix a l'stage. Equivalent a git add.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">✅</div>
+          <div class="card-title">Commit</div>
+          <div class="cmd-desc">Escriu el missatge al camp de text superior i prem ✓ per fer el commit.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔄</div>
+          <div class="card-title">Sync Changes</div>
+          <div class="card-desc">Botó que fa push i pull alhora per sincronitzar amb GitHub en un sol clic.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🌿</div>
+          <div class="card-title">Canviar de branca</div>
+          <div class="card-desc">A la barra inferior esquerra de VS Code veus la branca activa. Fes clic per canviar o crear-ne una.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔍</div>
+          <div class="card-title">GitLens (extensió)</div>
+          <div class="card-desc">Mostra inline qui va escriure cada línia (blame), historial de commits per arxiu i molt més.</div>
+        </div>
+      </div>
+
+      <h3>Extensions recomanades per a Git a VS Code</h3>
+      <div class="compare-table" style="display:table;width:100%;border-collapse:collapse">
+        <thead>
+          <tr><th>Extensió</th><th>Que aporta</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>🔍 <strong>GitLens</strong></td><td>Blame inline, historial per línia, comparació de branques</td></tr>
+          <tr><td>📊 <strong>Git Graph</strong></td><td>Visualització gràfica de l'arbre de commits i branques</td></tr>
+          <tr><td>🔀 <strong>GitHub Pull Requests</strong></td><td>Gestiona PRs de GitHub directament des de VS Code</td></tr>
+          <tr><td>📁 <strong>GitIgnore</strong></td><td>Genera fitxers .gitignore per a qualsevol tipus de projecte</td></tr>
+        </tbody>
+      </table>
+
+      <div class="key-concept">💡 Clau → VS Code i Git treballen junts sense configuració extra. Usa el terminal integrat (Ctrl+`) per a les comandes i la barra Source Control per a una vista visual dels canvis.</div>
+    </div>
+  </section>
+
+  <!-- FITXER .GITIGNORE I FLUX COMPLET -->
+  <section id="flux">
+    <div class="section-header">
+      <div class="section-icon icon-purple">🔄</div>
+      <div>
+        <div class="section-title">Flux complet i .gitignore</div>
+        <div class="section-sub">bones pràctiques i referència ràpida</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <h3>El fitxer .gitignore</h3>
+      <ul class="bullet-list">
+        <li>El fitxer <kbd>.gitignore</kbd> indica a Git quins arxius o carpetes <strong>mai ha de controlar</strong>.</li>
+        <li>S'usa per excloure: dependències (<kbd>node_modules/</kbd>), arxius de configuració local, claus secretes, arxius temporals…</li>
+        <li>Ha d'estar a l'arrel del projecte i es commiteja com qualsevol altre arxiu.</li>
+      </ul>
+
+      <div class="code-block"><span class="cm"># Exemple de .gitignore per a un projecte web</span>
+
+<span class="cm"># Dependències</span>
+<span class="arg">node_modules/</span>
+
+<span class="cm"># Variables d'entorn (claus secretes, credencials)</span>
+<span class="arg">.env</span>
+<span class="arg">.env.local</span>
+
+<span class="cm"># Arxius de configuració dels editors</span>
+<span class="arg">.vscode/settings.json</span>
+<span class="arg">.idea/</span>
+
+<span class="cm"># Arxius del sistema operatiu</span>
+<span class="arg">.DS_Store</span>          <span class="cm"># macOS</span>
+<span class="arg">Thumbs.db</span>          <span class="cm"># Windows</span>
+
+<span class="cm"># Carpetes de build</span>
+<span class="arg">dist/</span>
+<span class="arg">build/</span></div>
+
+      <h3>Referència ràpida de comandes essencials</h3>
+      <table class="compare-table">
+        <thead><tr><th>Comanda</th><th>Descripció</th><th>Freqüència</th></tr></thead>
+        <tbody>
+          <tr><td><kbd>git status</kbd></td><td>Estat actual del repositori</td><td><span class="tag tag-safe">Molt alta</span></td></tr>
+          <tr><td><kbd>git add .</kbd></td><td>Afegeix tots els canvis a l'stage</td><td><span class="tag tag-safe">Molt alta</span></td></tr>
+          <tr><td><kbd>git commit -m ""</kbd></td><td>Guarda els canvis amb missatge</td><td><span class="tag tag-safe">Molt alta</span></td></tr>
+          <tr><td><kbd>git push</kbd></td><td>Puja commits a GitHub</td><td><span class="tag tag-safe">Alta</span></td></tr>
+          <tr><td><kbd>git pull</kbd></td><td>Baixa canvis de GitHub</td><td><span class="tag tag-safe">Alta</span></td></tr>
+          <tr><td><kbd>git log --oneline</kbd></td><td>Historial compacte de commits</td><td><span class="tag tag-blue">Mitjana</span></td></tr>
+          <tr><td><kbd>git switch -c &lt;nom&gt;</kbd></td><td>Crea i canvia a nova branca</td><td><span class="tag tag-blue">Mitjana</span></td></tr>
+          <tr><td><kbd>git merge &lt;branca&gt;</kbd></td><td>Fusiona una branca a l'actual</td><td><span class="tag tag-blue">Mitjana</span></td></tr>
+          <tr><td><kbd>git clone &lt;url&gt;</kbd></td><td>Clona un repositori remot</td><td><span class="tag tag-warn">Baixa</span></td></tr>
+          <tr><td><kbd>git diff</kbd></td><td>Mostra canvis pendents de l'stage</td><td><span class="tag tag-warn">Baixa</span></td></tr>
+        </tbody>
+      </table>
+
+      <h3>Flux complet: primer projecte a GitHub</h3>
+      <div class="code-block"><span class="cm">### PAS 1: Crear la carpeta i inicialitzar Git ###</span>
+<span class="cmd">mkdir</span> <span class="str">el-meu-projecte</span>
+<span class="cmd">cd</span> <span class="str">el-meu-projecte</span>
+<span class="cmd">git init</span>
+<span class="cmd">code</span> <span class="arg">.</span>              <span class="cm"># Obre VS Code a la carpeta</span>
+
+<span class="cm">### PAS 2: Crear arxius i fer el primer commit ###</span>
+<span class="cm"># Crea index.html, styles.css... des de VS Code</span>
+<span class="cmd">git add</span> <span class="arg">.</span>
+<span class="cmd">git commit</span> <span class="arg">-m</span> <span class="str">"Commit inicial"</span>
+
+<span class="cm">### PAS 3: Connectar amb GitHub ###</span>
+<span class="cm"># (Primer crea el repositori buit a github.com)</span>
+<span class="cmd">git remote add</span> <span class="arg">origin</span> <span class="str">https://github.com/usuari/el-meu-projecte.git</span>
+<span class="cmd">git push</span> <span class="arg">-u origin main</span>
+
+<span class="cm">### PAS 4: Flux diari de treball ###</span>
+<span class="cmd">git pull</span>                              <span class="cm"># Actualitzar</span>
+<span class="cmd">git switch</span> <span class="arg">-c</span> <span class="str">feature/nova-funcio</span>    <span class="cm"># Nova branca</span>
+<span class="cm"># ... treballes als arxius ...</span>
+<span class="cmd">git add</span> <span class="arg">.</span>
+<span class="cmd">git commit</span> <span class="arg">-m</span> <span class="str">"Afegeix nova funcionalitat"</span>
+<span class="cmd">git push</span> <span class="arg">origin</span> <span class="str">feature/nova-funcio</span>   <span class="cm"># Puja la branca</span>
+<span class="cm"># ... crea un Pull Request a GitHub ...</span></div>
+
+      <div class="alert success">
+        <span class="alert-icon">✅</span>
+        <span><strong>Bones pràctiques resumides:</strong> commits petits i freqüents · missatges descriptius · sempre treballar en branques · fer pull abans de push · mai pujar credencials ni node_modules.</span>
+      </div>
+
+      <div class="key-concept">💡 Clau → Git és una habilitat fonamental per a qualsevol desenvolupador. Dominar el cicle add → commit → push i treballar amb branques és suficient per al 90% dels casos del dia a dia.</div>
+    </div>
+  </section>
+  <!-- PRÀCTICA EN EQUIP -->
+  <section id="practica">
+    <div class="section-header">
+      <div class="section-icon icon-orange">🧪</div>
+      <div>
+        <div class="section-title">Pràctica: Treball en equip amb branques</div>
+        <div class="section-sub">activitat per a 2 persones · durada ~20 min</div>
+      </div>
+    </div>
+    <div class="section-body">
+
+      <ul class="bullet-list">
+        <li>Practicareu el flux real de treball: un crea el repositori, l'altre col·labora des de la seva màquina.</li>
+        <li>Cadascú treballarà en una <strong>branca pròpia</strong> i veureu com els canvis es fusionen a main.</li>
+        <li>Necessiteu: 2 ordinadors, 2 comptes de GitHub i VS Code instal·lat.</li>
+      </ul>
+
+      <div class="alert info">
+        <span class="alert-icon">👥</span>
+        <span>Al llarg de la pràctica, <strong>Persona A</strong> és qui crea el repositori i <strong>Persona B</strong> és el col·laborador convidat. Els passos indiquen clarament qui fa cada cosa.</span>
+      </div>
+
+      <!-- PAS 1 -->
+      <h3>PAS 1 — Persona A: Crea el repositori i l'arxiu inicial</h3>
+      <div class="code-block"><span class="cm"># Crea una carpeta i inicialitza Git</span>
+<span class="cmd">mkdir</span> <span class="str">practica-equip</span>
+<span class="cmd">cd</span> <span class="str">practica-equip</span>
+<span class="cmd">git init</span>
+<span class="cmd">code</span> <span class="arg">.</span>
+
+<span class="cm"># Crea un arxiu index.html amb contingut mínim i guarda'l</span>
+<span class="cm"># (des de VS Code, crea l'arxiu manualment)</span>
+
+<span class="cmd">git add</span> <span class="arg">.</span>
+<span class="cmd">git commit</span> <span class="arg">-m</span> <span class="str">"Commit inicial: index.html"</span></div>
+
+      <div class="alert success">
+        <span class="alert-icon">📋</span>
+        <span>Contingut mínim per a l'<kbd>index.html</kbd> inicial:<br><br>
+        <code style="font-family:'DM Mono',monospace;font-size:.88rem;display:block;margin-top:8px;background:#0d1117;color:#e6edf3;padding:12px 16px;border-radius:8px;line-height:1.8;">&lt;!DOCTYPE html&gt;<br>&lt;html lang="ca"&gt;<br>&lt;head&gt;&lt;meta charset="UTF-8"&gt;&lt;title&gt;Pràctica Git&lt;/title&gt;&lt;/head&gt;<br>&lt;body&gt;<br>  &lt;h1&gt;Pràctica de treball en equip amb Git&lt;/h1&gt;<br>&lt;/body&gt;<br>&lt;/html&gt;</code>
+        </span>
+      </div>
+
+      <!-- PAS 2 -->
+      <h3>PAS 2 — Persona A: Puja el repositori a GitHub i convida la Persona B</h3>
+      <div class="cmd-grid">
+        <div class="cmd-row">
+          <div class="cmd-code">1. Crea un repo a GitHub</div>
+          <div class="cmd-desc">Ves a github.com → New repository → nom: <strong>practica-equip</strong> → Create<small>Deixa-ho públic i sense README</small></div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-code">2. Connecta i puja</div>
+          <div class="cmd-desc">Copia la URL del repo i executa les comandes del costat →</div>
+        </div>
+      </div>
+
+      <div class="code-block"><span class="cmd">git remote add</span> <span class="arg">origin</span> <span class="str">https://github.com/personaA/practica-equip.git</span>
+<span class="cmd">git push</span> <span class="arg">-u origin main</span>
+<span class="ok">Branch 'main' set up to track remote branch 'main' from 'origin'.</span></div>
+
+      <div class="cmd-grid">
+        <div class="cmd-row">
+          <div class="cmd-code">3. Convida la Persona B</div>
+          <div class="cmd-desc">GitHub → Settings del repo → Collaborators → Add people → escriu el nom d'usuari de la Persona B<small>La Persona B rebrà un correu per acceptar la invitació</small></div>
+        </div>
+      </div>
+
+      <!-- PAS 3 -->
+      <h3>PAS 3 — Persona B: Clona el repositori</h3>
+      <div class="code-block"><span class="cm"># Accepta la invitació de GitHub primer (comprova el correu)</span>
+<span class="cm"># Clona el repositori de la Persona A</span>
+<span class="cmd">git clone</span> <span class="str">https://github.com/personaA/practica-equip.git</span>
+<span class="cmd">cd</span> <span class="str">practica-equip</span>
+<span class="cmd">code</span> <span class="arg">.</span>
+
+<span class="cm"># Comprova que veus l'index.html de la Persona A</span>
+<span class="cmd">git log</span> <span class="arg">--oneline</span>
+<span class="ok">a1b2c3d Commit inicial: index.html</span></div>
+
+      <!-- PAS 4 -->
+      <h3>PAS 4 — Cadascú treballa a la seva pròpia branca</h3>
+
+      <div class="cards">
+        <div class="card" style="border-left:4px solid #1d4ed8;">
+          <div class="card-icon">👤</div>
+          <div class="card-title" style="color:#1d4ed8;">Persona A</div>
+          <div class="card-desc">Afegeix un paràgraf de benvinguda a l'<kbd>index.html</kbd></div>
+        </div>
+        <div class="card" style="border-left:4px solid #dc2626;">
+          <div class="card-icon">👤</div>
+          <div class="card-title" style="color:#dc2626;">Persona B</div>
+          <div class="card-desc">Afegeix un peu de pàgina (<kbd>&lt;footer&gt;</kbd>) a l'<kbd>index.html</kbd></div>
+        </div>
+      </div>
+
+      <div class="code-block"><span class="cm">### PERSONA A (al seu ordinador) ###</span>
+<span class="cmd">git switch</span> <span class="arg">-c</span> <span class="str">feature/benvinguda</span>
+
+<span class="cm"># Edita index.html: afegeix dins &lt;body&gt;:</span>
+<span class="cm"># &lt;p&gt;Benvinguts a la nostra web de pràctiques!&lt;/p&gt;</span>
+
+<span class="cmd">git add</span> <span class="arg">.</span>
+<span class="cmd">git commit</span> <span class="arg">-m</span> <span class="str">"Afegeix paràgraf de benvinguda"</span>
+<span class="cmd">git push</span> <span class="arg">origin</span> <span class="str">feature/benvinguda</span>
+
+
+<span class="cm">### PERSONA B (al seu ordinador) ###</span>
+<span class="cmd">git switch</span> <span class="arg">-c</span> <span class="str">feature/footer</span>
+
+<span class="cm"># Edita index.html: afegeix abans de &lt;/body&gt;:</span>
+<span class="cm"># &lt;footer&gt;&lt;p&gt;Pràctica Git — 2025&lt;/p&gt;&lt;/footer&gt;</span>
+
+<span class="cmd">git add</span> <span class="arg">.</span>
+<span class="cmd">git commit</span> <span class="arg">-m</span> <span class="str">"Afegeix footer a la pàgina"</span>
+<span class="cmd">git push</span> <span class="arg">origin</span> <span class="str">feature/footer</span></div>
+
+      <!-- PAS 5 -->
+      <h3>PAS 5 — Persona A: Fusiona les dues branques a main</h3>
+      <div class="code-block"><span class="cm"># Tornem a main i baixem els canvis remots</span>
+<span class="cmd">git switch</span> <span class="str">main</span>
+<span class="cmd">git pull</span>
+
+<span class="cm"># Fusionem la branca de la Persona A</span>
+<span class="cmd">git merge</span> <span class="str">feature/benvinguda</span>
+<span class="ok">Updating a1b2c3d..b2c3d4e
+Fast-forward
+ index.html | 1 +</span>
+
+<span class="cm"># Baixem la branca de la Persona B del remot i la fusionem</span>
+<span class="cmd">git fetch</span> <span class="arg">origin</span>
+<span class="cmd">git merge</span> <span class="str">origin/feature/footer</span>
+<span class="ok">Merge made by the 'ort' strategy.
+ index.html | 1 +</span>
+
+<span class="cm"># Pugem el resultat fusionat a main</span>
+<span class="cmd">git push</span>
+
+<span class="cm"># Eliminem les branques ja fusionades</span>
+<span class="cmd">git branch</span> <span class="arg">-d</span> <span class="str">feature/benvinguda</span>
+<span class="cmd">git push</span> <span class="arg">--delete origin</span> <span class="str">feature/footer</span></div>
+
+      <!-- PAS 6 -->
+      <h3>PAS 6 — Persona B: Actualitza el seu local</h3>
+      <div class="code-block"><span class="cm"># Torna a main i baixa el resultat final</span>
+<span class="cmd">git switch</span> <span class="str">main</span>
+<span class="cmd">git pull</span>
+
+<span class="cm"># Comprova que veu els canvis dels dos al index.html</span>
+<span class="cmd">git log</span> <span class="arg">--oneline</span>
+<span class="ok">d4e5f6g Merge branch 'feature/footer'
+c3d4e5f Afegeix footer a la pàgina
+b2c3d4e Afegeix paràgraf de benvinguda
+a1b2c3d Commit inicial: index.html</span></div>
+
+      <h3>Resum de la pràctica</h3>
+      <table class="compare-table">
+        <thead><tr><th>Pas</th><th>Qui</th><th>Acció</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><span class="tag tag-blue">Persona A</span></td><td>Crea el repo, fa el commit inicial i el puja a GitHub</td></tr>
+          <tr><td>2</td><td><span class="tag tag-blue">Persona A</span></td><td>Convida la Persona B com a col·laboradora</td></tr>
+          <tr><td>3</td><td><span class="tag tag-danger">Persona B</span></td><td>Acepta la invitació i clona el repositori</td></tr>
+          <tr><td>4</td><td><span class="tag tag-blue">Persona A</span> + <span class="tag tag-danger">Persona B</span></td><td>Cadascú crea la seva branca, fa el seu canvi i el puja</td></tr>
+          <tr><td>5</td><td><span class="tag tag-blue">Persona A</span></td><td>Fusiona les dues branques a main i puja el resultat</td></tr>
+          <tr><td>6</td><td><span class="tag tag-danger">Persona B</span></td><td>Fa pull i comprova que veu els canvis dels dos</td></tr>
+        </tbody>
+      </table>
+
+      <div class="alert success">
+        <span class="alert-icon">🎯</span>
+        <span><strong>Heu acabat!</strong> Heu practicat: crear un repositori compartit, treballar en branques separades, pujar canvis a GitHub i fusionar-los a main. Aquest és el flux real que s'usa en empreses de desenvolupament.</span>
+      </div>
+
+      <div class="key-concept">💡 Clau → En equip, cada persona treballa a la seva branca i <strong>mai directament a main</strong>. La fusió la gestiona una sola persona per evitar conflictes. En projectes reals s'usarien Pull Requests a GitHub per fer la revisió.</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Git & GitHub · Desenvolupament Web — Batxillerat / FP · Material educatiu 2025
+</footer>
+
+</body>
+</html>
