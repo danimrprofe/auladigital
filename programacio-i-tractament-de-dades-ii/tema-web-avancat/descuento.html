@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cálculo de precio con descuento</title>
+    <script src="script.js"></script>
+  </head>
+  <body>
+    <h1>Cálculo de precio con descuento</h1>
+
+    <label for="precio">Precio base (€):</label>
+    <input type="number" id="precio" />
+
+    <br /><br />
+
+    <label>¿Es residente?</label><br />
+    <input type="radio" id="residenteSi" name="residente" value="si" />
+    <label for="residenteSi">Sí</label>
+
+    <input type="radio" id="residenteNo" name="residente" value="no" />
+    <label for="residenteNo">No</label>
+
+    <br /><br />
+
+    <label>Familia numerosa:</label><br />
+    <input type="radio" id="familiaNinguna" name="familia" value="ninguna" />
+    <label for="familiaNinguna">Ninguna</label>
+
+    <input type="radio" id="familiaGeneral" name="familia" value="general" />
+    <label for="familiaGeneral">General</label>
+
+    <input type="radio" id="familiaEspecial" name="familia" value="especial" />
+    <label for="familiaEspecial">Especial</label>
+
+    <br /><br />
+
+    <button type="button" onclick="calcularPrecio()">
+      Calcular precio final
+    </button>
+  </body>
+</html>

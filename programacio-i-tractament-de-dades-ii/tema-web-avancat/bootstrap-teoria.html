@@ -329,15 +329,42 @@
   .code-block {
     background: #1a1f36;
     border-radius: 12px;
-    padding: 20px 24px;
     font-family: 'DM Mono', monospace;
     font-size: .92rem;
-    line-height: 1.8;
+    line-height: 1.85;
     color: #e8eaf6;
     overflow-x: auto;
     border: 1.5px solid #252a42;
+    padding: 0;
   }
-  .code-block .cm { color: #6b7db8; }
+  .code-block table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: max-content;
+  }
+  .code-block td {
+    padding: 0;
+    vertical-align: top;
+    white-space: pre;
+  }
+  .code-block .ln-col {
+    user-select: none;
+    text-align: right;
+    padding: 16px 14px 16px 20px;
+    color: #4a5080;
+    background: #1a1f36;
+    border-right: 1.5px solid #252a42;
+    min-width: 44px;
+    font-size: .85rem;
+    line-height: 1.85;
+    vertical-align: top;
+  }
+  .code-block .code-col {
+    padding: 16px 24px 16px 20px;
+    background: #1a1f36;
+    width: 100%;
+  }
+  .code-block .cm { color: #6b7db8; font-style: italic; }
   .code-block .tg { color: #79b8ff; }
   .code-block .at { color: #f7c94f; }
   .code-block .vl { color: #85e89d; }
@@ -948,5 +975,19 @@
   Bootstrap · Desenvolupament Web — Batxillerat / FP · Material educatiu 2025
 </footer>
 
+<script>
+document.querySelectorAll('.code-block').forEach(block => {
+  const raw = block.innerHTML;
+  const lines = raw.split('\n');
+  if (lines[lines.length - 1].trim() === '') lines.pop();
+  if (lines[0].trim() === '') lines.shift();
+  const lineNums = lines.map((_, i) => (i + 1)).join('\n');
+  const codeContent = lines.join('\n');
+  block.innerHTML = `<table><tr>
+    <td class="ln-col">${lineNums}</td>
+    <td class="code-col">${codeContent}</td>
+  </tr></table>`;
+});
+</script>
 </body>
 </html>
