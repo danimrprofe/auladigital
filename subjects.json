@@ -223,15 +223,16 @@
     "path": "entorns-digitals/index.html",
     "description": "Ús responsable dels entorns virtuals de treball, identitat digital i organització personal.",
     "topics": [
+      "UP1: Descobrim els entorns digitals i el teclat QWERTY",
       "Funcionalitats comunes",
       "Processadors de text",
       "Presentacions diapositives",
       "Presentacions en línia",
-      "Fulls de càlcul"
+      "UP7: Iniciem amb fulls de càlcul: Google Sheets"
     ],
     "materials": [
       {
-        "title": "Funcionalitats i utilitats comunes a diverses aplicacions",
+        "title": "UP1: Descobrim els entorns digitals i el teclat QWERTY",
         "slug": "tema-funcionalitats-comunes",
         "technologies": ["Office", "Productivitat", "Aplicacions"],
         "items": [
@@ -370,9 +371,9 @@
         ]
       },
       {
-        "title": "Fulls de càlcul",
+        "title": "UP7: Iniciem amb fulls de càlcul: Google Sheets",
         "slug": "tema-fulls-de-calcul",
-        "technologies": ["LibreOffice Calc", "Fulls de càlcul", "Dades"],
+        "technologies": ["Google Sheets", "Fulls de càlcul", "Dades"],
         "items": [
           {
             "icon": "📊",
@@ -392,22 +393,17 @@
           {
             "icon": "🧠",
             "label": "Funcions",
-            "title": "Funcions lògiques, matemàtiques, estadístiques i de text"
+            "title": "Funcions bàsiques matemàtiques, lògiques i estadístiques"
           },
           {
             "icon": "📌",
-            "label": "Fixació",
-            "title": "Còpia de fórmules i fixació de cel·les"
-          },
-          {
-            "icon": "🔍",
-            "label": "Dades",
-            "title": "Ordenació, filtres i format condicional"
+            "label": "Fórmules",
+            "title": "Còpia de fórmules arrossegant el controlador d'emplenament"
           },
           {
             "icon": "📈",
             "label": "Gràfics",
-            "title": "Diagrames de columna, barra i sectors"
+            "title": "Generació de gràfics a partir de taules senzilles"
           }
         ]
       }
